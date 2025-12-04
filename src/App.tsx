@@ -67,6 +67,16 @@ const App = () => (
             <Route path="/vorbereitung" element={<Vorbereitung />} />
             <Route path="/business" element={<Business />} />
             <Route path="/membership" element={<Membership />} />
+            <Route path="/aromatherapie" element={<Aromatherapie />} />
+            <Route path="/soundtherapie" element={<Soundtherapie />} />
+            <Route path="/vergleich" element={<Vergleich />} />
+            <Route path="/saisonal" element={<Saisonal />} />
+            <Route path="/partner" element={<Partner />} />
+            <Route path="/presse" element={<Presse />} />
+            <Route path="/karriere" element={<Karriere />} />
+            <Route path="/nachhaltigkeit" element={<Nachhaltigkeit />} />
+            <Route path="/virtual-tour" element={<VirtualTour />} />
+            <Route path="/geschenkideen" element={<Geschenkideen />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <FloatingCTA />
