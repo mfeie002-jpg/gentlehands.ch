@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,28 +9,39 @@ export const NewsletterPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState("");
   const { toast } = useToast();
+  const hasShownRef = useRef(false);
 
   useEffect(() => {
     const dismissed = localStorage.getItem("newsletter-dismissed");
     const subscribed = localStorage.getItem("newsletter-subscribed");
     
-    if (!dismissed && !subscribed) {
-      // Show after 30 seconds or on exit intent
-      const timer = setTimeout(() => setIsVisible(true), 30000);
-      
-      const handleMouseLeave = (e: MouseEvent) => {
-        if (e.clientY <= 0) {
-          setIsVisible(true);
-        }
-      };
-      
-      document.addEventListener("mouseleave", handleMouseLeave);
-      
-      return () => {
-        clearTimeout(timer);
-        document.removeEventListener("mouseleave", handleMouseLeave);
-      };
+    // Don't show if already dismissed or subscribed
+    if (dismissed || subscribed) {
+      return;
     }
+
+    // Show after 30 seconds (only once)
+    const timer = setTimeout(() => {
+      if (!hasShownRef.current) {
+        hasShownRef.current = true;
+        setIsVisible(true);
+      }
+    }, 30000);
+    
+    // Show on exit intent (only once)
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0 && !hasShownRef.current) {
+        hasShownRef.current = true;
+        setIsVisible(true);
+      }
+    };
+    
+    document.addEventListener("mouseleave", handleMouseLeave);
+    
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+    };
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
