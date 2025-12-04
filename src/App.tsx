@@ -4,6 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { CookieConsent } from "@/components/shared/CookieConsent";
+import { FloatingCTA } from "@/components/shared/FloatingCTA";
+import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
 import Index from "./pages/Index";
 import Erlebnisse from "./pages/Erlebnisse";
 import Massagen from "./pages/Massagen";
@@ -15,6 +18,14 @@ import Ratgeber from "./pages/Ratgeber";
 import Kontakt from "./pages/Kontakt";
 import Rechtliches from "./pages/Rechtliches";
 import Buchung from "./pages/Buchung";
+import Gutscheine from "./pages/Gutscheine";
+import Warteliste from "./pages/Warteliste";
+import Preise from "./pages/Preise";
+import Quiz from "./pages/Quiz";
+import Galerie from "./pages/Galerie";
+import Vorbereitung from "./pages/Vorbereitung";
+import Business from "./pages/Business";
+import Membership from "./pages/Membership";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,8 +49,19 @@ const App = () => (
             <Route path="/kontakt" element={<Kontakt />} />
             <Route path="/rechtliches" element={<Rechtliches />} />
             <Route path="/buchung" element={<Buchung />} />
+            <Route path="/gutscheine" element={<Gutscheine />} />
+            <Route path="/warteliste" element={<Warteliste />} />
+            <Route path="/preise" element={<Preise />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/galerie" element={<Galerie />} />
+            <Route path="/vorbereitung" element={<Vorbereitung />} />
+            <Route path="/business" element={<Business />} />
+            <Route path="/membership" element={<Membership />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <FloatingCTA />
+          <CookieConsent />
+          <NewsletterPopup />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
