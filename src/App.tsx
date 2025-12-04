@@ -26,6 +26,16 @@ import Galerie from "./pages/Galerie";
 import Vorbereitung from "./pages/Vorbereitung";
 import Business from "./pages/Business";
 import Membership from "./pages/Membership";
+import Aromatherapie from "./pages/Aromatherapie";
+import Soundtherapie from "./pages/Soundtherapie";
+import Vergleich from "./pages/Vergleich";
+import Saisonal from "./pages/Saisonal";
+import Partner from "./pages/Partner";
+import Presse from "./pages/Presse";
+import Karriere from "./pages/Karriere";
+import Nachhaltigkeit from "./pages/Nachhaltigkeit";
+import VirtualTour from "./pages/VirtualTour";
+import Geschenkideen from "./pages/Geschenkideen";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
