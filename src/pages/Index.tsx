@@ -7,6 +7,9 @@ import { TeamPreviewSection } from "@/components/home/TeamPreviewSection";
 import { WhyWomenOnlySection } from "@/components/home/WhyWomenOnlySection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { ExclusivitySection } from "@/components/home/ExclusivitySection";
+import { StatsSection } from "@/components/home/StatsSection";
+import { BenefitsSection } from "@/components/home/BenefitsSection";
+import { CTASection } from "@/components/home/CTASection";
 import { Helmet } from "react-helmet-async";
 
 const Index = () => {
@@ -26,12 +29,15 @@ const Index = () => {
       </Helmet>
 
       <HeroSection />
+      <StatsSection />
       <HowItWorksSection />
+      <BenefitsSection />
       <ThemesPreviewSection />
       <MassagesPreviewSection />
       <TeamPreviewSection />
       <WhyWomenOnlySection />
       <TestimonialsSection />
+      <CTASection />
       <ExclusivitySection />
     </Layout>
   );
