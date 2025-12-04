@@ -4,21 +4,23 @@ import { Mail, Phone, MapPin } from "lucide-react";
 const footerLinks = {
   erlebnisse: [
     { href: "/erlebnisse", label: "Alle Erlebnisse" },
-    { href: "/erlebnisse#ozean", label: "Ozean & Palmen" },
-    { href: "/erlebnisse#alpine", label: "Alpine Stille" },
-    { href: "/erlebnisse#dark", label: "Deep Dark Relax" },
+    { href: "/quiz", label: "Erlebnis-Finder Quiz" },
+    { href: "/galerie", label: "Galerie" },
+    { href: "/preise", label: "Preise" },
   ],
   angebote: [
     { href: "/massagen", label: "Alle Massagen" },
     { href: "/team", label: "Unser Team" },
     { href: "/buchung", label: "Termin buchen" },
     { href: "/gutscheine", label: "Gutscheine" },
+    { href: "/membership", label: "Membership" },
   ],
   information: [
     { href: "/ueber-uns", label: "Über uns" },
     { href: "/erfahrungen", label: "Erfahrungen" },
+    { href: "/vorbereitung", label: "Vorbereitung" },
     { href: "/faq", label: "FAQ" },
-    { href: "/ratgeber", label: "Ratgeber" },
+    { href: "/business", label: "Corporate Wellness" },
   ],
   rechtliches: [
     { href: "/rechtliches", label: "Impressum" },

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Shield, Clock, Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import heroImage from "@/assets/hero-spa-room.jpg";
 
 const trustBadges = [
   { icon: Shield, label: "Nur für Frauen" },
@@ -12,12 +13,15 @@ const trustBadges = [
 export const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 via-background to-background" />
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img src={heroImage} alt="GentleHands Spa" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
+      </div>
       
       {/* Decorative Elements */}
-      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-copper/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-petrol/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-copper/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-petrol/10 rounded-full blur-3xl" />
 
       <div className="container-wide relative z-10 pt-32 pb-20">
         <div className="max-w-4xl mx-auto text-center">
