@@ -29,77 +29,59 @@ export const Logo = ({ className = "", showIcon = true, size = "md" }: LogoProps
             xmlns="http://www.w3.org/2000/svg"
             className="text-copper"
           >
-            {/* Elegant open palm with fingers - massage hand */}
-            {/* Palm base */}
+            {/* Minimalist Lotus Flower */}
+            {/* Center petal */}
             <path
-              d="M12 32C10 30 9 27 9 24C9 21 10 19 12 17"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              fill="none"
-            />
-            {/* Thumb */}
-            <path
-              d="M12 17C12 17 10 15 10 13C10 11 11 10 13 10C15 10 16 12 16 14"
+              d="M20 8C20 8 17 16 17 22C17 26 18.5 28 20 28C21.5 28 23 26 23 22C23 16 20 8 20 8Z"
               stroke="currentColor"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
             />
-            {/* Index finger */}
+            {/* Left inner petal */}
             <path
-              d="M16 14L17 8C17 6 18 5 20 5C22 5 23 6 23 8L23 12"
+              d="M14 12C14 12 12 18 13 23C13.5 26 15 27 16.5 26C18 25 18 22 17 18C16 14 14 12 14 12Z"
               stroke="currentColor"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
+              className="text-copper/80"
             />
-            {/* Middle finger */}
+            {/* Right inner petal */}
             <path
-              d="M23 12L24 6C24 4 25 3 27 3C29 3 30 4 30 6L29 13"
+              d="M26 12C26 12 28 18 27 23C26.5 26 25 27 23.5 26C22 25 22 22 23 18C24 14 26 12 26 12Z"
               stroke="currentColor"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
+              className="text-copper/80"
             />
-            {/* Ring finger */}
+            {/* Left outer petal */}
             <path
-              d="M29 13L30 8C30 6 31 5 32 6C33 7 33 9 32 11L31 16"
+              d="M8 16C8 16 8 22 10 26C11.5 29 13 29 14 27.5C15 26 14 23 12 20C10 17 8 16 8 16Z"
               stroke="currentColor"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
+              className="text-copper/60"
             />
-            {/* Palm connection */}
+            {/* Right outer petal */}
             <path
-              d="M16 14C16 16 15 18 14 20C13 22 12 26 12 32"
+              d="M32 16C32 16 32 22 30 26C28.5 29 27 29 26 27.5C25 26 26 23 28 20C30 17 32 16 32 16Z"
               stroke="currentColor"
               strokeWidth="1.5"
               strokeLinecap="round"
+              strokeLinejoin="round"
               fill="none"
+              className="text-copper/60"
             />
-            {/* Wrist to palm */}
+            {/* Base/water line */}
             <path
-              d="M31 16C31 19 30 22 28 25C26 28 22 32 12 32"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              fill="none"
-            />
-            {/* Healing energy lines */}
-            <path
-              d="M18 20C19 19 21 19 22 20"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeLinecap="round"
-              className="text-copper/50"
-            />
-            <path
-              d="M17 24C19 22 22 22 24 24"
+              d="M10 32C14 30 17 29 20 29C23 29 26 30 30 32"
               stroke="currentColor"
               strokeWidth="1"
               strokeLinecap="round"
