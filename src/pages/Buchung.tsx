@@ -6,9 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star } from "lucide-react";
+import { format, addDays, isBefore, startOfToday } from "date-fns";
+import { de } from "date-fns/locale";
+import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
@@ -54,6 +58,8 @@ const Buchung = () => {
     intensity: "mittel",
     avoidAreas: "",
     intuitive: false,
+    selectedDate: undefined as Date | undefined,
+    selectedTime: "",
     name: "",
     email: "",
     phone: "",
@@ -63,6 +69,10 @@ const Buchung = () => {
     newsletter: false,
     additionalNotes: "",
   });
+
+  const timeSlots = [
+    "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"
+  ];
 
   const updateFormData = (key: string, value: any) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -79,7 +89,7 @@ const Buchung = () => {
       case 4:
         return true;
       case 5:
-        return formData.name && formData.email && formData.phone && formData.agb && formData.datenschutz;
+        return formData.selectedDate && formData.selectedTime && formData.name && formData.email && formData.phone && formData.agb && formData.datenschutz;
       default:
         return true;
     }
@@ -370,14 +380,61 @@ const Buchung = () => {
               </p>
             </div>
 
-            {/* Calendar Placeholder */}
-            <div className="p-8 rounded-2xl bg-secondary/50 text-center mb-8">
-              <p className="text-muted-foreground mb-4">
-                [Platzhalter: Kalender zur Terminauswahl]
-              </p>
-              <p className="text-sm text-copper">
-                Termine sind begrenzt verfügbar
-              </p>
+            {/* Calendar & Time Selection */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {/* Calendar */}
+              <div className="space-y-4">
+                <Label className="text-base font-medium">Wunschtermin wählen *</Label>
+                <div className="p-4 rounded-2xl bg-card border border-border">
+                  <CalendarComponent
+                    mode="single"
+                    selected={formData.selectedDate}
+                    onSelect={(date) => updateFormData("selectedDate", date)}
+                    disabled={(date) => 
+                      isBefore(date, startOfToday()) || 
+                      date.getDay() === 0 || // No Sundays
+                      isBefore(addDays(new Date(), 60), date) // Max 60 days ahead
+                    }
+                    locale={de}
+                    className="pointer-events-auto mx-auto"
+                    classNames={{
+                      day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                      day_today: "bg-accent text-accent-foreground",
+                    }}
+                  />
+                  {formData.selectedDate && (
+                    <p className="text-center text-sm text-copper mt-4 font-medium">
+                      {format(formData.selectedDate, "EEEE, d. MMMM yyyy", { locale: de })}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Time Slots */}
+              <div className="space-y-4">
+                <Label className="text-base font-medium">Uhrzeit wählen *</Label>
+                <div className="grid grid-cols-2 gap-3">
+                  {timeSlots.map((time) => (
+                    <button
+                      key={time}
+                      type="button"
+                      onClick={() => updateFormData("selectedTime", time)}
+                      className={cn(
+                        "p-4 rounded-xl border-2 transition-all text-center",
+                        formData.selectedTime === time
+                          ? "border-primary bg-primary/10 text-foreground"
+                          : "border-border bg-card hover:border-primary/50 text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      <Clock className="w-5 h-5 mx-auto mb-2 opacity-70" />
+                      <span className="font-medium">{time} Uhr</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Termine sind begrenzt verfügbar. Bei hoher Nachfrage kontaktieren wir Sie für Alternativen.
+                </p>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -521,6 +578,16 @@ const Buchung = () => {
                 <div>
                   <p className="text-muted-foreground">Dauer</p>
                   <p className="text-foreground font-medium">{formData.duration}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Wunschtermin</p>
+                  <p className="text-foreground font-medium">
+                    {formData.selectedDate ? format(formData.selectedDate, "d. MMMM yyyy", { locale: de }) : "-"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Uhrzeit</p>
+                  <p className="text-foreground font-medium">{formData.selectedTime} Uhr</p>
                 </div>
               </div>
             </div>
