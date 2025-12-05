@@ -1,0 +1,483 @@
+import { useState, useEffect } from "react";
+import { Layout } from "@/components/layout/Layout";
+import { Helmet } from "react-helmet-async";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { 
+  Calendar, Heart, Gift, Star, Clock, User, Settings, LogOut, 
+  ChevronRight, Sparkles, BookOpen, Award, Bell, TrendingUp
+} from "lucide-react";
+
+interface UserProfile {
+  full_name: string | null;
+  preferred_therapist: string | null;
+  preferred_theme: string | null;
+  loyalty_points: number;
+  total_bookings: number;
+  member_since: string;
+}
+
+interface Booking {
+  id: string;
+  booking_number: string;
+  appointment_date: string;
+  appointment_time: string;
+  massage: string;
+  theme: string;
+  masseur: string;
+  status: string;
+}
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("overview");
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  const checkUser = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      navigate("/login");
+      return;
+    }
+    setUser(session.user);
+    fetchProfile(session.user.id);
+    fetchBookings(session.user.email);
+  };
+
+  const fetchProfile = async (userId: string) => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    
+    if (data) setProfile(data);
+    setLoading(false);
+  };
+
+  const fetchBookings = async (email: string | undefined) => {
+    if (!email) return;
+    const { data } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('customer_email', email)
+      .order('appointment_date', { ascending: false });
+    
+    if (data) setBookings(data);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
+
+  const upcomingBookings = bookings.filter(b => new Date(b.appointment_date) >= new Date());
+  const pastBookings = bookings.filter(b => new Date(b.appointment_date) < new Date());
+
+  const tabs = [
+    { id: "overview", label: "Übersicht", icon: TrendingUp },
+    { id: "bookings", label: "Buchungen", icon: Calendar },
+    { id: "favorites", label: "Favoriten", icon: Heart },
+    { id: "journal", label: "Journal", icon: BookOpen },
+    { id: "settings", label: "Einstellungen", icon: Settings },
+  ];
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-8 h-8 border-2 border-copper border-t-transparent rounded-full"
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <Helmet>
+        <title>Mein Bereich | GentleHands Zürich</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
+
+      <section className="pt-24 pb-16 min-h-screen bg-gradient-to-b from-secondary/30 to-background">
+        <div className="container mx-auto px-4">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8"
+          >
+            <div>
+              <h1 className="text-3xl font-display font-bold text-foreground">
+                Willkommen zurück, <span className="text-gradient-copper">{profile?.full_name || user?.email?.split('@')[0]}</span>
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Mitglied seit {profile?.member_since ? new Date(profile.member_since).toLocaleDateString('de-CH', { month: 'long', year: 'numeric' }) : 'heute'}
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button variant="outline" size="sm" className="gap-2">
+                <Bell className="w-4 h-4" />
+                Benachrichtigungen
+              </Button>
+              <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-2 text-muted-foreground">
+                <LogOut className="w-4 h-4" />
+                Abmelden
+              </Button>
+            </div>
+          </motion.div>
+
+          {/* Stats Cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+          >
+            <div className="glass rounded-2xl p-5 border border-border/50">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-copper/10 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-copper" />
+                </div>
+                <span className="text-xs text-emerald-500 font-medium">Aktiv</span>
+              </div>
+              <p className="text-2xl font-bold text-foreground">{upcomingBookings.length}</p>
+              <p className="text-sm text-muted-foreground">Anstehende Termine</p>
+            </div>
+
+            <div className="glass rounded-2xl p-5 border border-border/50">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-petrol/10 flex items-center justify-center">
+                  <Award className="w-5 h-5 text-petrol" />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-foreground">{profile?.loyalty_points || 0}</p>
+              <p className="text-sm text-muted-foreground">Treuepunkte</p>
+            </div>
+
+            <div className="glass rounded-2xl p-5 border border-border/50">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                  <Heart className="w-5 h-5 text-rose-500" />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-foreground">{profile?.total_bookings || bookings.length}</p>
+              <p className="text-sm text-muted-foreground">Erlebnisse gesamt</p>
+            </div>
+
+            <div className="glass rounded-2xl p-5 border border-border/50">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                  <Star className="w-5 h-5 text-amber-500" />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-foreground">VIP</p>
+              <p className="text-sm text-muted-foreground">Mitgliedsstatus</p>
+            </div>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-4 gap-8">
+            {/* Sidebar Navigation */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="lg:col-span-1"
+            >
+              <div className="glass rounded-2xl p-4 border border-border/50 sticky top-24">
+                <nav className="space-y-1">
+                  {tabs.map(tab => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                        activeTab === tab.id 
+                          ? "bg-copper text-background" 
+                          : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                      }`}
+                    >
+                      <tab.icon className="w-5 h-5" />
+                      <span className="font-medium">{tab.label}</span>
+                    </button>
+                  ))}
+                </nav>
+
+                <div className="mt-6 pt-6 border-t border-border/50">
+                  <Button variant="copper" className="w-full" asChild>
+                    <Link to="/buchung">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Neues Erlebnis
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Main Content */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="lg:col-span-3"
+            >
+              <AnimatePresence mode="wait">
+                {activeTab === "overview" && (
+                  <motion.div
+                    key="overview"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-6"
+                  >
+                    {/* Next Appointment */}
+                    {upcomingBookings[0] && (
+                      <div className="glass rounded-2xl p-6 border border-copper/20 bg-gradient-to-r from-copper/5 to-transparent">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <p className="text-sm text-copper font-medium mb-1">Nächster Termin</p>
+                            <h3 className="text-xl font-display font-semibold text-foreground mb-2">
+                              {upcomingBookings[0].massage}
+                            </h3>
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                {new Date(upcomingBookings[0].appointment_date).toLocaleDateString('de-CH')}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                {upcomingBookings[0].appointment_time} Uhr
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <User className="w-4 h-4" />
+                                {upcomingBookings[0].masseur}
+                              </span>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" asChild>
+                            <Link to="/vorbereitung">Vorbereitung</Link>
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recommendations */}
+                    <div className="glass rounded-2xl p-6 border border-border/50">
+                      <h3 className="font-display font-semibold text-foreground mb-4">
+                        Empfehlungen für Sie
+                      </h3>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <Link to="/erlebnisse" className="group p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-xl bg-petrol/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                              <Sparkles className="w-6 h-6 text-petrol" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-foreground">Neues Erlebnis</p>
+                              <p className="text-sm text-muted-foreground">Deep Dark Relax</p>
+                            </div>
+                            <ChevronRight className="w-5 h-5 text-muted-foreground ml-auto" />
+                          </div>
+                        </Link>
+                        <Link to="/gutscheine" className="group p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                              <Gift className="w-6 h-6 text-rose-500" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-foreground">Geschenk-Idee</p>
+                              <p className="text-sm text-muted-foreground">Gutschein verschenken</p>
+                            </div>
+                            <ChevronRight className="w-5 h-5 text-muted-foreground ml-auto" />
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Recent Bookings */}
+                    <div className="glass rounded-2xl p-6 border border-border/50">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-display font-semibold text-foreground">Letzte Buchungen</h3>
+                        <button onClick={() => setActiveTab("bookings")} className="text-sm text-copper hover:underline">
+                          Alle anzeigen
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {pastBookings.slice(0, 3).map(booking => (
+                          <div key={booking.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-lg bg-copper/10 flex items-center justify-center">
+                                <Calendar className="w-5 h-5 text-copper" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-sm text-foreground">{booking.massage}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(booking.appointment_date).toLocaleDateString('de-CH')}
+                                </p>
+                              </div>
+                            </div>
+                            <span className="text-xs px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500">
+                              Abgeschlossen
+                            </span>
+                          </div>
+                        ))}
+                        {pastBookings.length === 0 && (
+                          <p className="text-center text-muted-foreground py-4">
+                            Noch keine vergangenen Buchungen
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeTab === "bookings" && (
+                  <motion.div
+                    key="bookings"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="glass rounded-2xl p-6 border border-border/50"
+                  >
+                    <h3 className="font-display font-semibold text-foreground mb-6">Alle Buchungen</h3>
+                    
+                    {upcomingBookings.length > 0 && (
+                      <div className="mb-8">
+                        <h4 className="text-sm font-medium text-copper uppercase tracking-wider mb-3">Anstehend</h4>
+                        <div className="space-y-3">
+                          {upcomingBookings.map(booking => (
+                            <div key={booking.id} className="p-4 rounded-xl border border-copper/20 bg-copper/5">
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <p className="font-medium text-foreground">{booking.massage}</p>
+                                  <p className="text-sm text-muted-foreground">{booking.theme} • {booking.masseur}</p>
+                                  <div className="flex items-center gap-3 mt-2 text-sm">
+                                    <span className="flex items-center gap-1 text-copper">
+                                      <Calendar className="w-4 h-4" />
+                                      {new Date(booking.appointment_date).toLocaleDateString('de-CH')}
+                                    </span>
+                                    <span className="flex items-center gap-1 text-copper">
+                                      <Clock className="w-4 h-4" />
+                                      {booking.appointment_time}
+                                    </span>
+                                  </div>
+                                </div>
+                                <span className="text-xs font-mono text-muted-foreground">{booking.booking_number}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">Vergangen</h4>
+                      <div className="space-y-3">
+                        {pastBookings.map(booking => (
+                          <div key={booking.id} className="p-4 rounded-xl bg-muted/30">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <p className="font-medium text-foreground">{booking.massage}</p>
+                                <p className="text-sm text-muted-foreground">{booking.theme} • {booking.masseur}</p>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {new Date(booking.appointment_date).toLocaleDateString('de-CH')}
+                                </p>
+                              </div>
+                              <Button variant="ghost" size="sm">Erneut buchen</Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeTab === "favorites" && (
+                  <motion.div
+                    key="favorites"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="glass rounded-2xl p-6 border border-border/50"
+                  >
+                    <h3 className="font-display font-semibold text-foreground mb-4">Meine Favoriten</h3>
+                    <p className="text-muted-foreground text-center py-8">
+                      Sie haben noch keine Favoriten gespeichert.
+                      <br />
+                      <Link to="/erlebnisse" className="text-copper hover:underline">Erlebnisse entdecken</Link>
+                    </p>
+                  </motion.div>
+                )}
+
+                {activeTab === "journal" && (
+                  <motion.div
+                    key="journal"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="glass rounded-2xl p-6 border border-border/50"
+                  >
+                    <h3 className="font-display font-semibold text-foreground mb-4">Mein Wellness-Journal</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Dokumentieren Sie Ihre Erfahrungen und verfolgen Sie Ihre Wellness-Reise.
+                    </p>
+                    <Button variant="copper">Neuen Eintrag erstellen</Button>
+                  </motion.div>
+                )}
+
+                {activeTab === "settings" && (
+                  <motion.div
+                    key="settings"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="glass rounded-2xl p-6 border border-border/50"
+                  >
+                    <h3 className="font-display font-semibold text-foreground mb-6">Einstellungen</h3>
+                    <div className="space-y-6">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">E-Mail</label>
+                        <input type="email" value={user?.email} disabled className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Bevorzugte/r Therapeut:in</label>
+                        <select className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border">
+                          <option>Keine Präferenz</option>
+                          <option>Anna</option>
+                          <option>Luca</option>
+                          <option>Morris</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Newsletter</label>
+                        <label className="flex items-center gap-2">
+                          <input type="checkbox" className="rounded" />
+                          <span className="text-sm text-muted-foreground">Ich möchte über Angebote informiert werden</span>
+                        </label>
+                      </div>
+                      <Button variant="copper">Änderungen speichern</Button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+};
+
+export default Dashboard;

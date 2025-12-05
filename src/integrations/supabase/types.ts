@@ -30,6 +30,7 @@ export type Database = {
           id: string
           intensity_preference: string | null
           intuitive: boolean | null
+          is_available: boolean | null
           massage: string
           masseur: string
           music_preference: string | null
@@ -54,6 +55,7 @@ export type Database = {
           id?: string
           intensity_preference?: string | null
           intuitive?: boolean | null
+          is_available?: boolean | null
           massage: string
           masseur: string
           music_preference?: string | null
@@ -78,6 +80,7 @@ export type Database = {
           id?: string
           intensity_preference?: string | null
           intuitive?: boolean | null
+          is_available?: boolean | null
           massage?: string
           masseur?: string
           music_preference?: string | null
@@ -86,6 +89,277 @@ export type Database = {
           status?: string | null
           theme?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      favorites: {
+        Row: {
+          created_at: string | null
+          experience_id: string
+          id: string
+          massage_type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          experience_id: string
+          id?: string
+          massage_type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          experience_id?: string
+          id?: string
+          massage_type?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gift_cards: {
+        Row: {
+          code: string
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_redeemed: boolean | null
+          message: string | null
+          purchaser_email: string | null
+          recipient_email: string | null
+          recipient_name: string | null
+          remaining_balance: number
+          value: number
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_redeemed?: boolean | null
+          message?: string | null
+          purchaser_email?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          remaining_balance: number
+          value: number
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_redeemed?: boolean | null
+          message?: string | null
+          purchaser_email?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          remaining_balance?: number
+          value?: number
+        }
+        Relationships: []
+      }
+      health_questionnaires: {
+        Row: {
+          allergies: string | null
+          booking_id: string | null
+          consent_given: boolean | null
+          created_at: string | null
+          current_medications: string | null
+          id: string
+          medical_conditions: string | null
+          pain_areas: string[] | null
+          pregnancy_status: string | null
+          sleep_quality: number | null
+          stress_level: number | null
+          user_id: string | null
+        }
+        Insert: {
+          allergies?: string | null
+          booking_id?: string | null
+          consent_given?: boolean | null
+          created_at?: string | null
+          current_medications?: string | null
+          id?: string
+          medical_conditions?: string | null
+          pain_areas?: string[] | null
+          pregnancy_status?: string | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          allergies?: string | null
+          booking_id?: string | null
+          consent_given?: boolean | null
+          created_at?: string | null
+          current_medications?: string | null
+          id?: string
+          medical_conditions?: string | null
+          pain_areas?: string[] | null
+          pregnancy_status?: string | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_questionnaires_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          full_name: string | null
+          id: string
+          loyalty_points: number | null
+          member_since: string | null
+          newsletter_subscribed: boolean | null
+          phone: string | null
+          preferred_theme: string | null
+          preferred_therapist: string | null
+          total_bookings: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          loyalty_points?: number | null
+          member_since?: string | null
+          newsletter_subscribed?: boolean | null
+          phone?: string | null
+          preferred_theme?: string | null
+          preferred_therapist?: string | null
+          total_bookings?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          loyalty_points?: number | null
+          member_since?: string | null
+          newsletter_subscribed?: boolean | null
+          phone?: string | null
+          preferred_theme?: string | null
+          preferred_therapist?: string | null
+          total_bookings?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          created_at: string | null
+          id: string
+          referral_code: string
+          referred_email: string | null
+          referrer_id: string
+          reward_claimed: boolean | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          referral_code: string
+          referred_email?: string | null
+          referrer_id: string
+          reward_claimed?: boolean | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          referral_code?: string
+          referred_email?: string | null
+          referrer_id?: string
+          reward_claimed?: boolean | null
+          status?: string | null
+        }
+        Relationships: []
+      }
+      session_notes: {
+        Row: {
+          booking_id: string | null
+          created_at: string | null
+          id: string
+          mood_after: string | null
+          mood_before: string | null
+          note_date: string | null
+          notes: string | null
+          private_reflection: string | null
+          user_id: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string | null
+          id?: string
+          mood_after?: string | null
+          mood_before?: string | null
+          note_date?: string | null
+          notes?: string | null
+          private_reflection?: string | null
+          user_id: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string | null
+          id?: string
+          mood_after?: string | null
+          mood_before?: string | null
+          note_date?: string | null
+          notes?: string | null
+          private_reflection?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_notes_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      testimonial_submissions: {
+        Row: {
+          content: string
+          id: string
+          is_approved: boolean | null
+          location: string | null
+          name: string
+          rating: number | null
+          submitted_at: string | null
+          theme: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          id?: string
+          is_approved?: boolean | null
+          location?: string | null
+          name: string
+          rating?: number | null
+          submitted_at?: string | null
+          theme?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          id?: string
+          is_approved?: boolean | null
+          location?: string | null
+          name?: string
+          rating?: number | null
+          submitted_at?: string | null
+          theme?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
