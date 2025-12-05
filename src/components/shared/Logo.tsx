@@ -29,38 +29,82 @@ export const Logo = ({ className = "", showIcon = true, size = "md" }: LogoProps
             xmlns="http://www.w3.org/2000/svg"
             className="text-copper"
           >
-            {/* Two gentle hands cupping/holding - symbolizing care */}
-            {/* Left hand */}
+            {/* Elegant open palm with fingers - massage hand */}
+            {/* Palm base */}
             <path
-              d="M8 20C8 20 6 18 6 15C6 12 8 10 10 10C10 10 11 12 12 14C13 16 14 18 14 20C14 22 13 24 12 25C11 26 10 26 10 26"
+              d="M12 32C10 30 9 27 9 24C9 21 10 19 12 17"
               stroke="currentColor"
-              strokeWidth="1.8"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* Thumb */}
+            <path
+              d="M12 17C12 17 10 15 10 13C10 11 11 10 13 10C15 10 16 12 16 14"
+              stroke="currentColor"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
             />
-            {/* Right hand */}
+            {/* Index finger */}
             <path
-              d="M32 20C32 20 34 18 34 15C34 12 32 10 30 10C30 10 29 12 28 14C27 16 26 18 26 20C26 22 27 24 28 25C29 26 30 26 30 26"
+              d="M16 14L17 8C17 6 18 5 20 5C22 5 23 6 23 8L23 12"
               stroke="currentColor"
-              strokeWidth="1.8"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
             />
-            {/* Connecting gentle curve - the "held" space */}
+            {/* Middle finger */}
             <path
-              d="M10 26C10 26 14 30 20 30C26 30 30 26 30 26"
+              d="M23 12L24 6C24 4 25 3 27 3C29 3 30 4 30 6L29 13"
               stroke="currentColor"
-              strokeWidth="1.8"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
-              className="text-copper/70"
             />
-            {/* Soft energy/warmth emanating from center */}
-            <circle cx="20" cy="22" r="3" stroke="currentColor" strokeWidth="1" fill="none" className="text-copper/40" />
-            <circle cx="20" cy="22" r="6" stroke="currentColor" strokeWidth="0.5" fill="none" className="text-copper/20" />
+            {/* Ring finger */}
+            <path
+              d="M29 13L30 8C30 6 31 5 32 6C33 7 33 9 32 11L31 16"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
+            />
+            {/* Palm connection */}
+            <path
+              d="M16 14C16 16 15 18 14 20C13 22 12 26 12 32"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* Wrist to palm */}
+            <path
+              d="M31 16C31 19 30 22 28 25C26 28 22 32 12 32"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* Healing energy lines */}
+            <path
+              d="M18 20C19 19 21 19 22 20"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+              className="text-copper/50"
+            />
+            <path
+              d="M17 24C19 22 22 22 24 24"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+              className="text-copper/40"
+            />
           </svg>
         </motion.div>
       )}
