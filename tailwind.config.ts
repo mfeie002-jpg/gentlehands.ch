@@ -80,6 +80,7 @@ export default {
           DEFAULT: "hsl(var(--copper))",
           light: "hsl(var(--copper-light))",
           dark: "hsl(var(--copper-dark))",
+          glow: "hsl(var(--copper-glow))",
         },
         "warm-gray": {
           DEFAULT: "hsl(var(--warm-gray))",
@@ -97,7 +98,10 @@ export default {
         sm: "var(--shadow-sm)",
         md: "var(--shadow-md)",
         lg: "var(--shadow-lg)",
+        xl: "var(--shadow-xl)",
         copper: "var(--shadow-copper)",
+        "copper-lg": "var(--shadow-copper-lg)",
+        "glow-copper": "var(--shadow-glow-copper)",
         petrol: "var(--shadow-petrol)",
       },
       keyframes: {
