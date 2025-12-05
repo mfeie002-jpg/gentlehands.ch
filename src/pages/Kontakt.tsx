@@ -9,6 +9,8 @@ import { Mail, Phone, MapPin, Clock, Car, Train } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
+import zurichMap from "@/assets/zurich-map.jpg";
+
 const Kontakt = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -221,7 +223,7 @@ const Kontakt = () => {
                     <div>
                       <p className="font-medium text-foreground">Mit ÖV</p>
                       <p className="text-sm text-muted-foreground">
-                        [Platzhalter: Beschreibung der ÖV-Anbindung]
+                        Zentral gelegen, 5 Min. vom Hauptbahnhof Zürich. Tram-Linien 4, 11 und 15 halten in unmittelbarer Nähe.
                       </p>
                     </div>
                   </div>
@@ -230,19 +232,32 @@ const Kontakt = () => {
                     <div>
                       <p className="font-medium text-foreground">Mit Auto</p>
                       <p className="text-sm text-muted-foreground">
-                        [Platzhalter: Parkplatzsituation, evtl. Parkhaus in der
-                        Nähe]
+                        Parkmöglichkeiten im Parkhaus Urania (2 Min. zu Fuss). Blaue Zone in den umliegenden Strassen verfügbar.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Map Placeholder */}
-              <div className="aspect-video rounded-2xl bg-sand flex items-center justify-center">
-                <p className="text-warm-gray text-sm">
-                  [Platzhalter: Google Maps Karte]
-                </p>
+              {/* Map */}
+              <div className="relative aspect-video rounded-2xl overflow-hidden group">
+                <img 
+                  src={zurichMap} 
+                  alt="GentleHands Standort in Zürich"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="bg-background/90 backdrop-blur-sm rounded-xl p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-copper flex items-center justify-center shrink-0">
+                      <MapPin size={18} className="text-accent-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground text-sm">GentleHands</p>
+                      <p className="text-xs text-muted-foreground">Zürich Innenstadt</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
