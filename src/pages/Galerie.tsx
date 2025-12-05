@@ -15,12 +15,16 @@ import urbanImage from "@/assets/theme-urban.jpg";
 import spaMassageRoom from "@/assets/spa-massage-room.jpg";
 import aromatherapyOils from "@/assets/aromatherapy-oils.jpg";
 import wellnessLounge from "@/assets/wellness-lounge.jpg";
+import massageDeepRelease from "@/assets/massage-deep-release.jpg";
+import massageStressReset from "@/assets/massage-stress-reset.jpg";
 
 const galleryImages = [
   { src: heroImage, alt: "Luxuriöser Massageraum", category: "Räumlichkeiten" },
   { src: spaMassageRoom, alt: "Private Massage Suite", category: "Räumlichkeiten" },
   { src: wellnessLounge, alt: "Wellness Lounge", category: "Räumlichkeiten" },
   { src: aromatherapyOils, alt: "Aromatherapie Öle", category: "Details" },
+  { src: massageDeepRelease, alt: "Deep Release Massage", category: "Atmosphäre" },
+  { src: massageStressReset, alt: "Entspannungsmassage", category: "Atmosphäre" },
   { src: oceanImage, alt: "Ozean & Palmen Theme", category: "Themes" },
   { src: alpineImage, alt: "Alpine Stille Theme", category: "Themes" },
   { src: darkImage, alt: "Deep Dark Relax Theme", category: "Themes" },
