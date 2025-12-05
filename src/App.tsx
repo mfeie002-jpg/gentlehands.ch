@@ -19,6 +19,7 @@ import Ratgeber from "./pages/Ratgeber";
 import Kontakt from "./pages/Kontakt";
 import Rechtliches from "./pages/Rechtliches";
 import Buchung from "./pages/Buchung";
+import BuchungBestaetigung from "./pages/BuchungBestaetigung";
 import Gutscheine from "./pages/Gutscheine";
 import Warteliste from "./pages/Warteliste";
 import Preise from "./pages/Preise";
@@ -61,6 +62,7 @@ const App = () => (
             <Route path="/kontakt" element={<Kontakt />} />
             <Route path="/rechtliches" element={<Rechtliches />} />
             <Route path="/buchung" element={<Buchung />} />
+            <Route path="/buchung/bestaetigung" element={<BuchungBestaetigung />} />
             <Route path="/gutscheine" element={<Gutscheine />} />
             <Route path="/warteliste" element={<Warteliste />} />
             <Route path="/preise" element={<Preise />} />
