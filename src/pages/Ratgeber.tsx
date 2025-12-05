@@ -5,10 +5,16 @@ import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Clock, ArrowRight } from "lucide-react";
 
+import articleRelaxation from "@/assets/article-relaxation.jpg";
+import articleNervousSystem from "@/assets/article-nervous-system.jpg";
+import articleBurnout from "@/assets/article-burnout-signs.jpg";
+import articleSelfCare from "@/assets/article-self-care.jpg";
+
 const articles = [
   {
     slug: "tiefe-entspannung-heute",
     title: "Warum tiefe Entspannung heute wichtiger ist als je zuvor",
+    image: articleRelaxation,
     excerpt:
       "In einer Welt permanenter Erreichbarkeit und endloser To-Do-Listen braucht unser Nervensystem bewusste Pausen. Erfahren Sie, warum echte Entspannung keine Option, sondern eine Notwendigkeit ist.",
     readTime: "5 Min",
@@ -17,6 +23,7 @@ const articles = [
   {
     slug: "beruehrung-nervensystem",
     title: "Berührung & Nervensystem: Was in Ihrem Körper passiert",
+    image: articleNervousSystem,
     excerpt:
       "Was passiert eigentlich, wenn wir berührt werden? Ein Blick auf die Wissenschaft hinter der Entspannung durch achtsame Berührung.",
     readTime: "7 Min",
@@ -25,6 +32,7 @@ const articles = [
   {
     slug: "fuenf-zeichen-pause",
     title: "5 Zeichen, dass Ihr Körper nach einer Pause schreit",
+    image: articleBurnout,
     excerpt:
       "Oft ignorieren wir die Signale unseres Körpers, bis es zu spät ist. Lernen Sie die fünf häufigsten Anzeichen zu erkennen, dass Sie eine Auszeit brauchen.",
     readTime: "4 Min",
@@ -33,6 +41,7 @@ const articles = [
   {
     slug: "zeit-schenken",
     title: "Sich selbst Zeit zu schenken: Warum das kein Luxus ist",
+    image: articleSelfCare,
     excerpt:
       "Viele Frauen fühlen sich schuldig, wenn sie sich Zeit für sich selbst nehmen. Ein Plädoyer für radikale Selbstfürsorge – ohne schlechtes Gewissen.",
     readTime: "6 Min",
@@ -91,11 +100,13 @@ const Ratgeber = () => {
                   className="group block h-full"
                 >
                   <div className="h-full card-elevated p-8 border border-transparent hover:border-copper/20 transition-all">
-                    {/* Image Placeholder */}
-                    <div className="aspect-video rounded-xl bg-gradient-to-br from-sand to-sand-dark mb-6 flex items-center justify-center">
-                      <p className="text-warm-gray text-sm">
-                        [Platzhalter: Artikelbild]
-                      </p>
+                    {/* Image */}
+                    <div className="aspect-video rounded-xl mb-6 overflow-hidden">
+                      <img 
+                        src={article.image} 
+                        alt={article.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
                     </div>
 
                     {/* Meta */}
