@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Heart, Shield, Eye, Sparkles, Star } from "lucide-react";
+import spaMassageRoom from "@/assets/spa-massage-room.jpg";
+import wellnessLounge from "@/assets/wellness-lounge.jpg";
 
 const values = [
   {
@@ -49,9 +51,13 @@ const UeberUns = () => {
         />
       </Helmet>
 
-      {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background">
-        <div className="container-wide">
+      {/* Hero with Image */}
+      <section className="relative pt-32 pb-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={wellnessLounge} alt="GentleHands Wellness Lounge" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        </div>
+        <div className="container-wide relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -192,12 +198,12 @@ const UeberUns = () => {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6 }}
             >
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-sand to-sand-dark relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-warm-gray text-sm text-center px-6">
-                    [Platzhalter: Portrait des Inhabers Morris]
-                  </p>
-                </div>
+              <div className="aspect-square rounded-3xl overflow-hidden">
+                <img 
+                  src={spaMassageRoom} 
+                  alt="GentleHands Massageraum" 
+                  className="w-full h-full object-cover"
+                />
               </div>
             </motion.div>
 
