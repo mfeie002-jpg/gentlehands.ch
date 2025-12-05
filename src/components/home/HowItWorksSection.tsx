@@ -1,11 +1,15 @@
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { Sparkles, User, Settings, Calendar } from "lucide-react";
+import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+
+import massageBack from "@/assets/massage-hands-back.jpg";
+import massageShoulders from "@/assets/massage-hands-shoulders.jpg";
+import massageNeck from "@/assets/massage-hands-neck.jpg";
+import massageLowerBack from "@/assets/massage-hands-lower-back.jpg";
 
 const steps = [
   {
-    icon: Sparkles,
+    image: massageBack,
     step: "01",
     title: "Erlebnis wählen",
     description:
@@ -13,7 +17,7 @@ const steps = [
     color: "from-petrol/20 to-petrol/5",
   },
   {
-    icon: User,
+    image: massageShoulders,
     step: "02",
     title: "Masseur:in auswählen",
     description:
@@ -21,7 +25,7 @@ const steps = [
     color: "from-copper/20 to-copper/5",
   },
   {
-    icon: Settings,
+    image: massageNeck,
     step: "03",
     title: "Präferenzen definieren",
     description:
@@ -29,7 +33,7 @@ const steps = [
     color: "from-forest/20 to-forest/5",
   },
   {
-    icon: Calendar,
+    image: massageLowerBack,
     step: "04",
     title: "Termin bestätigen",
     description:
@@ -39,20 +43,18 @@ const steps = [
 ];
 
 const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => {
-  const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <ScrollReveal direction="up" delay={index * 0.15}>
       <motion.div
-        ref={ref}
         className="relative"
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
       >
         {/* Connector Line (hidden on mobile, last item) */}
         {index < steps.length - 1 && (
-          <div className="hidden lg:block absolute top-10 left-[calc(50%+40px)] w-[calc(100%-80px)] h-px overflow-hidden">
+          <div className="hidden lg:block absolute top-24 left-[calc(50%+60px)] w-[calc(100%-120px)] h-px overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-copper/50 to-primary/50"
               initial={{ scaleX: 0 }}
@@ -65,9 +67,9 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
         )}
 
         <div className="text-center group">
-          {/* Icon Container */}
+          {/* Image Container */}
           <motion.div 
-            className="relative inline-flex items-center justify-center w-20 h-20 mb-6"
+            className="relative inline-flex items-center justify-center w-32 h-32 mb-6"
             animate={isHovered ? { y: -4 } : { y: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
@@ -80,10 +82,14 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
               className="relative bg-card rounded-2xl w-full h-full flex items-center justify-center shadow-sm border border-border overflow-hidden"
               whileHover={{ scale: 1.05 }}
             >
-              <step.icon size={28} className="text-primary relative z-10" />
+              <img 
+                src={step.image} 
+                alt={step.title}
+                className="w-full h-full object-cover"
+              />
               {/* Shimmer on hover */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
                 initial={{ x: "-100%" }}
                 animate={isHovered ? { x: "100%" } : { x: "-100%" }}
                 transition={{ duration: 0.6 }}
@@ -91,7 +97,7 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
             </motion.div>
             {/* Step Number */}
             <motion.span 
-              className="absolute -top-2 -right-2 w-7 h-7 bg-copper text-accent-foreground text-xs font-bold rounded-full flex items-center justify-center shadow-copper"
+              className="absolute -top-2 -right-2 w-8 h-8 bg-copper text-accent-foreground text-xs font-bold rounded-full flex items-center justify-center shadow-copper"
               whileHover={{ scale: 1.1, rotate: 12 }}
             >
               {step.step}
