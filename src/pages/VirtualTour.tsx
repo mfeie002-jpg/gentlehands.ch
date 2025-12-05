@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
-import { Play, Eye, MapPin, Sparkles, ArrowRight, X, ChevronLeft, ChevronRight, Volume2, VolumeX, Maximize2 } from "lucide-react";
+import { Interactive360Viewer } from "@/components/shared/Interactive360Viewer";
+import { Play, Eye, MapPin, Sparkles, ArrowRight, X, ChevronLeft, ChevronRight, Volume2, VolumeX, Maximize2, ZoomIn } from "lucide-react";
 import { useState } from "react";
 
 import roomEmpfang from "@/assets/room-empfang.jpg";
@@ -77,6 +78,13 @@ const VirtualTour = () => {
   const [currentRoomIndex, setCurrentRoomIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [show360Viewer, setShow360Viewer] = useState(false);
+  const [viewerRoom, setViewerRoom] = useState<typeof rooms[0] | null>(null);
+
+  const open360Viewer = (room: typeof rooms[0]) => {
+    setViewerRoom(room);
+    setShow360Viewer(true);
+  };
 
   const openRoomDetail = (room: typeof rooms[0]) => {
     setSelectedRoom(room);
@@ -370,12 +378,25 @@ const VirtualTour = () => {
                       ))}
                     </div>
 
-                    <Button variant="copper" asChild>
-                      <Link to={`/buchung?theme=${selectedRoom.id}`}>
-                        In dieser Suite buchen
-                        <ArrowRight size={16} />
-                      </Link>
-                    </Button>
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="copper" asChild>
+                        <Link to={`/buchung?theme=${selectedRoom.id}`}>
+                          In dieser Suite buchen
+                          <ArrowRight size={16} />
+                        </Link>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => {
+                          setSelectedRoom(null);
+                          open360Viewer(selectedRoom);
+                        }}
+                        className="border-copper/30 hover:border-copper/50"
+                      >
+                        <ZoomIn size={16} className="mr-2" />
+                        360° Ansicht
+                      </Button>
+                    </div>
                   </motion.div>
                 </div>
               </div>
@@ -489,6 +510,20 @@ const VirtualTour = () => {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* 360° Viewer Modal */}
+      <AnimatePresence>
+        {show360Viewer && viewerRoom && (
+          <Interactive360Viewer
+            room={{
+              id: viewerRoom.id,
+              name: viewerRoom.name,
+              image: viewerRoom.image,
+            }}
+            onClose={() => setShow360Viewer(false)}
+          />
+        )}
+      </AnimatePresence>
     </Layout>
   );
 };
