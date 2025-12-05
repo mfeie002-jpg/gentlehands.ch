@@ -9,6 +9,9 @@ import {
   Calendar, Heart, Gift, Star, Clock, User, Settings, LogOut, 
   ChevronRight, Sparkles, BookOpen, Award, Bell, TrendingUp
 } from "lucide-react";
+import { FavoritesTab } from "@/components/dashboard/FavoritesTab";
+import { JournalTab } from "@/components/dashboard/JournalTab";
+import { SettingsTab } from "@/components/dashboard/SettingsTab";
 
 interface UserProfile {
   full_name: string | null;
@@ -404,72 +407,16 @@ const Dashboard = () => {
                   </motion.div>
                 )}
 
-                {activeTab === "favorites" && (
-                  <motion.div
-                    key="favorites"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="glass rounded-2xl p-6 border border-border/50"
-                  >
-                    <h3 className="font-display font-semibold text-foreground mb-4">Meine Favoriten</h3>
-                    <p className="text-muted-foreground text-center py-8">
-                      Sie haben noch keine Favoriten gespeichert.
-                      <br />
-                      <Link to="/erlebnisse" className="text-copper hover:underline">Erlebnisse entdecken</Link>
-                    </p>
-                  </motion.div>
+                {activeTab === "favorites" && user && (
+                  <FavoritesTab userId={user.id} />
                 )}
 
-                {activeTab === "journal" && (
-                  <motion.div
-                    key="journal"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="glass rounded-2xl p-6 border border-border/50"
-                  >
-                    <h3 className="font-display font-semibold text-foreground mb-4">Mein Wellness-Journal</h3>
-                    <p className="text-muted-foreground mb-6">
-                      Dokumentieren Sie Ihre Erfahrungen und verfolgen Sie Ihre Wellness-Reise.
-                    </p>
-                    <Button variant="copper">Neuen Eintrag erstellen</Button>
-                  </motion.div>
+                {activeTab === "journal" && user && (
+                  <JournalTab userId={user.id} userEmail={user.email || ""} />
                 )}
 
-                {activeTab === "settings" && (
-                  <motion.div
-                    key="settings"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="glass rounded-2xl p-6 border border-border/50"
-                  >
-                    <h3 className="font-display font-semibold text-foreground mb-6">Einstellungen</h3>
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">E-Mail</label>
-                        <input type="email" value={user?.email} disabled className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Bevorzugte/r Therapeut:in</label>
-                        <select className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border">
-                          <option>Keine Präferenz</option>
-                          <option>Anna</option>
-                          <option>Luca</option>
-                          <option>Morris</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Newsletter</label>
-                        <label className="flex items-center gap-2">
-                          <input type="checkbox" className="rounded" />
-                          <span className="text-sm text-muted-foreground">Ich möchte über Angebote informiert werden</span>
-                        </label>
-                      </div>
-                      <Button variant="copper">Änderungen speichern</Button>
-                    </div>
-                  </motion.div>
+                {activeTab === "settings" && user && (
+                  <SettingsTab userId={user.id} userEmail={user.email || ""} />
                 )}
               </AnimatePresence>
             </motion.div>
