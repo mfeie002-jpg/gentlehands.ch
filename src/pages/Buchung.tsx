@@ -718,8 +718,29 @@ const Buchung = () => {
               <Button
                 variant="copper"
                 onClick={() => {
-                  // Generate booking number and redirect to confirmation
+                  // Generate booking number and save data to localStorage
                   const bookingNumber = `GH-${Date.now().toString(36).toUpperCase()}`;
+                  const bookingData = {
+                    bookingNumber,
+                    masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
+                    theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
+                    massage: massages.find(m => m.id === formData.massage)?.title || formData.massage,
+                    duration: formData.duration,
+                    date: formData.selectedDate ? format(formData.selectedDate, "EEEE, d. MMMM yyyy", { locale: de }) : "",
+                    time: formData.selectedTime,
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    preferences: {
+                      music: formData.music,
+                      conversation: formData.conversation,
+                      intensity: formData.intensity,
+                      avoidAreas: formData.avoidAreas,
+                      intuitive: formData.intuitive,
+                    },
+                    additionalNotes: formData.additionalNotes,
+                  };
+                  localStorage.setItem("gentlehands_booking", JSON.stringify(bookingData));
                   navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
                 }}
                 disabled={!canProceed()}
