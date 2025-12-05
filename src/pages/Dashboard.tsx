@@ -12,9 +12,15 @@ import {
 import { FavoritesTab } from "@/components/dashboard/FavoritesTab";
 import { JournalTab } from "@/components/dashboard/JournalTab";
 import { SettingsTab } from "@/components/dashboard/SettingsTab";
+import { ProfileCompletion } from "@/components/dashboard/ProfileCompletion";
+import { LoyaltyRewards } from "@/components/dashboard/LoyaltyRewards";
+import { BookingReminders } from "@/components/dashboard/BookingReminders";
+import { QuickRebook } from "@/components/dashboard/QuickRebook";
+import { BookingExport } from "@/components/dashboard/BookingExport";
 
 interface UserProfile {
   full_name: string | null;
+  phone: string | null;
   preferred_therapist: string | null;
   preferred_theme: string | null;
   loyalty_points: number;
@@ -30,6 +36,7 @@ interface Booking {
   massage: string;
   theme: string;
   masseur: string;
+  duration: string;
   status: string;
 }
 
@@ -38,6 +45,8 @@ const Dashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [journalEntries, setJournalEntries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -52,30 +61,22 @@ const Dashboard = () => {
       return;
     }
     setUser(session.user);
-    fetchProfile(session.user.id);
-    fetchBookings(session.user.email);
+    fetchAllData(session.user.id, session.user.email);
   };
 
-  const fetchProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    
-    if (data) setProfile(data);
+  const fetchAllData = async (userId: string, email: string | undefined) => {
+    const [profileRes, bookingsRes, favoritesRes, journalRes] = await Promise.all([
+      supabase.from('profiles').select('*').eq('id', userId).single(),
+      email ? supabase.from('bookings').select('*').eq('customer_email', email).order('appointment_date', { ascending: false }) : Promise.resolve({ data: [] }),
+      supabase.from('favorites').select('*').eq('user_id', userId),
+      supabase.from('session_notes').select('*').eq('user_id', userId),
+    ]);
+
+    if (profileRes.data) setProfile(profileRes.data);
+    if (bookingsRes.data) setBookings(bookingsRes.data);
+    if (favoritesRes.data) setFavorites(favoritesRes.data);
+    if (journalRes.data) setJournalEntries(journalRes.data);
     setLoading(false);
-  };
-
-  const fetchBookings = async (email: string | undefined) => {
-    if (!email) return;
-    const { data } = await supabase
-      .from('bookings')
-      .select('*')
-      .eq('customer_email', email)
-      .order('appointment_date', { ascending: false });
-    
-    if (data) setBookings(data);
   };
 
   const handleLogout = async () => {
@@ -89,6 +90,7 @@ const Dashboard = () => {
   const tabs = [
     { id: "overview", label: "Übersicht", icon: TrendingUp },
     { id: "bookings", label: "Buchungen", icon: Calendar },
+    { id: "rewards", label: "Treueprogramm", icon: Award },
     { id: "favorites", label: "Favoriten", icon: Heart },
     { id: "journal", label: "Journal", icon: BookOpen },
     { id: "settings", label: "Einstellungen", icon: Settings },
@@ -150,18 +152,18 @@ const Dashboard = () => {
             transition={{ delay: 0.1 }}
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
           >
-            <div className="glass rounded-2xl p-5 border border-border/50">
+            <div className="glass rounded-2xl p-5 border border-border/50 cursor-pointer hover:border-copper/30 transition-colors" onClick={() => setActiveTab("bookings")}>
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-xl bg-copper/10 flex items-center justify-center">
                   <Calendar className="w-5 h-5 text-copper" />
                 </div>
-                <span className="text-xs text-emerald-500 font-medium">Aktiv</span>
+                {upcomingBookings.length > 0 && <span className="text-xs text-emerald-500 font-medium">Aktiv</span>}
               </div>
               <p className="text-2xl font-bold text-foreground">{upcomingBookings.length}</p>
               <p className="text-sm text-muted-foreground">Anstehende Termine</p>
             </div>
 
-            <div className="glass rounded-2xl p-5 border border-border/50">
+            <div className="glass rounded-2xl p-5 border border-border/50 cursor-pointer hover:border-petrol/30 transition-colors" onClick={() => setActiveTab("rewards")}>
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-xl bg-petrol/10 flex items-center justify-center">
                   <Award className="w-5 h-5 text-petrol" />
@@ -187,7 +189,11 @@ const Dashboard = () => {
                   <Star className="w-5 h-5 text-amber-500" />
                 </div>
               </div>
-              <p className="text-2xl font-bold text-foreground">VIP</p>
+              <p className="text-2xl font-bold text-foreground">
+                {(profile?.total_bookings || 0) >= 30 ? 'Platin' : 
+                 (profile?.total_bookings || 0) >= 15 ? 'Gold' : 
+                 (profile?.total_bookings || 0) >= 5 ? 'Silber' : 'Bronze'}
+              </p>
               <p className="text-sm text-muted-foreground">Mitgliedsstatus</p>
             </div>
           </motion.div>
@@ -245,35 +251,22 @@ const Dashboard = () => {
                     exit={{ opacity: 0, y: -20 }}
                     className="space-y-6"
                   >
-                    {/* Next Appointment */}
-                    {upcomingBookings[0] && (
-                      <div className="glass rounded-2xl p-6 border border-copper/20 bg-gradient-to-r from-copper/5 to-transparent">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="text-sm text-copper font-medium mb-1">Nächster Termin</p>
-                            <h3 className="text-xl font-display font-semibold text-foreground mb-2">
-                              {upcomingBookings[0].massage}
-                            </h3>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                {new Date(upcomingBookings[0].appointment_date).toLocaleDateString('de-CH')}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
-                                {upcomingBookings[0].appointment_time} Uhr
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <User className="w-4 h-4" />
-                                {upcomingBookings[0].masseur}
-                              </span>
-                            </div>
-                          </div>
-                          <Button variant="outline" size="sm" asChild>
-                            <Link to="/vorbereitung">Vorbereitung</Link>
-                          </Button>
-                        </div>
-                      </div>
+                    {/* Profile Completion */}
+                    <ProfileCompletion
+                      profile={profile}
+                      hasBookings={bookings.length > 0}
+                      hasFavorites={favorites.length > 0}
+                      hasJournalEntries={journalEntries.length > 0}
+                    />
+
+                    {/* Booking Reminders */}
+                    {upcomingBookings.length > 0 && (
+                      <BookingReminders upcomingBookings={upcomingBookings} />
+                    )}
+
+                    {/* Quick Rebook */}
+                    {pastBookings.length > 0 && (
+                      <QuickRebook pastBookings={pastBookings} />
                     )}
 
                     {/* Recommendations */}
@@ -308,41 +301,6 @@ const Dashboard = () => {
                         </Link>
                       </div>
                     </div>
-
-                    {/* Recent Bookings */}
-                    <div className="glass rounded-2xl p-6 border border-border/50">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-display font-semibold text-foreground">Letzte Buchungen</h3>
-                        <button onClick={() => setActiveTab("bookings")} className="text-sm text-copper hover:underline">
-                          Alle anzeigen
-                        </button>
-                      </div>
-                      <div className="space-y-3">
-                        {pastBookings.slice(0, 3).map(booking => (
-                          <div key={booking.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30">
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-lg bg-copper/10 flex items-center justify-center">
-                                <Calendar className="w-5 h-5 text-copper" />
-                              </div>
-                              <div>
-                                <p className="font-medium text-sm text-foreground">{booking.massage}</p>
-                                <p className="text-xs text-muted-foreground">
-                                  {new Date(booking.appointment_date).toLocaleDateString('de-CH')}
-                                </p>
-                              </div>
-                            </div>
-                            <span className="text-xs px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500">
-                              Abgeschlossen
-                            </span>
-                          </div>
-                        ))}
-                        {pastBookings.length === 0 && (
-                          <p className="text-center text-muted-foreground py-4">
-                            Noch keine vergangenen Buchungen
-                          </p>
-                        )}
-                      </div>
-                    </div>
                   </motion.div>
                 )}
 
@@ -352,59 +310,80 @@ const Dashboard = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="glass rounded-2xl p-6 border border-border/50"
+                    className="space-y-6"
                   >
-                    <h3 className="font-display font-semibold text-foreground mb-6">Alle Buchungen</h3>
-                    
-                    {upcomingBookings.length > 0 && (
-                      <div className="mb-8">
-                        <h4 className="text-sm font-medium text-copper uppercase tracking-wider mb-3">Anstehend</h4>
+                    <div className="glass rounded-2xl p-6 border border-border/50">
+                      <h3 className="font-display font-semibold text-foreground mb-6">Alle Buchungen</h3>
+                      
+                      {upcomingBookings.length > 0 && (
+                        <div className="mb-8">
+                          <h4 className="text-sm font-medium text-copper uppercase tracking-wider mb-3">Anstehend</h4>
+                          <div className="space-y-3">
+                            {upcomingBookings.map(booking => (
+                              <div key={booking.id} className="p-4 rounded-xl border border-copper/20 bg-copper/5">
+                                <div className="flex items-start justify-between">
+                                  <div>
+                                    <p className="font-medium text-foreground">{booking.massage}</p>
+                                    <p className="text-sm text-muted-foreground">{booking.theme} • {booking.masseur}</p>
+                                    <div className="flex items-center gap-3 mt-2 text-sm">
+                                      <span className="flex items-center gap-1 text-copper">
+                                        <Calendar className="w-4 h-4" />
+                                        {new Date(booking.appointment_date).toLocaleDateString('de-CH')}
+                                      </span>
+                                      <span className="flex items-center gap-1 text-copper">
+                                        <Clock className="w-4 h-4" />
+                                        {booking.appointment_time}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <span className="text-xs font-mono text-muted-foreground">{booking.booking_number}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div>
+                        <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">Vergangen</h4>
                         <div className="space-y-3">
-                          {upcomingBookings.map(booking => (
-                            <div key={booking.id} className="p-4 rounded-xl border border-copper/20 bg-copper/5">
+                          {pastBookings.map(booking => (
+                            <div key={booking.id} className="p-4 rounded-xl bg-muted/30">
                               <div className="flex items-start justify-between">
                                 <div>
                                   <p className="font-medium text-foreground">{booking.massage}</p>
                                   <p className="text-sm text-muted-foreground">{booking.theme} • {booking.masseur}</p>
-                                  <div className="flex items-center gap-3 mt-2 text-sm">
-                                    <span className="flex items-center gap-1 text-copper">
-                                      <Calendar className="w-4 h-4" />
-                                      {new Date(booking.appointment_date).toLocaleDateString('de-CH')}
-                                    </span>
-                                    <span className="flex items-center gap-1 text-copper">
-                                      <Clock className="w-4 h-4" />
-                                      {booking.appointment_time}
-                                    </span>
-                                  </div>
+                                  <p className="text-sm text-muted-foreground mt-1">
+                                    {new Date(booking.appointment_date).toLocaleDateString('de-CH')}
+                                  </p>
                                 </div>
-                                <span className="text-xs font-mono text-muted-foreground">{booking.booking_number}</span>
+                                <Button variant="ghost" size="sm" asChild>
+                                  <Link to={`/buchung?massage=${encodeURIComponent(booking.massage)}&theme=${encodeURIComponent(booking.theme)}`}>
+                                    Erneut buchen
+                                  </Link>
+                                </Button>
                               </div>
                             </div>
                           ))}
+                          {pastBookings.length === 0 && (
+                            <p className="text-center text-muted-foreground py-8">
+                              Noch keine vergangenen Buchungen
+                            </p>
+                          )}
                         </div>
                       </div>
-                    )}
-
-                    <div>
-                      <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">Vergangen</h4>
-                      <div className="space-y-3">
-                        {pastBookings.map(booking => (
-                          <div key={booking.id} className="p-4 rounded-xl bg-muted/30">
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <p className="font-medium text-foreground">{booking.massage}</p>
-                                <p className="text-sm text-muted-foreground">{booking.theme} • {booking.masseur}</p>
-                                <p className="text-sm text-muted-foreground mt-1">
-                                  {new Date(booking.appointment_date).toLocaleDateString('de-CH')}
-                                </p>
-                              </div>
-                              <Button variant="ghost" size="sm">Erneut buchen</Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
                     </div>
+
+                    {/* Export Section */}
+                    <BookingExport bookings={bookings} />
                   </motion.div>
+                )}
+
+                {activeTab === "rewards" && (
+                  <LoyaltyRewards 
+                    points={profile?.loyalty_points || 0} 
+                    totalBookings={profile?.total_bookings || bookings.length} 
+                  />
                 )}
 
                 {activeTab === "favorites" && user && (
