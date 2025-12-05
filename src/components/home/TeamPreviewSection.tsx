@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, Languages, Award, Heart } from "lucide-react";
+import { ArrowRight, Languages, Heart } from "lucide-react";
+
+import teamMorris from "@/assets/team-morris.jpg";
+import teamAnna from "@/assets/team-anna.jpg";
+import teamLuca from "@/assets/team-luca.jpg";
 
 const team = [
   {
     id: "morris",
     name: "Morris",
     role: "Inhaber & Leitender Masseur",
+    image: teamMorris,
     description:
       "Mit über 10 Jahren Erfahrung in ganzheitlicher Körperarbeit. Spezialisiert auf Deep Relax und Emotional Grounding.",
     languages: ["DE", "EN", "FR"],
@@ -18,6 +23,7 @@ const team = [
     id: "anna",
     name: "Anna",
     role: "Masseurin",
+    image: teamAnna,
     description:
       "Sanfte, achtsame Herangehensweise mit Fokus auf Stressabbau und Nervensystem-Regulation.",
     languages: ["DE", "EN"],
@@ -28,6 +34,7 @@ const team = [
     id: "luca",
     name: "Luca",
     role: "Masseur",
+    image: teamLuca,
     description:
       "Sportlicher Hintergrund mit intensiverer Technik für tiefe Verspannungen und körperliche Blockaden.",
     languages: ["DE", "IT", "EN"],
@@ -76,18 +83,18 @@ export const TeamPreviewSection = () => {
                   member.isOwner ? "ring-2 ring-copper/20" : ""
                 }`}
               >
-                {/* Avatar Placeholder */}
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-sand to-sand-dark mb-6 relative overflow-hidden">
+                {/* Avatar */}
+                <div className="aspect-square rounded-2xl mb-6 relative overflow-hidden group">
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                   {member.isOwner && (
                     <div className="absolute top-3 right-3 bg-copper text-accent-foreground text-xs font-medium px-2 py-1 rounded-full">
                       Inhaber
                     </div>
                   )}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <p className="text-warm-gray text-xs text-center px-4">
-                      [Platzhalter: Professionelles Portrait von {member.name}]
-                    </p>
-                  </div>
                 </div>
 
                 {/* Info */}
