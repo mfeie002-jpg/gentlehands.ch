@@ -38,6 +38,7 @@ import Karriere from "./pages/Karriere";
 import Nachhaltigkeit from "./pages/Nachhaltigkeit";
 import VirtualTour from "./pages/VirtualTour";
 import Geschenkideen from "./pages/Geschenkideen";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -81,6 +82,7 @@ const App = () => (
             <Route path="/nachhaltigkeit" element={<Nachhaltigkeit />} />
             <Route path="/virtual-tour" element={<VirtualTour />} />
             <Route path="/geschenkideen" element={<Geschenkideen />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <FloatingCTA />
