@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Languages, Award, Heart, Star, GraduationCap } from "lucide-react";
+import teamMorris from "@/assets/team-morris.jpg";
+import teamAnna from "@/assets/team-anna.jpg";
+import teamLuca from "@/assets/team-luca.jpg";
 
 const team = [
   {
@@ -11,6 +14,7 @@ const team = [
     name: "Morris",
     role: "Inhaber & Leitender Masseur",
     isOwner: true,
+    image: teamMorris,
     experience: "12+ Jahre",
     languages: ["Deutsch", "English", "Français"],
     specialties: ["Tiefenentspannung", "Intuitive Berührung", "Emotional Grounding"],
@@ -31,6 +35,7 @@ const team = [
     name: "Anna",
     role: "Masseurin",
     isOwner: false,
+    image: teamAnna,
     experience: "8 Jahre",
     languages: ["Deutsch", "English"],
     specialties: ["Sanfte Massage", "Stress Reset", "Nervensystem-Regulation"],
@@ -51,6 +56,7 @@ const team = [
     name: "Luca",
     role: "Masseur",
     isOwner: false,
+    image: teamLuca,
     experience: "6 Jahre",
     languages: ["Deutsch", "Italiano", "English"],
     specialties: ["Deep Tissue", "Sportmassage", "Körperarbeit"],
@@ -119,17 +125,17 @@ const Team = () => {
               <div className={`grid grid-cols-1 lg:grid-cols-3 gap-10 ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
                 {/* Portrait */}
                 <div className={`${index % 2 === 1 ? "lg:[direction:ltr]" : ""}`}>
-                  <div className="aspect-[3/4] rounded-3xl bg-gradient-to-br from-sand to-sand-dark relative overflow-hidden">
+                  <div className="aspect-[3/4] rounded-3xl relative overflow-hidden">
                     {member.isOwner && (
                       <div className="absolute top-4 right-4 bg-copper text-accent-foreground text-xs font-medium px-3 py-1 rounded-full z-10">
                         Inhaber
                       </div>
                     )}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-warm-gray text-sm text-center px-6">
-                        [Platzhalter: Professionelles Portrait von {member.name}]
-                      </p>
-                    </div>
+                    <img 
+                      src={member.image} 
+                      alt={`${member.name} - ${member.role}`}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
 
