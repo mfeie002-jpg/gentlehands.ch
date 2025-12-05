@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,6 +48,7 @@ const massages = [
 ];
 
 const Buchung = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     masseur: "",
@@ -715,7 +717,11 @@ const Buchung = () => {
             {currentStep === 5 && (
               <Button
                 variant="copper"
-                onClick={() => setCurrentStep(6)}
+                onClick={() => {
+                  // Generate booking number and redirect to confirmation
+                  const bookingNumber = `GH-${Date.now().toString(36).toUpperCase()}`;
+                  navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
+                }}
                 disabled={!canProceed()}
                 className="ml-auto"
               >
