@@ -7,6 +7,8 @@ import { HelmetProvider } from "react-helmet-async";
 import { FloatingCTA } from "@/components/shared/FloatingCTA";
 import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
+import { LiveChatWidget } from "@/components/shared/LiveChatWidget";
+import { WhatsAppWidget } from "@/components/shared/WhatsAppWidget";
 import Index from "./pages/Index";
 import Erlebnisse from "./pages/Erlebnisse";
 import Massagen from "./pages/Massagen";
@@ -38,6 +40,9 @@ import Nachhaltigkeit from "./pages/Nachhaltigkeit";
 import VirtualTour from "./pages/VirtualTour";
 import Geschenkideen from "./pages/Geschenkideen";
 import Admin from "./pages/Admin";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Empfehlen from "./pages/Empfehlen";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -82,10 +87,15 @@ const App = () => (
             <Route path="/virtual-tour" element={<VirtualTour />} />
             <Route path="/geschenkideen" element={<Geschenkideen />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/empfehlen" element={<Empfehlen />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <FloatingCTA />
           <NewsletterPopup />
+          <LiveChatWidget />
+          <WhatsAppWidget />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
