@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { AnimatedGradient } from "@/components/shared/AnimatedGradient";
-import heroImage from "@/assets/hero-spa-room.jpg";
+import heroImage from "@/assets/massage-hands-back.jpg";
 
 const trustBadges = [
   { icon: Shield, label: "Nur für Frauen" },
@@ -22,7 +22,7 @@ export const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Parallax */}
       <motion.div className="absolute inset-0" style={{ y }}>
-        <img src={heroImage} alt="GentleHands Spa" className="w-full h-full object-cover scale-110" />
+        <img src={heroImage} alt="GentleHands Massage" className="w-full h-full object-cover scale-110" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
       </motion.div>
       
