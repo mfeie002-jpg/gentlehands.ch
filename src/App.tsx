@@ -7,6 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/shared/CookieConsent";
 import { FloatingCTA } from "@/components/shared/FloatingCTA";
 import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
+import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import Index from "./pages/Index";
 import Erlebnisse from "./pages/Erlebnisse";
 import Massagen from "./pages/Massagen";
@@ -44,6 +45,7 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <LoadingScreen duration={2500} />
         <Toaster />
         <Sonner />
         <BrowserRouter>
