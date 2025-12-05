@@ -29,26 +29,38 @@ export const Logo = ({ className = "", showIcon = true, size = "md" }: LogoProps
             xmlns="http://www.w3.org/2000/svg"
             className="text-copper"
           >
-            {/* Hand outline - gentle caring hand */}
+            {/* Two gentle hands cupping/holding - symbolizing care */}
+            {/* Left hand */}
             <path
-              d="M20 4C18.5 4 17.2 5.1 17 6.5L16 14C15.8 15.4 14.6 16.5 13.2 16.5H11C9.3 16.5 8 17.8 8 19.5V28C8 31.9 11.1 35 15 35H25C28.9 35 32 31.9 32 28V19.5C32 17.8 30.7 16.5 29 16.5H26.8C25.4 16.5 24.2 15.4 24 14L23 6.5C22.8 5.1 21.5 4 20 4Z"
+              d="M8 20C8 20 6 18 6 15C6 12 8 10 10 10C10 10 11 12 12 14C13 16 14 18 14 20C14 22 13 24 12 25C11 26 10 26 10 26"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.8"
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
             />
-            {/* Gentle touch lines */}
+            {/* Right hand */}
             <path
-              d="M14 22C14 22 16 24 20 24C24 24 26 22 26 22"
+              d="M32 20C32 20 34 18 34 15C34 12 32 10 30 10C30 10 29 12 28 14C27 16 26 18 26 20C26 22 27 24 28 25C29 26 30 26 30 26"
               stroke="currentColor"
-              strokeWidth="1.5"
+              strokeWidth="1.8"
               strokeLinecap="round"
-              className="text-copper/60"
+              strokeLinejoin="round"
+              fill="none"
             />
-            <circle cx="16" cy="27" r="1" fill="currentColor" className="text-copper/40" />
-            <circle cx="20" cy="28" r="1" fill="currentColor" className="text-copper/40" />
-            <circle cx="24" cy="27" r="1" fill="currentColor" className="text-copper/40" />
+            {/* Connecting gentle curve - the "held" space */}
+            <path
+              d="M10 26C10 26 14 30 20 30C26 30 30 26 30 26"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
+              className="text-copper/70"
+            />
+            {/* Soft energy/warmth emanating from center */}
+            <circle cx="20" cy="22" r="3" stroke="currentColor" strokeWidth="1" fill="none" className="text-copper/40" />
+            <circle cx="20" cy="22" r="6" stroke="currentColor" strokeWidth="0.5" fill="none" className="text-copper/20" />
           </svg>
         </motion.div>
       )}
