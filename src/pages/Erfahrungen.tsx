@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet-async";
 import { Star, Quote, Heart, ChevronLeft, ChevronRight, Sparkles, ArrowRight } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
+import { VideoTestimonials } from "@/components/shared/VideoTestimonials";
 
 const testimonials = [
   {
@@ -376,6 +377,9 @@ const Erfahrungen = () => {
           </div>
         </div>
       </section>
+
+      {/* Video Testimonials Section */}
+      <VideoTestimonials />
 
       {/* CTA */}
       <section className="section-padding relative overflow-hidden">
