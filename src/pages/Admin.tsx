@@ -23,6 +23,8 @@ import { ActivityFeed } from "@/components/admin/ActivityFeed";
 import { RevenueChart } from "@/components/admin/RevenueChart";
 import { BookingsCalendar } from "@/components/admin/BookingsCalendar";
 import { QuickActions } from "@/components/admin/QuickActions";
+import { UsersManager } from "@/components/admin/UsersManager";
+import { SettingsPanel } from "@/components/admin/SettingsPanel";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -252,15 +254,25 @@ const Admin = () => {
                 </motion.div>
               )}
 
-              {(activeTab === "users" || activeTab === "settings") && (
+              {activeTab === "users" && (
                 <motion.div
-                  key={activeTab}
+                  key="users"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="p-12 text-center text-muted-foreground rounded-2xl border border-dashed"
                 >
-                  <p>Dieser Bereich wird bald verfügbar sein.</p>
+                  <UsersManager />
+                </motion.div>
+              )}
+
+              {activeTab === "settings" && (
+                <motion.div
+                  key="settings"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  <SettingsPanel />
                 </motion.div>
               )}
             </AnimatePresence>
