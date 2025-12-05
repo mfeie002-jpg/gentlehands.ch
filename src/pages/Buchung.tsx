@@ -760,6 +760,28 @@ const Buchung = () => {
                       return;
                     }
 
+                    // Send notification via edge function
+                    try {
+                      await supabase.functions.invoke("notify-booking", {
+                        body: {
+                          booking_number: bookingNumber,
+                          customer_name: formData.name,
+                          customer_email: formData.email,
+                          customer_phone: formData.phone,
+                          masseur: masseurs.find(m => m.id === formData.masseur)?.name,
+                          theme: themes.find(t => t.id === formData.theme)?.title,
+                          massage_type: massages.find(m => m.id === formData.massage)?.title,
+                          duration: formData.duration,
+                          appointment_date: formData.selectedDate ? format(formData.selectedDate, "yyyy-MM-dd") : null,
+                          appointment_time: formData.selectedTime,
+                          special_notes: formData.additionalNotes,
+                        },
+                      });
+                    } catch (notifyError) {
+                      console.error("Notification error:", notifyError);
+                      // Don't block booking if notification fails
+                    }
+
                     // Save to localStorage for confirmation page
                     const bookingData = {
                       bookingNumber,
