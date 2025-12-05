@@ -64,7 +64,7 @@ const themes = [
       "Vertrauen Sie uns – wir gestalten Ihr Erlebnis intuitiv nach Ihrem Mood.",
     color: "from-copper/20 to-copper/5",
     iconColor: "text-copper",
-    glowColor: "25 50% 55%",
+    glowColor: "24 55% 52%",
   },
 ];
 

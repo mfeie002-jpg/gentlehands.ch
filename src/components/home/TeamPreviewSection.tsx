@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, Languages, Heart } from "lucide-react";
+import { ArrowRight, Languages, Heart, Award } from "lucide-react";
 
 import teamMorris from "@/assets/team-morris.jpg";
 import teamAnna from "@/assets/team-anna.jpg";
@@ -45,8 +45,12 @@ const team = [
 
 export const TeamPreviewSection = () => {
   return (
-    <section className="section-padding">
-      <div className="container-wide">
+    <section className="section-padding relative overflow-hidden">
+      {/* Ambient effects */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-copper/3 rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-petrol/3 rounded-full blur-[150px]" />
+      
+      <div className="container-wide relative">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -55,13 +59,29 @@ export const TeamPreviewSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-copper font-medium tracking-wide uppercase text-sm mb-4">
-            Unser Team
-          </p>
-          <h2 className="text-foreground mb-4">
-            Wählen Sie Ihre Begleitung
+          <motion.div className="flex items-center justify-center gap-4 mb-4">
+            <motion.div 
+              className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-12"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            />
+            <span className="text-copper font-medium tracking-[0.2em] uppercase text-xs">
+              Unser Team
+            </span>
+            <motion.div 
+              className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-12"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            />
+          </motion.div>
+          <h2 className="text-foreground text-3xl md:text-4xl lg:text-5xl mb-4">
+            Wählen Sie Ihre <span className="text-gradient-copper">Begleitung</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Alle unsere Masseur:innen sind professionell ausgebildet und bringen
             ihre eigene, einzigartige Herangehensweise mit.
           </p>
@@ -76,57 +96,64 @@ export const TeamPreviewSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={member.isOwner ? "md:col-span-1" : ""}
             >
-              <div
-                className={`h-full card-elevated p-6 border border-transparent hover:border-copper/20 transition-all ${
-                  member.isOwner ? "ring-2 ring-copper/20" : ""
+              <motion.div
+                className={`h-full card-elevated p-6 border border-transparent hover:border-copper/20 transition-all duration-300 group ${
+                  member.isOwner ? "ring-1 ring-copper/20" : ""
                 }`}
+                whileHover={{ y: -4 }}
               >
                 {/* Avatar */}
-                <div className="aspect-square rounded-2xl mb-6 relative overflow-hidden group">
+                <div className="aspect-square rounded-2xl mb-6 relative overflow-hidden">
                   <img 
                     src={member.image} 
                     alt={member.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
                   {member.isOwner && (
-                    <div className="absolute top-3 right-3 bg-copper text-accent-foreground text-xs font-medium px-2 py-1 rounded-full">
+                    <motion.div 
+                      className="absolute top-3 right-3 bg-copper text-accent-foreground text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-copper"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <Award size={12} />
                       Inhaber
-                    </div>
+                    </motion.div>
                   )}
                 </div>
 
                 {/* Info */}
-                <h3 className="text-xl font-display text-foreground mb-1">
+                <h3 className="text-xl font-display text-foreground mb-1 group-hover:text-copper transition-colors">
                   {member.name}
                 </h3>
                 <p className="text-copper text-sm font-medium mb-3">
                   {member.role}
                 </p>
-                <p className="text-muted-foreground text-sm mb-4">
+                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                   {member.description}
                 </p>
 
                 {/* Details */}
-                <div className="space-y-2 mb-4">
+                <div className="space-y-2 mb-5">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Languages size={14} className="text-primary" />
+                    <Languages size={14} className="text-petrol" />
                     <span>{member.languages.join(", ")}</span>
                   </div>
                   <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Heart size={14} className="text-primary mt-0.5" />
+                    <Heart size={14} className="text-copper mt-0.5" />
                     <span>{member.specialties.join(", ")}</span>
                   </div>
                 </div>
 
                 {/* CTA */}
-                <Button variant="petrol-outline" size="sm" className="w-full" asChild>
+                <Button variant="outline" size="sm" className="w-full border-copper/30 hover:border-copper hover:bg-copper/5 group/btn" asChild>
                   <Link to={`/buchung?masseur=${member.id}`}>
                     Mit {member.name} buchen
+                    <ArrowRight size={14} className="ml-1 group-hover/btn:translate-x-0.5 transition-transform" />
                   </Link>
                 </Button>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -139,10 +166,10 @@ export const TeamPreviewSection = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-12"
         >
-          <Button variant="ghost" size="lg" asChild>
+          <Button variant="ghost" size="lg" asChild className="group text-muted-foreground hover:text-foreground">
             <Link to="/team">
               Mehr über unser Team
-              <ArrowRight size={18} />
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
         </motion.div>
