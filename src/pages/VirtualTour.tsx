@@ -6,36 +6,50 @@ import { Helmet } from "react-helmet-async";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { Play, Eye, MapPin, Sparkles, ArrowRight } from "lucide-react";
 
+import roomEmpfang from "@/assets/room-empfang.jpg";
+import roomOzean from "@/assets/room-ozean.jpg";
+import roomAlpine from "@/assets/room-alpine.jpg";
+import roomDark from "@/assets/room-dark.jpg";
+import roomZen from "@/assets/room-zen.jpg";
+import roomUrban from "@/assets/room-urban.jpg";
+import virtualTourHero from "@/assets/virtual-tour-hero.jpg";
+
 const rooms = [
   {
     id: "empfang",
     name: "Empfangsbereich",
     description: "Hier werden Sie empfangen – mit warmem Tee und Zeit zum Ankommen.",
+    image: roomEmpfang,
   },
   {
     id: "ozean",
     name: "Ozean Suite",
     description: "Projiziertes Meeresrauschen, warmes Licht und Düfte des Meeres.",
+    image: roomOzean,
   },
   {
     id: "alpine",
     name: "Alpine Suite",
     description: "Holzelemente, Kaminfeuer-Atmosphäre und Bergkräuter-Düfte.",
+    image: roomAlpine,
   },
   {
     id: "dark",
     name: "Deep Dark Suite",
     description: "Nahezu vollständige Dunkelheit für maximale Körperwahrnehmung.",
+    image: roomDark,
   },
   {
     id: "zen",
     name: "Zen Suite",
     description: "Minimalistisch, klar, mit sanften Räuchernoten.",
+    image: roomZen,
   },
   {
     id: "urban",
     name: "Urban Loft Suite",
     description: "Modern, stylish, mit urbanem Flair und Chillout-Vibes.",
+    image: roomUrban,
   },
 ];
 
@@ -73,17 +87,22 @@ const VirtualTour = () => {
         </div>
       </section>
 
-      {/* Main Video */}
+      {/* Main Video/Image */}
       <section className="section-padding-sm">
         <div className="container-wide">
           <ScrollReveal>
-            <div className="relative aspect-video rounded-3xl overflow-hidden bg-secondary">
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-copper/20 flex items-center justify-center mb-4 cursor-pointer hover:bg-copper/30 transition-colors">
-                  <Play size={32} className="text-copper ml-1" />
+            <div className="relative aspect-video rounded-3xl overflow-hidden bg-secondary group cursor-pointer">
+              <img 
+                src={virtualTourHero} 
+                alt="GentleHands Wellness Center Übersicht"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-foreground/30 group-hover:bg-foreground/40 transition-colors flex flex-col items-center justify-center">
+                <div className="w-20 h-20 rounded-full bg-primary-foreground/20 backdrop-blur flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Play size={32} className="text-primary-foreground ml-1" />
                 </div>
-                <p className="text-muted-foreground">
-                  [Platzhalter: 360° Video-Tour durch GentleHands]
+                <p className="text-primary-foreground font-medium">
+                  360° Tour starten
                 </p>
               </div>
             </div>
@@ -110,11 +129,11 @@ const VirtualTour = () => {
               <ScrollReveal key={room.id} delay={index * 0.1}>
                 <div className="group cursor-pointer">
                   <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-card mb-4">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-muted-foreground text-sm px-4 text-center">
-                        [Platzhalter: Bild {room.name}]
-                      </p>
-                    </div>
+                    <img 
+                      src={room.image} 
+                      alt={room.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/40 transition-colors flex items-center justify-center">
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="w-14 h-14 rounded-full bg-primary-foreground/20 backdrop-blur flex items-center justify-center">
