@@ -32,17 +32,9 @@ export const HeroSection = () => {
       {/* Floating Elements */}
       <FloatingElements variant="dots" />
       
-      {/* Decorative Blurs */}
-      <motion.div 
-        className="absolute top-1/4 -right-32 w-96 h-96 bg-copper/15 rounded-full blur-3xl"
-        animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.2, 0.15] }}
-        transition={{ duration: 8, repeat: Infinity }}
-      />
-      <motion.div 
-        className="absolute bottom-1/4 -left-32 w-96 h-96 bg-petrol/15 rounded-full blur-3xl"
-        animate={{ scale: [1.1, 1, 1.1], opacity: [0.15, 0.2, 0.15] }}
-        transition={{ duration: 10, repeat: Infinity }}
-      />
+      {/* Subtle ambient glow */}
+      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
       <motion.div 
         className="container-wide relative z-10 pt-32 pb-20"
@@ -115,14 +107,8 @@ export const HeroSection = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
             <MagneticButton>
-              <Button variant="hero" size="xl" asChild className="group">
-                <Link to="/buchung">
-                  <span className="relative z-10">Erlebnis anfragen</span>
-                  <motion.div
-                    className="absolute inset-0 bg-copper rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    layoutId="hero-btn-bg"
-                  />
-                </Link>
+              <Button variant="hero" size="xl" asChild>
+                <Link to="/buchung">Erlebnis anfragen</Link>
               </Button>
             </MagneticButton>
             <MagneticButton>
