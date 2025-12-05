@@ -12,8 +12,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { format, addDays, isBefore, startOfToday } from "date-fns";
 import { de } from "date-fns/locale";
-import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon } from "lucide-react";
+import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
@@ -49,7 +51,9 @@ const massages = [
 
 const Buchung = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     masseur: "",
     theme: "",
@@ -717,37 +721,93 @@ const Buchung = () => {
             {currentStep === 5 && (
               <Button
                 variant="copper"
-                onClick={() => {
-                  // Generate booking number and save data to localStorage
-                  const bookingNumber = `GH-${Date.now().toString(36).toUpperCase()}`;
-                  const bookingData = {
-                    bookingNumber,
-                    masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
-                    theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
-                    massage: massages.find(m => m.id === formData.massage)?.title || formData.massage,
-                    duration: formData.duration,
-                    date: formData.selectedDate ? format(formData.selectedDate, "EEEE, d. MMMM yyyy", { locale: de }) : "",
-                    time: formData.selectedTime,
-                    name: formData.name,
-                    email: formData.email,
-                    phone: formData.phone,
-                    preferences: {
-                      music: formData.music,
-                      conversation: formData.conversation,
-                      intensity: formData.intensity,
-                      avoidAreas: formData.avoidAreas,
+                onClick={async () => {
+                  setIsSubmitting(true);
+                  try {
+                    // Generate booking number
+                    const bookingNumber = `GH-${Date.now().toString(36).toUpperCase()}`;
+                    
+                    // Save to database
+                    const { error } = await supabase.from("bookings").insert({
+                      booking_number: bookingNumber,
+                      masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
+                      theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
+                      massage: massages.find(m => m.id === formData.massage)?.title || formData.massage,
+                      duration: formData.duration,
+                      appointment_date: formData.selectedDate ? format(formData.selectedDate, "yyyy-MM-dd") : null,
+                      appointment_time: formData.selectedTime,
+                      customer_name: formData.name,
+                      customer_email: formData.email,
+                      customer_phone: formData.phone,
+                      preferred_contact: formData.preferredContact,
+                      music_preference: formData.music,
+                      conversation_preference: formData.conversation,
+                      intensity_preference: formData.intensity,
+                      avoid_areas: formData.avoidAreas || null,
                       intuitive: formData.intuitive,
-                    },
-                    additionalNotes: formData.additionalNotes,
-                  };
-                  localStorage.setItem("gentlehands_booking", JSON.stringify(bookingData));
-                  navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
+                      additional_notes: formData.additionalNotes || null,
+                      newsletter_consent: formData.newsletter,
+                    });
+
+                    if (error) {
+                      console.error("Booking error:", error);
+                      toast({
+                        title: "Fehler bei der Buchung",
+                        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
+                        variant: "destructive",
+                      });
+                      setIsSubmitting(false);
+                      return;
+                    }
+
+                    // Save to localStorage for confirmation page
+                    const bookingData = {
+                      bookingNumber,
+                      masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
+                      theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
+                      massage: massages.find(m => m.id === formData.massage)?.title || formData.massage,
+                      duration: formData.duration,
+                      date: formData.selectedDate ? format(formData.selectedDate, "EEEE, d. MMMM yyyy", { locale: de }) : "",
+                      time: formData.selectedTime,
+                      name: formData.name,
+                      email: formData.email,
+                      phone: formData.phone,
+                      preferences: {
+                        music: formData.music,
+                        conversation: formData.conversation,
+                        intensity: formData.intensity,
+                        avoidAreas: formData.avoidAreas,
+                        intuitive: formData.intuitive,
+                      },
+                      additionalNotes: formData.additionalNotes,
+                    };
+                    localStorage.setItem("gentlehands_booking", JSON.stringify(bookingData));
+                    
+                    navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
+                  } catch (err) {
+                    console.error("Unexpected error:", err);
+                    toast({
+                      title: "Fehler",
+                      description: "Ein unerwarteter Fehler ist aufgetreten.",
+                      variant: "destructive",
+                    });
+                    setIsSubmitting(false);
+                  }
                 }}
-                disabled={!canProceed()}
+                disabled={!canProceed() || isSubmitting}
                 className="ml-auto"
               >
-                Anfrage absenden
-                <Check size={16} />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin mr-2" />
+                    Wird gesendet...
+                  </>
+                ) : (
+                  <>
+                    Anfrage absenden
+                    <Check size={16} />
+                  </>
+                )}
               </Button>
             )}
           </div>

@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          additional_notes: string | null
+          appointment_date: string
+          appointment_time: string
+          avoid_areas: string | null
+          booking_number: string
+          conversation_preference: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          duration: string
+          id: string
+          intensity_preference: string | null
+          intuitive: boolean | null
+          massage: string
+          masseur: string
+          music_preference: string | null
+          newsletter_consent: boolean | null
+          preferred_contact: string | null
+          status: string | null
+          theme: string
+          updated_at: string
+        }
+        Insert: {
+          additional_notes?: string | null
+          appointment_date: string
+          appointment_time: string
+          avoid_areas?: string | null
+          booking_number: string
+          conversation_preference?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          duration: string
+          id?: string
+          intensity_preference?: string | null
+          intuitive?: boolean | null
+          massage: string
+          masseur: string
+          music_preference?: string | null
+          newsletter_consent?: boolean | null
+          preferred_contact?: string | null
+          status?: string | null
+          theme: string
+          updated_at?: string
+        }
+        Update: {
+          additional_notes?: string | null
+          appointment_date?: string
+          appointment_time?: string
+          avoid_areas?: string | null
+          booking_number?: string
+          conversation_preference?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          duration?: string
+          id?: string
+          intensity_preference?: string | null
+          intuitive?: boolean | null
+          massage?: string
+          masseur?: string
+          music_preference?: string | null
+          newsletter_consent?: boolean | null
+          preferred_contact?: string | null
+          status?: string | null
+          theme?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
