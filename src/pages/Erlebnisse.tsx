@@ -8,11 +8,11 @@ import { Waves, Mountain, Moon, Building, Leaf, Sparkles, Check, ArrowRight, Pla
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 
-import massageOcean from "@/assets/massage-ocean-theme.jpg";
-import massageAlpine from "@/assets/massage-alpine-theme.jpg";
-import massageDark from "@/assets/massage-dark-theme.jpg";
-import massageZen from "@/assets/massage-zen-theme.jpg";
-import massageOverhead from "@/assets/massage-overhead-view.jpg";
+import experienceOcean from "@/assets/experience-ocean.jpg";
+import experienceAlpine from "@/assets/experience-alpine.jpg";
+import experienceDark from "@/assets/experience-dark.jpg";
+import experienceUrban from "@/assets/experience-urban.jpg";
+import experienceZen from "@/assets/experience-zen.jpg";
 import massageBack from "@/assets/massage-hands-back.jpg";
 
 const themes = [
@@ -21,7 +21,7 @@ const themes = [
     icon: Waves,
     title: "Ozean & Palmen",
     subtitle: "Tropische Leichtigkeit",
-    image: massageOcean,
+    image: experienceOcean,
     description:
       "Lassen Sie sich davontragen an einen warmen Strand bei Sonnenuntergang. Das sanfte Rauschen des Meeres, der Duft von Kokos und Sandelholz, warmes Licht – ein Kurzurlaub für Ihre Seele.",
     elements: [
@@ -47,7 +47,7 @@ const themes = [
     icon: Mountain,
     title: "Alpine Stille",
     subtitle: "Berghütten-Geborgenheit",
-    image: massageAlpine,
+    image: experienceAlpine,
     description:
       "Die Ruhe einer Berghütte nach einem langen Tag. Holzelemente, der Duft von frischen Kräutern und klarer Bergluft. Perfekt für alle, die Erdung und Naturverbundenheit suchen.",
     elements: [
@@ -73,7 +73,7 @@ const themes = [
     icon: Moon,
     title: "Deep Dark Relax",
     subtitle: "Maximale Tiefe",
-    image: massageDark,
+    image: experienceDark,
     description:
       "Ein dunkler, geschützter Raum mit nur punktuellen, warmen Lichtquellen. Hier steht Ihr Körper im absoluten Fokus – ohne visuelle Ablenkung, für maximale Wahrnehmung.",
     elements: [
@@ -99,7 +99,7 @@ const themes = [
     icon: Building,
     title: "Urban Loft",
     subtitle: "City-Wellness",
-    image: massageOverhead,
+    image: experienceUrban,
     description:
       "Moderner, stylisher Loft-Vibe für die Frau, die sich etwas Besonderes gönnt. Industrial-Charme trifft auf Wärme und Wohlgefühl – urban, aber nie kalt.",
     elements: [
@@ -125,7 +125,7 @@ const themes = [
     icon: Leaf,
     title: "Zen Garden",
     subtitle: "Asiatische Ruhe",
-    image: massageZen,
+    image: experienceZen,
     description:
       "Minimalistisch, asiatisch inspiriert – maximale Reduktion für maximale Ruhe. Klare Linien, wenig Dekoration, leichte Räuchernoten. Ein Ort der Stille.",
     elements: [
