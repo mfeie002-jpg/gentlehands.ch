@@ -7,12 +7,12 @@ import { Waves, Mountain, Moon, Building, Leaf, Sparkles, Check, ArrowRight } fr
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 
-import oceanImage from "@/assets/theme-ocean.jpg";
-import alpineImage from "@/assets/theme-alpine.jpg";
-import darkImage from "@/assets/theme-dark.jpg";
-import urbanImage from "@/assets/theme-urban.jpg";
-import zenImage from "@/assets/theme-zen.jpg";
-import heroSpaRoom from "@/assets/hero-spa-room.jpg";
+import massageOcean from "@/assets/massage-ocean-theme.jpg";
+import massageAlpine from "@/assets/massage-alpine-theme.jpg";
+import massageDark from "@/assets/massage-dark-theme.jpg";
+import massageZen from "@/assets/massage-zen-theme.jpg";
+import massageOverhead from "@/assets/massage-overhead-view.jpg";
+import massageBack from "@/assets/massage-hands-back.jpg";
 
 const themes = [
   {
@@ -20,7 +20,7 @@ const themes = [
     icon: Waves,
     title: "Ozean & Palmen",
     subtitle: "Tropische Leichtigkeit",
-    image: oceanImage,
+    image: massageOcean,
     description:
       "Lassen Sie sich davontragen an einen warmen Strand bei Sonnenuntergang. Das sanfte Rauschen des Meeres, der Duft von Kokos und Sandelholz, warmes Licht – ein Kurzurlaub für Ihre Seele.",
     elements: [
@@ -45,7 +45,7 @@ const themes = [
     icon: Mountain,
     title: "Alpine Stille",
     subtitle: "Berghütten-Geborgenheit",
-    image: alpineImage,
+    image: massageAlpine,
     description:
       "Die Ruhe einer Berghütte nach einem langen Tag. Holzelemente, der Duft von frischen Kräutern und klarer Bergluft. Perfekt für alle, die Erdung und Naturverbundenheit suchen.",
     elements: [
@@ -70,7 +70,7 @@ const themes = [
     icon: Moon,
     title: "Deep Dark Relax",
     subtitle: "Maximale Tiefe",
-    image: darkImage,
+    image: massageDark,
     description:
       "Ein dunkler, geschützter Raum mit nur punktuellen, warmen Lichtquellen. Hier steht Ihr Körper im absoluten Fokus – ohne visuelle Ablenkung, für maximale Wahrnehmung.",
     elements: [
@@ -95,7 +95,7 @@ const themes = [
     icon: Building,
     title: "Urban Loft",
     subtitle: "City-Wellness",
-    image: urbanImage,
+    image: massageOverhead,
     description:
       "Moderner, stylisher Loft-Vibe für die Frau, die sich etwas Besonderes gönnt. Industrial-Charme trifft auf Wärme und Wohlgefühl – urban, aber nie kalt.",
     elements: [
@@ -120,7 +120,7 @@ const themes = [
     icon: Leaf,
     title: "Zen Garden",
     subtitle: "Asiatische Ruhe",
-    image: zenImage,
+    image: massageZen,
     description:
       "Minimalistisch, asiatisch inspiriert – maximale Reduktion für maximale Ruhe. Klare Linien, wenig Dekoration, leichte Räuchernoten. Ein Ort der Stille.",
     elements: [
@@ -145,7 +145,7 @@ const themes = [
     icon: Sparkles,
     title: "Surprise Experience",
     subtitle: "Vertrauen & Hingabe",
-    image: heroSpaRoom,
+    image: massageBack,
     description:
       "Sie wählen nur Ihren groben Mood – leicht, tief oder emotionaler Reset. Alles andere überlassen Sie uns. Ein Akt des Vertrauens mit einem Erlebnis, das genau zu Ihnen passt.",
     elements: [
@@ -184,7 +184,7 @@ const Erlebnisse = () => {
       {/* Hero with Parallax */}
       <section className="relative pt-32 pb-24 overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
-          <img src={heroSpaRoom} alt="GentleHands Erlebnisse" className="w-full h-full object-cover scale-110" />
+          <img src={massageBack} alt="GentleHands Erlebnisse" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
         </motion.div>
         
