@@ -4,7 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { CookieConsent } from "@/components/shared/CookieConsent";
 import { FloatingCTA } from "@/components/shared/FloatingCTA";
 import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
@@ -86,7 +85,6 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <FloatingCTA />
-          <CookieConsent />
           <NewsletterPopup />
         </BrowserRouter>
       </TooltipProvider>
