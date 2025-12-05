@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { Gift, Heart, Star, Clock, Check, ArrowRight } from "lucide-react";
+import { Gift, Heart, Star, Clock, Check, ArrowRight, ArrowLeft, Sparkles, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { FloatingElements } from "@/components/shared/FloatingElements";
+import { GlowCard } from "@/components/shared/GlowCard";
 
 const giftCards = [
   {
@@ -17,7 +19,8 @@ const giftCards = [
     price: 180,
     description: "Der perfekte Einstieg in die Welt von GentleHands.",
     includes: ["60-Minuten-Massage", "Freie Theme-Wahl", "Willkommenstee"],
-    color: "from-petrol/20 to-petrol/5",
+    color: "petrol",
+    glowColor: "180 50% 30%",
     icon: Star,
   },
   {
@@ -28,7 +31,8 @@ const giftCards = [
     description: "Unser meistgebuchtes Erlebnis als Geschenk.",
     includes: ["90-Minuten-Massage", "Alle Themes verfügbar", "Aromatherapie", "Getränkeauswahl"],
     popular: true,
-    color: "from-copper/20 to-copper/5",
+    color: "copper",
+    glowColor: "24 55% 52%",
     icon: Heart,
   },
   {
@@ -38,7 +42,8 @@ const giftCards = [
     price: 340,
     description: "Das ultimative Entspannungserlebnis für besondere Menschen.",
     includes: ["120-Minuten-Massage", "Premium Themes", "Champagner/Tee", "Aftercare-Set", "Persönliche Beratung"],
-    color: "from-forest/20 to-forest/5",
+    color: "forest",
+    glowColor: "155 35% 35%",
     icon: Gift,
   },
   {
@@ -48,7 +53,8 @@ const giftCards = [
     price: null,
     description: "Lassen Sie die beschenkte Person selbst wählen.",
     includes: ["Beliebiger Betrag ab CHF 50", "Flexibel einlösbar", "2 Jahre gültig"],
-    color: "from-warm-gray/20 to-warm-gray/5",
+    color: "warm-gray",
+    glowColor: "0 0% 50%",
     icon: Clock,
   },
 ];
@@ -81,277 +87,367 @@ const Gutscheine = () => {
     <Layout>
       <Helmet>
         <title>Gutscheine | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Verschenken Sie Entspannung: Exklusive GentleHands Gutscheine für unvergessliche Massage-Erlebnisse. Das perfekte Geschenk für besondere Menschen."
-        />
+        <meta name="description" content="Verschenken Sie Entspannung: Exklusive GentleHands Gutscheine für unvergessliche Massage-Erlebnisse." />
       </Helmet>
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background">
-        <div className="container-wide">
+      <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div 
+            className="absolute top-1/4 -right-32 w-96 h-96 bg-copper/10 rounded-full blur-[120px]"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div 
+            className="absolute bottom-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity, delay: 4 }}
+          />
+        </div>
+        
+        <FloatingElements variant="dots" />
+        
+        <div className="container-wide relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <div className="w-20 h-20 rounded-2xl bg-copper/10 flex items-center justify-center mx-auto mb-6">
-              <Gift size={40} className="text-copper" />
-            </div>
-            <h1 className="text-foreground mb-6">
-              Schenken Sie Entspannung
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Das perfekte Geschenk für besondere Menschen – ein unvergessliches
-              GentleHands-Erlebnis.
-            </p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="w-20 h-20 rounded-2xl bg-copper/10 flex items-center justify-center mx-auto mb-6"
+            >
+              <motion.div
+                animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                <Gift size={40} className="text-copper" />
+              </motion.div>
+            </motion.div>
+            
+            <motion.h1 
+              className="text-foreground mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              Schenken Sie <span className="text-gradient-copper">Entspannung</span>
+            </motion.h1>
+            <motion.p 
+              className="text-muted-foreground text-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              Das perfekte Geschenk für besondere Menschen – ein unvergessliches GentleHands-Erlebnis.
+            </motion.p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Progress Indicator */}
+      <section className="py-6 border-b border-border/50 sticky top-16 z-30 bg-background/80 backdrop-blur-md">
+        <div className="container-wide">
+          <div className="flex items-center justify-center gap-4">
+            {[1, 2].map((s) => (
+              <div key={s} className="flex items-center gap-2">
+                <motion.div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    step >= s ? 'bg-copper text-accent-foreground' : 'bg-secondary text-muted-foreground'
+                  }`}
+                  animate={{ scale: step === s ? 1.1 : 1 }}
+                >
+                  {s}
+                </motion.div>
+                <span className={`text-sm hidden sm:inline ${step >= s ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  {s === 1 ? 'Gutschein wählen' : 'Personalisieren'}
+                </span>
+                {s === 1 && (
+                  <div className="w-8 h-px bg-border mx-2" />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Gift Cards */}
       <section className="section-padding-sm">
         <div className="container-wide">
-          {step === 1 && (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                {giftCards.map((card, index) => (
-                  <motion.div
-                    key={card.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                  >
-                    <button
-                      onClick={() => setSelectedCard(card.id)}
-                      className={`w-full text-left h-full card-elevated p-6 border-2 transition-all hover:-translate-y-1 ${
-                        selectedCard === card.id
-                          ? "border-copper shadow-copper"
-                          : "border-transparent hover:border-copper/30"
-                      }`}
+          <AnimatePresence mode="wait">
+            {step === 1 && (
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                  {giftCards.map((card, index) => (
+                    <motion.div
+                      key={card.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
                     >
-                      {card.popular && (
-                        <span className="inline-block px-2 py-1 text-xs font-medium bg-copper text-accent-foreground rounded-full mb-4">
-                          Beliebt
-                        </span>
-                      )}
-                      <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-4`}>
-                        <card.icon size={28} className="text-primary" />
-                      </div>
-                      <h3 className="font-display text-xl text-foreground mb-1">
-                        {card.title}
-                      </h3>
-                      <p className="text-copper text-sm mb-3">{card.subtitle}</p>
-                      <p className="text-muted-foreground text-sm mb-4">
-                        {card.description}
-                      </p>
-                      <ul className="space-y-2 mb-4">
-                        {card.includes.map((item) => (
-                          <li key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Check size={14} className="text-copper" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                      {card.price ? (
-                        <p className="font-display text-2xl text-foreground">
-                          CHF {card.price}
-                        </p>
-                      ) : (
-                        <p className="text-muted-foreground text-sm">
-                          Betrag wählbar
-                        </p>
-                      )}
-                    </button>
-                  </motion.div>
-                ))}
-              </div>
-
-              {selectedCard === "custom" && (
-                <div className="max-w-xs mx-auto mb-8">
-                  <Label htmlFor="amount">Gewünschter Betrag (CHF)</Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    min="50"
-                    step="10"
-                    placeholder="z.B. 200"
-                    value={customAmount}
-                    onChange={(e) => setCustomAmount(e.target.value)}
-                    className="mt-2"
-                  />
+                      <GlowCard
+                        glowColor={card.glowColor}
+                        className={`h-full p-6 cursor-pointer transition-all ${
+                          selectedCard === card.id
+                            ? "ring-2 ring-copper"
+                            : "hover:ring-1 hover:ring-copper/30"
+                        }`}
+                        onClick={() => setSelectedCard(card.id)}
+                      >
+                        {card.popular && (
+                          <motion.span 
+                            className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-copper text-accent-foreground rounded-full mb-4"
+                            animate={{ scale: [1, 1.05, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          >
+                            <Sparkles size={12} />
+                            Beliebt
+                          </motion.span>
+                        )}
+                        
+                        <motion.div 
+                          className={`w-14 h-14 rounded-xl bg-gradient-to-br from-${card.color}/20 to-${card.color}/5 flex items-center justify-center mb-4`}
+                          whileHover={{ rotate: 360 }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          <card.icon size={28} className="text-primary" />
+                        </motion.div>
+                        
+                        <h3 className="font-display text-xl text-foreground mb-1">{card.title}</h3>
+                        <p className="text-copper text-sm mb-3">{card.subtitle}</p>
+                        <p className="text-muted-foreground text-sm mb-4">{card.description}</p>
+                        
+                        <ul className="space-y-2 mb-4">
+                          {card.includes.map((item) => (
+                            <li key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <Check size={14} className="text-copper" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                        
+                        {card.price ? (
+                          <motion.p 
+                            className="font-display text-2xl text-foreground"
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                          >
+                            CHF {card.price}
+                          </motion.p>
+                        ) : (
+                          <p className="text-muted-foreground text-sm">Betrag wählbar</p>
+                        )}
+                        
+                        {selectedCard === card.id && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute top-4 right-4 w-6 h-6 rounded-full bg-copper flex items-center justify-center"
+                          >
+                            <Check size={14} className="text-accent-foreground" />
+                          </motion.div>
+                        )}
+                      </GlowCard>
+                    </motion.div>
+                  ))}
                 </div>
-              )}
 
-              {selectedCard && (
-                <div className="text-center">
-                  <Button
-                    variant="copper"
-                    size="lg"
-                    onClick={() => setStep(2)}
-                    disabled={selectedCard === "custom" && !customAmount}
+                {selectedCard === "custom" && (
+                  <motion.div 
+                    className="max-w-xs mx-auto mb-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                   >
-                    Weiter zur Personalisierung
-                    <ArrowRight size={18} />
-                  </Button>
-                </div>
-              )}
-            </>
-          )}
-
-          {step === 2 && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="max-w-2xl mx-auto"
-            >
-              <div className="card-elevated p-8">
-                <h2 className="font-display text-2xl text-foreground mb-6">
-                  Gutschein personalisieren
-                </h2>
-
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="recipientName">Name des Beschenkten</Label>
-                      <Input
-                        id="recipientName"
-                        value={formData.recipientName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, recipientName: e.target.value })
-                        }
-                        placeholder="Anna Muster"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="recipientEmail">E-Mail des Beschenkten</Label>
-                      <Input
-                        id="recipientEmail"
-                        type="email"
-                        value={formData.recipientEmail}
-                        onChange={(e) =>
-                          setFormData({ ...formData, recipientEmail: e.target.value })
-                        }
-                        placeholder="anna@email.ch"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="senderName">Ihr Name</Label>
-                      <Input
-                        id="senderName"
-                        value={formData.senderName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, senderName: e.target.value })
-                        }
-                        placeholder="Maria Muster"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="senderEmail">Ihre E-Mail</Label>
-                      <Input
-                        id="senderEmail"
-                        type="email"
-                        value={formData.senderEmail}
-                        onChange={(e) =>
-                          setFormData({ ...formData, senderEmail: e.target.value })
-                        }
-                        placeholder="maria@email.ch"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Persönliche Nachricht</Label>
-                    <Textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) =>
-                        setFormData({ ...formData, message: e.target.value })
-                      }
-                      placeholder="Schreiben Sie eine persönliche Nachricht..."
-                      rows={4}
+                    <Label htmlFor="amount">Gewünschter Betrag (CHF)</Label>
+                    <Input
+                      id="amount"
+                      type="number"
+                      min="50"
+                      step="10"
+                      placeholder="z.B. 200"
+                      value={customAmount}
+                      onChange={(e) => setCustomAmount(e.target.value)}
+                      className="mt-2"
                     />
-                  </div>
+                  </motion.div>
+                )}
 
-                  <div className="p-4 bg-secondary/50 rounded-xl">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Ausgewählt:</span>
-                      <span className="font-display text-foreground">
-                        {selectedGift?.title}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="text-muted-foreground">Gesamtbetrag:</span>
-                      <span className="font-display text-2xl text-copper">
-                        CHF {totalPrice}
-                      </span>
-                    </div>
-                  </div>
+                {selectedCard && (
+                  <motion.div 
+                    className="text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      <Button
+                        variant="copper"
+                        size="lg"
+                        onClick={() => setStep(2)}
+                        disabled={selectedCard === "custom" && !customAmount}
+                        className="group"
+                      >
+                        Weiter zur Personalisierung
+                        <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
+                      </Button>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
 
-                  <div className="flex gap-4">
-                    <Button variant="outline" onClick={() => setStep(1)}>
-                      Zurück
-                    </Button>
-                    <Button
-                      variant="copper"
-                      className="flex-1"
-                      onClick={handlePurchase}
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="max-w-2xl mx-auto"
+              >
+                <div className="card-elevated p-8 relative overflow-hidden">
+                  {/* Decorative corner */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-copper/10 to-transparent" />
+                  
+                  <h2 className="font-display text-2xl text-foreground mb-6">Gutschein personalisieren</h2>
+
+                  <div className="space-y-6 relative z-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="recipientName">Name des Beschenkten</Label>
+                        <Input
+                          id="recipientName"
+                          value={formData.recipientName}
+                          onChange={(e) => setFormData({ ...formData, recipientName: e.target.value })}
+                          placeholder="Anna Muster"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="recipientEmail">E-Mail des Beschenkten</Label>
+                        <Input
+                          id="recipientEmail"
+                          type="email"
+                          value={formData.recipientEmail}
+                          onChange={(e) => setFormData({ ...formData, recipientEmail: e.target.value })}
+                          placeholder="anna@email.ch"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="senderName">Ihr Name</Label>
+                        <Input
+                          id="senderName"
+                          value={formData.senderName}
+                          onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
+                          placeholder="Maria Muster"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="senderEmail">Ihre E-Mail</Label>
+                        <Input
+                          id="senderEmail"
+                          type="email"
+                          value={formData.senderEmail}
+                          onChange={(e) => setFormData({ ...formData, senderEmail: e.target.value })}
+                          placeholder="maria@email.ch"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Persönliche Nachricht</Label>
+                      <Textarea
+                        id="message"
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        placeholder="Schreiben Sie eine persönliche Nachricht..."
+                        rows={4}
+                      />
+                    </div>
+
+                    <motion.div 
+                      className="p-4 bg-gradient-to-r from-secondary/50 to-secondary/30 rounded-xl border border-border/50"
+                      whileHover={{ scale: 1.01 }}
                     >
-                      Zur Kasse (CHF {totalPrice})
-                    </Button>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Ausgewählt:</span>
+                        <span className="font-display text-foreground">{selectedGift?.title}</span>
+                      </div>
+                      <div className="flex justify-between items-center mt-2">
+                        <span className="text-muted-foreground">Gesamtbetrag:</span>
+                        <motion.span 
+                          className="font-display text-2xl text-copper"
+                          initial={{ scale: 0.5 }}
+                          animate={{ scale: 1 }}
+                        >
+                          CHF {totalPrice}
+                        </motion.span>
+                      </div>
+                    </motion.div>
+
+                    <div className="flex gap-4">
+                      <Button variant="outline" onClick={() => setStep(1)} className="group">
+                        <ArrowLeft size={16} className="mr-2 transition-transform group-hover:-translate-x-1" />
+                        Zurück
+                      </Button>
+                      <motion.div className="flex-1" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                        <Button
+                          variant="copper"
+                          className="w-full group"
+                          onClick={handlePurchase}
+                        >
+                          <CreditCard size={18} className="mr-2" />
+                          Zur Kasse (CHF {totalPrice})
+                          <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
+                        </Button>
+                      </motion.div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
       {/* Info Section */}
-      <section className="section-padding bg-secondary/30">
+      <section className="section-padding bg-gradient-to-b from-secondary/30 to-background">
         <div className="container-narrow">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Gift size={24} className="text-primary" />
-              </div>
-              <h4 className="font-display text-lg text-foreground mb-2">
-                Sofort verfügbar
-              </h4>
-              <p className="text-muted-foreground text-sm">
-                Der Gutschein wird sofort per E-Mail zugestellt – perfekt für
-                Last-Minute-Geschenke.
-              </p>
-            </div>
-            <div>
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Clock size={24} className="text-primary" />
-              </div>
-              <h4 className="font-display text-lg text-foreground mb-2">
-                2 Jahre gültig
-              </h4>
-              <p className="text-muted-foreground text-sm">
-                Genügend Zeit, um den perfekten Moment für das Erlebnis zu
-                finden.
-              </p>
-            </div>
-            <div>
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Heart size={24} className="text-primary" />
-              </div>
-              <h4 className="font-display text-lg text-foreground mb-2">
-                Persönlich gestaltbar
-              </h4>
-              <p className="text-muted-foreground text-sm">
-                Mit persönlicher Nachricht und wahlweise elegantem Ausdruck zum
-                Verschenken.
-              </p>
-            </div>
+            {[
+              { icon: Gift, title: "Sofort verfügbar", text: "Der Gutschein wird sofort per E-Mail zugestellt – perfekt für Last-Minute-Geschenke." },
+              { icon: Clock, title: "2 Jahre gültig", text: "Genügend Zeit, um den perfekten Moment für das Erlebnis zu finden." },
+              { icon: Heart, title: "Persönlich gestaltbar", text: "Mit persönlicher Nachricht und wahlweise elegantem Ausdruck zum Verschenken." },
+            ].map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+              >
+                <motion.div 
+                  className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <item.icon size={24} className="text-primary" />
+                </motion.div>
+                <h4 className="font-display text-lg text-foreground mb-2">{item.title}</h4>
+                <p className="text-muted-foreground text-sm">{item.text}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
