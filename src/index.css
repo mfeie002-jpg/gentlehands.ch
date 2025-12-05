@@ -52,7 +52,7 @@
 
     --radius: 0.75rem;
 
-    /* Custom Colors */
+    /* Custom Colors - Enhanced Copper Palette */
     --cream: 35 30% 96%;
     --sand: 30 25% 88%;
     --sand-dark: 30 20% 78%;
@@ -61,24 +61,30 @@
     --petrol-dark: 185 50% 20%;
     --forest: 150 30% 25%;
     --forest-light: 150 25% 35%;
-    --copper: 25 50% 55%;
-    --copper-light: 25 45% 65%;
-    --copper-dark: 25 55% 45%;
+    --copper: 24 55% 52%;
+    --copper-light: 24 50% 62%;
+    --copper-dark: 24 60% 42%;
+    --copper-glow: 24 55% 52%;
     --warm-gray: 30 12% 45%;
     --warm-gray-light: 30 10% 70%;
 
-    /* Gradients */
+    /* Premium Gradients */
     --gradient-hero: linear-gradient(180deg, hsl(35 30% 96%) 0%, hsl(30 25% 92%) 100%);
     --gradient-card: linear-gradient(135deg, hsl(35 35% 98%) 0%, hsl(30 25% 95%) 100%);
     --gradient-petrol: linear-gradient(135deg, hsl(185 45% 28%) 0%, hsl(185 50% 22%) 100%);
-    --gradient-copper: linear-gradient(135deg, hsl(25 50% 55%) 0%, hsl(25 55% 45%) 100%);
+    --gradient-copper: linear-gradient(135deg, hsl(24 55% 52%) 0%, hsl(24 60% 42%) 100%);
+    --gradient-copper-light: linear-gradient(135deg, hsl(24 50% 62%) 0%, hsl(24 55% 52%) 100%);
+    --gradient-copper-radial: radial-gradient(circle, hsl(24 55% 52% / 0.15) 0%, transparent 70%);
 
-    /* Shadows */
+    /* Premium Shadows */
     --shadow-sm: 0 2px 8px hsl(30 20% 50% / 0.08);
     --shadow-md: 0 4px 20px hsl(30 20% 50% / 0.1);
     --shadow-lg: 0 8px 40px hsl(30 20% 50% / 0.12);
-    --shadow-copper: 0 4px 20px hsl(25 50% 55% / 0.25);
+    --shadow-xl: 0 12px 60px hsl(30 20% 50% / 0.15);
+    --shadow-copper: 0 4px 30px hsl(24 55% 52% / 0.3);
+    --shadow-copper-lg: 0 8px 50px hsl(24 55% 52% / 0.4);
     --shadow-petrol: 0 4px 20px hsl(185 45% 28% / 0.2);
+    --shadow-glow-copper: 0 0 40px hsl(24 55% 52% / 0.3);
 
     /* Sidebar */
     --sidebar-background: 35 30% 96%;
@@ -178,11 +184,28 @@
   }
 
   .text-gradient-copper {
-    @apply bg-gradient-to-r from-copper to-copper-light bg-clip-text text-transparent;
+    background: linear-gradient(135deg, hsl(var(--copper)) 0%, hsl(var(--copper-light)) 50%, hsl(var(--copper)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .text-gradient-petrol {
     @apply bg-gradient-to-r from-petrol to-petrol-light bg-clip-text text-transparent;
+  }
+
+  .text-gradient-copper-animated {
+    background: linear-gradient(90deg, hsl(var(--copper-dark)), hsl(var(--copper)), hsl(var(--copper-light)), hsl(var(--copper)));
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: copper-flow 4s ease-in-out infinite;
+  }
+
+  @keyframes copper-flow {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
   }
 
   .card-elevated {
