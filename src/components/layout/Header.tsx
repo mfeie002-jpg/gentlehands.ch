@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Logo } from "@/components/shared/Logo";
 
 const navLinks = [
   { href: "/erlebnisse", label: "Erlebnisse" },
@@ -42,10 +43,8 @@ export const Header = () => {
       >
         <div className="container-wide flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <span className="font-display text-2xl md:text-3xl tracking-tight text-foreground group-hover:text-primary transition-colors">
-              Gentle<span className="text-copper">Hands</span>
-            </span>
+          <Link to="/" className="group">
+            <Logo size="md" />
           </Link>
 
           {/* Desktop Navigation */}

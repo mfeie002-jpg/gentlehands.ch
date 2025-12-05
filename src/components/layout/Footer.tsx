@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Heart, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { Logo } from "@/components/shared/Logo";
 
 const footerLinks = {
   erlebnisse: [
@@ -55,13 +56,8 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
           {/* Brand Column */}
           <ScrollReveal direction="up" className="lg:col-span-2">
-            <Link to="/" className="inline-block mb-6 group">
-              <motion.span 
-                className="font-display text-2xl tracking-tight text-foreground"
-                whileHover={{ scale: 1.02 }}
-              >
-                Gentle<span className="text-copper group-hover:text-copper-light transition-colors">Hands</span>
-              </motion.span>
+            <Link to="/" className="inline-block mb-6">
+              <Logo size="md" />
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm leading-relaxed">
               Exklusive Erlebnismassagen für Frauen. Ein geschützter Raum für
