@@ -5,12 +5,14 @@ interface GlowCardProps {
   children: ReactNode;
   className?: string;
   glowColor?: string;
+  onClick?: () => void;
 }
 
 export const GlowCard = ({ 
   children, 
   className = "",
-  glowColor = "hsl(var(--primary))"
+  glowColor = "hsl(var(--primary))",
+  onClick
 }: GlowCardProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -32,6 +34,7 @@ export const GlowCard = ({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.3 }}
     >
