@@ -7,6 +7,9 @@ import { Helmet } from "react-helmet-async";
 import { Clock, Sparkles, Heart, Zap, Moon, Sun, Star, ArrowRight, Filter, Check } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
+import { MassageComparisonTable } from "@/components/massagen/MassageComparisonTable";
+import { MassageBenefitsGrid } from "@/components/massagen/MassageBenefitsGrid";
+import { MassageProcessSection } from "@/components/massagen/MassageProcessSection";
 
 import massageDeepRelease from "@/assets/massage-deep-release.jpg";
 import massageStressReset from "@/assets/massage-stress-reset.jpg";

@@ -7,6 +7,9 @@ import { Helmet } from "react-helmet-async";
 import { Waves, Mountain, Moon, Building, Leaf, Sparkles, Check, ArrowRight, Play, Volume2 } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
+import { ThemeAtmosphereGrid } from "@/components/erlebnisse/ThemeAtmosphereGrid";
+import { ThemeMoodSelector } from "@/components/erlebnisse/ThemeMoodSelector";
+import { ThemeCombinationsSection } from "@/components/erlebnisse/ThemeCombinationsSection";
 
 import experienceOcean from "@/assets/experience-ocean.jpg";
 import experienceAlpine from "@/assets/experience-alpine.jpg";
