@@ -161,9 +161,8 @@ export const Footer = () => {
             </motion.span>
             {" "}in Zürich.
           </motion.p>
-          <p className="text-xs text-muted-foreground text-center md:text-right max-w-md opacity-70">
-            GentleHands ist kein Erotikstudio. Wir bieten ausschliesslich
-            professionelle Entspannungsmassagen an.
+          <p className="text-xs text-muted-foreground text-center md:text-right max-w-md opacity-80">
+            GentleHands bietet ausschliesslich professionelle Entspannungsmassagen an. Wir sind kein Erotikstudio.
           </p>
         </div>
       </div>

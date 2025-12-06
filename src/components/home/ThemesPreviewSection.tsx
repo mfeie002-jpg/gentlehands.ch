@@ -160,10 +160,13 @@ export const ThemesPreviewSection = () => {
               transition={{ duration: 0.8 }}
             />
           </motion.div>
-          <h2 className="text-foreground mb-4">Wählen Sie Ihr Theme</h2>
+          <h2 className="text-foreground mb-4">
+            Wählen Sie Ihre <span className="text-gradient-copper">Atmosphäre</span>
+          </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Jedes Erlebnis wird durch eine einzigartige Atmosphäre geprägt –
-            Licht, Düfte, Klänge und Ambiente perfekt abgestimmt.
+            Licht, Düfte, Klänge und Ambiente sind perfekt auf Ihre Entspannung abgestimmt.
+            Alle Themes sind professionell gestaltet für maximale Erholung.
           </p>
         </ScrollReveal>
 

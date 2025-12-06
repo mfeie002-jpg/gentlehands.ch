@@ -27,7 +27,7 @@ const faqs = [
   {
     question: "Was ist GentleHands genau?",
     answer:
-      "GentleHands ist ein exklusiver Ort für Erlebnismassagen – ausschliesslich für Frauen. Wir bieten professionelle Entspannungsmassagen in atmosphärisch gestalteten Räumen an. Jedes Erlebnis wird durch ein wählbares «Theme» geprägt: Licht, Düfte, Klänge und Ambiente sind perfekt auf Ihre Entspannung abgestimmt. Es ist kein klassisches Massage-Studio, sondern ein privater Raum für tiefe Entspannung.",
+      "GentleHands ist ein exklusiver Ort für Erlebnismassagen – ausschliesslich für Frauen. Wir bieten professionelle Entspannungsmassagen in atmosphärisch gestalteten Themenräumen an. Jedes Erlebnis wird durch ein wählbares «Theme» geprägt: Licht, Düfte, Klänge und Ambiente sind perfekt auf Ihre Entspannung abgestimmt. Es ist kein klassisches Massage-Studio, sondern ein geschützter Raum für tiefe Entspannung.",
     category: "general",
   },
   {
@@ -45,13 +45,25 @@ const faqs = [
   {
     question: "Ist GentleHands ein Erotikstudio?",
     answer:
-      "Nein, absolut nicht. GentleHands bietet ausschliesslich professionelle Entspannungs- und Wohlfühlmassagen an. Es gibt keine sexuellen Dienstleistungen. «Sinnlich» bedeutet bei uns atmosphärisch und auf die Sinne bezogen (Sehen, Hören, Riechen, Fühlen) – nicht erotisch. Wir legen grossen Wert auf Professionalität, Respekt und klare Grenzen.",
+      "Nein, absolut nicht. GentleHands bietet ausschliesslich professionelle Entspannungs- und Wohlfühlmassagen an. Es gibt keine sexuellen Dienstleistungen. «Sinnlich» bedeutet bei uns atmosphärisch und auf die Sinne bezogen (Licht, Düfte, Musik) – nicht erotisch. Wir legen grössten Wert auf Professionalität, Respekt und klare Grenzen.",
+    category: "general",
+  },
+  {
+    question: "Wie werden meine Grenzen respektiert?",
+    answer:
+      "Ihre Grenzen haben bei uns oberste Priorität. Vor jeder Session besprechen wir Ihre Präferenzen und Bereiche, die Sie aussparen möchten. Während der Massage können Sie jederzeit Feedback geben oder die Session abbrechen – ohne Erklärung. Unsere Therapeut:innen sind speziell geschult, achtsam und respektvoll zu arbeiten.",
+    category: "privacy",
+  },
+  {
+    question: "Wer arbeitet bei GentleHands?",
+    answer:
+      "Alle unsere Therapeut:innen sind umfassend ausgebildet und bringen jahrelange Erfahrung in professioneller Körperarbeit mit. Sie können zwischen verschiedenen Therapeut:innen wählen oder uns intuitiv für Sie entscheiden lassen. Jede Person in unserem Team teilt unsere Werte: Respekt, Professionalität und echte Präsenz.",
     category: "general",
   },
   {
     question: "Was trage ich während der Massage?",
     answer:
-      "Sie entkleiden sich so weit, wie Sie sich wohl fühlen. Die meisten Kundinnen werden vollständig massiert, sind aber während der gesamten Session professionell abgedeckt – nur der gerade bearbeitete Bereich wird freigelegt. Wenn Sie bestimmte Bereiche nicht berührt haben möchten, teilen Sie uns das einfach mit.",
+      "Sie entkleiden sich so weit, wie Sie sich wohl fühlen. Während der gesamten Session sind Sie professionell abgedeckt – nur der gerade bearbeitete Bereich wird freigelegt. Bereiche, die Sie nicht berührt haben möchten, teilen Sie uns einfach mit. Sie behalten jederzeit die Kontrolle.",
     category: "session",
   },
   {
@@ -81,7 +93,13 @@ const faqs = [
   {
     question: "Wie diskret ist der Standort?",
     answer:
-      "Sehr diskret. Unser Studio befindet sich an einer ruhigen Adresse in Zürich, ohne auffällige Beschilderung. Der Eingang ist so gestaltet, dass Sie unauffällig kommen und gehen können. Ihre Privatsphäre ist uns sehr wichtig.",
+      "Sehr diskret. Unser Studio befindet sich an einer ruhigen Adresse in Zürich, ohne auffällige Beschilderung. Der Eingang ist so gestaltet, dass Sie unauffällig kommen und gehen können. Es gibt keine Kameras im Empfangsbereich. Ihre Privatsphäre ist uns heilig.",
+    category: "privacy",
+  },
+  {
+    question: "Werden meine Daten gespeichert?",
+    answer:
+      "Wir speichern nur die für die Buchung notwendigen Daten und behandeln diese streng vertraulich. Ihre Daten werden niemals an Dritte weitergegeben. Auf Wunsch löschen wir Ihre Daten nach Ihrem Besuch vollständig.",
     category: "privacy",
   },
   {
