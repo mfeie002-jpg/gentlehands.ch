@@ -17,6 +17,15 @@ import { LoyaltyRewards } from "@/components/dashboard/LoyaltyRewards";
 import { BookingReminders } from "@/components/dashboard/BookingReminders";
 import { QuickRebook } from "@/components/dashboard/QuickRebook";
 import { BookingExport } from "@/components/dashboard/BookingExport";
+import { MobileNavigation } from "@/components/dashboard/MobileNavigation";
+import { NotificationCenter } from "@/components/dashboard/NotificationCenter";
+import { TestimonialSubmission } from "@/components/dashboard/TestimonialSubmission";
+import { ReferralProgram } from "@/components/dashboard/ReferralProgram";
+import { WellnessInsights } from "@/components/dashboard/WellnessInsights";
+import { PersonalRecommendations } from "@/components/dashboard/PersonalRecommendations";
+import { SocialProofFeed } from "@/components/dashboard/SocialProofFeed";
+import { BookingReschedule } from "@/components/dashboard/BookingReschedule";
+import { BookingCancellation } from "@/components/dashboard/BookingCancellation";
 
 interface UserProfile {
   full_name: string | null;
@@ -134,10 +143,11 @@ const Dashboard = () => {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Bell className="w-4 h-4" />
-                Benachrichtigungen
-              </Button>
+              <NotificationCenter 
+                userId={user?.id || ''} 
+                loyaltyPoints={profile?.loyalty_points || 0} 
+                upcomingBookings={upcomingBookings} 
+              />
               <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-2 text-muted-foreground">
                 <LogOut className="w-4 h-4" />
                 Abmelden
@@ -269,38 +279,36 @@ const Dashboard = () => {
                       <QuickRebook pastBookings={pastBookings} />
                     )}
 
-                    {/* Recommendations */}
-                    <div className="glass rounded-2xl p-6 border border-border/50">
-                      <h3 className="font-display font-semibold text-foreground mb-4">
-                        Empfehlungen für Sie
-                      </h3>
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <Link to="/erlebnisse" className="group p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-xl bg-petrol/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                              <Sparkles className="w-6 h-6 text-petrol" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-foreground">Neues Erlebnis</p>
-                              <p className="text-sm text-muted-foreground">Deep Dark Relax</p>
-                            </div>
-                            <ChevronRight className="w-5 h-5 text-muted-foreground ml-auto" />
-                          </div>
-                        </Link>
-                        <Link to="/gutscheine" className="group p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                              <Gift className="w-6 h-6 text-rose-500" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-foreground">Geschenk-Idee</p>
-                              <p className="text-sm text-muted-foreground">Gutschein verschenken</p>
-                            </div>
-                            <ChevronRight className="w-5 h-5 text-muted-foreground ml-auto" />
-                          </div>
-                        </Link>
-                      </div>
-                    </div>
+                    {/* Wellness Insights */}
+                    <WellnessInsights 
+                      bookings={bookings} 
+                      journalEntries={journalEntries} 
+                      loyaltyPoints={profile?.loyalty_points || 0} 
+                    />
+
+                    {/* Personal Recommendations */}
+                    <PersonalRecommendations 
+                      bookings={bookings} 
+                      preferences={{ 
+                        preferred_theme: profile?.preferred_theme, 
+                        preferred_therapist: profile?.preferred_therapist 
+                      }} 
+                    />
+
+                    {/* Referral Program */}
+                    <ReferralProgram userId={user?.id || ''} />
+
+                    {/* Testimonial Submission */}
+                    {pastBookings.length > 0 && (
+                      <TestimonialSubmission 
+                        userName={profile?.full_name || user?.email?.split('@')[0] || ''} 
+                        userId={user?.id || ''} 
+                        recentBookings={pastBookings.slice(0, 3)} 
+                      />
+                    )}
+
+                    {/* Social Proof */}
+                    <SocialProofFeed />
                   </motion.div>
                 )}
 
