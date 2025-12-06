@@ -409,6 +409,9 @@ const Dashboard = () => {
             </motion.div>
           </div>
         </div>
+
+        {/* Mobile Navigation */}
+        <MobileNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       </section>
     </Layout>
   );

@@ -25,6 +25,7 @@ import { BookingsCalendar } from "@/components/admin/BookingsCalendar";
 import { QuickActions } from "@/components/admin/QuickActions";
 import { UsersManager } from "@/components/admin/UsersManager";
 import { SettingsPanel } from "@/components/admin/SettingsPanel";
+import { TestDataGenerator } from "@/components/admin/TestDataGenerator";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -186,7 +187,10 @@ const Admin = () => {
                     <div className="lg:col-span-2">
                       <RevenueChart bookings={bookings} />
                     </div>
-                    <QuickActions onAction={handleQuickAction} />
+                    <div className="space-y-6">
+                      <QuickActions onAction={handleQuickAction} />
+                      <TestDataGenerator onDataGenerated={handleRefresh} />
+                    </div>
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <BookingsCalendar bookings={bookings} />

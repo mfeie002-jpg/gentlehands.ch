@@ -35,7 +35,11 @@ const testimonialTexts = [
   "Fantastische Massage mit wunderschönem Ambiente. Werde definitiv wiederkommen.",
 ];
 
-export const TestDataGenerator = () => {
+interface TestDataGeneratorProps {
+  onDataGenerated?: () => void;
+}
+
+export const TestDataGenerator = ({ onDataGenerated }: TestDataGeneratorProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [results, setResults] = useState<{bookings: number; testimonials: number; giftCards: number} | null>(null);
@@ -129,6 +133,7 @@ export const TestDataGenerator = () => {
       if (giftCardsError) throw giftCardsError;
 
       setResults({ bookings: 10, testimonials: 5, giftCards: 3 });
+      onDataGenerated?.();
       toast({ 
         title: 'Testdaten erstellt', 
         description: '10 Buchungen, 5 Testimonials, 3 Gutscheine generiert' 
@@ -153,6 +158,7 @@ export const TestDataGenerator = () => {
       await supabase.from('gift_cards').delete().like('purchaser_email', '%@example.com');
       
       setResults(null);
+      onDataGenerated?.();
       toast({ 
         title: 'Testdaten gelöscht', 
         description: 'Alle Testdaten wurden entfernt' 
