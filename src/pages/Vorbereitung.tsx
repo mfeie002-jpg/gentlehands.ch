@@ -15,9 +15,9 @@ const beforeVisit = [
 ];
 
 const duringSession = [
-  { icon: Shirt, title: "Bekleidung", text: "Sie entkleiden sich so weit, wie Sie sich wohl fühlen. Professionelle Abdeckung ist garantiert." },
-  { icon: Heart, title: "Kommunikation", text: "Teilen Sie uns mit, wenn etwas unangenehm ist – Druck, Temperatur, Berührung." },
-  { icon: Check, title: "Loslassen", text: "Es gibt kein 'richtig' oder 'falsch'. Erlauben Sie sich einfach zu sein." },
+  { icon: Shirt, title: "Bekleidung", text: "Sie entkleiden sich so weit, wie Sie sich wohl fühlen. Während der gesamten Session sind Sie professionell abgedeckt." },
+  { icon: Heart, title: "Kommunikation", text: "Teilen Sie uns jederzeit mit, wenn etwas unangenehm ist – Druck, Temperatur, Bereiche. Wir passen uns sofort an." },
+  { icon: Check, title: "Volle Kontrolle", text: "Sie können die Session jederzeit anpassen oder beenden. Ihr Wohlbefinden hat oberste Priorität." },
 ];
 
 const afterSession = [
@@ -38,10 +38,10 @@ const Vorbereitung = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Vorbereitung | GentleHands Zürich</title>
+        <title>Vorbereitung auf Ihre Session | GentleHands Zürich</title>
         <meta
           name="description"
-          content="Tipps zur optimalen Vorbereitung auf Ihr GentleHands-Erlebnis. So holen Sie das Maximum aus Ihrer Session."
+          content="Tipps zur optimalen Vorbereitung auf Ihre professionelle Entspannungsmassage. Erfahren Sie, was Sie vor, während und nach Ihrer Session erwartet."
         />
       </Helmet>
 

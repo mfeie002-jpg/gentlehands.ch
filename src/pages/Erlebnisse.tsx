@@ -355,10 +355,10 @@ const Erlebnisse = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Erlebnisse & Themes | GentleHands Zürich</title>
+        <title>Themenräume & Erlebnisse | GentleHands Zürich</title>
         <meta
           name="description"
-          content="Entdecken Sie unsere atmosphärischen Erlebnisse: Ozean & Palmen, Alpine Stille, Deep Dark Relax und mehr. Jedes Theme ein einzigartiges Entspannungserlebnis."
+          content="Entdecken Sie unsere professionell gestalteten Themenräume: Ozean & Palmen, Alpine Stille, Deep Dark Relax und mehr. Jeder Raum bietet eine einzigartige Entspannungsatmosphäre."
         />
       </Helmet>
 

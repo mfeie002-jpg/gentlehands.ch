@@ -82,8 +82,8 @@ const Team = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Unser Team | GentleHands Zürich</title>
-        <meta name="description" content="Lernen Sie unser Team kennen: Professionelle Masseur:innen mit langjähriger Erfahrung und individuellen Spezialisierungen." />
+        <title>Unser Team – Professionelle Therapeut:innen | GentleHands Zürich</title>
+        <meta name="description" content="Lernen Sie unser Team professionell ausgebildeter Therapeut:innen kennen. Jahrelange Erfahrung, individueller Stil, respektvoller Umgang." />
       </Helmet>
 
       {/* Hero */}

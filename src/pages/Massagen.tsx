@@ -160,10 +160,10 @@ const Massagen = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Massagen & Angebote | GentleHands Zürich</title>
+        <title>Professionelle Entspannungsmassagen | GentleHands Zürich</title>
         <meta
           name="description"
-          content="Entdecken Sie unsere Massagen: Deep Release, Stress Reset, Emotional Grounding und mehr. Jede Massage kombinierbar mit unseren atmosphärischen Themes."
+          content="Entdecken Sie unsere professionellen Entspannungsmassagen: Deep Release, Stress Reset, Emotional Grounding und mehr. Jede Massage kombinierbar mit unseren Themenräumen."
         />
       </Helmet>
 
