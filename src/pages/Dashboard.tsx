@@ -26,6 +26,10 @@ import { PersonalRecommendations } from "@/components/dashboard/PersonalRecommen
 import { SocialProofFeed } from "@/components/dashboard/SocialProofFeed";
 import { BookingReschedule } from "@/components/dashboard/BookingReschedule";
 import { BookingCancellation } from "@/components/dashboard/BookingCancellation";
+import { WelcomeCard } from "@/components/dashboard/WelcomeCard";
+import { UpcomingBooking } from "@/components/dashboard/UpcomingBooking";
+import { RecentSessions } from "@/components/dashboard/RecentSessions";
+import { WellnessProgress } from "@/components/dashboard/WellnessProgress";
 
 interface UserProfile {
   full_name: string | null;
@@ -261,6 +265,13 @@ const Dashboard = () => {
                     exit={{ opacity: 0, y: -20 }}
                     className="space-y-6"
                   >
+                    {/* Welcome Card */}
+                    <WelcomeCard 
+                      userName={profile?.full_name || user?.email?.split('@')[0] || 'Gast'}
+                      memberSince={profile?.member_since}
+                      loyaltyPoints={profile?.loyalty_points || 0}
+                    />
+
                     {/* Profile Completion */}
                     <ProfileCompletion
                       profile={profile}
@@ -268,6 +279,23 @@ const Dashboard = () => {
                       hasFavorites={favorites.length > 0}
                       hasJournalEntries={journalEntries.length > 0}
                     />
+
+                    {/* Upcoming Booking */}
+                    {upcomingBookings.length > 0 && (
+                      <UpcomingBooking booking={upcomingBookings[0]} />
+                    )}
+
+                    {/* Wellness Progress */}
+                    <WellnessProgress 
+                      totalSessions={bookings.length}
+                      loyaltyPoints={profile?.loyalty_points || 0}
+                      journalEntries={journalEntries.length}
+                    />
+
+                    {/* Recent Sessions */}
+                    {pastBookings.length > 0 && (
+                      <RecentSessions sessions={pastBookings.slice(0, 3)} />
+                    )}
 
                     {/* Booking Reminders */}
                     {upcomingBookings.length > 0 && (
