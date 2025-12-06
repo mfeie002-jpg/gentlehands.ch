@@ -268,8 +268,6 @@ const Dashboard = () => {
                     {/* Welcome Card */}
                     <WelcomeCard 
                       userName={profile?.full_name || user?.email?.split('@')[0] || 'Gast'}
-                      memberSince={profile?.member_since}
-                      loyaltyPoints={profile?.loyalty_points || 0}
                     />
 
                     {/* Profile Completion */}
@@ -282,20 +280,20 @@ const Dashboard = () => {
 
                     {/* Upcoming Booking */}
                     {upcomingBookings.length > 0 && (
-                      <UpcomingBooking booking={upcomingBookings[0]} />
+                      <UpcomingBooking booking={{
+                        date: new Date(upcomingBookings[0].appointment_date).toLocaleDateString('de-CH'),
+                        time: upcomingBookings[0].appointment_time,
+                        massage: upcomingBookings[0].massage,
+                        therapist: upcomingBookings[0].masseur,
+                        theme: upcomingBookings[0].theme
+                      }} />
                     )}
 
                     {/* Wellness Progress */}
-                    <WellnessProgress 
-                      totalSessions={bookings.length}
-                      loyaltyPoints={profile?.loyalty_points || 0}
-                      journalEntries={journalEntries.length}
-                    />
+                    <WellnessProgress />
 
                     {/* Recent Sessions */}
-                    {pastBookings.length > 0 && (
-                      <RecentSessions sessions={pastBookings.slice(0, 3)} />
-                    )}
+                    <RecentSessions />
 
                     {/* Booking Reminders */}
                     {upcomingBookings.length > 0 && (
