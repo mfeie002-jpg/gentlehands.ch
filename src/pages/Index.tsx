@@ -4,7 +4,6 @@ import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { ThemesPreviewSection } from "@/components/home/ThemesPreviewSection";
 import { MassagesPreviewSection } from "@/components/home/MassagesPreviewSection";
 import { TeamPreviewSection } from "@/components/home/TeamPreviewSection";
-
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { ExclusivitySection } from "@/components/home/ExclusivitySection";
 import { StatsSection } from "@/components/home/StatsSection";
@@ -15,6 +14,17 @@ import { SessionProcessSection } from "@/components/home/SessionProcessSection";
 import { TrustIndicatorsSection } from "@/components/home/TrustIndicatorsSection";
 import { HomeFAQSection } from "@/components/home/HomeFAQSection";
 import { SafetyBoundariesSection } from "@/components/home/SafetyBoundariesSection";
+import { ClientTypesSection } from "@/components/home/ClientTypesSection";
+import { GuaranteeSection } from "@/components/home/GuaranteeSection";
+import { PressSection } from "@/components/home/PressSection";
+import { QuoteSection } from "@/components/home/QuoteSection";
+import { DifferentiatorSection } from "@/components/home/DifferentiatorSection";
+import { BookingPreviewSection } from "@/components/home/BookingPreviewSection";
+import { AtmosphereSection } from "@/components/home/AtmosphereSection";
+import { QuickFactsBar } from "@/components/home/QuickFactsBar";
+import { GiftCardSection } from "@/components/home/GiftCardSection";
+import { NewsletterSection } from "@/components/home/NewsletterSection";
+import { FloatingContactButton } from "@/components/shared/FloatingContactButton";
 import { Helmet } from "react-helmet-async";
 
 const Index = () => {
@@ -96,20 +106,32 @@ const Index = () => {
       {/* Trust Indicators - Vertrauenssignale direkt nach Hero */}
       <TrustIndicatorsSection />
 
+      {/* Quick Facts - Wichtigste Infos auf einen Blick */}
+      <QuickFactsBar />
+
       {/* Stats - Soziale Beweise */}
       <StatsSection />
 
       {/* Philosophy - Werte & Versprechen */}
       <PhilosophySection />
 
+      {/* Guarantee - Qualitätsversprechen */}
+      <GuaranteeSection />
+
       {/* How It Works - Buchungsprozess erklärt */}
       <HowItWorksSection />
+
+      {/* Differentiator - Warum GentleHands */}
+      <DifferentiatorSection />
 
       {/* Benefits - Vorteile von GentleHands */}
       <BenefitsSection />
 
       {/* Themes - Erlebnisräume */}
       <ThemesPreviewSection />
+
+      {/* Atmosphere - Sinneserlebnis */}
+      <AtmosphereSection />
 
       {/* Massages - Massage-Angebote */}
       <MassagesPreviewSection />
@@ -123,17 +145,38 @@ const Index = () => {
       {/* Safety & Boundaries - Grenzen & Kontrolle */}
       <SafetyBoundariesSection />
 
+      {/* Client Types - Für wen ist GentleHands */}
+      <ClientTypesSection />
+
+      {/* Featured Quote */}
+      <QuoteSection />
+
       {/* Testimonials - Kundenstimmen */}
       <TestimonialsSection />
 
+      {/* Press - Bekannt aus */}
+      <PressSection />
+
       {/* Home FAQ - Wichtigste Fragen */}
       <HomeFAQSection />
+
+      {/* Booking Preview - Buchungsprozess Vorschau */}
+      <BookingPreviewSection />
+
+      {/* Gift Card - Gutscheine */}
+      <GiftCardSection />
+
+      {/* Newsletter */}
+      <NewsletterSection />
 
       {/* CTA - Handlungsaufforderung */}
       <CTASection />
 
       {/* Exclusivity - Limitierte Verfügbarkeit */}
       <ExclusivitySection />
+
+      {/* Floating Contact Button */}
+      <FloatingContactButton />
     </Layout>
   );
 };
