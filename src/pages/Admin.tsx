@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -30,15 +30,12 @@ import { RealtimeBookingNotifications } from "@/components/admin/RealtimeBooking
 import { LiveBookingCounter } from "@/components/admin/LiveBookingCounter";
 import { BookingStatusNotifications } from "@/components/admin/BookingStatusNotifications";
 import { WeeklyOverview } from "@/components/admin/WeeklyOverview";
-import { BookingFilters } from "@/components/admin/BookingFilters";
-import { BookingQuickPreview } from "@/components/admin/BookingQuickPreview";
 import { PerformanceMetrics } from "@/components/admin/PerformanceMetrics";
 import { TopMassages } from "@/components/admin/TopMassages";
 import { RecentCustomers } from "@/components/admin/RecentCustomers";
 import { UpcomingAppointments } from "@/components/admin/UpcomingAppointments";
 import { ExportOptions } from "@/components/admin/ExportOptions";
 import { AdminNotificationBell } from "@/components/admin/AdminNotificationBell";
-import { QuickStats } from "@/components/admin/QuickStats";
 import { CustomerInsights } from "@/components/admin/CustomerInsights";
 import { BookingTrends } from "@/components/admin/BookingTrends";
 import { TherapistPerformance } from "@/components/admin/TherapistPerformance";
@@ -48,7 +45,6 @@ import { BookingHeatmap } from "@/components/admin/BookingHeatmap";
 import { QuickNotes } from "@/components/admin/QuickNotes";
 import { SystemHealth } from "@/components/admin/SystemHealth";
 import { GoalTracker } from "@/components/admin/GoalTracker";
-import { AnnouncementBanner } from "@/components/admin/AnnouncementBanner";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -57,13 +53,6 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedBooking, setSelectedBooking] = useState<any>(null);
-  const [bookingFilters, setBookingFilters] = useState({
-    status: "all",
-    dateRange: "all",
-    therapist: "all",
-    massage: "all"
-  });
 
   const { bookings, isLoading: bookingsLoading, updateBookingStatus, deleteBooking, refetch: refetchBookings } = useBookings();
   const { testimonials, isLoading: testimonialsLoading, approveTestimonial, deleteTestimonial, refetch: refetchTestimonials } = useTestimonials();
@@ -133,17 +122,9 @@ const Admin = () => {
       case 'activity': return 'Aktivität';
       case 'users': return 'Benutzer';
       case 'settings': return 'Einstellungen';
-      case 'analytics': return 'Analytics';
       default: return 'Admin';
     }
   };
-
-  const filteredBookings = bookings.filter(booking => {
-    if (bookingFilters.status !== "all" && booking.status !== bookingFilters.status) return false;
-    if (bookingFilters.therapist !== "all" && booking.masseur !== bookingFilters.therapist) return false;
-    if (bookingFilters.massage !== "all" && booking.massage !== bookingFilters.massage) return false;
-    return true;
-  });
 
   if (authLoading) {
     return (
@@ -198,9 +179,6 @@ const Admin = () => {
         {/* Realtime notifications */}
         <RealtimeBookingNotifications onNewBooking={handleRefresh} />
         <BookingStatusNotifications onStatusChange={handleRefresh} />
-        
-        {/* Announcement Banner */}
-        <AnnouncementBanner />
 
         <AdminSidebar
           activeTab={activeTab}
@@ -218,7 +196,7 @@ const Admin = () => {
           >
             <div className="flex items-center gap-4">
               <LiveBookingCounter />
-              <AdminNotificationBell bookings={bookings} />
+              <AdminNotificationBell />
             </div>
           </AdminHeader>
 
@@ -232,9 +210,6 @@ const Admin = () => {
                   exit={{ opacity: 0, y: -20 }}
                   className="space-y-6"
                 >
-                  {/* Quick Stats Row */}
-                  <QuickStats bookings={bookings} stats={stats} />
-                  
                   {/* Main Stats */}
                   <StatsCards stats={stats} />
                   
@@ -268,7 +243,7 @@ const Admin = () => {
                   {/* Upcoming & Performance */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <UpcomingAppointments bookings={bookings} />
-                    <PerformanceMetrics bookings={bookings} stats={stats} />
+                    <PerformanceMetrics bookings={bookings} />
                     <RecentCustomers bookings={bookings} />
                   </div>
                   
@@ -301,31 +276,16 @@ const Admin = () => {
                   exit={{ opacity: 0, y: -20 }}
                   className="space-y-6"
                 >
-                  {/* Filters & Export */}
-                  <div className="flex flex-wrap gap-4 items-center justify-between">
-                    <BookingFilters 
-                      filters={bookingFilters} 
-                      onFilterChange={setBookingFilters}
-                      bookings={bookings}
-                    />
-                    <ExportOptions bookings={filteredBookings} />
+                  {/* Export Options */}
+                  <div className="flex justify-end">
+                    <ExportOptions />
                   </div>
                   
-                  {/* Quick Preview */}
-                  {selectedBooking && (
-                    <BookingQuickPreview 
-                      booking={selectedBooking} 
-                      onClose={() => setSelectedBooking(null)}
-                      onUpdateStatus={updateBookingStatus}
-                    />
-                  )}
-                  
                   <BookingsTable
-                    bookings={filteredBookings}
+                    bookings={bookings}
                     searchQuery={searchQuery}
                     onUpdateStatus={updateBookingStatus}
                     onDelete={deleteBooking}
-                    onSelect={setSelectedBooking}
                   />
                 </motion.div>
               )}

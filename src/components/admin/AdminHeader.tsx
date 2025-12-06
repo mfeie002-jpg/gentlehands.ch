@@ -2,15 +2,16 @@ import { motion } from "framer-motion";
 import { Bell, Search, Sun, Moon, RefreshCw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 
 interface AdminHeaderProps {
   title: string;
   onSearch?: (query: string) => void;
   onRefresh?: () => void;
+  children?: ReactNode;
 }
 
-export const AdminHeader = ({ title, onSearch, onRefresh }: AdminHeaderProps) => {
+export const AdminHeader = ({ title, onSearch, onRefresh, children }: AdminHeaderProps) => {
   const [isDark, setIsDark] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -54,6 +55,9 @@ export const AdminHeader = ({ title, onSearch, onRefresh }: AdminHeaderProps) =>
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Custom Children */}
+          {children}
+
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -71,14 +75,6 @@ export const AdminHeader = ({ title, onSearch, onRefresh }: AdminHeaderProps) =>
               <RefreshCw className="w-4 h-4" />
             </Button>
           )}
-
-          {/* Notifications */}
-          <Button variant="outline" size="icon" className="relative">
-            <Bell className="w-4 h-4" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
-              3
-            </span>
-          </Button>
 
           {/* Theme Toggle */}
           <Button variant="outline" size="icon" onClick={() => setIsDark(!isDark)}>
