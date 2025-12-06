@@ -365,14 +365,37 @@ const Kontakt = () => {
                       <p className="text-xs text-muted-foreground">Zürich Innenstadt</p>
                     </div>
                   </div>
-                </motion.div>
               </motion.div>
             </motion.div>
-          </div>
+
+            {/* Trust Note */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="p-5 rounded-xl bg-secondary/50 border border-border"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-petrol/10 flex items-center justify-center shrink-0">
+                  <MessageCircle size={18} className="text-petrol" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground mb-1">
+                    Diskretion garantiert
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Alle Anfragen werden vertraulich behandelt. Wir antworten diskret 
+                    und nennen in E-Mails nur «GentleHands», keine weiteren Details.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
-    </Layout>
-  );
+      </div>
+    </section>
+  </Layout>
+);
 };
 
 export default Kontakt;

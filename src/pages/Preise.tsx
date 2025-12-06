@@ -78,8 +78,8 @@ const Preise = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Preise | GentleHands Zürich</title>
-        <meta name="description" content="Transparente Preise für alle GentleHands Massagen und Erlebnisse. 60, 90 oder 120 Minuten – finden Sie Ihr perfektes Erlebnis." />
+        <title>Preise – Professionelle Entspannungsmassagen | GentleHands Zürich</title>
+        <meta name="description" content="Transparente Preise für professionelle Entspannungsmassagen bei GentleHands. 60, 90 oder 120 Minuten – finden Sie Ihr perfektes Erlebnis." />
       </Helmet>
 
       {/* Hero */}

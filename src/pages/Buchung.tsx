@@ -107,9 +107,10 @@ const Buchung = () => {
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-foreground mb-2">Wählen Sie Ihre:n Masseur:in</h2>
+              <h2 className="text-foreground mb-2">Wählen Sie Ihre:n Therapeut:in</h2>
               <p className="text-muted-foreground">
-                Jede:r unserer Masseur:innen bringt einen eigenen Stil mit.
+                Jede:r unserer professionell ausgebildeten Therapeut:innen bringt einen eigenen Stil mit.
+                Alle arbeiten respektvoll und achtsam.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -159,9 +160,9 @@ const Buchung = () => {
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-foreground mb-2">Wählen Sie Ihr Erlebnis</h2>
+              <h2 className="text-foreground mb-2">Wählen Sie Ihre Atmosphäre</h2>
               <p className="text-muted-foreground">
-                Welche Atmosphäre darf es sein?
+                Jeder unserer professionell gestalteten Themenräume bietet eine einzigartige Entspannungserfahrung.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

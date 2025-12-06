@@ -4,7 +4,7 @@ import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { ThemesPreviewSection } from "@/components/home/ThemesPreviewSection";
 import { MassagesPreviewSection } from "@/components/home/MassagesPreviewSection";
 import { TeamPreviewSection } from "@/components/home/TeamPreviewSection";
-import { WhyWomenOnlySection } from "@/components/home/WhyWomenOnlySection";
+
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { ExclusivitySection } from "@/components/home/ExclusivitySection";
 import { StatsSection } from "@/components/home/StatsSection";
@@ -14,6 +14,7 @@ import { PhilosophySection } from "@/components/home/PhilosophySection";
 import { SessionProcessSection } from "@/components/home/SessionProcessSection";
 import { TrustIndicatorsSection } from "@/components/home/TrustIndicatorsSection";
 import { HomeFAQSection } from "@/components/home/HomeFAQSection";
+import { SafetyBoundariesSection } from "@/components/home/SafetyBoundariesSection";
 import { Helmet } from "react-helmet-async";
 
 const Index = () => {
@@ -119,8 +120,8 @@ const Index = () => {
       {/* Team - Therapeut:innen */}
       <TeamPreviewSection />
 
-      {/* Why Women Only - Fokus */}
-      <WhyWomenOnlySection />
+      {/* Safety & Boundaries - Grenzen & Kontrolle */}
+      <SafetyBoundariesSection />
 
       {/* Testimonials - Kundenstimmen */}
       <TestimonialsSection />
