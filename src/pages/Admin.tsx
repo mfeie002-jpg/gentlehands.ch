@@ -26,6 +26,7 @@ import { QuickActions } from "@/components/admin/QuickActions";
 import { UsersManager } from "@/components/admin/UsersManager";
 import { SettingsPanel } from "@/components/admin/SettingsPanel";
 import { TestDataGenerator } from "@/components/admin/TestDataGenerator";
+import { RealtimeBookingNotifications } from "@/components/admin/RealtimeBookingNotifications";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -157,6 +158,8 @@ const Admin = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background">
+        {/* Realtime notifications for new bookings */}
+        <RealtimeBookingNotifications onNewBooking={handleRefresh} />
         <AdminSidebar
           activeTab={activeTab}
           onTabChange={setActiveTab}
