@@ -14,6 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
+import { FAQContactPrompt } from "@/components/faq/FAQContactPrompt";
+import { FAQQuickLinks } from "@/components/faq/FAQQuickLinks";
 
 const faqCategories = [
   { id: "all", label: "Alle Fragen", icon: Sparkles },

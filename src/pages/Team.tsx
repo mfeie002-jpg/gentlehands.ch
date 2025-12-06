@@ -5,6 +5,9 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Languages, Award, Heart, Star, GraduationCap, Quote, ArrowRight, Users } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
+import { TeamHeroEnhanced } from "@/components/team/TeamHeroEnhanced";
+import { TeamCultureSection } from "@/components/team/TeamCultureSection";
+import { TeamTestimonialsSection } from "@/components/team/TeamTestimonialsSection";
 import teamMorris from "@/assets/team-morris.jpg";
 import teamAnna from "@/assets/team-anna.jpg";
 import teamLuca from "@/assets/team-luca.jpg";
@@ -136,9 +139,13 @@ const Team = () => {
             >
               Alle unsere Masseur:innen sind professionell ausgebildet und bringen ihre eigene, einzigartige Herangehensweise mit.
             </motion.p>
+
+            <TeamHeroEnhanced />
           </motion.div>
         </div>
       </section>
+
+      <TeamCultureSection />
 
       {/* Team Members */}
       <section className="section-padding-sm">
@@ -339,6 +346,8 @@ const Team = () => {
           </motion.div>
         </div>
       </section>
+
+      <TeamTestimonialsSection />
     </Layout>
   );
 };
