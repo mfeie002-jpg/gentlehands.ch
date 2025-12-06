@@ -7,10 +7,10 @@ import { FloatingElements } from "@/components/shared/FloatingElements";
 import heroImage from "@/assets/massage-hands-back.jpg";
 
 const trustBadges = [
-  { icon: Shield, label: "Nur für Frauen" },
-  { icon: Lock, label: "100% Diskret" },
-  { icon: Clock, label: "Limitierte Termine" },
-  { icon: Heart, label: "Professionell & Respektvoll" },
+  { icon: Shield, label: "Nur für Frauen", sublabel: "Geschützter Raum" },
+  { icon: Lock, label: "100% Diskret", sublabel: "Keine Datensammlung" },
+  { icon: Clock, label: "Limitierte Termine", sublabel: "Exklusive Verfügbarkeit" },
+  { icon: Heart, label: "Professionell", sublabel: "Diplomierte Therapeut:innen" },
 ];
 
 export const HeroSection = () => {
@@ -144,7 +144,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.1 }}
-            className="flex flex-wrap items-center justify-center gap-4 md:gap-8"
+            className="flex flex-wrap items-center justify-center gap-3 md:gap-6"
           >
             {trustBadges.map((badge, index) => (
               <motion.div
@@ -152,12 +152,15 @@ export const HeroSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.2 + index * 0.1 }}
-                className="flex items-center gap-2.5 text-muted-foreground group cursor-default"
+                className="flex items-center gap-3 text-muted-foreground group cursor-default bg-card/30 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-border/30 hover:border-copper/30 transition-all duration-300"
               >
-                <div className="relative p-2 rounded-full bg-copper/10 group-hover:bg-copper/20 transition-colors duration-300">
+                <div className="relative p-2 rounded-lg bg-copper/15 group-hover:bg-copper/25 transition-colors duration-300">
                   <badge.icon size={16} className="text-copper transition-transform duration-300 group-hover:scale-110" />
                 </div>
-                <span className="text-sm font-medium tracking-wide">{badge.label}</span>
+                <div className="text-left">
+                  <span className="text-sm font-medium tracking-wide text-foreground block">{badge.label}</span>
+                  <span className="text-xs text-muted-foreground hidden md:block">{badge.sublabel}</span>
+                </div>
               </motion.div>
             ))}
           </motion.div>
