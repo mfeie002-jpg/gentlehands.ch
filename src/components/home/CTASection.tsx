@@ -73,15 +73,15 @@ export const CTASection = () => {
           </motion.div>
           
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-display text-foreground mt-6 mb-4 leading-tight">
-            Ihr Moment der
+            Bereit für Ihren
           </h2>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-display mb-8 leading-tight">
-            <span className="text-gradient-copper">Tiefenentspannung</span> wartet
+            <span className="text-gradient-copper">Moment der Ruhe</span>?
           </h2>
           
           <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
-            Gönnen Sie sich eine Auszeit vom Alltag. Begrenzte Verfügbarkeit – 
-            reservieren Sie jetzt Ihren persönlichen Termin.
+            Gönnen Sie sich eine professionelle Auszeit vom Alltag in einem 
+            geschützten Raum. Begrenzte Verfügbarkeit – reservieren Sie jetzt.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

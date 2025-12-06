@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, Clock, Heart, ChevronDown } from "lucide-react";
+import { Shield, Clock, Heart, ChevronDown, Sparkles, Lock } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { FloatingElements } from "@/components/shared/FloatingElements";
@@ -8,8 +8,9 @@ import heroImage from "@/assets/massage-hands-back.jpg";
 
 const trustBadges = [
   { icon: Shield, label: "Nur für Frauen" },
+  { icon: Lock, label: "100% Diskret" },
   { icon: Clock, label: "Limitierte Termine" },
-  { icon: Heart, label: "Diskrete Lage" },
+  { icon: Heart, label: "Professionell & Respektvoll" },
 ];
 
 export const HeroSection = () => {
@@ -24,14 +25,14 @@ export const HeroSection = () => {
       <motion.div className="absolute inset-0" style={{ y, scale }}>
         <img 
           src={heroImage} 
-          alt="GentleHands Massage - Sanfte Hände auf einem entspannten Rücken" 
+          alt="GentleHands Massage - Sanfte, professionelle Hände auf einem entspannten Rücken" 
           className="w-full h-full object-cover"
         />
         {/* Multi-layer gradient overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/50 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-background/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/60 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" />
         {/* Warm copper tint overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-copper/10 via-transparent to-petrol/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-copper/8 via-transparent to-petrol/8" />
       </motion.div>
       
       {/* Floating Elements */}
@@ -77,19 +78,19 @@ export const HeroSection = () => {
               initial={{ y: 120, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-foreground text-5xl md:text-6xl lg:text-7xl"
+              className="text-foreground text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
             >
-              Die intensivste Entspannung
+              Ein geschützter Raum
             </motion.h1>
           </div>
-          <div className="overflow-hidden mb-10">
+          <div className="overflow-hidden mb-6">
             <motion.h1
               initial={{ y: 120, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-gradient-copper text-5xl md:text-6xl lg:text-7xl"
+              className="text-foreground text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
             >
-              Ihres Lebens.
+              für <span className="text-gradient-copper">tiefe Entspannung</span>
             </motion.h1>
           </div>
 
@@ -98,23 +99,37 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
-            className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-14 leading-relaxed font-light"
+            className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-6 leading-relaxed font-light"
           >
-            Erleben Sie tiefe Entspannung in einer atmosphärischen Umgebung –
-            mit persönlich abgestimmten Themen und der freien Wahl Ihrer
-            Masseurin oder Ihres Masseurs.
+            Erleben Sie professionelle Entspannungsmassagen in atmosphärischen
+            Themenräumen – mit absoluter Diskretion und Ihrer Wahl der
+            Therapeutin oder des Therapeuten.
+          </motion.p>
+
+          {/* Clarification Note */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-sm text-muted-foreground/80 mb-12 max-w-xl mx-auto"
+          >
+            Professionelle Körperarbeit • Keine erotischen Dienstleistungen • 
+            Ihr Wohlbefinden hat oberste Priorität
           </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16"
           >
             <MagneticButton>
               <Button variant="copper" size="xl" asChild className="min-w-[200px] shadow-copper">
-                <Link to="/buchung">Erlebnis anfragen</Link>
+                <Link to="/buchung">
+                  <Sparkles size={18} className="mr-2" />
+                  Erlebnis anfragen
+                </Link>
               </Button>
             </MagneticButton>
             <MagneticButton>
@@ -128,19 +143,19 @@ export const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
-            className="flex flex-wrap items-center justify-center gap-6 md:gap-10"
+            transition={{ duration: 1, delay: 1.1 }}
+            className="flex flex-wrap items-center justify-center gap-4 md:gap-8"
           >
             {trustBadges.map((badge, index) => (
               <motion.div
                 key={badge.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1.1 + index * 0.15 }}
-                className="flex items-center gap-3 text-muted-foreground group cursor-default"
+                transition={{ duration: 0.6, delay: 1.2 + index * 0.1 }}
+                className="flex items-center gap-2.5 text-muted-foreground group cursor-default"
               >
                 <div className="relative p-2 rounded-full bg-copper/10 group-hover:bg-copper/20 transition-colors duration-300">
-                  <badge.icon size={18} className="text-copper transition-transform duration-300 group-hover:scale-110" />
+                  <badge.icon size={16} className="text-copper transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <span className="text-sm font-medium tracking-wide">{badge.label}</span>
               </motion.div>
@@ -152,7 +167,7 @@ export const HeroSection = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
+          transition={{ delay: 1.8, duration: 1 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
         >
           <motion.div
