@@ -27,6 +27,28 @@ import { UsersManager } from "@/components/admin/UsersManager";
 import { SettingsPanel } from "@/components/admin/SettingsPanel";
 import { TestDataGenerator } from "@/components/admin/TestDataGenerator";
 import { RealtimeBookingNotifications } from "@/components/admin/RealtimeBookingNotifications";
+import { LiveBookingCounter } from "@/components/admin/LiveBookingCounter";
+import { BookingStatusNotifications } from "@/components/admin/BookingStatusNotifications";
+import { WeeklyOverview } from "@/components/admin/WeeklyOverview";
+import { BookingFilters } from "@/components/admin/BookingFilters";
+import { BookingQuickPreview } from "@/components/admin/BookingQuickPreview";
+import { PerformanceMetrics } from "@/components/admin/PerformanceMetrics";
+import { TopMassages } from "@/components/admin/TopMassages";
+import { RecentCustomers } from "@/components/admin/RecentCustomers";
+import { UpcomingAppointments } from "@/components/admin/UpcomingAppointments";
+import { ExportOptions } from "@/components/admin/ExportOptions";
+import { AdminNotificationBell } from "@/components/admin/AdminNotificationBell";
+import { QuickStats } from "@/components/admin/QuickStats";
+import { CustomerInsights } from "@/components/admin/CustomerInsights";
+import { BookingTrends } from "@/components/admin/BookingTrends";
+import { TherapistPerformance } from "@/components/admin/TherapistPerformance";
+import { RevenueBreakdown } from "@/components/admin/RevenueBreakdown";
+import { CustomerFeedbackSummary } from "@/components/admin/CustomerFeedbackSummary";
+import { BookingHeatmap } from "@/components/admin/BookingHeatmap";
+import { QuickNotes } from "@/components/admin/QuickNotes";
+import { SystemHealth } from "@/components/admin/SystemHealth";
+import { GoalTracker } from "@/components/admin/GoalTracker";
+import { AnnouncementBanner } from "@/components/admin/AnnouncementBanner";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -35,6 +57,13 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [bookingFilters, setBookingFilters] = useState({
+    status: "all",
+    dateRange: "all",
+    therapist: "all",
+    massage: "all"
+  });
 
   const { bookings, isLoading: bookingsLoading, updateBookingStatus, deleteBooking, refetch: refetchBookings } = useBookings();
   const { testimonials, isLoading: testimonialsLoading, approveTestimonial, deleteTestimonial, refetch: refetchTestimonials } = useTestimonials();
@@ -104,9 +133,17 @@ const Admin = () => {
       case 'activity': return 'Aktivität';
       case 'users': return 'Benutzer';
       case 'settings': return 'Einstellungen';
+      case 'analytics': return 'Analytics';
       default: return 'Admin';
     }
   };
+
+  const filteredBookings = bookings.filter(booking => {
+    if (bookingFilters.status !== "all" && booking.status !== bookingFilters.status) return false;
+    if (bookingFilters.therapist !== "all" && booking.masseur !== bookingFilters.therapist) return false;
+    if (bookingFilters.massage !== "all" && booking.massage !== bookingFilters.massage) return false;
+    return true;
+  });
 
   if (authLoading) {
     return (
@@ -158,8 +195,13 @@ const Admin = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background">
-        {/* Realtime notifications for new bookings */}
+        {/* Realtime notifications */}
         <RealtimeBookingNotifications onNewBooking={handleRefresh} />
+        <BookingStatusNotifications onStatusChange={handleRefresh} />
+        
+        {/* Announcement Banner */}
+        <AnnouncementBanner />
+
         <AdminSidebar
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -173,7 +215,12 @@ const Admin = () => {
             title={getTabTitle()}
             onSearch={setSearchQuery}
             onRefresh={handleRefresh}
-          />
+          >
+            <div className="flex items-center gap-4">
+              <LiveBookingCounter />
+              <AdminNotificationBell bookings={bookings} />
+            </div>
+          </AdminHeader>
 
           <div className="p-6">
             <AnimatePresence mode="wait">
@@ -185,16 +232,60 @@ const Admin = () => {
                   exit={{ opacity: 0, y: -20 }}
                   className="space-y-6"
                 >
+                  {/* Quick Stats Row */}
+                  <QuickStats bookings={bookings} stats={stats} />
+                  
+                  {/* Main Stats */}
                   <StatsCards stats={stats} />
+                  
+                  {/* Performance & Goals */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <GoalTracker bookings={bookings} />
+                    <SystemHealth />
+                  </div>
+                  
+                  {/* Charts Row */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
                       <RevenueChart bookings={bookings} />
                     </div>
-                    <div className="space-y-6">
-                      <QuickActions onAction={handleQuickAction} />
-                      <TestDataGenerator onDataGenerated={handleRefresh} />
-                    </div>
+                    <RevenueBreakdown bookings={bookings} />
                   </div>
+                  
+                  {/* Analytics Row */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <BookingTrends bookings={bookings} />
+                    <TopMassages bookings={bookings} />
+                    <TherapistPerformance bookings={bookings} />
+                  </div>
+                  
+                  {/* Heatmap & Insights */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <BookingHeatmap bookings={bookings} />
+                    <CustomerInsights bookings={bookings} />
+                  </div>
+                  
+                  {/* Upcoming & Performance */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <UpcomingAppointments bookings={bookings} />
+                    <PerformanceMetrics bookings={bookings} stats={stats} />
+                    <RecentCustomers bookings={bookings} />
+                  </div>
+                  
+                  {/* Quick Actions & Tools */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <QuickActions onAction={handleQuickAction} />
+                    <TestDataGenerator onDataGenerated={handleRefresh} />
+                    <QuickNotes />
+                  </div>
+                  
+                  {/* Feedback & Calendar */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <CustomerFeedbackSummary testimonials={testimonials} />
+                    <WeeklyOverview bookings={bookings} />
+                  </div>
+                  
+                  {/* Calendar & Activity */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <BookingsCalendar bookings={bookings} />
                     <ActivityFeed logs={logs.slice(0, 10)} isLoading={logsLoading} />
@@ -208,12 +299,33 @@ const Admin = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
+                  {/* Filters & Export */}
+                  <div className="flex flex-wrap gap-4 items-center justify-between">
+                    <BookingFilters 
+                      filters={bookingFilters} 
+                      onFilterChange={setBookingFilters}
+                      bookings={bookings}
+                    />
+                    <ExportOptions bookings={filteredBookings} />
+                  </div>
+                  
+                  {/* Quick Preview */}
+                  {selectedBooking && (
+                    <BookingQuickPreview 
+                      booking={selectedBooking} 
+                      onClose={() => setSelectedBooking(null)}
+                      onUpdateStatus={updateBookingStatus}
+                    />
+                  )}
+                  
                   <BookingsTable
-                    bookings={bookings}
+                    bookings={filteredBookings}
                     searchQuery={searchQuery}
                     onUpdateStatus={updateBookingStatus}
                     onDelete={deleteBooking}
+                    onSelect={setSelectedBooking}
                   />
                 </motion.div>
               )}
