@@ -160,10 +160,10 @@ export const ThemesPreviewSection = () => {
               transition={{ duration: 0.8 }}
             />
           </motion.div>
-          <h2 className="text-foreground mb-4">
+          <h2 className="text-foreground mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl px-4 sm:px-0">
             Wählen Sie Ihre <span className="text-gradient-copper">Atmosphäre</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base px-4 sm:px-0">
             Jedes Erlebnis wird durch eine einzigartige Atmosphäre geprägt –
             Licht, Düfte, Klänge und Ambiente sind perfekt auf Ihre Entspannung abgestimmt.
             Alle Themes sind professionell gestaltet für maximale Erholung.
@@ -171,7 +171,7 @@ export const ThemesPreviewSection = () => {
         </ScrollReveal>
 
         {/* Themes Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-4 sm:px-0">
           {themes.map((theme, index) => (
             <ThemeCard key={theme.id} theme={theme} index={index} />
           ))}

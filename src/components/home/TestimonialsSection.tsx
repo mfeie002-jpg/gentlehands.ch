@@ -141,13 +141,13 @@ export const TestimonialsSection = () => {
             />
           </motion.div>
           
-          <h2 className="text-foreground text-3xl md:text-4xl lg:text-5xl mb-6">
+          <h2 className="text-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 sm:mb-6 px-4 sm:px-0">
             Was unsere <span className="text-gradient-copper">Kundinnen</span> sagen
           </h2>
           
           {/* Rating Badge */}
           <motion.div 
-            className="inline-flex items-center gap-4 bg-card/80 backdrop-blur-sm px-6 py-3 rounded-full border border-border/50 shadow-sm"
+            className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-4 bg-card/80 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-border/50 shadow-sm mx-4 sm:mx-0"
             whileHover={{ scale: 1.02 }}
           >
             <div className="flex gap-0.5">
@@ -163,13 +163,13 @@ export const TestimonialsSection = () => {
                 </motion.div>
               ))}
             </div>
-            <span className="text-foreground font-display text-xl">4.9/5</span>
-            <span className="text-muted-foreground text-sm">• 200+ Bewertungen</span>
+            <span className="text-foreground font-display text-lg sm:text-xl">4.9/5</span>
+            <span className="text-muted-foreground text-xs sm:text-sm">• 200+ Bewertungen</span>
           </motion.div>
         </ScrollReveal>
 
         {/* Featured Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10 px-4 sm:px-0">
           {testimonials.slice(0, 3).map((testimonial, index) => (
             <ScrollReveal key={testimonial.id} direction="up" delay={index * 0.1}>
               <TestimonialCard testimonial={testimonial} featured />
