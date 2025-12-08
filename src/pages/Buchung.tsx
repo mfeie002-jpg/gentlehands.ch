@@ -31,7 +31,7 @@ const steps = [
   { id: 2, title: "Erlebnis", icon: Sparkles },
   { id: 3, title: "Massage", icon: Clock },
   { id: 4, title: "Präferenzen", icon: Settings },
-  { id: 5, title: "Termin & Daten", icon: Calendar },
+  { id: 5, title: "Termin", icon: Calendar },
   { id: 6, title: "Bestätigung", icon: CheckCircle },
 ];
 
@@ -787,12 +787,8 @@ const Buchung = () => {
             {/* Desktop: Full step indicator */}
             <div className="hidden sm:flex items-center justify-between">
               {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center">
-                  <div
-                    className={`flex flex-col items-center ${
-                      index < steps.length - 1 ? "flex-1" : ""
-                    }`}
-                  >
+                <div key={step.id} className="flex items-center flex-1 last:flex-none">
+                  <div className="flex flex-col items-center min-w-[60px]">
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                         currentStep > step.id
@@ -809,9 +805,9 @@ const Buchung = () => {
                       )}
                     </div>
                     <span
-                      className={`mt-2 text-xs ${
+                      className={`mt-2 text-xs text-center whitespace-nowrap ${
                         currentStep >= step.id
-                          ? "text-foreground"
+                          ? "text-foreground font-medium"
                           : "text-muted-foreground"
                       }`}
                     >
@@ -820,7 +816,7 @@ const Buchung = () => {
                   </div>
                   {index < steps.length - 1 && (
                     <div
-                      className={`flex-1 h-px mx-2 ${
+                      className={`flex-1 h-px mx-2 min-w-[20px] ${
                         currentStep > step.id ? "bg-copper" : "bg-border"
                       }`}
                     />
