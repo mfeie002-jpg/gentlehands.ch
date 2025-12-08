@@ -8,6 +8,10 @@ import { GuaranteeSection } from "@/components/home/GuaranteeSection";
 import { WellnessJourneySection } from "@/components/home/WellnessJourneySection";
 import { BeforeAfterSection } from "@/components/home/BeforeAfterSection";
 import { EmotionalBenefitsSection } from "@/components/home/EmotionalBenefitsSection";
+import { EmotionalReliefSection } from "@/components/home/EmotionalReliefSection";
+import { StressRecognitionSection } from "@/components/home/StressRecognitionSection";
+import { SelfCarePermissionSection } from "@/components/home/SelfCarePermissionSection";
+import { TransformationStoriesSection } from "@/components/home/TransformationStoriesSection";
 import { ExclusiveServicesSection } from "@/components/home/ExclusiveServicesSection";
 import { ScentPreviewSection } from "@/components/home/ScentPreviewSection";
 import { MusicPreviewSection } from "@/components/home/MusicPreviewSection";
@@ -74,8 +78,11 @@ const Index = () => {
       <GuaranteeSection />
       <QuickBookingWidget />
       <WellnessJourneySection />
+      <StressRecognitionSection />
       <BeforeAfterSection />
       <EmotionalBenefitsSection />
+      <EmotionalReliefSection />
+      <SelfCarePermissionSection />
       <ExclusiveServicesSection />
       <ScentPreviewSection />
       <MusicPreviewSection />
@@ -87,6 +94,7 @@ const Index = () => {
       <SafetyCommitmentSection />
       <PrivacyPromiseSection />
       <TestimonialHighlight />
+      <TransformationStoriesSection />
       <TestimonialsSection />
       <FeaturedReviewSection />
       <ClientSuccessStories />
