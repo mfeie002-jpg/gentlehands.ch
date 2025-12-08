@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Minimize2, Phone, Clock } from "lucide-react";
+import { MessageCircle, X, Send, Minimize2, Phone, Clock, Loader2, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { chatMessageSchema } from "@/lib/validations";
 
 interface Message {
   id: number;
   text: string;
   sender: "user" | "bot";
   timestamp: Date;
+  isLoading?: boolean;
 }
 
 const quickReplies = [
@@ -16,13 +20,6 @@ const quickReplies = [
   "Therapeut:in wählen",
   "Gutschein einlösen",
 ];
-
-const botResponses: Record<string, string> = {
-  "Termine anfragen": "Gerne helfe ich Ihnen bei der Terminbuchung! Sie können direkt auf unserer Buchungsseite einen Termin wählen, oder ich verbinde Sie mit unserem Team.",
-  "Preise erfahren": "Unsere Massage-Erlebnisse beginnen bei CHF 150 für 60 Minuten. Für eine detaillierte Preisübersicht besuchen Sie bitte unsere Preisseite.",
-  "Therapeut:in wählen": "Bei GentleHands können Sie zwischen Anna, Luca und Morris wählen. Jede/r hat unterschiedliche Spezialisierungen. Möchten Sie mehr über unser Team erfahren?",
-  "Gutschein einlösen": "Wunderbar! Gutscheine können Sie direkt bei der Buchung einlösen. Geben Sie einfach Ihren Gutscheincode im Buchungsformular ein.",
-};
 
 export const LiveChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,13 +33,31 @@ export const LiveChatWidget = () => {
     },
   ]);
   const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = (text?: string) => {
-    const messageText = text || inputValue;
-    if (!messageText.trim()) return;
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSend = async (text?: string) => {
+    const messageText = (text || inputValue).trim();
+    
+    // Validate message
+    const validation = chatMessageSchema.safeParse({ message: messageText });
+    if (!validation.success) {
+      if (!text) {
+        toast.error(validation.error.errors[0]?.message || "Ungültige Nachricht");
+      }
+      return;
+    }
 
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: Date.now(),
       text: messageText,
       sender: "user",
       timestamp: new Date(),
@@ -50,20 +65,55 @@ export const LiveChatWidget = () => {
 
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
+    setIsLoading(true);
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse = botResponses[messageText] || 
-        "Vielen Dank für Ihre Nachricht. Unser Team wird sich in Kürze bei Ihnen melden. Sie können uns auch telefonisch erreichen: +41 44 123 45 67";
+    // Add loading message
+    const loadingId = Date.now() + 1;
+    setMessages(prev => [...prev, {
+      id: loadingId,
+      text: "",
+      sender: "bot",
+      timestamp: new Date(),
+      isLoading: true,
+    }]);
+
+    try {
+      // Build conversation history for context
+      const conversationHistory = messages
+        .filter(m => !m.isLoading)
+        .map(m => ({
+          role: m.sender === "user" ? "user" : "assistant",
+          content: m.text,
+        }));
+
+      conversationHistory.push({ role: "user", content: messageText });
+
+      const { data, error } = await supabase.functions.invoke('chat-support', {
+        body: { messages: conversationHistory }
+      });
+
+      if (error) throw error;
+
+      // Replace loading message with actual response
+      setMessages(prev => prev.map(m => 
+        m.id === loadingId
+          ? { ...m, text: data.message, isLoading: false }
+          : m
+      ));
+    } catch (error) {
+      console.error('Chat error:', error);
       
-      const botMessage: Message = {
-        id: messages.length + 2,
-        text: botResponse,
-        sender: "bot",
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, botMessage]);
-    }, 1000);
+      // Replace loading message with error fallback
+      const fallbackResponse = "Entschuldigung, ich konnte Ihre Anfrage gerade nicht verarbeiten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch: +41 44 123 45 67";
+      
+      setMessages(prev => prev.map(m => 
+        m.id === loadingId
+          ? { ...m, text: fallbackResponse, isLoading: false }
+          : m
+      ));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -79,6 +129,7 @@ export const LiveChatWidget = () => {
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsOpen(true)}
             className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-copper text-background shadow-lg shadow-copper/30 flex items-center justify-center"
+            aria-label="Chat öffnen"
           >
             <MessageCircle className="w-6 h-6" />
             
@@ -109,20 +160,20 @@ export const LiveChatWidget = () => {
               height: isMinimized ? "auto" : "500px"
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 w-[360px] bg-background rounded-2xl shadow-2xl border border-border overflow-hidden flex flex-col"
+            className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] bg-background rounded-2xl shadow-2xl border border-border overflow-hidden flex flex-col"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-copper to-copper/90 text-background p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-background/20 flex items-center justify-center">
-                    <MessageCircle className="w-5 h-5" />
+                    <Bot className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">GentleHands Support</h3>
+                    <h3 className="font-semibold">GentleHands AI</h3>
                     <div className="flex items-center gap-1 text-xs text-background/80">
                       <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                      Online
+                      Jetzt verfügbar
                     </div>
                   </div>
                 </div>
@@ -130,12 +181,14 @@ export const LiveChatWidget = () => {
                   <button
                     onClick={() => setIsMinimized(!isMinimized)}
                     className="w-8 h-8 rounded-full hover:bg-background/10 flex items-center justify-center transition-colors"
+                    aria-label="Chat minimieren"
                   >
                     <Minimize2 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setIsOpen(false)}
                     className="w-8 h-8 rounded-full hover:bg-background/10 flex items-center justify-center transition-colors"
+                    aria-label="Chat schliessen"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -154,20 +207,42 @@ export const LiveChatWidget = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                     >
-                      <div
-                        className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                          message.sender === "user"
-                            ? "bg-copper text-background rounded-br-sm"
-                            : "bg-muted text-foreground rounded-bl-sm"
-                        }`}
-                      >
-                        <p className="text-sm">{message.text}</p>
-                        <p className={`text-[10px] mt-1 ${message.sender === "user" ? "text-background/60" : "text-muted-foreground"}`}>
-                          {message.timestamp.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' })}
-                        </p>
+                      <div className="flex items-start gap-2 max-w-[85%]">
+                        {message.sender === "bot" && (
+                          <div className="w-6 h-6 rounded-full bg-copper/10 flex items-center justify-center flex-shrink-0 mt-1">
+                            <Bot className="w-3 h-3 text-copper" />
+                          </div>
+                        )}
+                        <div
+                          className={`rounded-2xl px-4 py-2 ${
+                            message.sender === "user"
+                              ? "bg-copper text-background rounded-br-sm"
+                              : "bg-muted text-foreground rounded-bl-sm"
+                          }`}
+                        >
+                          {message.isLoading ? (
+                            <div className="flex items-center gap-2 py-1">
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span className="text-sm text-muted-foreground">Schreibt...</span>
+                            </div>
+                          ) : (
+                            <>
+                              <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                              <p className={`text-[10px] mt-1 ${message.sender === "user" ? "text-background/60" : "text-muted-foreground"}`}>
+                                {message.timestamp.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' })}
+                              </p>
+                            </>
+                          )}
+                        </div>
+                        {message.sender === "user" && (
+                          <div className="w-6 h-6 rounded-full bg-copper/10 flex items-center justify-center flex-shrink-0 mt-1">
+                            <User className="w-3 h-3 text-copper" />
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   ))}
+                  <div ref={messagesEndRef} />
                 </div>
 
                 {/* Quick Replies */}
@@ -177,7 +252,8 @@ export const LiveChatWidget = () => {
                       <button
                         key={reply}
                         onClick={() => handleSend(reply)}
-                        className="px-3 py-1.5 text-xs rounded-full border border-copper/30 text-copper hover:bg-copper/10 transition-colors"
+                        disabled={isLoading}
+                        className="px-3 py-1.5 text-xs rounded-full border border-copper/30 text-copper hover:bg-copper/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {reply}
                       </button>
@@ -187,24 +263,35 @@ export const LiveChatWidget = () => {
 
                 {/* Input */}
                 <div className="p-4 border-t border-border">
-                  <div className="flex gap-2">
+                  <form 
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSend();
+                    }}
+                    className="flex gap-2"
+                  >
                     <input
                       type="text"
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleSend()}
                       placeholder="Ihre Nachricht..."
-                      className="flex-1 px-4 py-2 rounded-xl bg-muted border-0 text-sm focus:ring-2 focus:ring-copper/20 outline-none"
+                      disabled={isLoading}
+                      maxLength={500}
+                      className="flex-1 px-4 py-2 rounded-xl bg-muted border-0 text-sm focus:ring-2 focus:ring-copper/20 outline-none disabled:opacity-50"
                     />
                     <Button
-                      onClick={() => handleSend()}
+                      type="submit"
                       size="icon"
-                      variant="copper"
-                      className="rounded-xl"
+                      disabled={isLoading || !inputValue.trim()}
+                      className="rounded-xl bg-copper hover:bg-copper/90"
                     >
-                      <Send className="w-4 h-4" />
+                      {isLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Send className="w-4 h-4" />
+                      )}
                     </Button>
-                  </div>
+                  </form>
                 </div>
 
                 {/* Footer */}
