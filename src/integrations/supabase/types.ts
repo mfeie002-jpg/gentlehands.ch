@@ -435,6 +435,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      log_activity: {
+        Args: {
+          p_action: string
+          p_details?: Json
+          p_entity_id?: string
+          p_entity_type: string
+        }
+        Returns: undefined
+      }
       lookup_booking_by_number: {
         Args: { p_booking_number: string }
         Returns: {

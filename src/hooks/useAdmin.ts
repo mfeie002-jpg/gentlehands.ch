@@ -354,15 +354,13 @@ export const useActivityLogs = () => {
 };
 
 const logActivity = async (action: string, entityType: string, entityId?: string, details?: Record<string, unknown>) => {
-  const { data: { session } } = await supabase.auth.getSession();
-  
-  await supabase.from('activity_logs').insert([{
-    user_id: session?.user?.id || null,
-    action,
-    entity_type: entityType,
-    entity_id: entityId || null,
-    details: details ? JSON.parse(JSON.stringify(details)) : null
-  }]);
+  // Use secure RPC function instead of direct insert
+  await supabase.rpc('log_activity', {
+    p_action: action,
+    p_entity_type: entityType,
+    p_entity_id: entityId || null,
+    p_details: details ? JSON.parse(JSON.stringify(details)) : null
+  });
 };
 
 export const useAdminStats = () => {
