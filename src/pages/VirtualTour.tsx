@@ -2,7 +2,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { Interactive360Viewer } from "@/components/shared/Interactive360Viewer";
 import { Play, Eye, MapPin, Sparkles, ArrowRight, X, ChevronLeft, ChevronRight, Volume2, VolumeX, Maximize2, ZoomIn } from "lucide-react";
@@ -105,13 +106,11 @@ const VirtualTour = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Virtuelle Tour | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Entdecken Sie unsere Räumlichkeiten virtuell. Ein erster Eindruck unserer atmosphärischen Suiten und des Empfangsbereichs."
-        />
-      </Helmet>
+      <SEOHead
+        title="Virtuelle Tour | GentleHands Zürich"
+        description="Entdecken Sie unsere Räumlichkeiten virtuell. Ein erster Eindruck unserer atmosphärischen Suiten und des Empfangsbereichs."
+        canonical="/virtual-tour"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

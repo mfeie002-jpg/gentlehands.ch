@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -68,10 +68,11 @@ const Login = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>{isLogin ? "Anmelden" : "Registrieren"} | GentleHands Zürich</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
+      <SEOHead
+        title={`${isLogin ? "Anmelden" : "Registrieren"} | GentleHands Zürich`}
+        description="Melden Sie sich an oder erstellen Sie ein Konto für exklusive Vorteile bei GentleHands."
+        noIndex={true}
+      />
 
       <section className="min-h-screen pt-24 pb-16 flex items-center bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
         {/* Ambient effects */}

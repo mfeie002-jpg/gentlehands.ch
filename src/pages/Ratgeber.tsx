@@ -3,7 +3,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { Clock, ArrowRight, BookOpen, Search, Sparkles, Tag } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
@@ -125,13 +126,11 @@ const Ratgeber = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Ratgeber | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Artikel und Tipps rund um Entspannung, Selbstfürsorge und Wohlbefinden. Wissen für ein entspannteres Leben."
-        />
-      </Helmet>
+      <SEOHead
+        title="Wellness Ratgeber | GentleHands Zürich"
+        description="Artikel und Tipps rund um Entspannung, Selbstfürsorge und Wohlbefinden. Expertenwissen für ein entspannteres Leben."
+        canonical="/ratgeber"
+      />
 
       {/* Hero */}
       <section className="relative pt-32 pb-24 overflow-hidden">
