@@ -449,6 +449,37 @@
     .section-padding-sm {
       @apply py-8;
     }
+    
+    /* Improve mobile typography */
+    h1 {
+      @apply text-2xl leading-tight;
+    }
+    h2 {
+      @apply text-xl leading-tight;
+    }
+    h3 {
+      @apply text-lg;
+    }
+    
+    /* Mobile-optimized buttons */
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Mobile safe area */
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+  }
+  
+  /* Safe area insets for notched devices */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
   /* Touch Performance Optimizations */
