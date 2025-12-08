@@ -73,22 +73,22 @@ export const HeroSection = () => {
           </motion.div>
 
           {/* Main Headline with staggered reveal */}
-          <div className="overflow-hidden mb-4">
+          <div className="overflow-hidden mb-2 sm:mb-4">
             <motion.h1
               initial={{ y: 120, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-foreground text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
+              className="text-foreground text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl px-4 sm:px-0"
             >
               Ein geschützter Raum
             </motion.h1>
           </div>
-          <div className="overflow-hidden mb-6">
+          <div className="overflow-hidden mb-4 sm:mb-6">
             <motion.h1
               initial={{ y: 120, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-foreground text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
+              className="text-foreground text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl px-4 sm:px-0"
             >
               für <span className="text-gradient-copper">tiefe Entspannung</span>
             </motion.h1>
@@ -99,7 +99,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
-            className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-6 leading-relaxed font-light"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed font-light px-4 sm:px-0"
           >
             Erleben Sie professionelle Entspannungsmassagen in atmosphärischen
             Themenräumen – mit absoluter Diskretion und Ihrer Wahl der
@@ -111,7 +111,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-sm text-muted-foreground/80 mb-12 max-w-xl mx-auto"
+            className="text-xs sm:text-sm text-muted-foreground/80 mb-8 sm:mb-12 max-w-xl mx-auto px-4 sm:px-0"
           >
             Professionelle Körperarbeit • Keine erotischen Dienstleistungen • 
             Ihr Wohlbefinden hat oberste Priorität
@@ -144,7 +144,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.1 }}
-            className="flex flex-wrap items-center justify-center gap-3 md:gap-6"
+            className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 px-4 sm:px-0"
           >
             {trustBadges.map((badge, index) => (
               <motion.div
@@ -152,14 +152,14 @@ export const HeroSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.2 + index * 0.1 }}
-                className="flex items-center gap-3 text-muted-foreground group cursor-default bg-card/30 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-border/30 hover:border-copper/30 transition-all duration-300"
+                className="flex items-center gap-2 sm:gap-3 text-muted-foreground group cursor-default bg-card/30 backdrop-blur-sm px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-border/30 hover:border-copper/30 transition-all duration-300"
               >
-                <div className="relative p-2 rounded-lg bg-copper/15 group-hover:bg-copper/25 transition-colors duration-300">
-                  <badge.icon size={16} className="text-copper transition-transform duration-300 group-hover:scale-110" />
+                <div className="relative p-1.5 sm:p-2 rounded-lg bg-copper/15 group-hover:bg-copper/25 transition-colors duration-300">
+                  <badge.icon size={14} className="sm:w-4 sm:h-4 text-copper transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="text-left">
-                  <span className="text-sm font-medium tracking-wide text-foreground block">{badge.label}</span>
-                  <span className="text-xs text-muted-foreground hidden md:block">{badge.sublabel}</span>
+                  <span className="text-xs sm:text-sm font-medium tracking-wide text-foreground block leading-tight">{badge.label}</span>
+                  <span className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{badge.sublabel}</span>
                 </div>
               </motion.div>
             ))}

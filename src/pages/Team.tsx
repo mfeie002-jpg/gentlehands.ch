@@ -150,8 +150,8 @@ const Team = () => {
       <TeamCultureSection />
 
       {/* Team Members */}
-      <section className="section-padding-sm">
-        <div className="container-wide space-y-24">
+      <section className="section-padding-sm px-4 sm:px-0">
+        <div className="container-wide space-y-16 sm:space-y-24">
           {team.map((member, index) => (
             <motion.div
               key={member.id}
@@ -162,11 +162,10 @@ const Team = () => {
               transition={{ duration: 0.6 }}
               className="scroll-mt-32"
             >
-              <div className={`grid grid-cols-1 lg:grid-cols-3 gap-10 ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
-                {/* Portrait */}
+              <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10 ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
                 <div className={`${index % 2 === 1 ? "lg:[direction:ltr]" : ""}`}>
                   <motion.div 
-                    className="aspect-[3/4] rounded-3xl relative overflow-hidden group"
+                    className="aspect-[3/4] sm:aspect-[3/4] rounded-2xl sm:rounded-3xl relative overflow-hidden group"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -245,7 +244,7 @@ const Team = () => {
                     </motion.blockquote>
 
                     {/* Details Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                    <div className="grid grid-cols-1 gap-4 sm:gap-6 mb-6 sm:mb-8">
                       {[
                         { icon: Award, title: "Erfahrung", content: member.experience },
                         { icon: Languages, title: "Sprachen", content: member.languages.join(", ") },

@@ -193,7 +193,7 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="scroll-mt-40"
     >
-      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
         {/* Image */}
         <div 
           className={`${index % 2 === 1 ? "lg:[direction:ltr]" : ""}`}
@@ -447,9 +447,9 @@ const Erlebnisse = () => {
       </section>
 
       {/* Theme Quick Nav */}
-      <section className="py-8 border-b border-border/50 sticky top-16 z-30 bg-background/80 backdrop-blur-md">
+      <section className="py-4 sm:py-8 border-b border-border/50 sticky top-16 z-30 bg-background/80 backdrop-blur-md">
         <div className="container-wide">
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide px-4 sm:px-0">
             {themes.map((theme, i) => (
               <motion.a
                 key={theme.id}
@@ -461,15 +461,15 @@ const Erlebnisse = () => {
                 whileTap={{ scale: 0.95 }}
                 onMouseEnter={() => setActiveTheme(theme.id)}
                 onMouseLeave={() => setActiveTheme(null)}
-                className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${theme.bgAccent} hover:opacity-90 shadow-sm`}
+                className={`relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${theme.bgAccent} hover:opacity-90 shadow-sm shrink-0 whitespace-nowrap`}
               >
                 <motion.div
                   animate={{ rotate: activeTheme === theme.id ? 360 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <theme.icon size={16} className={theme.iconColor} />
+                  <theme.icon size={14} className={`sm:w-4 sm:h-4 ${theme.iconColor}`} />
                 </motion.div>
-                <span className="hidden sm:inline">{theme.title}</span>
+                <span className="sm:inline">{theme.title.split(' ')[0]}</span>
                 
                 {/* Active Indicator */}
                 {activeTheme === theme.id && (
@@ -486,7 +486,7 @@ const Erlebnisse = () => {
       </section>
 
       {/* Themes */}
-      <section className="section-padding-sm relative">
+      <section className="section-padding-sm relative px-4 sm:px-0">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
           <div className="absolute inset-0" style={{
@@ -495,7 +495,7 @@ const Erlebnisse = () => {
           }} />
         </div>
         
-        <div className="container-wide space-y-32 relative">
+        <div className="container-wide space-y-16 sm:space-y-24 md:space-y-32 relative">
           {themes.map((theme, index) => (
             <ThemeCard key={theme.id} theme={theme} index={index} />
           ))}

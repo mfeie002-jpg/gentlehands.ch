@@ -240,17 +240,17 @@ const Massagen = () => {
       </section>
 
       {/* Filter Section */}
-      <section className="py-6 border-b border-border/50 sticky top-16 z-30 bg-background/80 backdrop-blur-md">
+      <section className="py-4 sm:py-6 border-b border-border/50 sticky top-16 z-30 bg-background/80 backdrop-blur-md">
         <div className="container-wide">
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            <Filter size={18} className="text-muted-foreground mr-2" />
+          <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide px-4 sm:px-0">
+            <Filter size={16} className="text-muted-foreground mr-1 sm:mr-2 shrink-0" />
             {categories.map((cat) => (
               <motion.button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
                   activeCategory === cat.id
                     ? "bg-copper text-accent-foreground shadow-lg shadow-copper/20"
                     : "bg-secondary text-secondary-foreground hover:bg-secondary/80"

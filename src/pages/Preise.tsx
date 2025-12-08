@@ -200,9 +200,9 @@ const Preise = () => {
                     </motion.div>
                     
                     <div className="flex items-baseline justify-center gap-1 mb-2">
-                      <span className="text-muted-foreground text-lg">CHF</span>
+                      <span className="text-muted-foreground text-base sm:text-lg">CHF</span>
                       <motion.span 
-                        className="font-display text-6xl text-foreground"
+                        className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground"
                         initial={{ opacity: 0, scale: 0.5 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
@@ -299,7 +299,7 @@ const Preise = () => {
             <p className="text-muted-foreground">Ergänzen Sie Ihr Erlebnis mit besonderen Extras.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {addOns.map((addon, index) => (
               <motion.div
                 key={addon.name}
@@ -309,24 +309,24 @@ const Preise = () => {
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
                 <GlowCard 
-                  className="p-5 text-center h-full cursor-pointer"
+                  className="p-3 sm:p-5 text-center h-full cursor-pointer"
                   glowColor="24 55% 52%"
                 >
                   <motion.span 
-                    className="text-3xl mb-3 block"
+                    className="text-2xl sm:text-3xl mb-2 sm:mb-3 block"
                     whileHover={{ scale: 1.2, rotate: 10 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     {addon.icon}
                   </motion.span>
-                  <p className="font-display text-foreground mb-1">{addon.name}</p>
+                  <p className="font-display text-sm sm:text-base text-foreground mb-1 leading-tight">{addon.name}</p>
                   <motion.p 
-                    className="text-copper font-semibold mb-2"
+                    className="text-copper font-semibold text-sm sm:text-base mb-1 sm:mb-2"
                     whileHover={{ scale: 1.05 }}
                   >
                     +CHF {addon.price}
                   </motion.p>
-                  <p className="text-muted-foreground text-xs">{addon.description}</p>
+                  <p className="text-muted-foreground text-[10px] sm:text-xs hidden sm:block">{addon.description}</p>
                 </GlowCard>
               </motion.div>
             ))}
