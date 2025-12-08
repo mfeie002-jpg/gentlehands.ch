@@ -71,15 +71,15 @@ const Kontakt = () => {
       </Helmet>
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <motion.div 
-            className="absolute top-1/4 -right-32 w-96 h-96 bg-copper/10 rounded-full blur-[120px]"
+            className="absolute top-1/4 -right-32 w-48 sm:w-96 h-48 sm:h-96 bg-copper/10 rounded-full blur-[80px] sm:blur-[120px]"
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute bottom-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"
+            className="absolute bottom-1/4 -left-32 w-48 sm:w-96 h-48 sm:h-96 bg-primary/10 rounded-full blur-[80px] sm:blur-[120px]"
             animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity, delay: 4 }}
           />
@@ -87,7 +87,7 @@ const Kontakt = () => {
         
         <FloatingElements variant="dots" />
         
-        <div className="container-wide relative z-10">
+        <div className="container-wide relative z-10 px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -98,14 +98,14 @@ const Kontakt = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20 mb-6"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-copper/10 border border-copper/20 mb-4 sm:mb-6"
             >
-              <MessageCircle size={16} className="text-copper" />
-              <span className="text-copper text-sm font-medium">24h Antwortzeit</span>
+              <MessageCircle size={14} className="sm:w-4 sm:h-4 text-copper" />
+              <span className="text-copper text-xs sm:text-sm font-medium">24h Antwortzeit</span>
             </motion.div>
             
             <motion.h1 
-              className="text-foreground mb-6"
+              className="text-foreground mb-4 sm:mb-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -113,7 +113,7 @@ const Kontakt = () => {
               Wir freuen uns auf <span className="text-gradient-copper">Sie</span>
             </motion.h1>
             <motion.p 
-              className="text-muted-foreground text-lg"
+              className="text-muted-foreground text-sm sm:text-base md:text-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -126,9 +126,9 @@ const Kontakt = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="section-padding-sm">
+      <section className="section-padding-sm px-4 sm:px-6">
         <div className="container-wide">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
             {/* Contact Form */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -136,19 +136,19 @@ const Kontakt = () => {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6 }}
             >
-              <div className="card-elevated p-8 relative overflow-hidden">
+              <div className="card-elevated p-5 sm:p-6 md:p-8 relative overflow-hidden">
                 {/* Decorative corner */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-copper/10 to-transparent" />
+                <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-bl from-copper/10 to-transparent" />
                 
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.5 }}
-                    className="w-10 h-10 rounded-xl bg-copper/10 flex items-center justify-center"
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-copper/10 flex items-center justify-center"
                   >
-                    <Send size={20} className="text-copper" />
+                    <Send size={16} className="sm:w-5 sm:h-5 text-copper" />
                   </motion.div>
-                  <h2 className="font-display text-2xl text-foreground">Nachricht senden</h2>
+                  <h2 className="font-display text-xl sm:text-2xl text-foreground">Nachricht senden</h2>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="space-y-6 relative z-10">

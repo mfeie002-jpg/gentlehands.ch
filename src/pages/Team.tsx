@@ -92,15 +92,15 @@ const Team = () => {
       </Helmet>
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <motion.div 
-            className="absolute top-1/4 -right-32 w-96 h-96 bg-copper/10 rounded-full blur-[120px]"
+            className="absolute top-1/4 -right-32 w-48 sm:w-96 h-48 sm:h-96 bg-copper/10 rounded-full blur-[80px] sm:blur-[120px]"
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute bottom-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"
+            className="absolute bottom-1/4 -left-32 w-48 sm:w-96 h-48 sm:h-96 bg-primary/10 rounded-full blur-[80px] sm:blur-[120px]"
             animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity, delay: 4 }}
           />
@@ -108,7 +108,7 @@ const Team = () => {
         
         <FloatingElements variant="dots" />
         
-        <div className="container-wide relative z-10">
+        <div className="container-wide relative z-10 px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -119,14 +119,14 @@ const Team = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20 mb-6"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-copper/10 border border-copper/20 mb-4 sm:mb-6"
             >
-              <Users size={16} className="text-copper" />
-              <span className="text-copper text-sm font-medium">3 Expert:innen</span>
+              <Users size={14} className="sm:w-4 sm:h-4 text-copper" />
+              <span className="text-copper text-xs sm:text-sm font-medium">3 Expert:innen</span>
             </motion.div>
             
             <motion.h1 
-              className="text-foreground mb-6"
+              className="text-foreground mb-4 sm:mb-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -134,7 +134,7 @@ const Team = () => {
               Menschen, die Sie <span className="text-gradient-copper">begleiten</span>
             </motion.h1>
             <motion.p 
-              className="text-muted-foreground text-lg"
+              className="text-muted-foreground text-sm sm:text-base md:text-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
