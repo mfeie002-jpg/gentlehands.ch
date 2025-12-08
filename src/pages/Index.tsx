@@ -40,7 +40,7 @@ import { InstagramFeedSection } from "@/components/home/InstagramFeedSection";
 import { QuickContactSection } from "@/components/home/QuickContactSection";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { FinalCTASection } from "@/components/home/FinalCTASection";
-import { FloatingContactButton } from "@/components/shared/FloatingContactButton";
+
 import { UrgencyBanner } from "@/components/home/UrgencyBanner";
 import { QuickBookingWidget } from "@/components/home/QuickBookingWidget";
 import { Helmet } from "react-helmet-async";
@@ -108,7 +108,7 @@ const Index = () => {
       <QuickContactSection />
       <NewsletterSection />
       <FinalCTASection />
-      <FloatingContactButton />
+      
     </Layout>
   );
 };

@@ -166,27 +166,28 @@ export const HeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
+      </motion.div>
+
+      {/* Scroll Indicator - positioned outside the fade container */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8, duration: 1 }}
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 hidden lg:block"
+      >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-2 text-muted-foreground/50"
         >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-3 text-muted-foreground/60"
-          >
-            <span className="text-xs tracking-[0.2em] uppercase font-medium">Entdecken</span>
-            <div className="w-7 h-12 border-2 border-copper/40 rounded-full flex items-start justify-center p-2">
-              <motion.div
-                animate={{ y: [0, 16, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="w-2 h-2 bg-copper rounded-full"
-              />
-            </div>
-          </motion.div>
+          <span className="text-xs tracking-[0.2em] uppercase font-medium">Entdecken</span>
+          <div className="w-6 h-10 border-2 border-copper/30 rounded-full flex items-start justify-center p-1.5">
+            <motion.div
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="w-1.5 h-1.5 bg-copper/70 rounded-full"
+            />
+          </div>
         </motion.div>
       </motion.div>
     </section>
