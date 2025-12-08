@@ -131,6 +131,20 @@ const FAQ = () => {
     return matchesSearch && matchesCategory;
   });
 
+  // Generate FAQ structured data for SEO
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
   return (
     <Layout>
       <Helmet>
@@ -139,6 +153,8 @@ const FAQ = () => {
           name="description"
           content="Antworten auf häufige Fragen zu GentleHands: Was ist das genau? Für wen? Ist es ein Erotikstudio? Alle wichtigen Infos auf einen Blick."
         />
+        <link rel="canonical" href="https://gentlehands.ch/faq" />
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
 
       {/* Hero */}

@@ -59,6 +59,14 @@
     
     <!-- DNS prefetch for external resources -->
     <link rel="dns-prefetch" href="https://hrindypsfxbiijxgtdmi.supabase.co">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/src/main.tsx" as="script" crossorigin>
+    
+    <!-- Security headers via meta -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
   </head>
 
   <body>

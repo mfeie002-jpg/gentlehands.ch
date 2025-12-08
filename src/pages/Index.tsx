@@ -54,18 +54,43 @@ const Index = () => {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
     "name": "GentleHands",
-    "description": "Exklusive Erlebnismassagen für Frauen in Zürich.",
+    "description": "Exklusive Erlebnismassagen für Frauen in Zürich. Tiefenentspannung in atmosphärisch gestalteten Themenräumen.",
     "url": "https://gentlehands.ch",
-    "address": { "@type": "PostalAddress", "addressLocality": "Zürich", "addressCountry": "CH" },
-    "priceRange": "$$$$"
+    "telephone": "+41000000000",
+    "email": "kontakt@gentlehands.ch",
+    "address": { 
+      "@type": "PostalAddress", 
+      "addressLocality": "Zürich", 
+      "addressRegion": "ZH",
+      "addressCountry": "CH" 
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "47.3769",
+      "longitude": "8.5417"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "10:00",
+      "closes": "21:00"
+    },
+    "priceRange": "$$$$",
+    "image": "https://gentlehands.ch/og-image.jpg",
+    "sameAs": []
   };
 
   return (
     <Layout>
       <Helmet>
         <title>GentleHands – Exklusive Erlebnismassagen für Frauen | Zürich</title>
-        <meta name="description" content="Exklusive Erlebnismassagen nur für Frauen in Zürich. Tiefenentspannung, absolute Diskretion, professionelle Betreuung." />
+        <meta name="description" content="Exklusive Erlebnismassagen nur für Frauen in Zürich. Tiefenentspannung in atmosphärischen Themenräumen, absolute Diskretion und professionelle Betreuung." />
         <link rel="canonical" href="https://gentlehands.ch/" />
+        <meta property="og:title" content="GentleHands – Exklusive Erlebnismassagen für Frauen" />
+        <meta property="og:description" content="Tiefenentspannung in atmosphärischen Erlebnisräumen. Nur für Frauen. Zürich." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://gentlehands.ch/" />
+        <meta property="og:image" content="https://gentlehands.ch/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
