@@ -20,7 +20,10 @@ export const HeroSection = () => {
   const scale = useTransform(scrollY, [0, 800], [1, 1.1]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section 
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      aria-label="Willkommen bei GentleHands"
+    >
       {/* Background Image with Parallax & Scale */}
       <motion.div className="absolute inset-0" style={{ y, scale }}>
         <img 
@@ -28,14 +31,15 @@ export const HeroSection = () => {
           alt="GentleHands Massage - Sanfte, professionelle Hände auf einem entspannten Rücken" 
           className="w-full h-full object-cover"
           loading="eager"
-          // @ts-ignore - fetchpriority is a valid HTML attribute
-          fetchpriority="high"
+          fetchPriority="high"
+          width={1920}
+          height={1080}
         />
         {/* Multi-layer gradient overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/60 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/60 to-background" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" aria-hidden="true" />
         {/* Warm copper tint overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-copper/8 via-transparent to-petrol/8" />
+        <div className="absolute inset-0 bg-gradient-to-br from-copper/8 via-transparent to-petrol/8" aria-hidden="true" />
       </motion.div>
       
       {/* Floating Elements */}
@@ -152,30 +156,31 @@ export const HeroSection = () => {
           </motion.div>
 
           {/* Trust Badges */}
-          <motion.div
+          <motion.ul
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.1 }}
             className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3 md:gap-4 px-2 sm:px-0"
+            aria-label="Unsere Garantien"
           >
             {trustBadges.map((badge, index) => (
-              <motion.div
+              <motion.li
                 key={badge.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.2 + index * 0.1 }}
                 className="flex items-center gap-2 sm:gap-3 text-muted-foreground group cursor-default bg-card/30 backdrop-blur-sm px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-border/30 hover:border-copper/30 transition-all duration-300"
               >
-                <div className="relative p-1.5 sm:p-2 rounded-lg bg-copper/15 group-hover:bg-copper/25 transition-colors duration-300 flex-shrink-0">
+                <div className="relative p-1.5 sm:p-2 rounded-lg bg-copper/15 group-hover:bg-copper/25 transition-colors duration-300 flex-shrink-0" aria-hidden="true">
                   <badge.icon size={14} className="sm:w-4 sm:h-4 text-copper transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="text-left min-w-0">
                   <span className="text-[11px] sm:text-sm font-medium tracking-wide text-foreground block leading-tight truncate">{badge.label}</span>
                   <span className="text-[9px] sm:text-xs text-muted-foreground hidden sm:block truncate">{badge.sublabel}</span>
                 </div>
-              </motion.div>
+              </motion.li>
             ))}
-          </motion.div>
+          </motion.ul>
         </div>
 
       </motion.div>

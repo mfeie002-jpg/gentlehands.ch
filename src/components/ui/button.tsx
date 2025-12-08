@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-200 ease-smooth-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 touch-manipulation active:scale-[0.97] select-none",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-200 ease-smooth-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 touch-manipulation active:scale-[0.97] select-none aria-disabled:pointer-events-none aria-disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -27,7 +27,11 @@ const buttonVariants = cva(
         // Premium variants with enhanced visuals
         premium: "relative bg-gradient-to-r from-copper to-copper-light text-accent-foreground shadow-copper hover:shadow-copper-lg overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700",
         "glass": "backdrop-blur-md bg-card/60 border border-border/50 text-foreground hover:bg-card/80 hover:border-copper/30",
-        "glow": "bg-copper text-accent-foreground shadow-glow-copper hover:shadow-copper-lg",
+        "glow": "bg-copper text-accent-foreground shadow-glow-copper hover:shadow-copper-lg animate-glow-pulse",
+        // Subtle variant for less prominent actions
+        "subtle": "bg-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/50",
+        // Success variant
+        "success": "bg-forest text-primary-foreground hover:bg-forest-light shadow-sm",
         // Loading state variant
         loading: "bg-secondary text-secondary-foreground cursor-wait",
       },
@@ -37,6 +41,8 @@ const buttonVariants = cva(
         lg: "h-11 sm:h-12 rounded-lg px-6 sm:px-8 text-sm sm:text-base",
         xl: "h-12 sm:h-14 rounded-xl px-8 sm:px-10 text-base sm:text-lg",
         icon: "h-10 w-10 sm:h-11 sm:w-11 p-0",
+        "icon-sm": "h-8 w-8 p-0 rounded-md",
+        "icon-lg": "h-12 w-12 p-0 rounded-xl",
       },
     },
     defaultVariants: {
