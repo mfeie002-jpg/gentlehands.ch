@@ -419,12 +419,35 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_gift_card_balance: {
+        Args: { p_code: string }
+        Returns: {
+          expires_at: string
+          is_redeemed: boolean
+          remaining_balance: number
+          valid: boolean
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      lookup_booking_by_number: {
+        Args: { p_booking_number: string }
+        Returns: {
+          appointment_date: string
+          appointment_time: string
+          booking_number: string
+          customer_name: string
+          duration: string
+          massage: string
+          masseur: string
+          status: string
+          theme: string
+        }[]
       }
     }
     Enums: {

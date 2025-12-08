@@ -22,6 +22,8 @@ import { BookingSummaryCard } from "@/components/booking/BookingSummaryCard";
 import { BookingTrustBadges } from "@/components/booking/BookingTrustBadges";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
+import { bookingContactSchema, bookingPreferencesSchema } from "@/lib/validations";
+import { z } from "zod";
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
@@ -60,6 +62,7 @@ const Buchung = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     masseur: "",
     theme: "",
@@ -86,8 +89,62 @@ const Buchung = () => {
     "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"
   ];
 
-  const updateFormData = (key: string, value: any) => {
+  const updateFormData = (key: string, value: unknown) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
+    // Clear error when field is updated
+    if (formErrors[key]) {
+      setFormErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[key];
+        return newErrors;
+      });
+    }
+  };
+
+  const validateContactForm = (): boolean => {
+    try {
+      bookingContactSchema.parse({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      });
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            newErrors[err.path[0] as string] = err.message;
+          }
+        });
+        setFormErrors(newErrors);
+      }
+      return false;
+    }
+  };
+
+  const validatePreferences = (): boolean => {
+    try {
+      bookingPreferencesSchema.parse({
+        avoidAreas: formData.avoidAreas,
+        additionalNotes: formData.additionalNotes,
+        intensityPreference: formData.intensity as "sanft" | "mittel" | "intensiv",
+        conversationPreference: formData.conversation as "still" | "wenig" | "gespraechig",
+        musicPreference: formData.music as "leise" | "mittel" | "laut" | "keine",
+      });
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            newErrors[err.path[0] as string] = err.message;
+          }
+        });
+        setFormErrors(newErrors);
+      }
+      return false;
+    }
   };
 
   const canProceed = () => {
@@ -503,8 +560,13 @@ const Buchung = () => {
                   value={formData.name}
                   onChange={(e) => updateFormData("name", e.target.value)}
                   placeholder="Ihr Name"
+                  className={formErrors.name ? "border-destructive" : ""}
+                  maxLength={100}
                   required
                 />
+                {formErrors.name && (
+                  <p className="text-sm text-destructive">{formErrors.name}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">E-Mail *</Label>
@@ -514,8 +576,13 @@ const Buchung = () => {
                   value={formData.email}
                   onChange={(e) => updateFormData("email", e.target.value)}
                   placeholder="ihre@email.ch"
+                  className={formErrors.email ? "border-destructive" : ""}
+                  maxLength={255}
                   required
                 />
+                {formErrors.email && (
+                  <p className="text-sm text-destructive">{formErrors.email}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">Telefon *</Label>
@@ -525,8 +592,13 @@ const Buchung = () => {
                   value={formData.phone}
                   onChange={(e) => updateFormData("phone", e.target.value)}
                   placeholder="+41 00 000 00 00"
+                  className={formErrors.phone ? "border-destructive" : ""}
+                  maxLength={20}
                   required
                 />
+                {formErrors.phone && (
+                  <p className="text-sm text-destructive">{formErrors.phone}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>Bevorzugter Kontaktkanal</Label>
@@ -813,6 +885,25 @@ const Buchung = () => {
               <Button
                 variant="copper"
                 onClick={async () => {
+                  // Validate form before submission
+                  if (!validateContactForm()) {
+                    toast({
+                      title: "Bitte überprüfen Sie Ihre Eingaben",
+                      description: "Einige Felder enthalten ungültige Daten.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  
+                  if (!validatePreferences()) {
+                    toast({
+                      title: "Bitte überprüfen Sie Ihre Präferenzen",
+                      description: "Einige Felder sind zu lang.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  
                   setIsSubmitting(true);
                   try {
                     // Generate booking number
@@ -827,16 +918,16 @@ const Buchung = () => {
                       duration: formData.duration,
                       appointment_date: formData.selectedDate ? format(formData.selectedDate, "yyyy-MM-dd") : null,
                       appointment_time: formData.selectedTime,
-                      customer_name: formData.name,
-                      customer_email: formData.email,
-                      customer_phone: formData.phone,
+                      customer_name: formData.name.trim(),
+                      customer_email: formData.email.trim().toLowerCase(),
+                      customer_phone: formData.phone.trim(),
                       preferred_contact: formData.preferredContact,
                       music_preference: formData.music,
                       conversation_preference: formData.conversation,
                       intensity_preference: formData.intensity,
-                      avoid_areas: formData.avoidAreas || null,
+                      avoid_areas: formData.avoidAreas?.trim() || null,
                       intuitive: formData.intuitive,
-                      additional_notes: formData.additionalNotes || null,
+                      additional_notes: formData.additionalNotes?.trim() || null,
                       newsletter_consent: formData.newsletter,
                     });
 
