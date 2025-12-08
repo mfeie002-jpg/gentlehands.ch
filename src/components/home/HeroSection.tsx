@@ -28,7 +28,8 @@ export const HeroSection = () => {
           alt="GentleHands Massage - Sanfte, professionelle Hände auf einem entspannten Rücken" 
           className="w-full h-full object-cover"
           loading="eager"
-          fetchPriority="high"
+          // @ts-ignore - fetchpriority is a valid HTML attribute
+          fetchpriority="high"
         />
         {/* Multi-layer gradient overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/60 to-background" />

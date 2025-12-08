@@ -253,6 +253,44 @@
     @apply backdrop-blur-md bg-foreground/80 border border-foreground/20;
   }
 
+  /* Premium Glass Morphism Variants */
+  .glass-copper {
+    @apply backdrop-blur-xl bg-copper/5 border border-copper/20;
+  }
+
+  .glass-petrol {
+    @apply backdrop-blur-xl bg-primary/5 border border-primary/20;
+  }
+
+  /* Smooth entrance animation */
+  .animate-enter {
+    animation: enter 0.5s ease-out forwards;
+  }
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger children animations */
+  .stagger-children > * {
+    opacity: 0;
+    animation: enter 0.5s ease-out forwards;
+  }
+
+  .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+  .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+
   /* Premium Hover Effects */
   .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;

@@ -6,6 +6,7 @@ import { ScrollProgress } from "@/components/shared/ScrollProgress";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SmoothScrollProvider } from "@/components/shared/SmoothScroll";
 import { PullToRefreshIndicator } from "@/components/shared/PullToRefreshIndicator";
+import { SkipToContent } from "@/components/shared/SkipToContent";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 
 interface LayoutProps {
@@ -27,6 +28,7 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <SmoothScrollProvider>
       <div className="min-h-screen flex flex-col">
+        <SkipToContent />
         <PullToRefreshIndicator 
           isPulling={isPulling} 
           isRefreshing={isRefreshing} 
@@ -35,7 +37,9 @@ export const Layout = ({ children }: LayoutProps) => {
         <CustomCursor />
         <ScrollProgress />
         <Header />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1" role="main">
+          {children}
+        </main>
         <Footer />
         <BackToTop />
       </div>

@@ -24,6 +24,10 @@ const buttonVariants = cva(
         hero: "bg-copper text-accent-foreground hover:bg-copper-dark shadow-copper hover:shadow-lg text-base font-medium px-6 sm:px-8 py-3 sm:py-4",
         "hero-secondary": "bg-card/80 backdrop-blur-sm border border-border text-foreground hover:bg-card hover:border-copper/30 text-base font-medium px-6 sm:px-8 py-3 sm:py-4",
         nav: "text-foreground hover:text-primary font-normal",
+        // Premium variants with enhanced visuals
+        premium: "relative bg-gradient-to-r from-copper to-copper-light text-accent-foreground shadow-copper hover:shadow-copper-lg overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700",
+        "glass": "backdrop-blur-md bg-card/60 border border-border/50 text-foreground hover:bg-card/80 hover:border-copper/30",
+        "glow": "bg-copper text-accent-foreground shadow-glow-copper hover:shadow-copper-lg animate-glow-pulse",
       },
       size: {
         default: "h-11 px-5 sm:px-6 py-2.5",

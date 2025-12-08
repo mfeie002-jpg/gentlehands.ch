@@ -46,7 +46,7 @@ const FooterLink = ({ href, label }: { href: string; label: string }) => (
 
 export const Footer = () => {
   return (
-    <footer className="relative bg-gradient-to-b from-secondary/30 to-secondary/60 border-t border-border overflow-hidden">
+    <footer className="relative bg-gradient-to-b from-secondary/30 to-secondary/60 border-t border-border overflow-hidden" role="contentinfo">
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-[250px] sm:w-[500px] h-[250px] sm:h-[500px] bg-petrol/5 rounded-full blur-[100px] sm:blur-[150px] -translate-y-1/2 translate-x-1/2" />
       <div className="absolute bottom-0 left-0 w-[200px] sm:w-[400px] h-[200px] sm:h-[400px] bg-copper/5 rounded-full blur-[80px] sm:blur-[120px] translate-y-1/2 -translate-x-1/2" />
