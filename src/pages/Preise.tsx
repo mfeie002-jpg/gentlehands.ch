@@ -156,22 +156,22 @@ const Preise = () => {
                 className="relative"
               >
                 <motion.div 
-                  className={`h-full rounded-3xl p-8 transition-all duration-500 ${
+                  className={`h-full rounded-2xl sm:rounded-3xl p-5 sm:p-8 transition-all duration-500 ${
                     tier.recommended 
                       ? "bg-gradient-to-b from-copper/10 to-background ring-2 ring-copper" 
                       : "card-elevated"
                   }`}
                   animate={{
-                    y: hoveredTier === index ? -12 : 0,
+                    y: hoveredTier === index ? -8 : 0,
                     boxShadow: hoveredTier === index 
                       ? `0 25px 50px -12px hsl(${tier.glowColor} / 0.25)` 
                       : '0 4px 20px rgba(0,0,0,0.1)'
                   }}
                   transition={{ duration: 0.3 }}
                 >
-                  {/* Animated glow */}
+                  {/* Animated glow - desktop only */}
                   <motion.div
-                    className="absolute inset-0 rounded-3xl opacity-0 pointer-events-none"
+                    className="absolute inset-0 rounded-2xl sm:rounded-3xl opacity-0 pointer-events-none hidden sm:block"
                     animate={{ opacity: hoveredTier === index ? 1 : 0 }}
                     transition={{ duration: 0.3 }}
                     style={{
@@ -181,31 +181,33 @@ const Preise = () => {
                   
                   {tier.recommended && (
                     <motion.div 
-                      className="absolute -top-4 left-1/2 -translate-x-1/2"
+                      className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2"
                       initial={{ opacity: 0, y: -10, scale: 0.9 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ delay: 0.5 }}
                     >
-                      <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-copper text-accent-foreground text-sm font-medium rounded-full shadow-lg shadow-copper/30">
-                        <Star size={14} fill="currentColor" />
+                      <span className="inline-flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-1 sm:py-1.5 bg-copper text-accent-foreground text-xs sm:text-sm font-medium rounded-full shadow-lg shadow-copper/30">
+                        <Star size={12} fill="currentColor" className="sm:hidden" />
+                        <Star size={14} fill="currentColor" className="hidden sm:block" />
                         Empfohlen
                       </span>
                     </motion.div>
                   )}
 
-                  <div className="text-center mb-8 relative">
+                  <div className="text-center mb-5 sm:mb-8 relative">
                     <motion.div 
-                      className="flex items-center justify-center gap-2 text-primary mb-3"
+                      className="flex items-center justify-center gap-1.5 sm:gap-2 text-primary mb-2 sm:mb-3"
                       animate={{ scale: hoveredTier === index ? 1.05 : 1 }}
                     >
-                      <Clock size={20} />
-                      <span className="font-medium text-lg">{tier.duration}</span>
+                      <Clock size={16} className="sm:hidden" />
+                      <Clock size={20} className="hidden sm:block" />
+                      <span className="font-medium text-base sm:text-lg">{tier.duration}</span>
                     </motion.div>
                     
-                    <div className="flex items-baseline justify-center gap-1 mb-2">
-                      <span className="text-muted-foreground text-base sm:text-lg">CHF</span>
+                    <div className="flex items-baseline justify-center gap-1 mb-1 sm:mb-2">
+                      <span className="text-muted-foreground text-sm sm:text-lg">CHF</span>
                       <motion.span 
-                        className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground"
+                        className="font-display text-3xl sm:text-5xl md:text-6xl text-foreground"
                         initial={{ opacity: 0, scale: 0.5 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
@@ -215,49 +217,46 @@ const Preise = () => {
                       </motion.span>
                     </div>
                     
-                    {/* Price per minute indicator */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: hoveredTier === index ? 1 : 0 }}
-                      className="text-xs text-copper font-medium"
-                    >
+                    {/* Price per minute indicator - always visible on mobile */}
+                    <div className="text-[10px] sm:text-xs text-copper font-medium sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                       CHF {tier.pricePerMin.toFixed(2)}/Min
-                    </motion.div>
+                    </div>
                     
-                    <p className="text-muted-foreground mt-2">{tier.description}</p>
+                    <p className="text-muted-foreground text-sm sm:text-base mt-1.5 sm:mt-2">{tier.description}</p>
                   </div>
 
-                  <ul className="space-y-4 mb-8">
+                  <ul className="space-y-2.5 sm:space-y-4 mb-5 sm:mb-8">
                     {tier.features.map((feature, i) => (
                       <motion.li 
                         key={feature} 
-                        className="flex items-start gap-3"
+                        className="flex items-start gap-2 sm:gap-3"
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.3 + (i * 0.1) }}
+                        transition={{ delay: 0.3 + (i * 0.05) }}
                       >
-                        <motion.div 
-                          className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${tier.recommended ? 'bg-copper' : 'bg-primary/20'}`}
-                          whileHover={{ scale: 1.2 }}
+                        <div 
+                          className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${tier.recommended ? 'bg-copper' : 'bg-primary/20'}`}
                         >
-                          <Check size={12} className={tier.recommended ? 'text-accent-foreground' : 'text-primary'} />
-                        </motion.div>
-                        <span className="text-muted-foreground">{feature}</span>
+                          <Check size={10} className={`sm:hidden ${tier.recommended ? 'text-accent-foreground' : 'text-primary'}`} />
+                          <Check size={12} className={`hidden sm:block ${tier.recommended ? 'text-accent-foreground' : 'text-primary'}`} />
+                        </div>
+                        <span className="text-muted-foreground text-sm sm:text-base">{feature}</span>
                       </motion.li>
                     ))}
                   </ul>
 
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <motion.div whileTap={{ scale: 0.98 }}>
                     <Button
                       variant={tier.recommended ? "copper" : "petrol-outline"}
-                      className="w-full group"
+                      className="w-full group min-h-[44px]"
                       size="lg"
                       asChild
                     >
                       <Link to="/buchung">
-                        Jetzt buchen
-                        <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
+                        <span className="text-sm sm:text-base">Jetzt buchen</span>
+                        <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-1 sm:hidden" />
+                        <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1 hidden sm:block" />
                       </Link>
                     </Button>
                   </motion.div>
@@ -271,10 +270,11 @@ const Preise = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mt-8"
+            className="text-center mt-6 sm:mt-8"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-forest/10 text-forest text-sm">
-              <Zap size={16} />
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-forest/10 text-forest text-xs sm:text-sm">
+              <Zap size={14} className="sm:hidden" />
+              <Zap size={16} className="hidden sm:block" />
               <span>Je länger die Session, desto mehr sparen Sie pro Minute</span>
             </div>
           </motion.div>
