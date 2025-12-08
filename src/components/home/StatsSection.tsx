@@ -171,12 +171,12 @@ export const StatsSection = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6 }}
-          className="mt-16 flex justify-center"
+          className="mt-8 sm:mt-12 md:mt-16 flex justify-center"
         >
           <div className="flex items-center gap-3">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-copper/50" />
-            <div className="w-2 h-2 rounded-full bg-copper/50" />
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-copper/50" />
+            <div className="w-12 sm:w-16 h-px bg-gradient-to-r from-transparent to-copper/50" />
+            <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-copper/50" />
+            <div className="w-12 sm:w-16 h-px bg-gradient-to-l from-transparent to-copper/50" />
           </div>
         </motion.div>
       </div>

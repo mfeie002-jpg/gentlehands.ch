@@ -133,10 +133,10 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mb-12 sm:mb-16 px-4 sm:px-0"
           >
             <MagneticButton>
-              <Button variant="copper" size="xl" asChild className="min-w-[200px] shadow-copper">
+              <Button variant="copper" size="lg" asChild className="w-full sm:w-auto min-w-[200px] shadow-copper">
                 <Link to="/buchung">
                   <Sparkles size={18} className="mr-2" />
                   Erlebnis anfragen
@@ -144,7 +144,7 @@ export const HeroSection = () => {
               </Button>
             </MagneticButton>
             <MagneticButton>
-              <Button variant="outline" size="xl" asChild className="min-w-[200px] border-copper/30 hover:border-copper hover:bg-copper/5">
+              <Button variant="outline" size="lg" asChild className="w-full sm:w-auto min-w-[200px] border-copper/30 hover:border-copper hover:bg-copper/5">
                 <Link to="/erlebnisse">Erlebnisse entdecken</Link>
               </Button>
             </MagneticButton>
@@ -155,7 +155,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.1 }}
-            className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 px-4 sm:px-0"
+            className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3 md:gap-4 px-2 sm:px-0"
           >
             {trustBadges.map((badge, index) => (
               <motion.div
@@ -163,14 +163,14 @@ export const HeroSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.2 + index * 0.1 }}
-                className="flex items-center gap-2 sm:gap-3 text-muted-foreground group cursor-default bg-card/30 backdrop-blur-sm px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-border/30 hover:border-copper/30 transition-all duration-300"
+                className="flex items-center gap-2 sm:gap-3 text-muted-foreground group cursor-default bg-card/30 backdrop-blur-sm px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-border/30 hover:border-copper/30 transition-all duration-300"
               >
-                <div className="relative p-1.5 sm:p-2 rounded-lg bg-copper/15 group-hover:bg-copper/25 transition-colors duration-300">
+                <div className="relative p-1.5 sm:p-2 rounded-lg bg-copper/15 group-hover:bg-copper/25 transition-colors duration-300 flex-shrink-0">
                   <badge.icon size={14} className="sm:w-4 sm:h-4 text-copper transition-transform duration-300 group-hover:scale-110" />
                 </div>
-                <div className="text-left">
-                  <span className="text-xs sm:text-sm font-medium tracking-wide text-foreground block leading-tight">{badge.label}</span>
-                  <span className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{badge.sublabel}</span>
+                <div className="text-left min-w-0">
+                  <span className="text-[11px] sm:text-sm font-medium tracking-wide text-foreground block leading-tight truncate">{badge.label}</span>
+                  <span className="text-[9px] sm:text-xs text-muted-foreground hidden sm:block truncate">{badge.sublabel}</span>
                 </div>
               </motion.div>
             ))}

@@ -444,32 +444,64 @@
       @apply px-4;
     }
     .section-padding {
-      @apply py-12;
+      @apply py-10;
     }
     .section-padding-sm {
-      @apply py-8;
+      @apply py-6;
     }
     
     /* Improve mobile typography */
     h1 {
-      @apply text-2xl leading-tight;
+      @apply text-2xl leading-snug;
     }
     h2 {
-      @apply text-xl leading-tight;
+      @apply text-xl leading-snug;
     }
     h3 {
-      @apply text-lg;
+      @apply text-lg leading-snug;
+    }
+    h4 {
+      @apply text-base leading-snug;
     }
     
-    /* Mobile-optimized buttons */
-    button, a {
+    /* Mobile-optimized interactive elements */
+    button:not(.icon-only), 
+    a:not(.inline-link) {
       min-height: 44px;
-      min-width: 44px;
     }
     
     /* Mobile safe area */
     .safe-bottom {
       padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    
+    /* Fix text overflow on mobile */
+    p, span, h1, h2, h3, h4, h5, h6 {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    /* Ensure proper grid gaps on mobile */
+    .gap-responsive {
+      gap: 0.75rem;
+    }
+  }
+  
+  /* Extra small screens */
+  @media (max-width: 380px) {
+    .container-wide,
+    .container-narrow {
+      @apply px-3;
+    }
+    
+    h1 {
+      @apply text-xl;
+    }
+    h2 {
+      @apply text-lg;
+    }
+    h3 {
+      @apply text-base;
     }
   }
   

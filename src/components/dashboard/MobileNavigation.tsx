@@ -23,13 +23,13 @@ export const MobileNavigation = ({ activeTab, onTabChange }: MobileNavigationPro
       animate={{ y: 0 }}
       className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-background/95 backdrop-blur-xl border-t border-border safe-area-bottom"
     >
-      <div className="flex items-center justify-around py-1.5 sm:py-2 px-1">
+      <div className="flex items-center justify-around py-2 px-1 max-w-lg mx-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={cn(
-              "flex flex-col items-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all min-w-[50px] sm:min-w-[60px] touch-manipulation active:scale-95",
+              "flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all min-w-[52px] touch-manipulation active:scale-95",
               activeTab === tab.id
                 ? "text-copper"
                 : "text-muted-foreground hover:text-foreground"
@@ -38,13 +38,13 @@ export const MobileNavigation = ({ activeTab, onTabChange }: MobileNavigationPro
             <motion.div
               animate={{ scale: activeTab === tab.id ? 1.1 : 1 }}
               className={cn(
-                "p-1 sm:p-1.5 rounded-md sm:rounded-lg transition-colors",
+                "p-1.5 rounded-lg transition-colors",
                 activeTab === tab.id && "bg-copper/10"
               )}
             >
-              <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <tab.icon className="w-5 h-5" />
             </motion.div>
-            <span className="text-[9px] sm:text-[10px] font-medium leading-tight">{tab.label}</span>
+            <span className="text-[10px] font-medium leading-tight truncate max-w-[52px]">{tab.label}</span>
           </button>
         ))}
       </div>
