@@ -8,7 +8,6 @@ import { FloatingCTA } from "@/components/shared/FloatingCTA";
 import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { LiveChatWidget } from "@/components/shared/LiveChatWidget";
-import { WhatsAppWidget } from "@/components/shared/WhatsAppWidget";
 import Index from "./pages/Index";
 import Erlebnisse from "./pages/Erlebnisse";
 import Massagen from "./pages/Massagen";
@@ -95,7 +94,6 @@ const App = () => (
           <FloatingCTA />
           <NewsletterPopup />
           <LiveChatWidget />
-          <WhatsAppWidget />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
