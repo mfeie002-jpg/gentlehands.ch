@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, Languages, Heart, Award } from "lucide-react";
+import { LazyImage } from "@/components/shared/LazyImage";
 
 import teamMorris from "@/assets/team-morris.jpg";
 import teamAnna from "@/assets/team-anna.jpg";
@@ -105,10 +106,11 @@ export const TeamPreviewSection = () => {
               >
                 {/* Avatar */}
                 <div className="aspect-square rounded-2xl mb-6 relative overflow-hidden">
-                  <img 
+                  <LazyImage 
                     src={member.image} 
                     alt={member.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    wrapperClassName="w-full h-full"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   

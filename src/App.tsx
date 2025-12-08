@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,41 +9,46 @@ import { FloatingCTA } from "@/components/shared/FloatingCTA";
 import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { LiveChatWidget } from "@/components/shared/LiveChatWidget";
+import { PageLoadingFallback } from "@/components/shared/PageLoadingFallback";
+
+// Critical pages - loaded immediately
 import Index from "./pages/Index";
-import Erlebnisse from "./pages/Erlebnisse";
-import Massagen from "./pages/Massagen";
-import Team from "./pages/Team";
-import UeberUns from "./pages/UeberUns";
-import Erfahrungen from "./pages/Erfahrungen";
-import FAQ from "./pages/FAQ";
-import Ratgeber from "./pages/Ratgeber";
-import Kontakt from "./pages/Kontakt";
-import Rechtliches from "./pages/Rechtliches";
-import Buchung from "./pages/Buchung";
-import BuchungBestaetigung from "./pages/BuchungBestaetigung";
-import Gutscheine from "./pages/Gutscheine";
-import Warteliste from "./pages/Warteliste";
-import Preise from "./pages/Preise";
-import Quiz from "./pages/Quiz";
-import Galerie from "./pages/Galerie";
-import Vorbereitung from "./pages/Vorbereitung";
-import Business from "./pages/Business";
-import Membership from "./pages/Membership";
-import Aromatherapie from "./pages/Aromatherapie";
-import Soundtherapie from "./pages/Soundtherapie";
-import Vergleich from "./pages/Vergleich";
-import Saisonal from "./pages/Saisonal";
-import Partner from "./pages/Partner";
-import Presse from "./pages/Presse";
-import Karriere from "./pages/Karriere";
-import Nachhaltigkeit from "./pages/Nachhaltigkeit";
-import VirtualTour from "./pages/VirtualTour";
-import Geschenkideen from "./pages/Geschenkideen";
-import Admin from "./pages/Admin";
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
-import Empfehlen from "./pages/Empfehlen";
 import NotFound from "./pages/NotFound";
+
+// Lazy loaded pages - loaded on demand
+const Erlebnisse = lazy(() => import("./pages/Erlebnisse"));
+const Massagen = lazy(() => import("./pages/Massagen"));
+const Team = lazy(() => import("./pages/Team"));
+const UeberUns = lazy(() => import("./pages/UeberUns"));
+const Erfahrungen = lazy(() => import("./pages/Erfahrungen"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const Ratgeber = lazy(() => import("./pages/Ratgeber"));
+const Kontakt = lazy(() => import("./pages/Kontakt"));
+const Rechtliches = lazy(() => import("./pages/Rechtliches"));
+const Buchung = lazy(() => import("./pages/Buchung"));
+const BuchungBestaetigung = lazy(() => import("./pages/BuchungBestaetigung"));
+const Gutscheine = lazy(() => import("./pages/Gutscheine"));
+const Warteliste = lazy(() => import("./pages/Warteliste"));
+const Preise = lazy(() => import("./pages/Preise"));
+const Quiz = lazy(() => import("./pages/Quiz"));
+const Galerie = lazy(() => import("./pages/Galerie"));
+const Vorbereitung = lazy(() => import("./pages/Vorbereitung"));
+const Business = lazy(() => import("./pages/Business"));
+const Membership = lazy(() => import("./pages/Membership"));
+const Aromatherapie = lazy(() => import("./pages/Aromatherapie"));
+const Soundtherapie = lazy(() => import("./pages/Soundtherapie"));
+const Vergleich = lazy(() => import("./pages/Vergleich"));
+const Saisonal = lazy(() => import("./pages/Saisonal"));
+const Partner = lazy(() => import("./pages/Partner"));
+const Presse = lazy(() => import("./pages/Presse"));
+const Karriere = lazy(() => import("./pages/Karriere"));
+const Nachhaltigkeit = lazy(() => import("./pages/Nachhaltigkeit"));
+const VirtualTour = lazy(() => import("./pages/VirtualTour"));
+const Geschenkideen = lazy(() => import("./pages/Geschenkideen"));
+const Admin = lazy(() => import("./pages/Admin"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Login = lazy(() => import("./pages/Login"));
+const Empfehlen = lazy(() => import("./pages/Empfehlen"));
 
 const queryClient = new QueryClient();
 
@@ -54,43 +60,45 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/erlebnisse" element={<Erlebnisse />} />
-            <Route path="/massagen" element={<Massagen />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/ueber-uns" element={<UeberUns />} />
-            <Route path="/erfahrungen" element={<Erfahrungen />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/ratgeber" element={<Ratgeber />} />
-            <Route path="/kontakt" element={<Kontakt />} />
-            <Route path="/rechtliches" element={<Rechtliches />} />
-            <Route path="/buchung" element={<Buchung />} />
-            <Route path="/buchung/bestaetigung" element={<BuchungBestaetigung />} />
-            <Route path="/gutscheine" element={<Gutscheine />} />
-            <Route path="/warteliste" element={<Warteliste />} />
-            <Route path="/preise" element={<Preise />} />
-            <Route path="/quiz" element={<Quiz />} />
-            <Route path="/galerie" element={<Galerie />} />
-            <Route path="/vorbereitung" element={<Vorbereitung />} />
-            <Route path="/business" element={<Business />} />
-            <Route path="/membership" element={<Membership />} />
-            <Route path="/aromatherapie" element={<Aromatherapie />} />
-            <Route path="/soundtherapie" element={<Soundtherapie />} />
-            <Route path="/vergleich" element={<Vergleich />} />
-            <Route path="/saisonal" element={<Saisonal />} />
-            <Route path="/partner" element={<Partner />} />
-            <Route path="/presse" element={<Presse />} />
-            <Route path="/karriere" element={<Karriere />} />
-            <Route path="/nachhaltigkeit" element={<Nachhaltigkeit />} />
-            <Route path="/virtual-tour" element={<VirtualTour />} />
-            <Route path="/geschenkideen" element={<Geschenkideen />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/empfehlen" element={<Empfehlen />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense fallback={<PageLoadingFallback />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/erlebnisse" element={<Erlebnisse />} />
+              <Route path="/massagen" element={<Massagen />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/ueber-uns" element={<UeberUns />} />
+              <Route path="/erfahrungen" element={<Erfahrungen />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/ratgeber" element={<Ratgeber />} />
+              <Route path="/kontakt" element={<Kontakt />} />
+              <Route path="/rechtliches" element={<Rechtliches />} />
+              <Route path="/buchung" element={<Buchung />} />
+              <Route path="/buchung/bestaetigung" element={<BuchungBestaetigung />} />
+              <Route path="/gutscheine" element={<Gutscheine />} />
+              <Route path="/warteliste" element={<Warteliste />} />
+              <Route path="/preise" element={<Preise />} />
+              <Route path="/quiz" element={<Quiz />} />
+              <Route path="/galerie" element={<Galerie />} />
+              <Route path="/vorbereitung" element={<Vorbereitung />} />
+              <Route path="/business" element={<Business />} />
+              <Route path="/membership" element={<Membership />} />
+              <Route path="/aromatherapie" element={<Aromatherapie />} />
+              <Route path="/soundtherapie" element={<Soundtherapie />} />
+              <Route path="/vergleich" element={<Vergleich />} />
+              <Route path="/saisonal" element={<Saisonal />} />
+              <Route path="/partner" element={<Partner />} />
+              <Route path="/presse" element={<Presse />} />
+              <Route path="/karriere" element={<Karriere />} />
+              <Route path="/nachhaltigkeit" element={<Nachhaltigkeit />} />
+              <Route path="/virtual-tour" element={<VirtualTour />} />
+              <Route path="/geschenkideen" element={<Geschenkideen />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/empfehlen" element={<Empfehlen />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
           <FloatingCTA />
           <NewsletterPopup />
           <LiveChatWidget />
