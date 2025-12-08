@@ -2,8 +2,9 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Languages, Award, Heart, Star, GraduationCap, Quote, ArrowRight, Users } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { TeamHeroEnhanced } from "@/components/team/TeamHeroEnhanced";
 import { TeamCultureSection } from "@/components/team/TeamCultureSection";
@@ -86,10 +87,11 @@ const Team = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Unser Team – Professionelle Therapeut:innen | GentleHands Zürich</title>
-        <meta name="description" content="Lernen Sie unser Team professionell ausgebildeter Therapeut:innen kennen. Jahrelange Erfahrung, individueller Stil, respektvoller Umgang." />
-      </Helmet>
+      <SEOHead 
+        title="Unser Team – Professionelle Therapeut:innen | GentleHands Zürich"
+        description="Lernen Sie unser Team professionell ausgebildeter Therapeut:innen kennen. Jahrelange Erfahrung, individueller Stil, respektvoller Umgang."
+        canonical="https://gentlehands.ch/team"
+      />
 
       {/* Hero */}
       <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

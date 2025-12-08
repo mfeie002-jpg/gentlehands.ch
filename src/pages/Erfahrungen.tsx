@@ -3,8 +3,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Star, Quote, Heart, ChevronLeft, ChevronRight, Sparkles, ArrowRight } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { VideoTestimonials } from "@/components/shared/VideoTestimonials";
@@ -109,13 +109,11 @@ const Erfahrungen = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Erfahrungen & Bewertungen | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Lesen Sie Erfahrungsberichte unserer Kundinnen. Echte Geschichten über Entspannung, Transformation und tiefes Loslassen bei GentleHands."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Erfahrungen & Bewertungen | GentleHands Zürich"
+        description="Lesen Sie Erfahrungsberichte unserer Kundinnen. Echte Geschichten über Entspannung, Transformation und tiefes Loslassen bei GentleHands."
+        canonical="https://gentlehands.ch/erfahrungen"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

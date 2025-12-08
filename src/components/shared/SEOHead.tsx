@@ -9,6 +9,7 @@ interface SEOHeadProps {
   type?: "website" | "article" | "product";
   noIndex?: boolean;
   schema?: Record<string, unknown>;
+  jsonLd?: Record<string, unknown>;
   keywords?: string[];
   author?: string;
   publishedTime?: string;
@@ -27,6 +28,7 @@ export const SEOHead = memo(({
   type = "website",
   noIndex = false,
   schema,
+  jsonLd,
   keywords = [],
   author = "GentleHands",
   publishedTime,
@@ -60,7 +62,7 @@ export const SEOHead = memo(({
     },
   };
 
-  const finalSchema = schema || defaultSchema;
+  const finalSchema = jsonLd || schema || defaultSchema;
 
   return (
     <Helmet>

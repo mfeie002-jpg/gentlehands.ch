@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { Check, Clock, MapPin, Shirt, Droplets, Heart, Phone, Coffee, X, ArrowRight, Sparkles } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
@@ -37,13 +37,11 @@ const dontDo = [
 const Vorbereitung = () => {
   return (
     <Layout>
-      <Helmet>
-        <title>Vorbereitung auf Ihre Session | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Tipps zur optimalen Vorbereitung auf Ihre professionelle Entspannungsmassage. Erfahren Sie, was Sie vor, während und nach Ihrer Session erwartet."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Vorbereitung auf Ihre Session | GentleHands Zürich"
+        description="Tipps zur optimalen Vorbereitung auf Ihre professionelle Entspannungsmassage. Erfahren Sie, was Sie vor, während und nach Ihrer Session erwartet."
+        canonical="https://gentlehands.ch/vorbereitung"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

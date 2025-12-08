@@ -3,8 +3,9 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Check, Star, Clock, Info, Gift, Percent, Sparkles, ArrowRight, Zap } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { PriceTierCard } from "@/components/pricing/PriceTierCard";
@@ -78,10 +79,11 @@ const Preise = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Preise – Professionelle Entspannungsmassagen | GentleHands Zürich</title>
-        <meta name="description" content="Transparente Preise für professionelle Entspannungsmassagen bei GentleHands. 60, 90 oder 120 Minuten – finden Sie Ihr perfektes Erlebnis." />
-      </Helmet>
+      <SEOHead 
+        title="Preise – Professionelle Entspannungsmassagen | GentleHands Zürich"
+        description="Transparente Preise für professionelle Entspannungsmassagen bei GentleHands. 60, 90 oder 120 Minuten – finden Sie Ihr perfektes Erlebnis."
+        canonical="https://gentlehands.ch/preise"
+      />
 
       {/* Hero */}
       <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { ScentGuide } from "@/components/shared/ScentGuide";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { GlowCard } from "@/components/shared/GlowCard";
@@ -78,13 +78,11 @@ const Aromatherapie = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Aromatherapie | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Entdecken Sie die Kraft der Düfte. Unsere Aromatherapie-Optionen verstärken Ihr Massage-Erlebnis und fördern tiefe Entspannung."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Aromatherapie | GentleHands Zürich"
+        description="Entdecken Sie die Kraft der Düfte. Unsere Aromatherapie-Optionen verstärken Ihr Massage-Erlebnis und fördern tiefe Entspannung."
+        canonical="https://gentlehands.ch/aromatherapie"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
