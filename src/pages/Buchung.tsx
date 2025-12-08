@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { format, addDays, isBefore, startOfToday } from "date-fns";
 import { de } from "date-fns/locale";
-import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -24,6 +24,7 @@ import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
 import { bookingContactSchema, bookingPreferencesSchema } from "@/lib/validations";
 import { z } from "zod";
+import { useThrottle } from "@/hooks/useThrottle";
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
@@ -63,6 +64,13 @@ const Buchung = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  
+  // Rate limiting - max 3 submissions per minute, minimum 5 seconds between attempts
+  const { canSubmit, cooldownSeconds, attemptsRemaining, recordSubmission } = useThrottle({
+    limitMs: 5000,
+    maxAttempts: 3,
+    windowMs: 60000,
+  });
   const [formData, setFormData] = useState({
     masseur: "",
     theme: "",
@@ -885,6 +893,18 @@ const Buchung = () => {
               <Button
                 variant="copper"
                 onClick={async () => {
+                  // Check rate limiting first
+                  if (!canSubmit) {
+                    toast({
+                      title: "Bitte warten Sie",
+                      description: cooldownSeconds > 0 
+                        ? `Sie können in ${cooldownSeconds} Sekunden erneut versuchen.`
+                        : "Zu viele Versuche. Bitte warten Sie eine Minute.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+
                   // Validate form before submission
                   if (!validateContactForm()) {
                     toast({
@@ -899,6 +919,16 @@ const Buchung = () => {
                     toast({
                       title: "Bitte überprüfen Sie Ihre Präferenzen",
                       description: "Einige Felder sind zu lang.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+
+                  // Record the submission attempt for rate limiting
+                  if (!recordSubmission()) {
+                    toast({
+                      title: "Zu schnell",
+                      description: "Bitte warten Sie einen Moment vor dem nächsten Versuch.",
                       variant: "destructive",
                     });
                     return;
@@ -998,7 +1028,7 @@ const Buchung = () => {
                     setIsSubmitting(false);
                   }
                 }}
-                disabled={!canProceed() || isSubmitting}
+                disabled={!canProceed() || isSubmitting || !canSubmit}
                 className="ml-auto"
               >
                 {isSubmitting ? (
@@ -1006,10 +1036,15 @@ const Buchung = () => {
                     <Loader2 size={16} className="animate-spin mr-2" />
                     Wird gesendet...
                   </>
+                ) : cooldownSeconds > 0 ? (
+                  <>
+                    <AlertCircle size={16} className="mr-2" />
+                    Warten ({cooldownSeconds}s)
+                  </>
                 ) : (
                   <>
                     Anfrage absenden
-                    <Check size={16} />
+                    <Check size={16} className="ml-2" />
                   </>
                 )}
               </Button>
