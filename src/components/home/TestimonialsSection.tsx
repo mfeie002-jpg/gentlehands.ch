@@ -56,7 +56,7 @@ const testimonials = [
 
 const TestimonialCard = ({ testimonial, featured = false }: { testimonial: typeof testimonials[0]; featured?: boolean }) => (
   <motion.div
-    className={`${featured ? 'card-elevated p-8' : 'card-bordered p-6'} group relative overflow-hidden h-full`}
+    className={`${featured ? 'card-elevated p-5 sm:p-6 md:p-8' : 'card-bordered p-4 sm:p-5 md:p-6'} group relative overflow-hidden h-full`}
     whileHover={{ y: featured ? -4 : -2 }}
     transition={{ type: "spring", stiffness: 300, damping: 20 }}
   >
@@ -71,14 +71,14 @@ const TestimonialCard = ({ testimonial, featured = false }: { testimonial: typeo
       <motion.div
         initial={{ rotate: 0 }}
         whileHover={{ rotate: 12 }}
-        className="mb-4"
+        className="mb-3 sm:mb-4"
       >
-        <Quote size={36} className="text-copper/20" />
+        <Quote size={28} className="sm:w-9 sm:h-9 text-copper/20" />
       </motion.div>
     )}
 
     {/* Content */}
-    <p className={`text-foreground ${featured ? 'mb-6 leading-relaxed text-lg' : 'text-sm mb-4'} italic`}>
+    <p className={`text-foreground ${featured ? 'mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base md:text-lg' : 'text-xs sm:text-sm mb-3 sm:mb-4'} italic`}>
       „{testimonial.content}"
     </p>
 
@@ -88,7 +88,7 @@ const TestimonialCard = ({ testimonial, featured = false }: { testimonial: typeo
         <p className={`font-display text-foreground ${!featured && 'text-sm'}`}>
           {testimonial.name}
         </p>
-        <p className={`text-muted-foreground ${featured ? 'text-sm' : 'text-xs'}`}>
+        <p className={`text-muted-foreground ${featured ? 'text-xs sm:text-sm' : 'text-[10px] sm:text-xs'}`}>
           {testimonial.age} Jahre
         </p>
       </div>
@@ -101,8 +101,8 @@ const TestimonialCard = ({ testimonial, featured = false }: { testimonial: typeo
             transition={{ delay: i * 0.1 }}
           >
             <Star
-              size={featured ? 16 : 12}
-              className="text-copper fill-copper"
+              size={featured ? 14 : 10}
+              className="sm:w-4 sm:h-4 text-copper fill-copper"
             />
           </motion.div>
         ))}
@@ -115,25 +115,25 @@ export const TestimonialsSection = () => {
   return (
     <section className="section-padding bg-gradient-to-b from-secondary/30 via-muted/20 to-background relative overflow-hidden">
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-copper/5 rounded-full blur-[150px] -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-petrol/5 rounded-full blur-[150px] translate-x-1/2 translate-y-1/2" />
+      <div className="absolute top-0 left-0 w-[250px] sm:w-[500px] h-[250px] sm:h-[500px] bg-copper/5 rounded-full blur-[100px] sm:blur-[150px] -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-[250px] sm:w-[500px] h-[250px] sm:h-[500px] bg-petrol/5 rounded-full blur-[100px] sm:blur-[150px] translate-x-1/2 translate-y-1/2" />
       
       <div className="container-wide relative">
         {/* Section Header */}
-        <ScrollReveal className="text-center mb-16">
-          <motion.div className="flex items-center justify-center gap-4 mb-4">
+        <ScrollReveal className="text-center mb-8 sm:mb-12 md:mb-16 px-4 sm:px-0">
+          <motion.div className="flex items-center justify-center gap-2 sm:gap-4 mb-3 sm:mb-4">
             <motion.div 
-              className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-12"
+              className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-8 sm:w-12"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             />
-            <span className="text-copper font-medium tracking-[0.2em] uppercase text-xs">
+            <span className="text-copper font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase text-[10px] sm:text-xs">
               Erfahrungen
             </span>
             <motion.div 
-              className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-12"
+              className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-8 sm:w-12"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
@@ -141,13 +141,13 @@ export const TestimonialsSection = () => {
             />
           </motion.div>
           
-          <h2 className="text-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 sm:mb-6 px-4 sm:px-0">
+          <h2 className="text-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 sm:mb-6">
             Was unsere <span className="text-gradient-copper">Kundinnen</span> sagen
           </h2>
           
           {/* Rating Badge */}
           <motion.div 
-            className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-4 bg-card/80 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-border/50 shadow-sm mx-4 sm:mx-0"
+            className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 bg-card/80 backdrop-blur-sm px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-full border border-border/50 shadow-sm"
             whileHover={{ scale: 1.02 }}
           >
             <div className="flex gap-0.5">
@@ -159,28 +159,28 @@ export const TestimonialsSection = () => {
                   viewport={{ once: true }}
                   transition={{ delay: 0.3 + i * 0.1, type: "spring" }}
                 >
-                  <Star size={20} className="text-copper fill-copper" />
+                  <Star size={16} className="sm:w-5 sm:h-5 text-copper fill-copper" />
                 </motion.div>
               ))}
             </div>
-            <span className="text-foreground font-display text-lg sm:text-xl">4.9/5</span>
-            <span className="text-muted-foreground text-xs sm:text-sm">• 200+ Bewertungen</span>
+            <span className="text-foreground font-display text-base sm:text-lg md:text-xl">4.9/5</span>
+            <span className="text-muted-foreground text-[10px] sm:text-xs md:text-sm">• 200+ Bewertungen</span>
           </motion.div>
         </ScrollReveal>
 
         {/* Featured Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10 px-4 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 md:mb-10 px-4 sm:px-0">
           {testimonials.slice(0, 3).map((testimonial, index) => (
-            <ScrollReveal key={testimonial.id} direction="up" delay={index * 0.1}>
+            <ScrollReveal key={testimonial.id} direction="up" delay={index * 0.08}>
               <TestimonialCard testimonial={testimonial} featured />
             </ScrollReveal>
           ))}
         </div>
 
         {/* Marquee Testimonials */}
-        <Marquee speed={35} className="py-4">
+        <Marquee speed={35} className="py-3 sm:py-4">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="w-80 flex-shrink-0">
+            <div key={testimonial.id} className="w-64 sm:w-72 md:w-80 flex-shrink-0">
               <TestimonialCard testimonial={testimonial} />
             </div>
           ))}
