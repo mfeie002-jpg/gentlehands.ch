@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, User, LogOut, LayoutDashboard, Heart } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Sparkles, User, LogOut, LayoutDashboard, Heart, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "framer-motion";
 import { Logo } from "@/components/shared/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -30,6 +30,11 @@ export const Header = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const menuRef = useRef<HTMLDivElement>(null);
+  
+  // Touch gesture handling
+  const dragY = useMotionValue(0);
+  const menuOpacity = useTransform(dragY, [-100, 0], [0, 1]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,6 +101,14 @@ export const Header = () => {
     navigate('/');
   };
 
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    // Close menu if dragged up more than 80px or with high velocity
+    if (info.offset.y < -80 || info.velocity.y < -500) {
+      setIsMobileMenuOpen(false);
+    }
+    dragY.set(0);
+  };
+
   return (
     <>
       <motion.header
@@ -105,7 +118,7 @@ export const Header = () => {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
             ? "bg-background/80 backdrop-blur-xl shadow-sm border-b border-border/50 py-3"
-            : "bg-transparent py-5"
+            : "bg-transparent py-4 sm:py-5"
         }`}
       >
         <div className="container-wide flex items-center justify-between">
@@ -200,10 +213,10 @@ export const Header = () => {
 
           {/* Mobile Menu Button */}
           <motion.button
-            className="lg:hidden p-2 text-foreground rounded-lg hover:bg-secondary transition-colors"
+            className="lg:hidden p-2.5 text-foreground rounded-xl hover:bg-secondary/80 active:bg-secondary transition-colors touch-manipulation"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.9 }}
           >
             <AnimatePresence mode="wait">
               {isMobileMenuOpen ? (
@@ -214,7 +227,7 @@ export const Header = () => {
                   exit={{ rotate: 90, opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <X size={24} />
+                  <X size={22} />
                 </motion.div>
               ) : (
                 <motion.div
@@ -224,7 +237,7 @@ export const Header = () => {
                   exit={{ rotate: -90, opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Menu size={24} />
+                  <Menu size={22} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -232,7 +245,7 @@ export const Header = () => {
         </div>
       </motion.header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu with Touch Gestures */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -242,40 +255,60 @@ export const Header = () => {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-40 lg:hidden"
           >
+            {/* Backdrop */}
             <motion.div
-              className="absolute inset-0 bg-foreground/30 backdrop-blur-sm"
+              className="absolute inset-0 bg-foreground/40 backdrop-blur-sm"
               onClick={() => setIsMobileMenuOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             />
+            
+            {/* Menu Panel with Drag Gesture */}
             <motion.nav
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 30 }}
-              className="absolute top-20 left-4 right-4 bg-card rounded-2xl shadow-xl p-6 border border-border overflow-hidden"
+              ref={menuRef}
+              drag="y"
+              dragConstraints={{ top: -200, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={handleDragEnd}
+              style={{ y: dragY, opacity: menuOpacity }}
+              initial={{ opacity: 0, y: -40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -40 }}
+              transition={{ duration: 0.35, type: "spring", stiffness: 300, damping: 30 }}
+              className="absolute top-16 sm:top-20 left-3 right-3 sm:left-4 sm:right-4 bg-card rounded-2xl shadow-2xl border border-border overflow-hidden max-h-[calc(100vh-5rem)] overflow-y-auto touch-pan-y"
             >
-              {/* Decorative gradient */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-copper/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              {/* Drag Handle Indicator */}
+              <div className="flex justify-center pt-3 pb-1">
+                <div className="w-10 h-1 bg-muted-foreground/30 rounded-full" />
+              </div>
               
-              <div className="flex flex-col gap-2 relative">
+              {/* Swipe hint text */}
+              <p className="text-center text-xs text-muted-foreground/60 mb-2">
+                Nach oben wischen zum Schließen
+              </p>
+              
+              {/* Decorative gradient */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-copper/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+              
+              <div className="flex flex-col gap-1 relative px-4 pb-6">
                 {navLinks.map((link, index) => (
                   <motion.div
                     key={link.href}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 + index * 0.05 }}
+                    transition={{ delay: 0.05 + index * 0.04 }}
                   >
                     <Link
                       to={link.href}
-                      className={`block px-4 py-3 text-lg font-medium rounded-xl transition-all ${
+                      className={`flex items-center justify-between px-4 py-3.5 text-base font-medium rounded-xl transition-all active:scale-[0.98] ${
                         location.pathname === link.href
                           ? "text-copper bg-copper/10"
-                          : "text-foreground hover:bg-secondary hover:text-copper"
+                          : "text-foreground hover:bg-secondary active:bg-secondary/80"
                       }`}
                     >
-                      {link.label}
+                      <span>{link.label}</span>
+                      <ChevronRight size={18} className={`text-muted-foreground/50 ${location.pathname === link.href ? 'text-copper' : ''}`} />
                     </Link>
                   </motion.div>
                 ))}
@@ -285,40 +318,40 @@ export const Header = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.35 }}
-                  className="mt-2 pt-2 border-t border-border"
+                  className="mt-3 pt-3 border-t border-border"
                 >
                   {user ? (
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <Link
                         to="/dashboard"
-                        className="block px-4 py-3 text-lg font-medium rounded-xl text-foreground hover:bg-secondary hover:text-copper"
+                        className="flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-xl text-foreground hover:bg-secondary active:bg-secondary/80 active:scale-[0.98] transition-all"
                       >
-                        <Heart className="w-5 h-5 inline mr-2" />
+                        <Heart className="w-5 h-5 text-copper" />
                         Mein Bereich
                       </Link>
                       {isAdmin && (
                         <Link
                           to="/admin"
-                          className="block px-4 py-3 text-lg font-medium rounded-xl text-foreground hover:bg-secondary hover:text-copper"
+                          className="flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-xl text-foreground hover:bg-secondary active:bg-secondary/80 active:scale-[0.98] transition-all"
                         >
-                          <LayoutDashboard className="w-5 h-5 inline mr-2" />
+                          <LayoutDashboard className="w-5 h-5 text-petrol" />
                           Admin
                         </Link>
                       )}
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-3 text-lg font-medium rounded-xl text-destructive hover:bg-destructive/10"
+                        className="w-full flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-xl text-destructive hover:bg-destructive/10 active:bg-destructive/15 active:scale-[0.98] transition-all"
                       >
-                        <LogOut className="w-5 h-5 inline mr-2" />
+                        <LogOut className="w-5 h-5" />
                         Abmelden
                       </button>
                     </div>
                   ) : (
                     <Link
                       to="/login"
-                      className="block px-4 py-3 text-lg font-medium rounded-xl text-foreground hover:bg-secondary hover:text-copper"
+                      className="flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-xl text-foreground hover:bg-secondary active:bg-secondary/80 active:scale-[0.98] transition-all"
                     >
-                      <User className="w-5 h-5 inline mr-2" />
+                      <User className="w-5 h-5 text-copper" />
                       Anmelden
                     </Link>
                   )}
@@ -330,7 +363,7 @@ export const Header = () => {
                   transition={{ delay: 0.4 }}
                   className="mt-4 pt-4 border-t border-border"
                 >
-                  <Button variant="copper" className="w-full shadow-copper" size="lg" asChild>
+                  <Button variant="copper" className="w-full shadow-copper active:scale-[0.98] transition-transform" size="lg" asChild>
                     <Link to="/buchung">
                       <Sparkles size={16} className="mr-1.5" />
                       Erlebnis anfragen
