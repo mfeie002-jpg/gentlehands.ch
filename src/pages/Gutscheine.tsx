@@ -422,10 +422,13 @@ const Gutscheine = () => {
         </div>
       </section>
 
-      {/* Info Section */}
+      {/* Check Gift Card Balance */}
       <section className="section-padding bg-gradient-to-b from-secondary/30 to-background">
         <div className="container-narrow">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <GiftCardChecker />
+          
+          {/* Info Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-16">
             {[
               { icon: Gift, title: "Sofort verfügbar", text: "Der Gutschein wird sofort per E-Mail zugestellt – perfekt für Last-Minute-Geschenke." },
               { icon: Clock, title: "2 Jahre gültig", text: "Genügend Zeit, um den perfekten Moment für das Erlebnis zu finden." },

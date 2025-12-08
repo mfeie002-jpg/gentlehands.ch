@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { Search, HelpCircle, MessageCircle, ArrowRight, Sparkles, ChevronDown } from "lucide-react";
+import { Search, HelpCircle, Sparkles, CreditCard } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -20,7 +20,7 @@ import { FAQQuickLinks } from "@/components/faq/FAQQuickLinks";
 const faqCategories = [
   { id: "all", label: "Alle Fragen", icon: Sparkles },
   { id: "general", label: "Allgemein", icon: HelpCircle },
-  { id: "booking", label: "Buchung & Preise", icon: MessageCircle },
+  { id: "booking", label: "Buchung & Preise", icon: CreditCard },
   { id: "session", label: "Ihre Session", icon: HelpCircle },
   { id: "privacy", label: "Diskretion", icon: HelpCircle },
 ];
@@ -352,55 +352,11 @@ const FAQ = () => {
           )}
         </div>
       </section>
+      {/* Quick Links */}
+      <FAQQuickLinks />
 
-      {/* CTA */}
-      <section className="section-padding bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
-        {/* Ambient Glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <motion.div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-copper/10 blur-[100px]"
-            animate={{ scale: [1, 1.3, 1] }}
-            transition={{ duration: 8, repeat: Infinity }}
-          />
-        </div>
-        
-        <div className="container-narrow text-center relative">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.div 
-              className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center"
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ type: "spring", delay: 0.2 }}
-            >
-              <MessageCircle size={32} className="text-primary" />
-            </motion.div>
-            <h2 className="text-foreground mb-6">
-              Noch Fragen?
-            </h2>
-            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Wir sind für Sie da. Kontaktieren Sie uns direkt – wir
-              beantworten Ihre Fragen gerne persönlich.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button variant="copper" size="lg" className="group" asChild>
-                <Link to="/kontakt">
-                  Kontakt aufnehmen
-                  <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
-              <Button variant="petrol-outline" size="lg" asChild>
-                <Link to="/buchung">Direkt buchen</Link>
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Contact Prompt */}
+      <FAQContactPrompt />
     </Layout>
   );
 };
