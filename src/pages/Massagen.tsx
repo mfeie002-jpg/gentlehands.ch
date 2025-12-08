@@ -171,29 +171,31 @@ const Massagen = () => {
       </Helmet>
 
       {/* Hero with Parallax */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
           <img src={massageBack} alt="GentleHands Massagen" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
         </motion.div>
         
-        {/* Ambient Effects */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Ambient Effects - hidden on mobile for performance */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block">
           <motion.div 
-            className="absolute top-1/4 -left-20 w-96 h-96 rounded-full bg-copper/10 blur-[100px]"
+            className="absolute top-1/4 -left-20 w-64 sm:w-96 h-64 sm:h-96 rounded-full bg-copper/10 blur-[80px] sm:blur-[100px]"
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute bottom-1/4 -right-20 w-80 h-80 rounded-full bg-primary/10 blur-[80px]"
+            className="absolute bottom-1/4 -right-20 w-48 sm:w-80 h-48 sm:h-80 rounded-full bg-primary/10 blur-[60px] sm:blur-[80px]"
             animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.2, 0.4] }}
             transition={{ duration: 10, repeat: Infinity }}
           />
         </div>
         
-        <FloatingElements variant="dots" />
+        <div className="hidden sm:block">
+          <FloatingElements variant="dots" />
+        </div>
         
-        <div className="container-wide relative z-10">
+        <div className="container-wide relative z-10 px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -204,19 +206,20 @@ const Massagen = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20 mb-6 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-copper/10 border border-copper/20 mb-4 sm:mb-6 backdrop-blur-sm"
             >
               <motion.div
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               >
-                <Sparkles size={16} className="text-copper" />
+                <Sparkles size={14} className="text-copper sm:hidden" />
+                <Sparkles size={16} className="text-copper hidden sm:block" />
               </motion.div>
-              <span className="text-copper text-sm font-medium">6 einzigartige Massagen</span>
+              <span className="text-copper text-xs sm:text-sm font-medium">6 einzigartige Massagen</span>
             </motion.div>
             
             <motion.h1 
-              className="text-foreground mb-6"
+              className="text-foreground mb-4 sm:mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -227,7 +230,7 @@ const Massagen = () => {
               </span>
             </motion.h1>
             <motion.p 
-              className="text-muted-foreground text-lg"
+              className="text-muted-foreground text-base sm:text-lg px-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -240,20 +243,20 @@ const Massagen = () => {
       </section>
 
       {/* Filter Section */}
-      <section className="py-4 sm:py-6 border-b border-border/50 sticky top-16 z-30 bg-background/80 backdrop-blur-md">
+      <section className="py-3 sm:py-6 border-b border-border/50 sticky top-14 sm:top-16 z-30 bg-background/80 backdrop-blur-md">
         <div className="container-wide">
-          <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide px-4 sm:px-0">
-            <Filter size={16} className="text-muted-foreground mr-1 sm:mr-2 shrink-0" />
+          <div className="flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide px-3 sm:px-0 -mx-1">
+            <Filter size={14} className="text-muted-foreground mr-1 shrink-0 sm:hidden" />
+            <Filter size={16} className="text-muted-foreground mr-2 shrink-0 hidden sm:block" />
             {categories.map((cat) => (
               <motion.button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
+                className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 min-h-[44px] touch-manipulation ${
                   activeCategory === cat.id
                     ? "bg-copper text-accent-foreground shadow-lg shadow-copper/20"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    : "bg-secondary text-secondary-foreground active:bg-secondary/80"
                 }`}
               >
                 {cat.label}
@@ -264,16 +267,16 @@ const Massagen = () => {
       </section>
 
       {/* Massages Grid */}
-      <section className="section-padding-sm relative">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
+      <section className="py-6 sm:py-12 relative">
+        {/* Background Pattern - hidden on mobile */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none hidden sm:block">
           <div className="absolute inset-0" style={{
             backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 1px)`,
             backgroundSize: '40px 40px'
           }} />
         </div>
         
-        <div className="container-wide relative">
+        <div className="container-wide relative px-3 sm:px-6">
           <AnimatePresence mode="wait">
             <motion.div 
               key={activeCategory}
@@ -281,7 +284,7 @@ const Massagen = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+              className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8"
             >
               {filteredMassages.map((massage, index) => (
                 <motion.div
@@ -289,15 +292,15 @@ const Massagen = () => {
                   id={massage.id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="scroll-mt-32"
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: index * 0.05 }}
+                  className="scroll-mt-28 sm:scroll-mt-32"
                   onMouseEnter={() => setHoveredMassage(massage.id)}
                   onMouseLeave={() => setHoveredMassage(null)}
                 >
                   <GlowCard className="h-full overflow-hidden group">
                     {/* Image */}
-                    <div className="relative h-56 overflow-hidden">
+                    <div className="relative h-44 sm:h-56 overflow-hidden">
                       <motion.img
                         src={massage.image}
                         alt={massage.title}
@@ -309,16 +312,16 @@ const Massagen = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                       
-                      {/* Shimmer Effect */}
+                      {/* Shimmer Effect - desktop only */}
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full hidden sm:block"
                         animate={hoveredMassage === massage.id ? { translateX: '100%' } : {}}
                         transition={{ duration: 0.8 }}
                       />
                       
                       {massage.highlight && (
                         <motion.span 
-                          className="absolute top-4 right-4 px-3 py-1 text-xs font-medium bg-copper text-accent-foreground rounded-full shadow-lg"
+                          className="absolute top-3 sm:top-4 right-3 sm:right-4 px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-medium bg-copper text-accent-foreground rounded-full shadow-lg"
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.2 }}
@@ -329,53 +332,56 @@ const Massagen = () => {
                       
                       {/* Icon Overlay */}
                       <motion.div 
-                        className="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-background/80 backdrop-blur-sm flex items-center justify-center"
+                        className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 w-10 sm:w-12 h-10 sm:h-12 rounded-xl bg-background/80 backdrop-blur-sm flex items-center justify-center"
                         animate={{ 
                           scale: hoveredMassage === massage.id ? 1.1 : 1,
                           rotate: hoveredMassage === massage.id ? 5 : 0
                         }}
                       >
-                        <massage.icon size={24} className="text-copper" />
+                        <massage.icon size={20} className="text-copper sm:hidden" />
+                        <massage.icon size={24} className="text-copper hidden sm:block" />
                       </motion.div>
                     </div>
 
-                    <div className="p-8">
+                    <div className="p-4 sm:p-8">
                       {/* Header */}
-                      <div className="mb-6">
+                      <div className="mb-4 sm:mb-6">
                         <motion.h3 
-                          className="font-display text-xl text-foreground mb-1"
+                          className="font-display text-lg sm:text-xl text-foreground mb-1"
                           animate={{ x: hoveredMassage === massage.id ? 4 : 0 }}
                         >
                           {massage.title}
                         </motion.h3>
-                        <p className="text-sm text-copper">{massage.subtitle}</p>
+                        <p className="text-xs sm:text-sm text-copper">{massage.subtitle}</p>
                       </div>
 
                       {/* Description */}
-                      <p className="text-muted-foreground mb-6 line-clamp-3">
+                      <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 line-clamp-3">
                         {massage.description}
                       </p>
 
                       {/* Details */}
-                      <ul className="space-y-2 mb-6">
+                      <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
                         {massage.details.map((detail, i) => (
                           <motion.li 
                             key={detail} 
-                            className="flex items-start gap-3 text-sm"
+                            className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm"
                             initial={{ opacity: 0, x: -10 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ delay: i * 0.05 }}
                           >
-                            <Check size={14} className="text-copper mt-1 shrink-0" />
+                            <Check size={12} className="text-copper mt-0.5 shrink-0 sm:hidden" />
+                            <Check size={14} className="text-copper mt-1 shrink-0 hidden sm:block" />
                             <span className="text-muted-foreground">{detail}</span>
                           </motion.li>
                         ))}
                       </ul>
 
                       {/* Meta */}
-                      <div className="flex flex-wrap gap-4 mb-6 text-sm">
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Clock size={16} className="text-primary" />
+                      <div className="flex flex-wrap gap-3 sm:gap-4 mb-4 sm:mb-6 text-xs sm:text-sm">
+                        <div className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground">
+                          <Clock size={14} className="text-primary sm:hidden" />
+                          <Clock size={16} className="text-primary hidden sm:block" />
                           <span>{massage.durations.join(" / ")}</span>
                         </div>
                         <div className="text-muted-foreground">
@@ -385,27 +391,26 @@ const Massagen = () => {
                       </div>
 
                       {/* Recommended Themes */}
-                      <div className="mb-6">
-                        <p className="text-sm text-muted-foreground mb-2">
+                      <div className="mb-4 sm:mb-6">
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                           Empfohlene Themes:
                         </p>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
                           {massage.recommendedThemes.map((theme) => (
-                            <motion.span
+                            <span
                               key={theme}
-                              whileHover={{ scale: 1.05 }}
-                              className="px-3 py-1 text-xs bg-secondary rounded-full text-secondary-foreground cursor-default"
+                              className="px-2 sm:px-3 py-1 text-[10px] sm:text-xs bg-secondary rounded-full text-secondary-foreground"
                             >
                               {theme}
-                            </motion.span>
+                            </span>
                           ))}
                         </div>
                       </div>
 
                       {/* CTA */}
-                      <Button variant="copper" className="w-full group relative overflow-hidden" asChild>
+                      <Button variant="copper" className="w-full group relative overflow-hidden min-h-[44px]" asChild>
                         <Link to={`/buchung?massage=${massage.id}`}>
-                          <span className="relative z-10 flex items-center justify-center gap-2">
+                          <span className="relative z-10 flex items-center justify-center gap-2 text-sm sm:text-base">
                             Diese Massage buchen
                             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                           </span>

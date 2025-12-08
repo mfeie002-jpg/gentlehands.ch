@@ -84,23 +84,25 @@ const Preise = () => {
       </Helmet>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none hidden sm:block">
           <motion.div 
-            className="absolute top-1/4 -right-32 w-96 h-96 bg-copper/10 rounded-full blur-[120px]"
+            className="absolute top-1/4 -right-32 w-64 sm:w-96 h-64 sm:h-96 bg-copper/10 rounded-full blur-[100px] sm:blur-[120px]"
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute bottom-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"
+            className="absolute bottom-1/4 -left-32 w-64 sm:w-96 h-64 sm:h-96 bg-primary/10 rounded-full blur-[100px] sm:blur-[120px]"
             animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity, delay: 4 }}
           />
         </div>
         
-        <FloatingElements variant="dots" />
+        <div className="hidden sm:block">
+          <FloatingElements variant="dots" />
+        </div>
         
-        <div className="container-wide relative z-10">
+        <div className="container-wide relative z-10 px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -111,14 +113,15 @@ const Preise = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20 mb-6"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-copper/10 border border-copper/20 mb-4 sm:mb-6"
             >
-              <Sparkles size={16} className="text-copper" />
-              <span className="text-copper text-sm font-medium">Transparente Preise</span>
+              <Sparkles size={14} className="text-copper sm:hidden" />
+              <Sparkles size={16} className="text-copper hidden sm:block" />
+              <span className="text-copper text-xs sm:text-sm font-medium">Transparente Preise</span>
             </motion.div>
             
             <motion.h1 
-              className="text-foreground mb-6"
+              className="text-foreground mb-4 sm:mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -126,7 +129,7 @@ const Preise = () => {
               Investieren Sie in Ihr <span className="text-gradient-copper">Wohlbefinden</span>
             </motion.h1>
             <motion.p 
-              className="text-muted-foreground text-lg"
+              className="text-muted-foreground text-base sm:text-lg px-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -138,9 +141,9 @@ const Preise = () => {
       </section>
 
       {/* Pricing Comparison Cards */}
-      <section className="section-padding-sm -mt-8">
-        <div className="container-wide">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="py-6 sm:py-12 -mt-4 sm:-mt-8">
+        <div className="container-wide px-3 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
             {pricingTiers.map((tier, index) => (
               <motion.div
                 key={tier.duration}

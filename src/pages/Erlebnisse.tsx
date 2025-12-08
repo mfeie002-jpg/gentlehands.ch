@@ -181,19 +181,19 @@ const themes = [
 
 const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
       ref={ref}
       id={theme.id}
-      initial={{ opacity: 0, y: 80 }}
+      initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className="scroll-mt-40"
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="scroll-mt-32 sm:scroll-mt-40"
     >
-      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-12 items-center ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
         {/* Image */}
         <div 
           className={`${index % 2 === 1 ? "lg:[direction:ltr]" : ""}`}
@@ -205,7 +205,7 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
+            <div className="aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl">
               <motion.img 
                 src={theme.image} 
                 alt={theme.title}
@@ -219,24 +219,24 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
                 transition={{ duration: 0.3 }}
               />
               
-              {/* Play Preview Button */}
+              {/* Play Preview Button - larger on mobile for touch */}
               <motion.div
                 className="absolute inset-0 flex items-center justify-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isHovered ? 1 : 0 }}
               >
                 <motion.div
-                  className="w-20 h-20 rounded-full bg-background/90 backdrop-blur-sm flex items-center justify-center shadow-xl"
-                  whileHover={{ scale: 1.1 }}
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-background/90 backdrop-blur-sm flex items-center justify-center shadow-xl"
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Play size={32} className="text-copper ml-1" fill="currentColor" />
+                  <Play size={28} className="text-copper ml-1 sm:hidden" fill="currentColor" />
+                  <Play size={32} className="text-copper ml-1 hidden sm:block" fill="currentColor" />
                 </motion.div>
               </motion.div>
               
-              {/* Sound Indicator */}
+              {/* Sound Indicator - hidden on mobile */}
               <motion.div
-                className="absolute bottom-4 right-4 flex items-center gap-2 px-3 py-2 rounded-full bg-background/80 backdrop-blur-sm"
+                className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 items-center gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full bg-background/80 backdrop-blur-sm hidden sm:flex"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
               >
@@ -247,7 +247,7 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
             
             {/* Floating Badge */}
             <motion.div 
-              className={`absolute top-6 left-6 flex items-center gap-2 px-4 py-2 rounded-full glass ${theme.bgAccent} shadow-lg`}
+              className={`absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass ${theme.bgAccent} shadow-lg`}
               initial={{ opacity: 0, x: -20 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: 0.3 }}
@@ -256,14 +256,15 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
                 animate={{ rotate: isHovered ? 360 : 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <theme.icon size={18} className={theme.iconColor} />
+                <theme.icon size={14} className={`${theme.iconColor} sm:hidden`} />
+                <theme.icon size={18} className={`${theme.iconColor} hidden sm:block`} />
               </motion.div>
-              <span className="text-sm font-medium">{theme.subtitle}</span>
+              <span className="text-xs sm:text-sm font-medium">{theme.subtitle}</span>
             </motion.div>
             
-            {/* Glow Effect */}
+            {/* Glow Effect - desktop only */}
             <motion.div
-              className={`absolute -inset-4 rounded-[2rem] bg-gradient-to-r ${theme.color} opacity-0 blur-2xl -z-10`}
+              className={`absolute -inset-4 rounded-[2rem] bg-gradient-to-r ${theme.color} opacity-0 blur-2xl -z-10 hidden sm:block`}
               animate={{ opacity: isHovered ? 0.5 : 0 }}
             />
           </motion.div>
@@ -276,72 +277,75 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <p className={`font-medium tracking-wide uppercase text-sm mb-2 ${theme.iconColor}`}>
+            <p className={`font-medium tracking-wide uppercase text-xs sm:text-sm mb-1.5 sm:mb-2 ${theme.iconColor}`}>
               {theme.subtitle}
             </p>
-            <h2 className="text-foreground mb-4">{theme.title}</h2>
-            <div className="divider-copper mb-6" />
-            <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+            <h2 className="text-foreground mb-3 sm:mb-4">{theme.title}</h2>
+            <div className="divider-copper mb-4 sm:mb-6" />
+            <p className="text-muted-foreground mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed">
               {theme.description}
             </p>
 
             {/* Elements */}
-            <GlowCard className="mb-8 p-6">
-              <h4 className="font-display text-lg text-foreground mb-4 flex items-center gap-2">
-                <Sparkles size={18} className="text-copper" />
+            <GlowCard className="mb-6 sm:mb-8 p-4 sm:p-6">
+              <h4 className="font-display text-base sm:text-lg text-foreground mb-3 sm:mb-4 flex items-center gap-2">
+                <Sparkles size={16} className="text-copper sm:hidden" />
+                <Sparkles size={18} className="text-copper hidden sm:block" />
                 Das erwartet Sie:
               </h4>
-              <ul className="space-y-3">
+              <ul className="space-y-2 sm:space-y-3">
                 {theme.elements.map((element, i) => (
                   <motion.li 
                     key={element} 
-                    className="flex items-start gap-3"
+                    className="flex items-start gap-2 sm:gap-3"
                     initial={{ opacity: 0, x: -10 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ delay: 0.3 + i * 0.1 }}
                   >
-                    <div className="mt-1">
-                      <Check size={16} className="text-copper" />
+                    <div className="mt-0.5 sm:mt-1">
+                      <Check size={14} className="text-copper sm:hidden" />
+                      <Check size={16} className="text-copper hidden sm:block" />
                     </div>
-                    <span className="text-muted-foreground">{element}</span>
+                    <span className="text-sm sm:text-base text-muted-foreground">{element}</span>
                   </motion.li>
                 ))}
               </ul>
             </GlowCard>
 
             {/* Ideal For */}
-            <div className="mb-8 p-6 rounded-2xl bg-secondary/50 border border-border/50">
-              <h4 className="font-display text-lg text-foreground mb-4">
+            <div className="mb-6 sm:mb-8 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-secondary/50 border border-border/50">
+              <h4 className="font-display text-base sm:text-lg text-foreground mb-3 sm:mb-4">
                 Ideal für Sie, wenn...
               </h4>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 {theme.idealFor.map((item, i) => (
                   <motion.li 
                     key={item} 
-                    className="flex items-start gap-3"
+                    className="flex items-start gap-2 sm:gap-3"
                     initial={{ opacity: 0 }}
                     animate={isInView ? { opacity: 1 } : {}}
                     transition={{ delay: 0.4 + i * 0.05 }}
                   >
-                    <div className={`w-2 h-2 rounded-full ${theme.bgAccent} mt-2 shrink-0`} />
-                    <span className="text-muted-foreground text-sm">{item}</span>
+                    <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${theme.bgAccent} mt-1.5 sm:mt-2 shrink-0`} />
+                    <span className="text-muted-foreground text-xs sm:text-sm">{item}</span>
                   </motion.li>
                 ))}
               </ul>
             </div>
 
             {/* Duration & CTA */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <Button variant="copper" size="lg" asChild className="group relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+              <Button variant="copper" size="lg" asChild className="group relative overflow-hidden min-h-[48px]">
                 <Link to={`/buchung?theme=${theme.id}`}>
-                  <span className="relative z-10 flex items-center gap-2">
+                  <span className="relative z-10 flex items-center gap-2 text-sm sm:text-base">
                     Dieses Erlebnis buchen
-                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-1 sm:hidden" />
+                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1 hidden sm:block" />
                   </span>
                 </Link>
               </Button>
-              <span className="text-sm text-muted-foreground flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-copper/50" />
+              <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2 justify-center sm:justify-start">
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-copper/50" />
                 {theme.duration}
               </span>
             </div>
@@ -368,18 +372,18 @@ const Erlebnisse = () => {
       </Helmet>
 
       {/* Hero with Parallax */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
           <img src={massageBack} alt="GentleHands Erlebnisse" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
         </motion.div>
         
-        {/* Ambient Orbs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Ambient Orbs - hidden on mobile */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block">
           {themes.slice(0, 4).map((theme, i) => (
             <motion.div
               key={theme.id}
-              className={`absolute w-64 h-64 rounded-full ${theme.bgAccent} blur-[100px]`}
+              className={`absolute w-48 sm:w-64 h-48 sm:h-64 rounded-full ${theme.bgAccent} blur-[80px] sm:blur-[100px]`}
               style={{
                 top: `${20 + i * 15}%`,
                 left: `${10 + i * 25}%`,
@@ -397,9 +401,11 @@ const Erlebnisse = () => {
           ))}
         </div>
         
-        <FloatingElements variant="dots" />
+        <div className="hidden sm:block">
+          <FloatingElements variant="dots" />
+        </div>
         
-        <div className="container-wide relative z-10">
+        <div className="container-wide relative z-10 px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -410,19 +416,20 @@ const Erlebnisse = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20 mb-6 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-copper/10 border border-copper/20 mb-4 sm:mb-6 backdrop-blur-sm"
             >
               <motion.div
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               >
-                <Sparkles size={16} className="text-copper" />
+                <Sparkles size={14} className="text-copper sm:hidden" />
+                <Sparkles size={16} className="text-copper hidden sm:block" />
               </motion.div>
-              <span className="text-copper text-sm font-medium">6 einzigartige Welten</span>
+              <span className="text-copper text-xs sm:text-sm font-medium">6 einzigartige Welten</span>
             </motion.div>
             
             <motion.h1 
-              className="text-foreground mb-6"
+              className="text-foreground mb-4 sm:mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -433,7 +440,7 @@ const Erlebnisse = () => {
               </span>
             </motion.h1>
             <motion.p 
-              className="text-muted-foreground text-lg"
+              className="text-muted-foreground text-base sm:text-lg px-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
