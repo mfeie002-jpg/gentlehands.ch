@@ -10,6 +10,7 @@ import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { LiveChatWidget } from "@/components/shared/LiveChatWidget";
 import { PageLoadingFallback } from "@/components/shared/PageLoadingFallback";
+import { CriticalImagePreloader } from "@/components/shared/CriticalImagePreloader";
 
 // Critical pages - loaded immediately
 import Index from "./pages/Index";
@@ -99,6 +100,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
+          <CriticalImagePreloader />
           <FloatingCTA />
           <NewsletterPopup />
           <LiveChatWidget />
