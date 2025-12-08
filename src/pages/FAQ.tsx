@@ -142,16 +142,16 @@ const FAQ = () => {
       </Helmet>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
         {/* Ambient Effects */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div 
-            className="absolute top-1/4 -left-20 w-80 h-80 rounded-full bg-copper/10 blur-[100px]"
+            className="absolute top-1/4 -left-20 w-48 sm:w-80 h-48 sm:h-80 rounded-full bg-copper/10 blur-[60px] sm:blur-[100px]"
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-primary/10 blur-[80px]"
+            className="absolute bottom-0 right-0 w-32 sm:w-64 h-32 sm:h-64 rounded-full bg-primary/10 blur-[50px] sm:blur-[80px]"
             animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
             transition={{ duration: 10, repeat: Infinity }}
           />
@@ -159,7 +159,7 @@ const FAQ = () => {
         
         <FloatingElements variant="dots" />
         
-        <div className="container-wide relative z-10">
+        <div className="container-wide relative z-10 px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -170,20 +170,20 @@ const FAQ = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-copper/20 to-primary/10 flex items-center justify-center"
+              className="w-14 h-14 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-copper/20 to-primary/10 flex items-center justify-center"
             >
               <motion.div
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
               >
-                <HelpCircle size={40} className="text-copper" />
+                <HelpCircle size={28} className="sm:w-10 sm:h-10 text-copper" />
               </motion.div>
             </motion.div>
             
-            <h1 className="text-foreground mb-6">
+            <h1 className="text-foreground mb-4 sm:mb-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
               Alles, was Sie wissen möchten
             </h1>
-            <p className="text-muted-foreground text-lg mb-8">
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg mb-6 sm:mb-8">
               Hier finden Sie Antworten auf die häufigsten Fragen zu
               GentleHands. Sollte Ihre Frage nicht dabei sein, kontaktieren
               Sie uns gerne direkt.
@@ -196,20 +196,20 @@ const FAQ = () => {
               transition={{ delay: 0.3 }}
               className="max-w-md mx-auto relative group"
             >
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-copper transition-colors" size={20} />
+              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-copper transition-colors w-5 h-5 sm:w-5 sm:h-5" size={18} />
               <Input
                 type="text"
                 placeholder="Frage suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 rounded-full bg-background border-border/50 text-base focus:border-copper focus:ring-copper/20"
+                className="pl-10 sm:pl-12 h-12 sm:h-14 rounded-full bg-background border-border/50 text-sm sm:text-base focus:border-copper focus:ring-copper/20"
               />
               {searchQuery && (
                 <motion.button
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1"
                 >
                   ✕
                 </motion.button>
@@ -220,9 +220,9 @@ const FAQ = () => {
       </section>
 
       {/* Category Filter */}
-      <section className="py-6 border-b border-border/50 sticky top-16 z-30 bg-background/80 backdrop-blur-md">
-        <div className="container-wide">
-          <div className="flex flex-wrap justify-center gap-2">
+      <section className="py-4 sm:py-6 border-b border-border/50 sticky top-14 sm:top-16 z-30 bg-background/80 backdrop-blur-md">
+        <div className="container-wide px-3 sm:px-6">
+          <div className="flex overflow-x-auto scrollbar-hide gap-2 pb-1 -mx-1 px-1">
             {faqCategories.map((category, i) => (
               <motion.button
                 key={category.id}
@@ -232,9 +232,8 @@ const FAQ = () => {
                 onClick={() => setActiveCategory(category.id)}
                 onMouseEnter={() => setHoveredCategory(category.id)}
                 onMouseLeave={() => setHoveredCategory(null)}
-                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`relative px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 touch-manipulation ${
                   activeCategory === category.id
                     ? "bg-copper text-accent-foreground shadow-lg shadow-copper/20"
                     : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
