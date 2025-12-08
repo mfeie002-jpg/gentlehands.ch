@@ -108,11 +108,11 @@ export const FloatingCTA = () => {
             exit={{ y: 100, opacity: 0 }}
             className="fixed bottom-0 left-0 right-0 z-40 md:hidden safe-area-bottom"
           >
-            <div className="bg-background/95 backdrop-blur-xl border-t border-border/50 px-4 py-3">
-              <div className="flex items-center gap-3">
+            <div className="bg-background/95 backdrop-blur-xl border-t border-border/50 px-3 sm:px-4 py-2.5 sm:py-3">
+              <div className="flex items-center gap-2 sm:gap-3 max-w-lg mx-auto">
                 <Button
                   variant="copper"
-                  className="flex-1 shadow-copper relative overflow-hidden h-12 text-base font-medium"
+                  className="flex-1 shadow-copper relative overflow-hidden h-11 sm:h-12 text-sm sm:text-base font-medium"
                   asChild
                 >
                   <Link to="/buchung">
@@ -121,16 +121,16 @@ export const FloatingCTA = () => {
                       animate={{ x: ["-100%", "200%"] }}
                       transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
                     />
-                    <Calendar size={18} className="mr-2" />
+                    <Calendar size={16} className="sm:w-[18px] sm:h-[18px] mr-1.5 sm:mr-2" />
                     <span className="relative">Erlebnis anfragen</span>
                   </Link>
                 </Button>
                 <motion.button
                   onClick={() => setIsDismissed(true)}
-                  className="w-12 h-12 bg-secondary text-foreground rounded-xl flex items-center justify-center active:scale-95 transition-transform touch-manipulation"
+                  className="w-11 h-11 sm:w-12 sm:h-12 bg-secondary text-foreground rounded-xl flex items-center justify-center active:scale-95 transition-transform touch-manipulation flex-shrink-0"
                   whileTap={{ scale: 0.9 }}
                 >
-                  <X size={20} />
+                  <X size={18} className="sm:w-5 sm:h-5" />
                 </motion.button>
               </div>
             </div>
