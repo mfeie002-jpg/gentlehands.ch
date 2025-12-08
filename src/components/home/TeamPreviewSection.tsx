@@ -57,7 +57,7 @@ export const TeamPreviewSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16 px-4 sm:px-0"
         >
           <motion.div className="flex items-center justify-center gap-4 mb-4">
             <motion.div 
@@ -78,17 +78,17 @@ export const TeamPreviewSection = () => {
               transition={{ duration: 0.8 }}
             />
           </motion.div>
-          <h2 className="text-foreground text-3xl md:text-4xl lg:text-5xl mb-4">
+          <h2 className="text-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-3 sm:mb-4">
             Wählen Sie Ihre <span className="text-gradient-copper">Begleitung</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-base sm:text-lg">
             Alle unsere Masseur:innen sind professionell ausgebildet und bringen
             ihre eigene, einzigartige Herangehensweise mit.
           </p>
         </motion.div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 px-4 sm:px-0">
           {team.map((member, index) => (
             <motion.div
               key={member.id}
