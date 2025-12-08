@@ -5,6 +5,7 @@ import { Menu, X, Sparkles, User, LogOut, LayoutDashboard, Heart, ChevronRight }
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "framer-motion";
 import { Logo } from "@/components/shared/Logo";
 import { supabase } from "@/integrations/supabase/client";
+import { triggerHaptic } from "@/hooks/useHapticFeedback";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,6 +98,7 @@ export const Header = () => {
   }, [isMobileMenuOpen]);
 
   const handleLogout = async () => {
+    triggerHaptic('medium');
     await supabase.auth.signOut();
     navigate('/');
   };
@@ -104,6 +106,7 @@ export const Header = () => {
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     // Close menu if dragged up more than 80px or with high velocity
     if (info.offset.y < -80 || info.velocity.y < -500) {
+      triggerHaptic('light');
       setIsMobileMenuOpen(false);
     }
     dragY.set(0);
@@ -214,7 +217,10 @@ export const Header = () => {
           {/* Mobile Menu Button */}
           <motion.button
             className="lg:hidden p-2.5 text-foreground rounded-xl hover:bg-secondary/80 active:bg-secondary transition-colors touch-manipulation"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={() => {
+              triggerHaptic('light');
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+            }}
             aria-label="Toggle menu"
             whileTap={{ scale: 0.9 }}
           >

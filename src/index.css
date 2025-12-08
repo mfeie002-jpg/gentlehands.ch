@@ -450,4 +450,87 @@
       @apply py-8;
     }
   }
+
+  /* Touch Performance Optimizations */
+  .touch-optimized {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .touch-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+  }
+
+  .touch-scroll-x {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+  }
+
+  .touch-scroll-y {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+
+  /* GPU Acceleration for Touch */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
+  }
+
+  /* Tap Feedback */
+  .tap-feedback {
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tap-feedback::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: hsl(var(--copper) / 0);
+    transition: background 0.15s ease-out;
+    pointer-events: none;
+  }
+
+  .tap-feedback:active::after {
+    background: hsl(var(--copper) / 0.1);
+  }
+
+  /* Smooth scroll for all */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Active state feedback */
+  .active-scale {
+    transition: transform 0.1s ease-out;
+  }
+
+  .active-scale:active {
+    transform: scale(0.97);
+  }
+
+  /* Pull-to-refresh prevention */
+  body {
+    overscroll-behavior-y: none;
+  }
 }
