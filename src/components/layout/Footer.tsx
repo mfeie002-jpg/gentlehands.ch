@@ -53,9 +53,9 @@ export const Footer = () => {
       
       {/* Main Footer */}
       <div className="container-wide section-padding-sm relative">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-8">
           {/* Brand Column */}
-          <ScrollReveal direction="up" className="lg:col-span-2">
+          <ScrollReveal direction="up" className="col-span-2 lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
               <Logo size="md" />
             </Link>
@@ -145,7 +145,7 @@ export const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="border-t border-border/50 relative bg-secondary/30">
-        <div className="container-wide py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="container-wide py-4 sm:py-6 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 px-4 sm:px-0">
           <motion.p 
             className="text-sm text-muted-foreground text-center md:text-left flex items-center gap-1.5"
             initial={{ opacity: 0 }}
