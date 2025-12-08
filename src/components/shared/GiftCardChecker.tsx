@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Search, Check, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { giftCardCodeSchema } from "@/lib/validations";
 
 interface GiftCardResult {
   valid: boolean;
@@ -15,42 +16,53 @@ export const GiftCardChecker = () => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GiftCardResult | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const checkGiftCard = async () => {
-    if (!code.trim()) return;
+    const trimmedCode = code.trim().toUpperCase();
+    
+    // Validate input
+    const validation = giftCardCodeSchema.safeParse({ code: trimmedCode });
+    if (!validation.success) {
+      setValidationError(validation.error.errors[0]?.message || "Ungültiger Code");
+      return;
+    }
+    setValidationError(null);
     
     setLoading(true);
     setResult(null);
 
     try {
+      // Use secure RPC function instead of direct table access
       const { data, error } = await supabase
-        .from('gift_cards')
-        .select('*')
-        .eq('code', code.toUpperCase())
-        .single();
+        .rpc('check_gift_card_balance', { p_code: trimmedCode });
 
-      if (error || !data) {
+      if (error || !data || data.length === 0) {
         setResult({
           valid: false,
           message: "Dieser Gutscheincode wurde nicht gefunden.",
         });
-      } else if (data.is_redeemed) {
-        setResult({
-          valid: false,
-          message: "Dieser Gutschein wurde bereits eingelöst.",
-        });
-      } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
-        setResult({
-          valid: false,
-          message: "Dieser Gutschein ist abgelaufen.",
-        });
       } else {
-        setResult({
-          valid: true,
-          balance: data.remaining_balance,
-          expires: data.expires_at,
-          message: "Gutschein gültig!",
-        });
+        const giftCard = data[0];
+        
+        if (giftCard.is_redeemed) {
+          setResult({
+            valid: false,
+            message: "Dieser Gutschein wurde bereits eingelöst.",
+          });
+        } else if (giftCard.expires_at && new Date(giftCard.expires_at) < new Date()) {
+          setResult({
+            valid: false,
+            message: "Dieser Gutschein ist abgelaufen.",
+          });
+        } else {
+          setResult({
+            valid: true,
+            balance: giftCard.remaining_balance,
+            expires: giftCard.expires_at,
+            message: "Gutschein gültig!",
+          });
+        }
       }
     } catch {
       setResult({
@@ -79,10 +91,17 @@ export const GiftCardChecker = () => {
           <input
             type="text"
             value={code}
-            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            onChange={(e) => {
+              setCode(e.target.value.toUpperCase());
+              setValidationError(null);
+            }}
             placeholder="XXXX-XXXX-XXXX"
-            className="w-full px-4 py-3 rounded-xl bg-muted border border-border focus:border-copper focus:ring-2 focus:ring-copper/20 outline-none font-mono uppercase tracking-wider"
-            maxLength={14}
+            className={`w-full px-4 py-3 rounded-xl bg-muted border focus:ring-2 outline-none font-mono uppercase tracking-wider ${
+              validationError 
+                ? "border-destructive focus:border-destructive focus:ring-destructive/20" 
+                : "border-border focus:border-copper focus:ring-copper/20"
+            }`}
+            maxLength={20}
           />
         </div>
         <Button
@@ -98,6 +117,10 @@ export const GiftCardChecker = () => {
           )}
         </Button>
       </div>
+      
+      {validationError && (
+        <p className="text-sm text-destructive mt-2">{validationError}</p>
+      )}
 
       <AnimatePresence>
         {result && (
