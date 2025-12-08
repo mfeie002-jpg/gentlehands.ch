@@ -5,7 +5,7 @@ import { ArrowRight, Calendar, Gift, Sparkles } from "lucide-react";
 
 export const CTASection = () => {
   return (
-    <section className="py-32 relative overflow-hidden">
+    <section className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
       {/* Multi-layer gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-sand via-background to-secondary/50" />
       <div className="absolute inset-0 bg-gradient-to-t from-copper/5 via-transparent to-petrol/5" />
@@ -50,7 +50,7 @@ export const CTASection = () => {
         <Sparkles size={20} />
       </motion.div>
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,19 +72,19 @@ export const CTASection = () => {
             <div className="h-px w-8 bg-gradient-to-l from-transparent to-copper" />
           </motion.div>
           
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-display text-foreground mt-6 mb-4 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display text-foreground mt-4 sm:mt-6 mb-2 sm:mb-4 leading-tight">
             Bereit für Ihren
           </h2>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-display mb-8 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display mb-6 sm:mb-8 leading-tight">
             <span className="text-gradient-copper">Moment der Ruhe</span>?
           </h2>
           
-          <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed">
             Gönnen Sie sich eine professionelle Auszeit vom Alltag in einem 
             geschützten Raum. Begrenzte Verfügbarkeit – reservieren Sie jetzt.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-2 sm:px-0">
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
@@ -112,16 +112,18 @@ export const CTASection = () => {
           </div>
           
           <motion.p 
-            className="text-sm text-muted-foreground mt-10 flex items-center justify-center gap-2"
+            className="text-xs sm:text-sm text-muted-foreground mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-2"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
           >
-            <span className="w-2 h-2 bg-copper/60 rounded-full animate-pulse" />
-            Aktuell limitierte Verfügbarkeit
-            <span className="mx-2 text-border">•</span>
-            Persönliche Beratung möglich
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-copper/60 rounded-full animate-pulse" />
+              Aktuell limitierte Verfügbarkeit
+            </span>
+            <span className="mx-1 sm:mx-2 text-border hidden sm:inline">•</span>
+            <span className="w-full sm:w-auto text-center">Persönliche Beratung möglich</span>
           </motion.p>
         </motion.div>
       </div>

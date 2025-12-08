@@ -38,7 +38,7 @@ export const PhilosophySection = () => {
 
       <div className="container-wide relative">
         {/* Header */}
-        <ScrollReveal className="max-w-3xl mx-auto text-center mb-16">
+        <ScrollReveal className="max-w-3xl mx-auto text-center mb-10 sm:mb-16 px-4 sm:px-0">
           <motion.div className="flex items-center justify-center gap-4 mb-6">
             <motion.div
               className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-16"
@@ -59,11 +59,11 @@ export const PhilosophySection = () => {
             />
           </motion.div>
 
-          <h2 className="text-foreground text-3xl md:text-4xl lg:text-5xl mb-6">
+          <h2 className="text-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 sm:mb-6">
             Ein Ort, an dem Sie <span className="text-gradient-copper">wirklich loslassen</span> können
           </h2>
 
-          <p className="text-muted-foreground text-lg leading-relaxed">
+          <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
             GentleHands ist mehr als ein Massage-Studio. Es ist ein Rückzugsort, 
             an dem gestresste Frauen zur Ruhe kommen – in einer Atmosphäre, 
             die auf Vertrauen, Respekt und höchste Professionalität gebaut ist.
@@ -71,7 +71,7 @@ export const PhilosophySection = () => {
         </ScrollReveal>
 
         {/* Values Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-10 sm:mb-16 px-4 sm:px-0">
           {values.map((value, index) => (
             <ScrollReveal key={value.title} direction="up" delay={index * 0.1}>
               <motion.div
@@ -96,9 +96,9 @@ export const PhilosophySection = () => {
         </div>
 
         {/* Important Clarification */}
-        <ScrollReveal>
+        <ScrollReveal className="px-4 sm:px-0">
           <motion.div
-            className="max-w-3xl mx-auto text-center p-8 rounded-2xl bg-secondary/50 border border-border"
+            className="max-w-3xl mx-auto text-center p-6 sm:p-8 rounded-2xl bg-secondary/50 border border-border"
             whileHover={{ scale: 1.01 }}
           >
             <motion.div
@@ -107,10 +107,10 @@ export const PhilosophySection = () => {
             >
               <Sparkles size={24} className="text-petrol" />
             </motion.div>
-            <h3 className="text-xl font-display text-foreground mb-3">
+            <h3 className="text-lg sm:text-xl font-display text-foreground mb-2 sm:mb-3">
               Ein klares Versprechen
             </h3>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
               GentleHands bietet ausschliesslich professionelle Entspannungsmassagen an. 
               «Sinnlich» bedeutet bei uns: auf die Sinne bezogen – Licht, Klänge, Düfte, Atmosphäre. 
               Wir sind kein Erotikstudio. Bei uns stehen Ihr Wohlbefinden, Ihre Grenzen und 
