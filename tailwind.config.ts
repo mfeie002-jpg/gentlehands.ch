@@ -183,6 +183,13 @@ export default {
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
         "gradient-shift": "gradient-shift 6s ease infinite",
         "subtle-bounce": "subtle-bounce 2s ease-in-out infinite",
+        "spin-slow": "spin 3s linear infinite",
+        "bounce-subtle": "subtle-bounce 3s ease-in-out infinite",
+      },
+      transitionTimingFunction: {
+        "smooth-out": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+        "bounce-in": "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        "ease-out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

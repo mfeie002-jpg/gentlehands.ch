@@ -1,9 +1,9 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { FloatingCTA } from "@/components/shared/FloatingCTA";
 import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
@@ -11,6 +11,7 @@ import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { LiveChatWidget } from "@/components/shared/LiveChatWidget";
 import { PageLoadingFallback } from "@/components/shared/PageLoadingFallback";
 import { CriticalImagePreloader } from "@/components/shared/CriticalImagePreloader";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 // Critical pages - loaded immediately
 import Index from "./pages/Index";
@@ -51,59 +52,89 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Login"));
 const Empfehlen = lazy(() => import("./pages/Empfehlen"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 2,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+// Route change handler for analytics and accessibility
+const RouteChangeHandler = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Track page views (placeholder for analytics)
+    const pageTitle = document.title;
+    
+    // Announce route change to screen readers
+    const announcer = document.getElementById("page-announcer");
+    if (announcer) {
+      const pageName = pageTitle.split(" – ")[0] || "Seite";
+      announcer.textContent = `Navigiert zu: ${pageName}`;
+    }
+  }, [location.pathname]);
+  
+  return null;
+};
 
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
+      <TooltipProvider delayDuration={300}>
         <LoadingScreen duration={2500} />
         <Toaster />
-        <Sonner />
+        <Sonner position="top-center" />
         <BrowserRouter>
-          <Suspense fallback={<PageLoadingFallback />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/erlebnisse" element={<Erlebnisse />} />
-              <Route path="/massagen" element={<Massagen />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/ueber-uns" element={<UeberUns />} />
-              <Route path="/erfahrungen" element={<Erfahrungen />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/ratgeber" element={<Ratgeber />} />
-              <Route path="/kontakt" element={<Kontakt />} />
-              <Route path="/rechtliches" element={<Rechtliches />} />
-              <Route path="/buchung" element={<Buchung />} />
-              <Route path="/buchung/bestaetigung" element={<BuchungBestaetigung />} />
-              <Route path="/gutscheine" element={<Gutscheine />} />
-              <Route path="/warteliste" element={<Warteliste />} />
-              <Route path="/preise" element={<Preise />} />
-              <Route path="/quiz" element={<Quiz />} />
-              <Route path="/galerie" element={<Galerie />} />
-              <Route path="/vorbereitung" element={<Vorbereitung />} />
-              <Route path="/business" element={<Business />} />
-              <Route path="/membership" element={<Membership />} />
-              <Route path="/aromatherapie" element={<Aromatherapie />} />
-              <Route path="/soundtherapie" element={<Soundtherapie />} />
-              <Route path="/vergleich" element={<Vergleich />} />
-              <Route path="/saisonal" element={<Saisonal />} />
-              <Route path="/partner" element={<Partner />} />
-              <Route path="/presse" element={<Presse />} />
-              <Route path="/karriere" element={<Karriere />} />
-              <Route path="/nachhaltigkeit" element={<Nachhaltigkeit />} />
-              <Route path="/virtual-tour" element={<VirtualTour />} />
-              <Route path="/geschenkideen" element={<Geschenkideen />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/empfehlen" element={<Empfehlen />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-          <CriticalImagePreloader />
-          <FloatingCTA />
-          <NewsletterPopup />
-          <LiveChatWidget />
+          <ErrorBoundary>
+            <RouteChangeHandler />
+            <Suspense fallback={<PageLoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/erlebnisse" element={<Erlebnisse />} />
+                <Route path="/massagen" element={<Massagen />} />
+                <Route path="/team" element={<Team />} />
+                <Route path="/ueber-uns" element={<UeberUns />} />
+                <Route path="/erfahrungen" element={<Erfahrungen />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/ratgeber" element={<Ratgeber />} />
+                <Route path="/kontakt" element={<Kontakt />} />
+                <Route path="/rechtliches" element={<Rechtliches />} />
+                <Route path="/buchung" element={<Buchung />} />
+                <Route path="/buchung/bestaetigung" element={<BuchungBestaetigung />} />
+                <Route path="/gutscheine" element={<Gutscheine />} />
+                <Route path="/warteliste" element={<Warteliste />} />
+                <Route path="/preise" element={<Preise />} />
+                <Route path="/quiz" element={<Quiz />} />
+                <Route path="/galerie" element={<Galerie />} />
+                <Route path="/vorbereitung" element={<Vorbereitung />} />
+                <Route path="/business" element={<Business />} />
+                <Route path="/membership" element={<Membership />} />
+                <Route path="/aromatherapie" element={<Aromatherapie />} />
+                <Route path="/soundtherapie" element={<Soundtherapie />} />
+                <Route path="/vergleich" element={<Vergleich />} />
+                <Route path="/saisonal" element={<Saisonal />} />
+                <Route path="/partner" element={<Partner />} />
+                <Route path="/presse" element={<Presse />} />
+                <Route path="/karriere" element={<Karriere />} />
+                <Route path="/nachhaltigkeit" element={<Nachhaltigkeit />} />
+                <Route path="/virtual-tour" element={<VirtualTour />} />
+                <Route path="/geschenkideen" element={<Geschenkideen />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/empfehlen" element={<Empfehlen />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+            <CriticalImagePreloader />
+            <FloatingCTA />
+            <NewsletterPopup />
+            <LiveChatWidget />
+          </ErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
