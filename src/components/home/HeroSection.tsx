@@ -96,27 +96,36 @@ export const HeroSection = () => {
             </motion.h1>
           </div>
 
-          {/* Subline with fade */}
+          {/* Subline with fade - emotional trigger */}
           <motion.p
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed font-light px-4 sm:px-0"
           >
-            Erleben Sie professionelle Entspannungsmassagen in atmosphärischen
-            Themenräumen – mit absoluter Diskretion und Ihrer Wahl der
-            Therapeutin oder des Therapeuten.
+            Für Frauen, die täglich alles geben – und endlich einen Ort verdienen, 
+            an dem sie sich vollständig fallen lassen können.
           </motion.p>
 
-          {/* Clarification Note */}
+          {/* Secondary emotional hook */}
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.75 }}
+            className="text-sm sm:text-base text-muted-foreground/90 max-w-xl mx-auto mb-3 px-4 sm:px-0"
+          >
+            Professionelle Massagen in atmosphärischen Themenräumen • 
+            Ihre Grenzen werden respektiert • Sie haben die Kontrolle
+          </motion.p>
+
+          {/* Trust note */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-xs sm:text-sm text-muted-foreground/80 mb-8 sm:mb-12 max-w-xl mx-auto px-4 sm:px-0"
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="text-xs sm:text-sm text-copper/80 mb-8 sm:mb-12 max-w-xl mx-auto px-4 sm:px-0 font-medium"
           >
-            Professionelle Körperarbeit • Keine erotischen Dienstleistungen • 
-            Ihr Wohlbefinden hat oberste Priorität
+            Professionelle Körperarbeit • Sicher • Diskret
           </motion.p>
 
           {/* CTA Buttons */}
