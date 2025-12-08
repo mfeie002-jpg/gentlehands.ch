@@ -8,7 +8,8 @@ import { Star, Quote, Heart, ChevronLeft, ChevronRight, Sparkles, ArrowRight } f
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { VideoTestimonials } from "@/components/shared/VideoTestimonials";
-
+import { TestimonialQuoteCard } from "@/components/testimonials/TestimonialQuoteCard";
+import { TestimonialStatsBar } from "@/components/testimonials/TestimonialStatsBar";
 const testimonials = [
   {
     id: 1,

@@ -7,7 +7,8 @@ import { Helmet } from "react-helmet-async";
 import { Check, Star, Clock, Info, Gift, Percent, Sparkles, ArrowRight, Zap } from "lucide-react";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { FloatingElements } from "@/components/shared/FloatingElements";
-
+import { PriceTierCard } from "@/components/pricing/PriceTierCard";
+import { PriceComparisonRow } from "@/components/pricing/PriceComparisonRow";
 const pricingTiers = [
   {
     duration: "60 Min",

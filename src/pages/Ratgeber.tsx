@@ -8,7 +8,11 @@ import { Clock, ArrowRight, BookOpen, Search, Sparkles, Tag } from "lucide-react
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { Input } from "@/components/ui/input";
-
+import { BlogArticleCard } from "@/components/blog/BlogArticleCard";
+import { BlogCategoryNav } from "@/components/blog/BlogCategoryNav";
+import { BlogSearchBar } from "@/components/blog/BlogSearchBar";
+import { BlogFeaturedSlider } from "@/components/blog/BlogFeaturedSlider";
+import { BlogRelatedArticles } from "@/components/blog/BlogRelatedArticles";
 import articleRelaxation from "@/assets/article-relaxation.jpg";
 import articleNervousSystem from "@/assets/article-nervous-system.jpg";
 import articleBurnout from "@/assets/article-burnout-signs.jpg";

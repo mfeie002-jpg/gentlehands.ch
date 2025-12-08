@@ -10,7 +10,9 @@ import { Gift, Heart, Star, Clock, Check, ArrowRight, ArrowLeft, Sparkles, Credi
 import { useToast } from "@/hooks/use-toast";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
-
+import { VoucherPreviewCard } from "@/components/voucher/VoucherPreviewCard";
+import { VoucherValueSelector } from "@/components/voucher/VoucherValueSelector";
+import { GiftCardChecker } from "@/components/shared/GiftCardChecker";
 const giftCards = [
   {
     id: "discovery",

@@ -16,6 +16,10 @@ import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { BookingProgressIndicator } from "@/components/booking/BookingProgressIndicator";
+import { BookingIntroduction } from "@/components/booking/BookingIntroduction";
+import { BookingSummaryCard } from "@/components/booking/BookingSummaryCard";
+import { BookingTrustBadges } from "@/components/booking/BookingTrustBadges";
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
