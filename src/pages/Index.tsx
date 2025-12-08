@@ -44,10 +44,10 @@ import { InstagramFeedSection } from "@/components/home/InstagramFeedSection";
 import { QuickContactSection } from "@/components/home/QuickContactSection";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { FinalCTASection } from "@/components/home/FinalCTASection";
-
 import { UrgencyBanner } from "@/components/home/UrgencyBanner";
 import { QuickBookingWidget } from "@/components/home/QuickBookingWidget";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
 const Index = () => {
   const jsonLd = {
@@ -82,66 +82,190 @@ const Index = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>GentleHands – Exklusive Erlebnismassagen für Frauen | Zürich</title>
-        <meta name="description" content="Exklusive Erlebnismassagen nur für Frauen in Zürich. Tiefenentspannung in atmosphärischen Themenräumen, absolute Diskretion und professionelle Betreuung." />
-        <link rel="canonical" href="https://gentlehands.ch/" />
-        <meta property="og:title" content="GentleHands – Exklusive Erlebnismassagen für Frauen" />
-        <meta property="og:description" content="Tiefenentspannung in atmosphärischen Erlebnisräumen. Nur für Frauen. Zürich." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://gentlehands.ch/" />
-        <meta property="og:image" content="https://gentlehands.ch/og-image.jpg" />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
+      <SEOHead 
+        title="GentleHands – Exklusive Erlebnismassagen für Frauen | Zürich"
+        description="Exklusive Erlebnismassagen nur für Frauen in Zürich. Tiefenentspannung in atmosphärischen Themenräumen, absolute Diskretion und professionelle Betreuung."
+        canonical="https://gentlehands.ch/"
+        type="website"
+        jsonLd={jsonLd}
+      />
 
       <HeroSection />
       <UrgencyBanner />
-      <TrustIndicatorsSection />
-      <QuickFactsBar />
-      <SocialProofBanner />
-      <PhilosophySection />
-      <GuaranteeSection />
-      <QuickBookingWidget />
-      <WellnessJourneySection />
-      <StressRecognitionSection />
-      <BeforeAfterSection />
-      <EmotionalBenefitsSection />
-      <EmotionalReliefSection />
-      <SelfCarePermissionSection />
-      <ExclusiveServicesSection />
-      <ScentPreviewSection />
-      <MusicPreviewSection />
-      <ExperiencePreviewSection />
-      <RoomComparisonSection />
-      <TouchPhilosophySection />
-      <TherapistSpotlightSection />
-      <TeamPhilosophySection />
-      <SafetyCommitmentSection />
-      <PrivacyPromiseSection />
-      <TestimonialHighlight />
-      <TransformationStoriesSection />
-      <TestimonialsSection />
-      <FeaturedReviewSection />
-      <ClientSuccessStories />
-      <FAQPreviewSection />
-      <FirstVisitGuideSection />
-      <PricePreviewSection />
-      <BookingBenefitsSection />
-      <CountdownSection />
-      <WellnessQuizTeaser />
-      <SeasonalHighlightSection />
-      <LocationPreviewSection />
-      <GiftIdeaSection />
-      <MembershipTeaser />
-      <CorporateWellnessTeaser />
-      <BlogPreviewSection />
-      <SustainabilitySection />
-      <AwardsSection />
-      <InstagramFeedSection />
-      <QuickContactSection />
-      <NewsletterSection />
-      <FinalCTASection />
       
+      <AnimatedSection animation="fadeUp">
+        <TrustIndicatorsSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp" delay={0.1}>
+        <QuickFactsBar />
+      </AnimatedSection>
+      
+      <SocialProofBanner />
+      
+      <AnimatedSection animation="fadeUp">
+        <PhilosophySection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="scale">
+        <GuaranteeSection />
+      </AnimatedSection>
+      
+      <QuickBookingWidget />
+      
+      <AnimatedSection animation="fadeUp">
+        <WellnessJourneySection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <StressRecognitionSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <BeforeAfterSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <EmotionalBenefitsSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <EmotionalReliefSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <SelfCarePermissionSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <ExclusiveServicesSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeLeft">
+        <ScentPreviewSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeRight">
+        <MusicPreviewSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="scale">
+        <ExperiencePreviewSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <RoomComparisonSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <TouchPhilosophySection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <TherapistSpotlightSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <TeamPhilosophySection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <SafetyCommitmentSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <PrivacyPromiseSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <TestimonialHighlight />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <TransformationStoriesSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <TestimonialsSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <FeaturedReviewSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <ClientSuccessStories />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <FAQPreviewSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <FirstVisitGuideSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <PricePreviewSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <BookingBenefitsSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="scale">
+        <CountdownSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <WellnessQuizTeaser />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <SeasonalHighlightSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <LocationPreviewSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <GiftIdeaSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <MembershipTeaser />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <CorporateWellnessTeaser />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <BlogPreviewSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <SustainabilitySection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <AwardsSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <InstagramFeedSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <QuickContactSection />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <NewsletterSection />
+      </AnimatedSection>
+      
+      <FinalCTASection />
     </Layout>
   );
 };

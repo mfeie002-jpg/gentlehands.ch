@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Gift, Heart, Star, Clock, Check, ArrowRight, ArrowLeft, Sparkles, CreditCard } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { useToast } from "@/hooks/use-toast";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
@@ -87,10 +87,11 @@ const Gutscheine = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Gutscheine | GentleHands Zürich</title>
-        <meta name="description" content="Verschenken Sie Entspannung: Exklusive GentleHands Gutscheine für unvergessliche Massage-Erlebnisse." />
-      </Helmet>
+      <SEOHead 
+        title="Gutscheine | GentleHands Zürich"
+        description="Verschenken Sie Entspannung: Exklusive GentleHands Gutscheine für unvergessliche Massage-Erlebnisse."
+        canonical="https://gentlehands.ch/gutscheine"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

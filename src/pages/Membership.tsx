@@ -3,8 +3,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Crown, Star, Gift, Calendar, Heart, Sparkles, Check, ArrowRight, ChevronDown } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 
 const membershipTiers = [
@@ -85,10 +85,11 @@ const Membership = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Membership | GentleHands Zürich</title>
-        <meta name="description" content="GentleHands Membership Programme für regelmässige Entspannung. Exklusive Vorteile, bevorzugte Termine und besondere Erlebnisse." />
-      </Helmet>
+      <SEOHead 
+        title="Membership | GentleHands Zürich"
+        description="GentleHands Membership Programme für regelmässige Entspannung. Exklusive Vorteile, bevorzugte Termine und besondere Erlebnisse."
+        canonical="https://gentlehands.ch/membership"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

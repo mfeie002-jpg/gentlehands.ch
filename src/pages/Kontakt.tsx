@@ -4,8 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Mail, Phone, MapPin, Clock, Car, Train, Send, MessageCircle, Sparkles } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { FloatingElements } from "@/components/shared/FloatingElements";
@@ -65,10 +66,11 @@ const Kontakt = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Kontakt | GentleHands Zürich</title>
-        <meta name="description" content="Kontaktieren Sie GentleHands in Zürich. Fragen, Terminanfragen oder persönliche Beratung – wir sind für Sie da." />
-      </Helmet>
+      <SEOHead 
+        title="Kontakt | GentleHands Zürich"
+        description="Kontaktieren Sie GentleHands in Zürich. Fragen, Terminanfragen oder persönliche Beratung – wir sind für Sie da."
+        canonical="https://gentlehands.ch/kontakt"
+      />
 
       {/* Hero */}
       <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

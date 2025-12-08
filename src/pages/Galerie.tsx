@@ -3,8 +3,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { X, ChevronLeft, ChevronRight, Grid, Rows, ZoomIn, ZoomOut, Camera, Download, Share2, Maximize2 } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GalleryMasonry } from "@/components/gallery/GalleryMasonry";
 import { GalleryLightbox } from "@/components/gallery/GalleryLightbox";
@@ -132,10 +132,11 @@ const Galerie = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Galerie | GentleHands Zürich</title>
-        <meta name="description" content="Entdecken Sie unsere atmosphärischen Räume, Massage-Erlebnisse und Themes in der GentleHands Galerie." />
-      </Helmet>
+      <SEOHead 
+        title="Galerie | GentleHands Zürich"
+        description="Entdecken Sie unsere atmosphärischen Räume, Massage-Erlebnisse und Themes in der GentleHands Galerie."
+        canonical="https://gentlehands.ch/galerie"
+      />
 
       {/* Hero */}
       <section className="relative pt-32 pb-24 overflow-hidden">

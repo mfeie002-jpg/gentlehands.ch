@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Search, HelpCircle, Sparkles, CreditCard } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import {
   Accordion,
   AccordionContent,
@@ -147,15 +147,12 @@ const FAQ = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>FAQ – Häufige Fragen | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Antworten auf häufige Fragen zu GentleHands: Was ist das genau? Für wen? Ist es ein Erotikstudio? Alle wichtigen Infos auf einen Blick."
-        />
-        <link rel="canonical" href="https://gentlehands.ch/faq" />
-        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
-      </Helmet>
+      <SEOHead 
+        title="FAQ – Häufige Fragen | GentleHands Zürich"
+        description="Antworten auf häufige Fragen zu GentleHands: Was ist das genau? Für wen? Ist es ein Erotikstudio? Alle wichtigen Infos auf einen Blick."
+        canonical="https://gentlehands.ch/faq"
+        jsonLd={faqJsonLd}
+      />
 
       {/* Hero */}
       <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

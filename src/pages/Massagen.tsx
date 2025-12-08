@@ -3,8 +3,9 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Clock, Sparkles, Heart, Zap, Moon, Sun, Star, ArrowRight, Filter, Check } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { MassageComparisonTable } from "@/components/massagen/MassageComparisonTable";
@@ -162,13 +163,11 @@ const Massagen = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Professionelle Entspannungsmassagen | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Entdecken Sie unsere professionellen Entspannungsmassagen: Deep Release, Stress Reset, Emotional Grounding und mehr. Jede Massage kombinierbar mit unseren Themenräumen."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Professionelle Entspannungsmassagen | GentleHands Zürich"
+        description="Entdecken Sie unsere professionellen Entspannungsmassagen: Deep Release, Stress Reset, Emotional Grounding und mehr. Jede Massage kombinierbar mit unseren Themenräumen."
+        canonical="https://gentlehands.ch/massagen"
+      />
 
       {/* Hero with Parallax */}
       <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden">

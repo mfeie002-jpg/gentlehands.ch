@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { Clock, Bell, Heart, CheckCircle, Users, Sparkles, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { GlowCard } from "@/components/shared/GlowCard";
@@ -42,13 +42,11 @@ const Warteliste = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Warteliste | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Setzen Sie sich auf unsere Warteliste und erhalten Sie bevorzugten Zugang zu freien Terminen bei GentleHands."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Warteliste | GentleHands Zürich"
+        description="Setzen Sie sich auf unsere Warteliste und erhalten Sie bevorzugten Zugang zu freien Terminen bei GentleHands."
+        canonical="https://gentlehands.ch/warteliste"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

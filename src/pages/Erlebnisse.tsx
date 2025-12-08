@@ -3,8 +3,9 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Waves, Mountain, Moon, Building, Leaf, Sparkles, Check, ArrowRight, Play, Volume2 } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { ThemeAtmosphereGrid } from "@/components/erlebnisse/ThemeAtmosphereGrid";
@@ -363,13 +364,11 @@ const Erlebnisse = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Themenräume & Erlebnisse | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Entdecken Sie unsere professionell gestalteten Themenräume: Ozean & Palmen, Alpine Stille, Deep Dark Relax und mehr. Jeder Raum bietet eine einzigartige Entspannungsatmosphäre."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Themenräume & Erlebnisse | GentleHands Zürich"
+        description="Entdecken Sie unsere professionell gestalteten Themenräume: Ozean & Palmen, Alpine Stille, Deep Dark Relax und mehr. Jeder Raum bietet eine einzigartige Entspannungsatmosphäre."
+        canonical="https://gentlehands.ch/erlebnisse"
+      />
 
       {/* Hero with Parallax */}
       <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden">

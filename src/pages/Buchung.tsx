@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { format, addDays, isBefore, startOfToday } from "date-fns";
 import { de } from "date-fns/locale";
 import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
@@ -758,13 +758,11 @@ const Buchung = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Buchung | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Buchen Sie Ihr exklusives GentleHands-Erlebnis. Wählen Sie Masseur:in, Theme, Massage und Ihre persönlichen Präferenzen."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Buchung | GentleHands Zürich"
+        description="Buchen Sie Ihr exklusives GentleHands-Erlebnis. Wählen Sie Masseur:in, Theme, Massage und Ihre persönlichen Präferenzen."
+        canonical="https://gentlehands.ch/buchung"
+      />
 
       <section className="pt-24 sm:pt-32 pb-8 sm:pb-16 min-h-screen">
         <div className="container-narrow px-3 sm:px-6">

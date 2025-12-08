@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { MusicPreview } from "@/components/shared/MusicPreview";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { GlowCard } from "@/components/shared/GlowCard";
@@ -74,13 +74,11 @@ const Soundtherapie = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Soundtherapie & Musik | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Die richtige Klangkulisse verstärkt Ihr Entspannungserlebnis. Entdecken Sie unsere Sound-Optionen von Naturklängen bis Stille."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Soundtherapie & Musik | GentleHands Zürich"
+        description="Die richtige Klangkulisse verstärkt Ihr Entspannungserlebnis. Entdecken Sie unsere Sound-Optionen von Naturklängen bis Stille."
+        canonical="https://gentlehands.ch/soundtherapie"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

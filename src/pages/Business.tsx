@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { Building2, Users, Heart, Gift, Shield, Clock, Check, ArrowRight, Sparkles, TrendingUp, Award } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
@@ -96,13 +96,11 @@ const Business = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Corporate Wellness | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="GentleHands Corporate Wellness Programme für Unternehmen. Investieren Sie in das Wohlbefinden Ihrer Mitarbeiterinnen."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Corporate Wellness | GentleHands Zürich"
+        description="GentleHands Corporate Wellness Programme für Unternehmen. Investieren Sie in das Wohlbefinden Ihrer Mitarbeiterinnen."
+        canonical="https://gentlehands.ch/business"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

@@ -3,8 +3,9 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { Helmet } from "react-helmet-async";
 import { Heart, Shield, Eye, Sparkles, Star, ArrowRight, Quote } from "lucide-react";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 import spaMassageRoom from "@/assets/spa-massage-room.jpg";
@@ -56,13 +57,11 @@ const UeberUns = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Über uns | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Erfahren Sie mehr über GentleHands: Unsere Vision, unsere Werte und warum wir exklusive Erlebnismassagen nur für Frauen anbieten."
-        />
-      </Helmet>
+      <SEOHead 
+        title="Über uns | GentleHands Zürich"
+        description="Erfahren Sie mehr über GentleHands: Unsere Vision, unsere Werte und warum wir exklusive Erlebnismassagen nur für Frauen anbieten."
+        canonical="https://gentlehands.ch/ueber-uns"
+      />
 
       {/* Hero with Image */}
       <section className="relative pt-32 pb-24 overflow-hidden">
