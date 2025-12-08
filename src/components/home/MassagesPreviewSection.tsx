@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock, Star, Sparkles } from "lucide-react";
+import { LazyImage } from "@/components/shared/LazyImage";
 import spaRoom from "@/assets/spa-massage-room.jpg";
 
 const massages = [
@@ -134,10 +135,11 @@ export const MassagesPreviewSection = () => {
             className="relative"
           >
             <div className="aspect-[4/5] rounded-3xl overflow-hidden relative group">
-              <img 
+              <LazyImage 
                 src={spaRoom}
                 alt="GentleHands Massageraum mit warmem Licht"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                wrapperClassName="w-full h-full"
               />
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
