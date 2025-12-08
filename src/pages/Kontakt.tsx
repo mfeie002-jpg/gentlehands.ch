@@ -9,6 +9,10 @@ import { Mail, Phone, MapPin, Clock, Car, Train, Send, MessageCircle, Sparkles }
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { FloatingElements } from "@/components/shared/FloatingElements";
+import { ContactFormSection } from "@/components/contact/ContactFormSection";
+import { ContactInfoCards } from "@/components/contact/ContactInfoCards";
+import { LocationMapSection } from "@/components/location/LocationMapSection";
+import { LocationArrivalGuide } from "@/components/location/LocationArrivalGuide";
 
 import zurichMap from "@/assets/zurich-map.jpg";
 

@@ -10,6 +10,8 @@ import { GlowCard } from "@/components/shared/GlowCard";
 import { ThemeAtmosphereGrid } from "@/components/erlebnisse/ThemeAtmosphereGrid";
 import { ThemeMoodSelector } from "@/components/erlebnisse/ThemeMoodSelector";
 import { ThemeCombinationsSection } from "@/components/erlebnisse/ThemeCombinationsSection";
+import { ExperienceThemeCard } from "@/components/experience/ExperienceThemeCard";
+import { ExperienceCompareModal } from "@/components/experience/ExperienceCompareModal";
 
 import experienceOcean from "@/assets/experience-ocean.jpg";
 import experienceAlpine from "@/assets/experience-alpine.jpg";

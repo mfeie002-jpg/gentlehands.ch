@@ -8,6 +8,8 @@ import { FloatingElements } from "@/components/shared/FloatingElements";
 import { TeamHeroEnhanced } from "@/components/team/TeamHeroEnhanced";
 import { TeamCultureSection } from "@/components/team/TeamCultureSection";
 import { TeamTestimonialsSection } from "@/components/team/TeamTestimonialsSection";
+import { TherapistProfileCard } from "@/components/team/TherapistProfileCard";
+import { TeamPhilosophyCard } from "@/components/team/TeamPhilosophyCard";
 import teamMorris from "@/assets/team-morris.jpg";
 import teamAnna from "@/assets/team-anna.jpg";
 import teamLuca from "@/assets/team-luca.jpg";

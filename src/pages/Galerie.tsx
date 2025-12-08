@@ -6,7 +6,9 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Helmet } from "react-helmet-async";
 import { X, ChevronLeft, ChevronRight, Grid, Rows, ZoomIn, ZoomOut, Camera, Download, Share2, Maximize2 } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
-
+import { GalleryMasonry } from "@/components/gallery/GalleryMasonry";
+import { GalleryLightbox } from "@/components/gallery/GalleryLightbox";
+import { GalleryFilterBar } from "@/components/gallery/GalleryFilterBar";
 // Room/Atmosphere Images
 import heroImage from "@/assets/hero-spa-room.jpg";
 import spaMassageRoom from "@/assets/spa-massage-room.jpg";
