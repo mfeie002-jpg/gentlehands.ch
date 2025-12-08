@@ -2,7 +2,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { Leaf, Droplets, Recycle, Heart, Sun, TreePine, ArrowRight, Target } from "lucide-react";
@@ -63,13 +64,11 @@ const goals = [
 const Nachhaltigkeit = () => {
   return (
     <Layout>
-      <Helmet>
-        <title>Nachhaltigkeit | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Unser Engagement für Nachhaltigkeit. Erfahren Sie, wie GentleHands Verantwortung für Umwelt und Gesellschaft übernimmt."
-        />
-      </Helmet>
+      <SEOHead
+        title="Nachhaltigkeit | GentleHands Zürich"
+        description="Unser Engagement für Nachhaltigkeit. Erfahren Sie, wie GentleHands Verantwortung für Umwelt und Gesellschaft übernimmt."
+        canonical="/nachhaltigkeit"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-forest/10 to-background relative overflow-hidden">

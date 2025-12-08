@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote, Heart, ChevronLeft, ChevronRight, Sparkles, ArrowRight } from "lucide-react";
-import { SEOHead } from "@/components/shared/SEOHead";
+import { SEOHead, generateReviewSchema } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { VideoTestimonials } from "@/components/shared/VideoTestimonials";
@@ -107,12 +108,22 @@ const Erfahrungen = () => {
   const nextStory = () => setActiveStory((prev) => (prev + 1) % stories.length);
   const prevStory = () => setActiveStory((prev) => (prev - 1 + stories.length) % stories.length);
 
+  // Generate Review schema for structured data
+  const reviewSchema = generateReviewSchema(
+    testimonials.map(t => ({
+      author: t.name,
+      rating: t.rating,
+      content: t.content,
+    }))
+  );
+
   return (
     <Layout>
       <SEOHead 
         title="Erfahrungen & Bewertungen | GentleHands Zürich"
         description="Lesen Sie Erfahrungsberichte unserer Kundinnen. Echte Geschichten über Entspannung, Transformation und tiefes Loslassen bei GentleHands."
-        canonical="https://gentlehands.ch/erfahrungen"
+        canonical="/erfahrungen"
+        jsonLd={reviewSchema}
       />
 
       {/* Hero */}

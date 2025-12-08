@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -170,10 +170,11 @@ const Admin = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Admin Dashboard | GentleHands</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
+      <SEOHead
+        title="Admin Dashboard | GentleHands"
+        description="GentleHands Admin Dashboard"
+        noIndex={true}
+      />
 
       <div className="min-h-screen bg-background">
         {/* Realtime notifications */}

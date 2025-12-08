@@ -1,17 +1,17 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
 const Rechtliches = () => {
   return (
     <Layout>
-      <Helmet>
-        <title>Rechtliches | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Impressum, AGB und Datenschutzrichtlinien von GentleHands. Transparenz und Rechtssicherheit."
-        />
-      </Helmet>
+      <SEOHead
+        title="Rechtliches | GentleHands Zürich"
+        description="Impressum, AGB und Datenschutzrichtlinien von GentleHands Zürich. Transparenz und Rechtssicherheit für unsere Kundinnen."
+        canonical="/rechtliches"
+        noIndex={true}
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background">

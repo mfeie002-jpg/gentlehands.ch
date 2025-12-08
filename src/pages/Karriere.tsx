@@ -2,7 +2,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { Heart, Users, Sparkles, Clock, Award, MapPin, Mail, Briefcase, ArrowRight, CheckCircle } from "lucide-react";
@@ -73,13 +74,11 @@ const cultureValues = [
 const Karriere = () => {
   return (
     <Layout>
-      <Helmet>
-        <title>Karriere | Jobs bei GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Werden Sie Teil des GentleHands-Teams. Wir suchen Menschen mit Leidenschaft für Wellness und Wohlbefinden."
-        />
-      </Helmet>
+      <SEOHead
+        title="Karriere | Jobs bei GentleHands Zürich"
+        description="Werden Sie Teil des GentleHands-Teams. Wir suchen Menschen mit Leidenschaft für Wellness und Wohlbefinden."
+        canonical="/karriere"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

@@ -2,7 +2,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { GiftCard } from "@/components/shared/GiftCard";
@@ -42,13 +43,11 @@ const packages = [
 const Geschenkideen = () => {
   return (
     <Layout>
-      <Helmet>
-        <title>Geschenkideen | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Das perfekte Geschenk für besondere Frauen. Gutscheine und Geschenkpakete für unvergessliche Entspannungsmomente."
-        />
-      </Helmet>
+      <SEOHead
+        title="Geschenkideen | GentleHands Zürich"
+        description="Das perfekte Geschenk für besondere Frauen. Gutscheine und Geschenkpakete für unvergessliche Entspannungsmomente."
+        canonical="/geschenkideen"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

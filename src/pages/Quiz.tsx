@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { ArrowRight, ArrowLeft, Sparkles, Heart, Moon, Zap, Mountain, Waves, Leaf, Building, RotateCcw, Check } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -147,10 +147,11 @@ const Quiz = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Finden Sie Ihr Erlebnis | GentleHands Zürich</title>
-        <meta name="description" content="Entdecken Sie in wenigen Fragen, welches GentleHands-Erlebnis perfekt zu Ihnen passt." />
-      </Helmet>
+      <SEOHead
+        title="Finden Sie Ihr Erlebnis | GentleHands Zürich"
+        description="Entdecken Sie in wenigen Fragen, welches GentleHands-Erlebnis perfekt zu Ihnen passt. Personalisierte Massage-Empfehlungen in Zürich."
+        canonical="/quiz"
+      />
 
       <section className="pt-32 pb-20 min-h-screen relative overflow-hidden">
         {/* Animated background */}

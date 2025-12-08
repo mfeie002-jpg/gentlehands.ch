@@ -2,7 +2,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { Download, FileText, Image, Mail, Quote, ExternalLink, Newspaper, ArrowRight, Calendar } from "lucide-react";
@@ -73,13 +74,11 @@ const pressKitItems = [
 const Presse = () => {
   return (
     <Layout>
-      <Helmet>
-        <title>Presse & Medien | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Presseinformationen, Medienkontakt und Downloads für Journalist:innen. Erfahren Sie mehr über GentleHands."
-        />
-      </Helmet>
+      <SEOHead
+        title="Presse & Medien | GentleHands Zürich"
+        description="Presseinformationen, Medienkontakt und Downloads für Journalist:innen. Erfahren Sie mehr über GentleHands."
+        canonical="/presse"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

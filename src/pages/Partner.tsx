@@ -2,7 +2,8 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
+import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { Heart, Users, Gift, Sparkles, Building2, Handshake, ArrowRight, ExternalLink, Star } from "lucide-react";
@@ -72,13 +73,11 @@ const partnershipTypes = [
 const Partner = () => {
   return (
     <Layout>
-      <Helmet>
-        <title>Partner & Empfehlungen | GentleHands Zürich</title>
-        <meta
-          name="description"
-          content="Entdecken Sie unsere Partner und deren exklusive Vorteile für GentleHands-Kundinnen. Werden Sie selbst Partner."
-        />
-      </Helmet>
+      <SEOHead
+        title="Partner & Empfehlungen | GentleHands Zürich"
+        description="Entdecken Sie unsere Partner und deren exklusive Vorteile für GentleHands-Kundinnen. Werden Sie selbst Partner."
+        canonical="/partner"
+      />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">

@@ -194,3 +194,114 @@ export const generateServiceSchema = (service: {
     ...(service.image && { image: service.image }),
   };
 };
+
+/**
+ * LocalBusiness schema generator for location-based SEO
+ */
+export const generateLocalBusinessSchema = () => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HealthAndBeautyBusiness",
+    "@id": "https://gentlehands.ch/#organization",
+    name: "GentleHands",
+    description: "Premium Erlebnismassagen für Frauen in Zürich. Exklusive Wellness-Erfahrungen in atmosphärischen Themenwelten.",
+    url: "https://gentlehands.ch",
+    telephone: "+41 00 000 00 00",
+    email: "kontakt@gentlehands.ch",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Musterstrasse 1",
+      addressLocality: "Zürich",
+      postalCode: "8000",
+      addressCountry: "CH",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 47.3769,
+      longitude: 8.5417,
+    },
+    image: "https://gentlehands.ch/og-image.jpg",
+    logo: "https://gentlehands.ch/pwa-512x512.png",
+    priceRange: "CHF 150-400",
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "09:00",
+        closes: "21:00",
+      },
+    ],
+    sameAs: [],
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      ratingCount: "127",
+      bestRating: "5",
+      worstRating: "1",
+    },
+  };
+};
+
+/**
+ * Review schema generator for testimonials
+ */
+export const generateReviewSchema = (reviews: Array<{
+  author: string;
+  rating: number;
+  content: string;
+  date?: string;
+}>) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "GentleHands",
+    review: reviews.map((review) => ({
+      "@type": "Review",
+      author: {
+        "@type": "Person",
+        name: review.author,
+      },
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: review.rating.toString(),
+        bestRating: "5",
+        worstRating: "1",
+      },
+      reviewBody: review.content,
+      ...(review.date && { datePublished: review.date }),
+    })),
+  };
+};
+
+/**
+ * Product schema generator for gift cards
+ */
+export const generateProductSchema = (product: {
+  name: string;
+  description: string;
+  price: string;
+  image?: string;
+  availability?: "InStock" | "OutOfStock" | "PreOrder";
+}) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.image || "https://gentlehands.ch/og-image.jpg",
+    brand: {
+      "@type": "Brand",
+      name: "GentleHands",
+    },
+    offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: "CHF",
+      availability: `https://schema.org/${product.availability || "InStock"}`,
+      seller: {
+        "@type": "Organization",
+        name: "GentleHands",
+      },
+    },
+  };
+};

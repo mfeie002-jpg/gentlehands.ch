@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { Helmet } from "react-helmet-async";
+import { SEOHead } from "@/components/shared/SEOHead";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -125,10 +125,11 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Mein Bereich | GentleHands Zürich</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
+      <SEOHead
+        title="Mein Bereich | GentleHands Zürich"
+        description="Verwalten Sie Ihre Buchungen, Favoriten und Einstellungen."
+        noIndex={true}
+      />
 
       <section className="pt-24 pb-16 min-h-screen bg-gradient-to-b from-secondary/30 to-background">
         <div className="container mx-auto px-4">
