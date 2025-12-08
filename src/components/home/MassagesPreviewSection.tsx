@@ -51,7 +51,7 @@ export const MassagesPreviewSection = () => {
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-petrol/5 rounded-full blur-[120px]" />
       
       <div className="container-wide relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center px-4 sm:px-0">
           {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -66,17 +66,17 @@ export const MassagesPreviewSection = () => {
               </span>
             </motion.div>
             
-            <h2 className="text-foreground text-3xl md:text-4xl lg:text-5xl mb-6">
+            <h2 className="text-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 sm:mb-6">
               Individuell auf Sie <span className="text-gradient-copper">abgestimmt</span>
             </h2>
-            <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+            <p className="text-muted-foreground mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed">
               Jede Massage lässt sich mit jedem unserer Themes kombinieren.
               Gemeinsam finden wir die perfekte Kombination für Ihre
               Bedürfnisse.
             </p>
 
             {/* Massages List */}
-            <div className="space-y-3 mb-8">
+            <div className="space-y-3 mb-6 sm:mb-8">
               {massages.map((massage, index) => (
                 <motion.div
                   key={massage.id}
@@ -87,12 +87,12 @@ export const MassagesPreviewSection = () => {
                 >
                   <Link
                     to={`/massagen#${massage.id}`}
-                    className="group block p-5 rounded-xl bg-card border border-border hover:border-copper/30 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+                    className="group block p-4 sm:p-5 rounded-xl bg-card border border-border hover:border-copper/30 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h4 className="font-display text-lg text-foreground group-hover:text-copper transition-colors">
+                          <h4 className="font-display text-base sm:text-lg text-foreground group-hover:text-copper transition-colors">
                             {massage.title}
                           </h4>
                           {massage.highlight && (
@@ -105,7 +105,7 @@ export const MassagesPreviewSection = () => {
                           {massage.description}
                         </p>
                       </div>
-                      <div className="flex items-center gap-1.5 text-muted-foreground text-sm shrink-0 bg-secondary/50 px-3 py-1 rounded-full">
+                      <div className="flex items-center gap-1.5 text-muted-foreground text-xs sm:text-sm shrink-0 bg-secondary/50 px-2.5 sm:px-3 py-1 rounded-full w-fit">
                         <Clock size={14} className="text-copper" />
                         <span>{massage.duration}</span>
                       </div>
