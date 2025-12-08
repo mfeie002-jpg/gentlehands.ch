@@ -1,9 +1,43 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Rate limiting storage (in-memory for edge function)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT = 10; // requests per minute
+const RATE_WINDOW = 60000; // 1 minute in ms
+
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now();
+  const existing = rateLimitMap.get(identifier);
+  
+  if (!existing || now > existing.resetTime) {
+    rateLimitMap.set(identifier, { count: 1, resetTime: now + RATE_WINDOW });
+    return true;
+  }
+  
+  if (existing.count >= RATE_LIMIT) {
+    return false;
+  }
+  
+  existing.count++;
+  return true;
+}
+
+function maskEmail(email: string): string {
+  const [local, domain] = email.split('@');
+  if (!domain) return '***';
+  const maskedLocal = local.length > 2 ? local.substring(0, 2) + '***' : '***';
+  return `${maskedLocal}@${domain}`;
+}
+
+function maskPhone(phone: string): string {
+  if (!phone || phone.length < 6) return '***';
+  return phone.substring(0, 3) + '***' + phone.substring(phone.length - 2);
+}
 
 interface BookingNotification {
   booking_number: string;
@@ -20,52 +54,55 @@ interface BookingNotification {
 }
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Extract client IP for rate limiting
+    const clientIP = req.headers.get('x-forwarded-for') || 'unknown';
+    
+    if (!checkRateLimit(clientIP)) {
+      console.warn(`Rate limit exceeded for booking notification from: ${clientIP.substring(0, 8)}***`);
+      return new Response(
+        JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const booking: BookingNotification = await req.json();
 
-    console.log("=== NEUE BUCHUNG EINGEGANGEN ===");
+    // Log with masked PII for debugging (GDPR compliant)
+    console.log('=== Neue Buchungsanfrage erhalten ===');
     console.log(`Buchungsnummer: ${booking.booking_number}`);
-    console.log(`Kunde: ${booking.customer_name}`);
-    console.log(`E-Mail: ${booking.customer_email}`);
-    console.log(`Telefon: ${booking.customer_phone || "Nicht angegeben"}`);
-    console.log(`Masseur:in: ${booking.masseur || "Noch nicht gewählt"}`);
-    console.log(`Thema: ${booking.theme || "Nicht gewählt"}`);
-    console.log(`Massage: ${booking.massage_type || "Nicht gewählt"}`);
-    console.log(`Dauer: ${booking.duration ? `${booking.duration} Min.` : "Nicht angegeben"}`);
-    console.log(`Datum: ${booking.appointment_date || "Nicht angegeben"}`);
-    console.log(`Uhrzeit: ${booking.appointment_time || "Nicht angegeben"}`);
-    if (booking.special_notes) {
-      console.log(`Hinweise: ${booking.special_notes}`);
-    }
-    console.log("================================");
+    console.log(`Kunde: [MASKED]`);
+    console.log(`E-Mail: ${maskEmail(booking.customer_email)}`);
+    console.log(`Telefon: ${maskPhone(booking.customer_phone || '')}`);
+    console.log(`Massage: ${booking.massage_type || 'N/A'}`);
+    console.log(`Thema: ${booking.theme || 'N/A'}`);
+    console.log(`Therapeut:in: ${booking.masseur || 'N/A'}`);
+    console.log(`Dauer: ${booking.duration ? `${booking.duration} Min.` : 'N/A'}`);
+    console.log(`Termin: ${booking.appointment_date || 'N/A'} um ${booking.appointment_time || 'N/A'}`);
+    console.log(`Notizen: ${booking.special_notes ? '[vorhanden]' : '[keine]'}`);
+    console.log('=====================================');
 
-    // Here you could add email sending via Resend, SendGrid, etc.
-    // For now, the booking is logged and stored in the database
+    // TODO: Integrate with Resend API for actual email sending
+    // The booking data is stored in database, this function only processes notifications
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Buchungsbenachrichtigung verarbeitet",
-        booking_number: booking.booking_number,
+      JSON.stringify({ 
+        success: true, 
+        message: 'Buchungsbenachrichtigung verarbeitet',
+        booking_number: booking.booking_number
       }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    console.error("Error processing booking notification:", error);
+
+  } catch (error) {
+    console.error('Error processing booking notification:', error instanceof Error ? error.message : 'Unknown error');
     return new Response(
-      JSON.stringify({ error: errorMessage }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 500,
-      }
+      JSON.stringify({ error: 'Failed to process booking notification' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });
