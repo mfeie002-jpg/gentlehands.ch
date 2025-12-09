@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ import { triggerHaptic } from "@/hooks/useHapticFeedback";
 import { bookingContactSchema, bookingPreferencesSchema } from "@/lib/validations";
 import { z } from "zod";
 import { useThrottle } from "@/hooks/useThrottle";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
@@ -61,9 +62,15 @@ const massages = [
 const Buchung = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { trackBookingStart, trackBookingStep, trackBookingComplete } = useAnalytics();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  
+  // Track booking start on mount
+  useEffect(() => {
+    trackBookingStart();
+  }, []);
   
   // Rate limiting - max 3 submissions per minute, minimum 5 seconds between attempts
   const { canSubmit, cooldownSeconds, attemptsRemaining, recordSubmission } = useThrottle({
@@ -873,7 +880,9 @@ const Buchung = () => {
               <Button
                 variant="copper"
                 onClick={() => {
-                  setCurrentStep((prev) => prev + 1);
+                  const nextStep = currentStep + 1;
+                  setCurrentStep(nextStep);
+                  trackBookingStep(nextStep, steps[nextStep - 1]?.title || '');
                   triggerHaptic('success');
                 }}
                 disabled={!canProceed()}
@@ -1010,6 +1019,9 @@ const Buchung = () => {
                       additionalNotes: formData.additionalNotes,
                     };
                     localStorage.setItem("gentlehands_booking", JSON.stringify(bookingData));
+                    
+                    // Track successful booking conversion
+                    trackBookingComplete(bookingNumber);
                     
                     navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
                   } catch (err) {

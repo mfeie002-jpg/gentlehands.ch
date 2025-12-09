@@ -10,6 +10,7 @@ import { Clock, Bell, Heart, CheckCircle, Users, Sparkles, ArrowRight } from "lu
 import { useToast } from "@/hooks/use-toast";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const Warteliste = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -23,10 +24,12 @@ const Warteliste = () => {
     notifications: true,
   });
   const { toast } = useToast();
+  const { trackWaitlistSignup } = useAnalytics();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
+    trackWaitlistSignup();
     toast({
       title: "Sie wurden zur Warteliste hinzugefügt",
       description: "Wir informieren Sie, sobald ein Termin frei wird.",
