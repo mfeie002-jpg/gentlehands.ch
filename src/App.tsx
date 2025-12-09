@@ -12,6 +12,7 @@ import { LiveChatWidget } from "@/components/shared/LiveChatWidget";
 import { PageLoadingFallback } from "@/components/shared/PageLoadingFallback";
 import { CriticalImagePreloader } from "@/components/shared/CriticalImagePreloader";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
+import { GoogleAnalytics } from "@/components/shared/GoogleAnalytics";
 
 // Critical pages - loaded immediately
 import Index from "./pages/Index";
@@ -90,6 +91,7 @@ const App = () => (
         <Sonner position="top-center" />
         <BrowserRouter>
           <ErrorBoundary>
+            <GoogleAnalytics />
             <RouteChangeHandler />
             <Suspense fallback={<PageLoadingFallback />}>
               <Routes>
