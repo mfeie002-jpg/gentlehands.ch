@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, CheckCircle, Mail, Phone, MapPin } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 export const ContactFormSection = () => {
+  const { trackContactSubmit } = useAnalytics();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -20,6 +22,7 @@ export const ContactFormSection = () => {
     
     setIsSubmitting(false);
     setIsSubmitted(true);
+    trackContactSubmit();
     toast({
       title: "Nachricht gesendet",
       description: "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",

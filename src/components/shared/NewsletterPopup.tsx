@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Gift, Sparkles, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 export const NewsletterPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,6 +13,7 @@ export const NewsletterPopup = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
   const hasShownRef = useRef(false);
+  const { trackNewsletterSignup } = useAnalytics();
 
   useEffect(() => {
     const dismissed = localStorage.getItem("newsletter-dismissed");
@@ -57,6 +59,7 @@ export const NewsletterPopup = () => {
       localStorage.setItem("newsletter-subscribed", "true");
       setIsSubmitting(false);
       setIsSuccess(true);
+      trackNewsletterSignup();
       
       toast({
         title: "Willkommen!",
