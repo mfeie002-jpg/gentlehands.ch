@@ -49,6 +49,8 @@ import { UrgencyBanner } from "@/components/home/UrgencyBanner";
 import { QuickBookingWidget } from "@/components/home/QuickBookingWidget";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
+import { ExperienceThemeGallery } from "@/components/experience/ExperienceThemeGallery";
+import { AnimatedTestimonialSlider } from "@/components/testimonials/AnimatedTestimonialSlider";
 
 const Index = () => {
   const jsonLd = {
@@ -154,6 +156,8 @@ const Index = () => {
         <ExperiencePreviewSection />
       </AnimatedSection>
       
+      <ExperienceThemeGallery />
+      
       <AnimatedSection animation="fadeUp">
         <RoomComparisonSection />
       </AnimatedSection>
@@ -181,6 +185,8 @@ const Index = () => {
       <AnimatedSection animation="fadeUp">
         <TestimonialHighlight />
       </AnimatedSection>
+      
+      <AnimatedTestimonialSlider />
       
       <AnimatedSection animation="fadeUp">
         <TransformationStoriesSection />
