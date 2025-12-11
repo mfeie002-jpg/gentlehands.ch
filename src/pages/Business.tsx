@@ -7,6 +7,8 @@ import { SEOHead } from "@/components/shared/SEOHead";
 import { Building2, Users, Heart, Gift, Shield, Clock, Check, ArrowRight, Sparkles, TrendingUp, Award } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
+import { LazyImage } from "@/components/shared/LazyImage";
+import businessWellnessImage from "@/assets/business-wellness.jpg";
 
 const benefits = [
   {
@@ -102,7 +104,7 @@ const Business = () => {
         canonical="https://gentlehands.ch/business"
       />
 
-      {/* Hero */}
+      {/* Hero with Image */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
         {/* Ambient Effects */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -121,53 +123,107 @@ const Business = () => {
         <FloatingElements variant="dots" />
         
         <div className="container-wide relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Text Content */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-copper/20 to-primary/10 flex items-center justify-center mx-auto mb-6"
-            >
-              <Building2 size={40} className="text-copper" />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20 mb-6"
-            >
-              <Sparkles size={16} className="text-copper" />
-              <span className="text-copper text-sm font-medium">Corporate Wellness</span>
-            </motion.div>
-            
-            <motion.h1 
-              className="text-foreground mb-6"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ duration: 0.6 }}
+              className="text-center lg:text-left"
             >
-              <span className="block">Investieren Sie</span>
-              <span className="bg-gradient-to-r from-copper via-copper-light to-copper bg-clip-text text-transparent">
-                in Ihr Team
-              </span>
-            </motion.h1>
-            <motion.p 
-              className="text-muted-foreground text-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20 mb-6"
+              >
+                <Building2 size={16} className="text-copper" />
+                <span className="text-copper text-sm font-medium">Corporate Wellness</span>
+              </motion.div>
+              
+              <motion.h1 
+                className="text-foreground mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <span className="block">Investieren Sie</span>
+                <span className="bg-gradient-to-r from-copper via-copper-light to-copper bg-clip-text text-transparent">
+                  in Ihr Team
+                </span>
+              </motion.h1>
+              <motion.p 
+                className="text-muted-foreground text-lg mb-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                Stress ist der häufigste Grund für Ausfälle am Arbeitsplatz.
+                Bieten Sie Ihren Mitarbeiterinnen ein Benefit, das wirklich etwas
+                bewirkt.
+              </motion.p>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <Button variant="copper" size="lg" className="group" asChild>
+                  <Link to="/kontakt">
+                    Jetzt Beratung anfordern
+                    <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+              </motion.div>
+            </motion.div>
+            
+            {/* Hero Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="relative"
             >
-              Stress ist der häufigste Grund für Ausfälle am Arbeitsplatz.
-              Bieten Sie Ihren Mitarbeiterinnen ein Benefit, das wirklich etwas
-              bewirkt.
-            </motion.p>
-          </motion.div>
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-copper/10">
+                <LazyImage
+                  src={businessWellnessImage}
+                  alt="Corporate Wellness im modernen Büro"
+                  className="w-full h-auto object-cover"
+                  aspectRatio="video"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
+              </div>
+              
+              {/* Stats Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6, type: "spring" }}
+                className="absolute -bottom-4 -left-4 bg-background rounded-xl p-4 shadow-lg border border-border/50"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-forest/10 flex items-center justify-center">
+                    <Heart size={20} className="text-forest" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Nachgewiesen</p>
+                    <p className="text-sm font-medium text-foreground">67% weniger Ausfälle</p>
+                  </div>
+                </div>
+              </motion.div>
+              
+              {/* Discount Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7, type: "spring" }}
+                className="absolute -top-4 -right-4 bg-copper text-accent-foreground rounded-full px-4 py-2 shadow-lg"
+              >
+                <span className="text-sm font-medium">Bis zu 20% Rabatt</span>
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
