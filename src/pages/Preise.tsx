@@ -10,6 +10,8 @@ import { GlowCard } from "@/components/shared/GlowCard";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { PriceTierCard } from "@/components/pricing/PriceTierCard";
 import { PriceComparisonRow } from "@/components/pricing/PriceComparisonRow";
+import { LazyImage } from "@/components/shared/LazyImage";
+import pricingPremiumImage from "@/assets/pricing-premium.jpg";
 const pricingTiers = [
   {
     duration: "60 Min",
@@ -85,7 +87,7 @@ const Preise = () => {
         canonical="https://gentlehands.ch/preise"
       />
 
-      {/* Hero */}
+      {/* Hero with Image */}
       <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none hidden sm:block">
           <motion.div 
@@ -105,40 +107,80 @@ const Preise = () => {
         </div>
         
         <div className="container-wide relative z-10 px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Text Content */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-copper/10 border border-copper/20 mb-4 sm:mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center lg:text-left"
             >
-              <Sparkles size={14} className="text-copper sm:hidden" />
-              <Sparkles size={16} className="text-copper hidden sm:block" />
-              <span className="text-copper text-xs sm:text-sm font-medium">Transparente Preise</span>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-copper/10 border border-copper/20 mb-4 sm:mb-6"
+              >
+                <Sparkles size={14} className="text-copper sm:hidden" />
+                <Sparkles size={16} className="text-copper hidden sm:block" />
+                <span className="text-copper text-xs sm:text-sm font-medium">Transparente Preise</span>
+              </motion.div>
+              
+              <motion.h1 
+                className="text-foreground mb-4 sm:mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Investieren Sie in Ihr <span className="text-gradient-copper">Wohlbefinden</span>
+              </motion.h1>
+              <motion.p 
+                className="text-muted-foreground text-base sm:text-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                Transparente Preise ohne versteckte Kosten. Jede Session beinhaltet die volle GentleHands-Erfahrung.
+              </motion.p>
             </motion.div>
             
-            <motion.h1 
-              className="text-foreground mb-4 sm:mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+            {/* Hero Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="relative hidden lg:block"
             >
-              Investieren Sie in Ihr <span className="text-gradient-copper">Wohlbefinden</span>
-            </motion.h1>
-            <motion.p 
-              className="text-muted-foreground text-base sm:text-lg px-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              Transparente Preise ohne versteckte Kosten. Jede Session beinhaltet die volle GentleHands-Erfahrung.
-            </motion.p>
-          </motion.div>
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-copper/10">
+                <LazyImage
+                  src={pricingPremiumImage}
+                  alt="Premium Wellness Preisliste"
+                  className="w-full h-auto object-cover"
+                  aspectRatio="video"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
+              </div>
+              
+              {/* Floating Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6, type: "spring" }}
+                className="absolute -bottom-4 -left-4 bg-background rounded-xl p-4 shadow-lg border border-border/50"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-copper/10 flex items-center justify-center">
+                    <Gift size={20} className="text-copper" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Sparpakete</p>
+                    <p className="text-sm font-medium text-foreground">Bis zu 20% sparen</p>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
