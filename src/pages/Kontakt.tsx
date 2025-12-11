@@ -14,8 +14,11 @@ import { ContactFormSection } from "@/components/contact/ContactFormSection";
 import { ContactInfoCards } from "@/components/contact/ContactInfoCards";
 import { LocationMapSection } from "@/components/location/LocationMapSection";
 import { LocationArrivalGuide } from "@/components/location/LocationArrivalGuide";
+import { LazyImage } from "@/components/shared/LazyImage";
 
 import zurichMap from "@/assets/zurich-map.jpg";
+import contactWelcome from "@/assets/contact-welcome.jpg";
+import contactCaring from "@/assets/contact-caring.jpg";
 
 const Kontakt = () => {
   const { toast } = useToast();
@@ -396,6 +399,61 @@ const Kontakt = () => {
                 </div>
               </div>
             </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+
+    {/* Emotional Care Section */}
+    <section className="section-padding bg-secondary/30 relative overflow-hidden">
+      <div className="container-wide">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="order-2 lg:order-1 grid grid-cols-2 gap-4"
+          >
+            <motion.div 
+              className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg"
+              whileHover={{ scale: 1.02 }}
+            >
+              <LazyImage src={contactWelcome} alt="Herzlicher Empfang" className="w-full h-full object-cover" />
+            </motion.div>
+            <motion.div 
+              className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg mt-8"
+              whileHover={{ scale: 1.02 }}
+            >
+              <LazyImage src={contactCaring} alt="Persönliche Betreuung" className="w-full h-full object-cover" />
+            </motion.div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="order-1 lg:order-2 space-y-6"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20"
+            >
+              <MessageCircle size={16} className="text-copper" />
+              <span className="text-copper text-sm font-medium">Persönliche Betreuung</span>
+            </motion.div>
+            
+            <h2 className="text-foreground">Wir hören Ihnen zu</h2>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              Bei GentleHands nehmen wir uns Zeit für Ihre Anliegen. Ob Sie Fragen haben, 
+              unsicher sind oder einfach mehr über unsere Angebote erfahren möchten – 
+              wir sind für Sie da.
+            </p>
+            <p className="text-muted-foreground">
+              Jede Anfrage wird diskret und persönlich bearbeitet. Sie erreichen uns 
+              direkt per E-Mail oder Telefon – keine Callcenter, keine anonymen Antworten.
+            </p>
           </motion.div>
         </div>
       </div>

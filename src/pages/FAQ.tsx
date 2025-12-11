@@ -16,6 +16,11 @@ import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { FAQContactPrompt } from "@/components/faq/FAQContactPrompt";
 import { FAQQuickLinks } from "@/components/faq/FAQQuickLinks";
+import { LazyImage } from "@/components/shared/LazyImage";
+
+// Import FAQ images
+import faqConsultation from "@/assets/faq-consultation.jpg";
+import faqPrivacy from "@/assets/faq-privacy.jpg";
 
 const faqCategories = [
   { id: "all", label: "Alle Fragen", icon: Sparkles },
@@ -364,6 +369,45 @@ const FAQ = () => {
           )}
         </div>
       </section>
+
+      {/* Emotional Image Section */}
+      <section className="section-padding-sm bg-secondary/30 relative overflow-hidden">
+        <div className="container-wide">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <h2 className="text-foreground">Wir sind für Sie da</h2>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                Bei GentleHands nehmen wir uns Zeit für Ihre Fragen. Ob vor Ihrer ersten 
+                Session oder bei spezifischen Anliegen – wir beraten Sie persönlich und 
+                diskret.
+              </p>
+              <p className="text-muted-foreground">
+                Unsere Priorität ist es, dass Sie sich rundum wohl und informiert fühlen, 
+                bevor Sie bei uns ankommen.
+              </p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-2 gap-4"
+            >
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden">
+                <LazyImage src={faqConsultation} alt="Persönliche Beratung" className="w-full h-full object-cover" />
+              </div>
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden mt-8">
+                <LazyImage src={faqPrivacy} alt="Diskrete Atmosphäre" className="w-full h-full object-cover" />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Quick Links */}
       <FAQQuickLinks />
 
