@@ -1,35 +1,42 @@
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
-import { Shield, Award, Lock, UserCheck, MapPin, Clock } from "lucide-react";
+
+// Import emotional images
+import womenOnlyImage from "@/assets/emotional-private-moment.jpg";
+import certifiedImage from "@/assets/emotional-therapist-hands.jpg";
+import discretionImage from "@/assets/emotional-discreet-entrance.jpg";
+import choiceImage from "@/assets/emotional-content-smile.jpg";
+import locationImage from "@/assets/emotional-relaxed-face.jpg";
+import noRushImage from "@/assets/emotional-no-rush.jpg";
 
 const trustIndicators = [
   {
-    icon: Shield,
+    image: womenOnlyImage,
     title: "Nur für Frauen",
     description: "Ein geschützter Raum, in dem Sie sich vollständig entspannen können.",
   },
   {
-    icon: Award,
+    image: certifiedImage,
     title: "Zertifizierte Therapeut:innen",
     description: "Professionell ausgebildet mit jahrelanger Erfahrung in Körperarbeit.",
   },
   {
-    icon: Lock,
+    image: discretionImage,
     title: "Absolute Diskretion",
     description: "Diskreter Standort, keine Kameras, vollständige Vertraulichkeit.",
   },
   {
-    icon: UserCheck,
+    image: choiceImage,
     title: "Sie wählen, wer Sie berührt",
     description: "Freie Wahl der Therapeutin oder des Therapeuten – ganz nach Ihrem Wohlbefinden.",
   },
   {
-    icon: MapPin,
+    image: locationImage,
     title: "Diskrete Lage in Zürich",
     description: "Unauffälliger Eingang ohne Beschilderung, ruhige Umgebung.",
   },
   {
-    icon: Clock,
+    image: noRushImage,
     title: "Ohne Zeitdruck",
     description: "Jede Session hat ihren eigenen Rhythmus – keine Hektik, keine Eile.",
   },
@@ -57,19 +64,24 @@ export const TrustIndicatorsSection = () => {
           </h3>
         </ScrollReveal>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
           {trustIndicators.map((indicator, index) => (
             <ScrollReveal key={indicator.title} direction="up" delay={index * 0.05}>
               <motion.div
-                className="text-center p-4 rounded-xl group cursor-default"
+                className="text-center group cursor-default"
                 whileHover={{ y: -4 }}
               >
-                <motion.div
-                  className="w-12 h-12 mx-auto mb-4 rounded-xl bg-copper/10 flex items-center justify-center group-hover:bg-copper/20 group-hover:scale-110 transition-all duration-300"
-                  whileHover={{ rotate: 5 }}
-                >
-                  <indicator.icon size={24} className="text-copper" />
-                </motion.div>
+                {/* Image container */}
+                <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden">
+                  <img
+                    src={indicator.image}
+                    alt={indicator.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+                
                 <h4 className="text-sm font-display text-foreground mb-2 group-hover:text-copper transition-colors">
                   {indicator.title}
                 </h4>
