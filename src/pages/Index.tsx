@@ -56,6 +56,8 @@ import { AnimatedStatsSection } from "@/components/stats/AnimatedStatsSection";
 import { BeforeAfterSlider } from "@/components/comparison/BeforeAfterSlider";
 import { PriceCalculator } from "@/components/pricing/PriceCalculator";
 import { ParallaxHero } from "@/components/shared/ParallaxHero";
+import { TherapistMatcher } from "@/components/quiz/TherapistMatcher";
+import { CountdownTimer } from "@/components/shared/CountdownTimer";
 
 const Index = () => {
   const jsonLd = {
@@ -245,9 +247,26 @@ const Index = () => {
         <CountdownSection />
       </AnimatedSection>
       
+      {/* Countdown Timer for Seasonal Offer */}
+      <section className="py-16 bg-secondary/20">
+        <div className="container mx-auto px-4">
+          <CountdownTimer 
+            targetDate={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
+            title="Winter-Special"
+            offerText="20% auf alle Hot Stone Massagen"
+            description="Wärme und Entspannung für die kalte Jahreszeit"
+            ctaText="Jetzt sichern"
+            ctaLink="/buchung"
+          />
+        </div>
+      </section>
+      
       <AnimatedSection animation="fadeUp">
         <WellnessQuizTeaser />
       </AnimatedSection>
+      
+      {/* Therapist Matcher */}
+      <TherapistMatcher />
       
       <AnimatedSection animation="fadeUp">
         <SeasonalHighlightSection />
