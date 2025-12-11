@@ -11,6 +11,7 @@ import { GlowCard } from "@/components/shared/GlowCard";
 import { MassageComparisonTable } from "@/components/massagen/MassageComparisonTable";
 import { MassageBenefitsGrid } from "@/components/massagen/MassageBenefitsGrid";
 import { MassageProcessSection } from "@/components/massagen/MassageProcessSection";
+import { LazyImage } from "@/components/shared/LazyImage";
 
 import massageDeepRelease from "@/assets/massage-deep-release.jpg";
 import massageStressReset from "@/assets/massage-stress-reset.jpg";
@@ -19,6 +20,9 @@ import massageLowerBack from "@/assets/massage-hands-lower-back.jpg";
 import massageHotStones from "@/assets/massage-hot-stones.jpg";
 import massageOverhead from "@/assets/massage-overhead-view.jpg";
 import massageBack from "@/assets/massage-hands-back.jpg";
+import emotionalTherapistHands from "@/assets/emotional-therapist-hands.jpg";
+import emotionalStressRelease from "@/assets/emotional-stress-release.jpg";
+import emotionalBodyAwareness from "@/assets/emotional-body-awareness.jpg";
 
 const massages = [
   {
@@ -424,6 +428,48 @@ const Massagen = () => {
               ))}
             </motion.div>
           </AnimatePresence>
+        </div>
+      </section>
+
+      {/* Emotional Benefits Section */}
+      <section className="section-padding bg-secondary/30">
+        <div className="container-wide">
+          <AnimatedSection className="text-center mb-12">
+            <h2 className="text-foreground mb-4">Mehr als nur <span className="text-gradient-copper">Massage</span></h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Unsere Massagen wirken auf Körper, Geist und Seele – für nachhaltige Entspannung.
+            </p>
+          </AnimatedSection>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { image: emotionalTherapistHands, text: "Professionelle Berührung", desc: "Achtsam, respektvoll, wohltuend" },
+              { image: emotionalStressRelease, text: "Stress loslassen", desc: "Den Alltag hinter sich lassen" },
+              { image: emotionalBodyAwareness, text: "Körperbewusstsein", desc: "Wieder spüren, was Sie brauchen" },
+            ].map((item, index) => (
+              <motion.div
+                key={item.text}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group relative"
+              >
+                <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
+                  <LazyImage
+                    src={item.image}
+                    alt={item.text}
+                    className="transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="font-display text-xl mb-1">{item.text}</h3>
+                    <p className="text-white/70 text-sm">{item.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -6,9 +6,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { X, ChevronLeft, ChevronRight, Grid, Rows, ZoomIn, ZoomOut, Camera, Download, Share2, Maximize2 } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { FloatingElements } from "@/components/shared/FloatingElements";
-import { GalleryMasonry } from "@/components/gallery/GalleryMasonry";
-import { GalleryLightbox } from "@/components/gallery/GalleryLightbox";
-import { GalleryFilterBar } from "@/components/gallery/GalleryFilterBar";
+import { LazyImage } from "@/components/shared/LazyImage";
 // Room/Atmosphere Images
 import heroImage from "@/assets/hero-spa-room.jpg";
 import spaMassageRoom from "@/assets/spa-massage-room.jpg";
@@ -38,6 +36,14 @@ import massageZenTheme from "@/assets/massage-zen-theme.jpg";
 import massageAlpineTheme from "@/assets/massage-alpine-theme.jpg";
 import massageHotStones from "@/assets/massage-hot-stones.jpg";
 
+// Emotional Images
+import emotionalRelaxedFace from "@/assets/emotional-relaxed-face.jpg";
+import emotionalTherapistHands from "@/assets/emotional-therapist-hands.jpg";
+import emotionalPrivateMoment from "@/assets/emotional-private-moment.jpg";
+import emotionalContentSmile from "@/assets/emotional-content-smile.jpg";
+import emotionalInnerPeace from "@/assets/emotional-inner-peace.jpg";
+import emotionalDeepRest from "@/assets/emotional-deep-rest.jpg";
+
 const galleryImages = [
   { src: massageHandsBack, alt: "Sanfte Rückenmassage", category: "Massagen", featured: true },
   { src: massageHandsShoulders, alt: "Entspannende Schultermassage", category: "Massagen", featured: true },
@@ -45,6 +51,7 @@ const galleryImages = [
   { src: massageHandsLowerBack, alt: "Lösende Massage unterer Rücken", category: "Massagen", featured: false },
   { src: massageDeepRelease, alt: "Deep Release Session", category: "Massagen", featured: true },
   { src: massageStressReset, alt: "Stress Reset Behandlung", category: "Massagen", featured: false },
+  { src: emotionalTherapistHands, alt: "Professionelle Berührung", category: "Massagen", featured: true },
   { src: massageOverhead, alt: "Verwöhnende Ganzkörpermassage", category: "Erlebnisse", featured: true },
   { src: massageOceanTheme, alt: "Ozean Theme Massage", category: "Erlebnisse", featured: false },
   { src: massageDarkTheme, alt: "Deep Dark Relax Massage", category: "Erlebnisse", featured: true },
@@ -60,9 +67,14 @@ const galleryImages = [
   { src: darkImage, alt: "Deep Dark Relax Theme", category: "Themes", featured: false },
   { src: zenImage, alt: "Zen Garden Theme", category: "Themes", featured: false },
   { src: urbanImage, alt: "Urban Loft Theme", category: "Themes", featured: false },
+  { src: emotionalRelaxedFace, alt: "Tiefe Entspannung", category: "Emotionen", featured: true },
+  { src: emotionalPrivateMoment, alt: "Privater Moment der Ruhe", category: "Emotionen", featured: false },
+  { src: emotionalContentSmile, alt: "Zufriedenes Lächeln", category: "Emotionen", featured: true },
+  { src: emotionalInnerPeace, alt: "Innerer Frieden", category: "Emotionen", featured: false },
+  { src: emotionalDeepRest, alt: "Tiefe Erholung", category: "Emotionen", featured: true },
 ];
 
-const categories = ["Alle", "Massagen", "Erlebnisse", "Räumlichkeiten", "Themes", "Details"];
+const categories = ["Alle", "Massagen", "Erlebnisse", "Emotionen", "Räumlichkeiten", "Themes", "Details"];
 
 const Galerie = () => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
@@ -288,10 +300,12 @@ const Galerie = () => {
                         : image.featured ? "aspect-[3/4]" : "aspect-[4/3]"
                     }`}
                   >
-                    <img
+                    <LazyImage
                       src={image.src}
                       alt={image.alt}
-                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                      className="transition-all duration-700 group-hover:scale-110"
+                      threshold={0.1}
+                      rootMargin="100px"
                     />
                     
                     {/* Gradient overlays */}

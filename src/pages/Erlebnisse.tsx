@@ -13,6 +13,7 @@ import { ThemeMoodSelector } from "@/components/erlebnisse/ThemeMoodSelector";
 import { ThemeCombinationsSection } from "@/components/erlebnisse/ThemeCombinationsSection";
 import { ExperienceThemeCard } from "@/components/experience/ExperienceThemeCard";
 import { ExperienceCompareModal } from "@/components/experience/ExperienceCompareModal";
+import { LazyImage } from "@/components/shared/LazyImage";
 
 import experienceOcean from "@/assets/experience-ocean.jpg";
 import experienceAlpine from "@/assets/experience-alpine.jpg";
@@ -20,6 +21,9 @@ import experienceDark from "@/assets/experience-dark.jpg";
 import experienceUrban from "@/assets/experience-urban.jpg";
 import experienceZen from "@/assets/experience-zen.jpg";
 import massageBack from "@/assets/massage-hands-back.jpg";
+import emotionalRelaxedFace from "@/assets/emotional-relaxed-face.jpg";
+import emotionalInnerPeace from "@/assets/emotional-inner-peace.jpg";
+import emotionalDeepRest from "@/assets/emotional-deep-rest.jpg";
 
 const themes = [
   {
@@ -509,6 +513,48 @@ const Erlebnisse = () => {
       </section>
 
       {/* CTA Section */}
+      {/* Emotional Experience Section */}
+      <section className="section-padding bg-secondary/30">
+        <div className="container-wide">
+          <AnimatedSection className="text-center mb-12">
+            <h2 className="text-foreground mb-4">So fühlt sich <span className="text-gradient-copper">GentleHands</span> an</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Echte Momente der Entspannung und des Loslassens – eingefangen von unseren Gästen.
+            </p>
+          </AnimatedSection>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { image: emotionalRelaxedFace, text: "Tiefe Entspannung", desc: "Wenn der Kopf endlich Ruhe findet" },
+              { image: emotionalInnerPeace, text: "Innerer Frieden", desc: "Zurück zu sich selbst finden" },
+              { image: emotionalDeepRest, text: "Vollkommene Erholung", desc: "Zeit, die nur Ihnen gehört" },
+            ].map((item, index) => (
+              <motion.div
+                key={item.text}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group relative"
+              >
+                <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
+                  <LazyImage
+                    src={item.image}
+                    alt={item.text}
+                    className="transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="font-display text-xl mb-1">{item.text}</h3>
+                    <p className="text-white/70 text-sm">{item.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section-padding bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
         {/* Decorative Elements */}
         <div className="absolute inset-0 pointer-events-none">
