@@ -11,9 +11,13 @@ import { TeamCultureSection } from "@/components/team/TeamCultureSection";
 import { TeamTestimonialsSection } from "@/components/team/TeamTestimonialsSection";
 import { TherapistProfileCard } from "@/components/team/TherapistProfileCard";
 import { TeamPhilosophyCard } from "@/components/team/TeamPhilosophyCard";
+import { LazyImage } from "@/components/shared/LazyImage";
 import teamMorris from "@/assets/team-morris-new.jpg";
 import teamAnna from "@/assets/team-anna-new.jpg";
 import teamLuca from "@/assets/team-luca-new.jpg";
+import teamWorkingMoment from "@/assets/team-working-moment.jpg";
+import teamConsultation from "@/assets/team-consultation.jpg";
+import emotionalTherapistHands from "@/assets/emotional-therapist-hands.jpg";
 
 const team = [
   {
@@ -146,6 +150,48 @@ const Team = () => {
 
             <TeamHeroEnhanced />
           </motion.div>
+        </div>
+      </section>
+
+      {/* Working Moments Section */}
+      <section className="section-padding bg-secondary/30">
+        <div className="container-wide">
+          <AnimatedSection className="text-center mb-12">
+            <h2 className="text-foreground mb-4">Momente der <span className="text-gradient-copper">Fürsorge</span></h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Einblicke in unsere tägliche Arbeit – mit Achtsamkeit und Hingabe.
+            </p>
+          </AnimatedSection>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { image: teamWorkingMoment, text: "Achtsame Berührung", desc: "Jede Massage beginnt mit Aufmerksamkeit" },
+              { image: teamConsultation, text: "Persönliches Gespräch", desc: "Wir hören zu, bevor wir beginnen" },
+              { image: emotionalTherapistHands, text: "Professionelle Hände", desc: "Jahrelange Erfahrung spürt man" },
+            ].map((item, index) => (
+              <motion.div
+                key={item.text}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group relative"
+              >
+                <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
+                  <LazyImage
+                    src={item.image}
+                    alt={item.text}
+                    className="transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="font-display text-xl mb-1">{item.text}</h3>
+                    <p className="text-white/70 text-sm">{item.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

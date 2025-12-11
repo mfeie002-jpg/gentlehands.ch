@@ -1,28 +1,36 @@
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
-import { Shield, Heart, Eye, Hand, Sparkles } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { LazyImage } from "@/components/shared/LazyImage";
+
+import safetyControl from "@/assets/safety-control.jpg";
+import emotionalTherapistHands from "@/assets/emotional-therapist-hands.jpg";
+import privacyDiscreet from "@/assets/privacy-discreet.jpg";
+import philosophyCaringTherapist from "@/assets/philosophy-caring-therapist.jpg";
 
 const values = [
   {
-    icon: Shield,
+    image: safetyControl,
     title: "Absolute Sicherheit",
     description:
       "Ein geschützter Raum, in dem Sie sich vollständig fallen lassen können. Ohne Urteile, ohne Erwartungen.",
   },
   {
-    icon: Heart,
+    image: emotionalTherapistHands,
     title: "Achtsame Berührung",
     description:
       "Jede Berührung erfolgt mit höchster Präsenz und Respekt. Ihre Grenzen werden jederzeit gewahrt.",
   },
   {
-    icon: Eye,
+    image: privacyDiscreet,
     title: "Vollkommene Diskretion",
     description:
       "Ihre Privatsphäre ist uns heilig. Diskreter Standort, keine Datensammlung, absolute Vertraulichkeit.",
   },
   {
-    icon: Hand,
+    image: philosophyCaringTherapist,
     title: "Professionelle Qualität",
     description:
       "Alle Therapeut:innen sind umfassend ausgebildet und bringen jahrelange Erfahrung mit.",
@@ -70,26 +78,30 @@ export const PhilosophySection = () => {
           </p>
         </ScrollReveal>
 
-        {/* Values Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-10 sm:mb-16 px-4 sm:px-0">
+        {/* Values Grid with Images */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10 sm:mb-16 px-4 sm:px-0">
           {values.map((value, index) => (
             <ScrollReveal key={value.title} direction="up" delay={index * 0.1}>
               <motion.div
-                className="group h-full p-6 rounded-2xl bg-card border border-border hover:border-copper/30 transition-all duration-300"
-                whileHover={{ y: -4, scale: 1.02 }}
+                className="group h-full rounded-2xl bg-card border border-border hover:border-copper/30 transition-all duration-300 overflow-hidden"
+                whileHover={{ y: -4 }}
               >
-                <motion.div
-                  className="w-14 h-14 rounded-xl bg-gradient-to-br from-copper/15 to-copper/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
-                  whileHover={{ rotate: 5 }}
-                >
-                  <value.icon size={26} className="text-copper" />
-                </motion.div>
-                <h3 className="text-lg font-display text-foreground mb-3 group-hover:text-copper transition-colors">
-                  {value.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {value.description}
-                </p>
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <LazyImage
+                    src={value.image}
+                    alt={value.title}
+                    className="transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-lg font-display text-foreground mb-2 group-hover:text-copper transition-colors">
+                    {value.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {value.description}
+                  </p>
+                </div>
               </motion.div>
             </ScrollReveal>
           ))}
@@ -110,12 +122,18 @@ export const PhilosophySection = () => {
             <h3 className="text-lg sm:text-xl font-display text-foreground mb-2 sm:mb-3">
               Ein klares Versprechen
             </h3>
-            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-6">
               GentleHands bietet ausschliesslich professionelle Entspannungsmassagen an. 
               «Sinnlich» bedeutet bei uns: auf die Sinne bezogen – Licht, Klänge, Düfte, Atmosphäre. 
               Wir sind kein Erotikstudio. Bei uns stehen Ihr Wohlbefinden, Ihre Grenzen und 
               Ihre Entspannung im Mittelpunkt – nichts anderes.
             </p>
+            <Button variant="ghost" size="sm" asChild className="group">
+              <Link to="/philosophie">
+                Mehr über unsere Philosophie
+                <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Button>
           </motion.div>
         </ScrollReveal>
       </div>

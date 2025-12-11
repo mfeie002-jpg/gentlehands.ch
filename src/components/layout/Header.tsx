@@ -18,6 +18,7 @@ const navLinks = [
   { href: "/erlebnisse", label: "Erlebnisse" },
   { href: "/massagen", label: "Massagen" },
   { href: "/team", label: "Team" },
+  { href: "/philosophie", label: "Philosophie" },
   { href: "/ueber-uns", label: "Über uns" },
   { href: "/erfahrungen", label: "Erfahrungen" },
   { href: "/faq", label: "FAQ" },
