@@ -2,26 +2,32 @@ import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Shirt, MessageCircle, Sparkles, ChevronRight } from "lucide-react";
+import { Clock, ChevronRight } from "lucide-react";
+
+// Import step images
+import arrivalImage from "@/assets/visit-step-arrival.jpg";
+import preparationImage from "@/assets/visit-step-preparation.jpg";
+import consultationImage from "@/assets/visit-step-consultation.jpg";
+import massageImage from "@/assets/visit-step-massage.jpg";
 
 const steps = [
   {
-    icon: MapPin,
+    image: arrivalImage,
     title: "Ankunft",
     description: "Kommen Sie 10 Minuten vor Ihrem Termin an. Wir empfangen Sie persönlich.",
   },
   {
-    icon: Shirt,
+    image: preparationImage,
     title: "Umziehen",
     description: "Ein privater Raum steht bereit. Roben und Handtücher sind vorhanden.",
   },
   {
-    icon: MessageCircle,
+    image: consultationImage,
     title: "Vorgespräch",
     description: "Kurzes Gespräch über Ihre Wünsche, Grenzen und Erwartungen.",
   },
   {
-    icon: Sparkles,
+    image: massageImage,
     title: "Geniessen",
     description: "Entspannen Sie sich. Wir kümmern uns um alles.",
   },
@@ -58,25 +64,36 @@ export const FirstVisitGuideSection = () => {
           </ScrollReveal>
 
           <ScrollReveal direction="right">
-            <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
               {steps.map((step, index) => (
                 <motion.div
                   key={step.title}
-                  className="flex items-start gap-4 p-4 rounded-xl bg-card/50 border border-border/50 hover:border-copper/30 transition-all"
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  className="group relative rounded-xl overflow-hidden"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ x: 4 }}
+                  whileHover={{ y: -4 }}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl font-display text-copper/30">{index + 1}</span>
-                    <div className="w-10 h-10 rounded-lg bg-copper/10 flex items-center justify-center">
-                      <step.icon size={18} className="text-copper" />
+                  {/* Image */}
+                  <div className="relative aspect-square overflow-hidden">
+                    <img
+                      src={step.image}
+                      alt={step.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    {/* Dark overlay with gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+                    
+                    {/* Step number */}
+                    <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-copper/90 flex items-center justify-center">
+                      <span className="text-sm font-display text-white">{index + 1}</span>
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-foreground font-medium text-sm mb-1">{step.title}</h3>
+                  
+                  {/* Content overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="text-foreground font-display text-base mb-1">{step.title}</h3>
                     <p className="text-muted-foreground text-xs leading-relaxed">{step.description}</p>
                   </div>
                 </motion.div>
