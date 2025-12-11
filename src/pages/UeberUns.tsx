@@ -3,49 +3,52 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { Heart, Shield, Eye, Sparkles, Star, ArrowRight, Quote } from "lucide-react";
+import { Heart, ArrowRight, Quote, Sparkles } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
-import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
+import { LazyImage } from "@/components/shared/LazyImage";
+
+// Team & Philosophy images
 import spaMassageRoom from "@/assets/spa-massage-room.jpg";
 import wellnessLounge from "@/assets/wellness-lounge.jpg";
+import philosophyCaring from "@/assets/philosophy-caring-therapist.jpg";
+import philosophyHands from "@/assets/philosophy-hands-connection.jpg";
+import philosophySafe from "@/assets/philosophy-safe-space.jpg";
+import philosophyRelax from "@/assets/philosophy-pure-relaxation.jpg";
+import teamWorking from "@/assets/team-working-moment.jpg";
+import teamConsultation from "@/assets/team-consultation.jpg";
 
 const values = [
   {
-    icon: Shield,
+    image: philosophySafe,
     title: "Vertrauen",
     description:
       "Alles beginnt mit Vertrauen. Wir schaffen einen Raum, in dem Sie sich vollständig sicher fühlen können.",
-    color: "from-petrol/20 to-petrol/10",
   },
   {
-    icon: Eye,
+    image: philosophyCaring,
     title: "Präsenz",
     description:
       "Vollständige Aufmerksamkeit für Sie. Keine Ablenkungen, keine Eile – nur Sie und dieser Moment.",
-    color: "from-forest/20 to-forest/10",
   },
   {
-    icon: Heart,
+    image: philosophyHands,
     title: "Achtsamkeit",
     description:
       "Jede Berührung ist bewusst. Wir spüren, was Ihr Körper braucht, und passen uns an.",
-    color: "from-copper/20 to-copper/10",
   },
   {
-    icon: Sparkles,
+    image: philosophyRelax,
     title: "Diskretion",
     description:
       "Ihre Privatsphäre ist uns heilig. Diskreter Standort, vertraulicher Umgang, keine Kompromisse.",
-    color: "from-primary/20 to-primary/10",
   },
   {
-    icon: Star,
+    image: teamWorking,
     title: "Qualität",
     description:
       "Keine Massenabfertigung. Limitierte Termine, sorgfältige Vorbereitung, höchste Ansprüche.",
-    color: "from-copper/20 to-copper/10",
   },
 ];
 
@@ -282,22 +285,74 @@ const UeberUns = () => {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <GlowCard className="h-full p-8 text-center group">
-                  <motion.div 
-                    className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center mx-auto mb-6`}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring" }}
-                  >
-                    <value.icon size={32} className="text-foreground" />
-                  </motion.div>
-                  <h3 className="font-display text-xl text-foreground mb-3">
-                    {value.title}
-                  </h3>
-                  <p className="text-muted-foreground">{value.description}</p>
+                <GlowCard className="h-full overflow-hidden group">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <LazyImage 
+                      src={value.image} 
+                      alt={value.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-transparent" />
+                  </div>
+                  <div className="p-6 text-center">
+                    <h3 className="font-display text-xl text-foreground mb-3">
+                      {value.title}
+                    </h3>
+                    <p className="text-muted-foreground">{value.description}</p>
+                  </div>
                 </GlowCard>
               </motion.div>
             ))}
           </div>
+          
+          {/* Team Story Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-20"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="grid grid-cols-2 gap-4">
+                <motion.div 
+                  className="aspect-[3/4] rounded-2xl overflow-hidden"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <LazyImage src={teamWorking} alt="Team bei der Arbeit" className="w-full h-full object-cover" />
+                </motion.div>
+                <motion.div 
+                  className="aspect-[3/4] rounded-2xl overflow-hidden mt-8"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <LazyImage src={teamConsultation} alt="Beratungsgespräch" className="w-full h-full object-cover" />
+                </motion.div>
+              </div>
+              <div>
+                <h3 className="font-display text-2xl text-foreground mb-4">Unser Team</h3>
+                <div className="space-y-4 text-muted-foreground">
+                  <p>
+                    Bei GentleHands arbeiten ausschliesslich sorgfältig ausgewählte und professionell 
+                    ausgebildete Therapeut:innen, die unsere Philosophie der achtsamen Berührung teilen.
+                  </p>
+                  <p>
+                    Jedes Teammitglied bringt jahrelange Erfahrung in ganzheitlicher Körperarbeit mit und 
+                    hat sich auf die Bedürfnisse von Frauen spezialisiert, die einen sicheren Raum für 
+                    tiefe Entspannung suchen.
+                  </p>
+                  <p className="italic text-foreground">
+                    "Wir sehen uns nicht nur als Massage-Therapeut:innen, sondern als Begleiter:innen 
+                    auf Ihrem Weg zu mehr Wohlbefinden und innerer Ruhe."
+                  </p>
+                </div>
+                <Button variant="petrol-outline" className="mt-6 group" asChild>
+                  <Link to="/team">
+                    Unser Team kennenlernen
+                    <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

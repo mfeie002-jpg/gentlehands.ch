@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Volume2, VolumeX, X, Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { LazyImage } from "./LazyImage";
+
+// Import emotional images
+import emotionalContentSmile from "@/assets/emotional-content-smile.jpg";
+import emotionalDeepRest from "@/assets/emotional-deep-rest.jpg";
+import emotionalInnerPeace from "@/assets/emotional-inner-peace.jpg";
+import emotionalRelaxedFace from "@/assets/emotional-relaxed-face.jpg";
 
 interface VideoTestimonial {
   id: number;
@@ -9,6 +16,8 @@ interface VideoTestimonial {
   location: string;
   theme: string;
   quote: string;
+  beforeText: string;
+  afterText: string;
   videoThumbnail: string;
   duration: string;
   rating: number;
@@ -21,8 +30,10 @@ const videoTestimonials: VideoTestimonial[] = [
     age: 42,
     location: "Zürich",
     theme: "Ozean & Palmen",
-    quote: "Nach der Session fühlte ich mich wie nach einem Strandurlaub.",
-    videoThumbnail: "/placeholder.svg",
+    quote: "Nach 15 Jahren Dauerstress habe ich endlich wieder gelernt, loszulassen.",
+    beforeText: "Chronische Verspannungen, Schlafprobleme",
+    afterText: "Tiefe Entspannung, besserer Schlaf",
+    videoThumbnail: emotionalContentSmile,
     duration: "2:34",
     rating: 5,
   },
@@ -32,8 +43,10 @@ const videoTestimonials: VideoTestimonial[] = [
     age: 38,
     location: "Winterthur",
     theme: "Alpine Stille",
-    quote: "Ein Ort, an dem ich mich als Frau wirklich sicher fühle.",
-    videoThumbnail: "/placeholder.svg",
+    quote: "Ich dachte, ich müsste immer stark sein. Hier durfte ich einfach sein.",
+    beforeText: "Burnout-Symptome, emotionale Erschöpfung",
+    afterText: "Emotionale Balance, Selbstfürsorge",
+    videoThumbnail: emotionalDeepRest,
     duration: "3:12",
     rating: 5,
   },
@@ -44,7 +57,9 @@ const videoTestimonials: VideoTestimonial[] = [
     location: "Zürich",
     theme: "Deep Dark Relax",
     quote: "Die Dunkelheit half mir, endlich loszulassen.",
-    videoThumbnail: "/placeholder.svg",
+    beforeText: "Gedankenkarussell, nie abschalten können",
+    afterText: "Mentale Klarheit, innere Ruhe",
+    videoThumbnail: emotionalInnerPeace,
     duration: "4:05",
     rating: 5,
   },
@@ -55,7 +70,9 @@ const videoTestimonials: VideoTestimonial[] = [
     location: "Luzern",
     theme: "Urban Loft",
     quote: "GentleHands hat mir die Ruhe zurückgegeben.",
-    videoThumbnail: "/placeholder.svg",
+    beforeText: "Körperliche Beschwerden, Stress",
+    afterText: "Körperliches Wohlbefinden, Lebensfreude",
+    videoThumbnail: emotionalRelaxedFace,
     duration: "2:58",
     rating: 5,
   },
@@ -147,17 +164,11 @@ export const VideoTestimonials = () => {
           <div className="relative aspect-video max-w-4xl mx-auto rounded-3xl overflow-hidden group cursor-pointer"
                onClick={() => openVideo(videoTestimonials[currentIndex])}>
             {/* Video Thumbnail */}
-            <div className="absolute inset-0 bg-gradient-to-br from-muted/80 to-muted">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  className="text-6xl font-display text-copper/20"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  GH
-                </motion.div>
-              </div>
-            </div>
+            <LazyImage
+              src={videoTestimonials[currentIndex].videoThumbnail}
+              alt={videoTestimonials[currentIndex].name}
+              className="w-full h-full object-cover"
+            />
             
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
@@ -247,11 +258,11 @@ export const VideoTestimonials = () => {
               }`}
               onClick={() => setCurrentIndex(index)}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-muted/60 to-muted">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-2xl font-display text-copper/30">GH</span>
-                </div>
-              </div>
+              <LazyImage
+                src={video.videoThumbnail}
+                alt={video.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-foreground/40 group-hover:bg-foreground/30 transition-colors" />
               
               {/* Play icon */}
@@ -296,17 +307,15 @@ export const VideoTestimonials = () => {
               className="relative w-full max-w-5xl aspect-video bg-muted rounded-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Placeholder for video player */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/80">
-                <motion.div
-                  className="text-8xl font-display text-copper/20 mb-4"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  GH
-                </motion.div>
-                <p className="text-muted-foreground">Video wird geladen...</p>
-                <p className="text-copper mt-2">{activeVideo.name} – {activeVideo.theme}</p>
+              {/* Video player placeholder with real thumbnail */}
+              <LazyImage
+                src={activeVideo.videoThumbnail}
+                alt={activeVideo.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-foreground/40">
+                <p className="text-white text-lg mb-2">Video-Testimonial</p>
+                <p className="text-copper">{activeVideo.name} – {activeVideo.theme}</p>
               </div>
               
               {/* Controls */}

@@ -3,21 +3,42 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SEOHead } from "@/components/shared/SEOHead";
-import { Check, Clock, MapPin, Shirt, Droplets, Heart, Phone, Coffee, X, ArrowRight, Sparkles } from "lucide-react";
+import { Check, MapPin, X, ArrowRight, Sparkles } from "lucide-react";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
+import { LazyImage } from "@/components/shared/LazyImage";
 
-const beforeVisit = [
-  { icon: Clock, title: "Kommen Sie pünktlich", text: "Planen Sie 10-15 Minuten vor Ihrem Termin ein, um in Ruhe anzukommen.", color: "from-petrol/20 to-petrol/10" },
-  { icon: Coffee, title: "Leichte Mahlzeit", text: "Vermeiden Sie schwere Mahlzeiten 2 Stunden vor der Session.", color: "from-copper/20 to-copper/10" },
-  { icon: Droplets, title: "Gut hydriert", text: "Trinken Sie ausreichend Wasser vor Ihrem Besuch.", color: "from-primary/20 to-primary/10" },
-  { icon: Phone, title: "Digital Detox", text: "Schalten Sie Ihr Handy aus oder auf lautlos – Sie werden nicht erreichbar sein.", color: "from-forest/20 to-forest/10" },
-];
+// Import visit step images
+import visitStepArrival from "@/assets/visit-step-arrival.jpg";
+import visitStepConsultation from "@/assets/visit-step-consultation.jpg";
+import visitStepPreparation from "@/assets/visit-step-preparation.jpg";
+import visitStepMassage from "@/assets/visit-step-massage.jpg";
 
-const duringSession = [
-  { icon: Shirt, title: "Bekleidung", text: "Sie entkleiden sich so weit, wie Sie sich wohl fühlen. Während der gesamten Session sind Sie professionell abgedeckt." },
-  { icon: Heart, title: "Kommunikation", text: "Teilen Sie uns jederzeit mit, wenn etwas unangenehm ist – Druck, Temperatur, Bereiche. Wir passen uns sofort an." },
-  { icon: Check, title: "Volle Kontrolle", text: "Sie können die Session jederzeit anpassen oder beenden. Ihr Wohlbefinden hat oberste Priorität." },
+const visitSteps = [
+  { 
+    image: visitStepArrival, 
+    title: "Ankommen", 
+    text: "Kommen Sie 10-15 Minuten vor Ihrem Termin an. Unsere diskrete Lage bietet Ihnen vollständige Privatsphäre.",
+    step: 1
+  },
+  { 
+    image: visitStepConsultation, 
+    title: "Beratungsgespräch", 
+    text: "Ein kurzes persönliches Gespräch, um Ihre Wünsche und eventuelle Bedenken zu besprechen.",
+    step: 2
+  },
+  { 
+    image: visitStepPreparation, 
+    title: "Vorbereitung", 
+    text: "Der Raum wird nach Ihrem gewählten Thema eingerichtet. Sie können sich in aller Ruhe vorbereiten.",
+    step: 3
+  },
+  { 
+    image: visitStepMassage, 
+    title: "Ihre Session", 
+    text: "Geniessen Sie Ihre vollständig personalisierte Massage in einer Atmosphäre der Geborgenheit.",
+    step: 4
+  },
 ];
 
 const afterSession = [
@@ -102,7 +123,7 @@ const Vorbereitung = () => {
         </div>
       </section>
 
-      {/* Before */}
+      {/* Visit Steps with Images */}
       <section className="section-padding-sm relative">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
@@ -117,38 +138,42 @@ const Vorbereitung = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-12"
+            className="text-center mb-12"
           >
-            <div className="flex items-center gap-4 mb-2">
-              <div className="w-10 h-10 rounded-full bg-copper/10 flex items-center justify-center">
-                <span className="text-copper font-display font-bold">1</span>
-              </div>
-              <h2 className="text-foreground">Vor Ihrem Besuch</h2>
-            </div>
-            <div className="divider-copper ml-14" />
+            <h2 className="text-foreground mb-4">Ihr Besuch bei uns</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Von der Ankunft bis zur vollständigen Entspannung – so gestaltet sich Ihr Erlebnis bei GentleHands.
+            </p>
+            <div className="divider-copper mx-auto mt-4" />
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {beforeVisit.map((item, index) => (
+            {visitSteps.map((step, index) => (
               <motion.div
-                key={item.title}
+                key={step.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <GlowCard className="h-full p-6 group">
-                  <motion.div 
-                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring" }}
-                  >
-                    <item.icon size={28} className="text-foreground" />
-                  </motion.div>
-                  <h4 className="font-display text-lg text-foreground mb-2">
-                    {item.title}
-                  </h4>
-                  <p className="text-muted-foreground text-sm">{item.text}</p>
+                <GlowCard className="h-full overflow-hidden group">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <LazyImage
+                      src={step.image}
+                      alt={step.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
+                    <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-copper flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">{step.step}</span>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h4 className="font-display text-lg text-foreground mb-2">
+                      {step.title}
+                    </h4>
+                    <p className="text-muted-foreground text-sm">{step.text}</p>
+                  </div>
                 </GlowCard>
               </motion.div>
             ))}
@@ -156,7 +181,7 @@ const Vorbereitung = () => {
         </div>
       </section>
 
-      {/* During */}
+      {/* During - Simple info cards */}
       <section className="section-padding-sm bg-secondary/30 relative overflow-hidden">
         {/* Ambient Effect */}
         <div className="absolute inset-0 pointer-events-none">
@@ -172,40 +197,57 @@ const Vorbereitung = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-12"
+            className="text-center mb-12"
           >
-            <div className="flex items-center gap-4 mb-2">
-              <div className="w-10 h-10 rounded-full bg-copper/10 flex items-center justify-center">
-                <span className="text-copper font-display font-bold">2</span>
-              </div>
-              <h2 className="text-foreground">Während der Session</h2>
-            </div>
-            <div className="divider-copper ml-14" />
+            <h2 className="text-foreground mb-4">Während Ihrer Session</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Ihr Wohlbefinden steht immer an erster Stelle. So gestalten wir Ihre Zeit bei uns.
+            </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {duringSession.map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <GlowCard className="h-full p-6 group">
-                  <motion.div 
-                    className="w-14 h-14 rounded-xl bg-gradient-to-br from-copper/20 to-copper/10 flex items-center justify-center mb-4"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                  >
-                    <item.icon size={28} className="text-copper" />
-                  </motion.div>
-                  <h4 className="font-display text-lg text-foreground mb-2">
-                    {item.title}
-                  </h4>
-                  <p className="text-muted-foreground text-sm">{item.text}</p>
-                </GlowCard>
-              </motion.div>
-            ))}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <GlowCard className="h-full p-6 text-center">
+                <div className="w-16 h-16 rounded-full mx-auto mb-4 overflow-hidden">
+                  <LazyImage src={visitStepPreparation} alt="Bekleidung" className="w-full h-full object-cover" />
+                </div>
+                <h4 className="font-display text-lg text-foreground mb-2">Bekleidung</h4>
+                <p className="text-muted-foreground text-sm">Sie entkleiden sich so weit, wie Sie sich wohl fühlen. Während der gesamten Session sind Sie professionell abgedeckt.</p>
+              </GlowCard>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <GlowCard className="h-full p-6 text-center">
+                <div className="w-16 h-16 rounded-full mx-auto mb-4 overflow-hidden">
+                  <LazyImage src={visitStepConsultation} alt="Kommunikation" className="w-full h-full object-cover" />
+                </div>
+                <h4 className="font-display text-lg text-foreground mb-2">Kommunikation</h4>
+                <p className="text-muted-foreground text-sm">Teilen Sie uns jederzeit mit, wenn etwas unangenehm ist – Druck, Temperatur, Bereiche. Wir passen uns sofort an.</p>
+              </GlowCard>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <GlowCard className="h-full p-6 text-center">
+                <div className="w-16 h-16 rounded-full mx-auto mb-4 overflow-hidden">
+                  <LazyImage src={visitStepMassage} alt="Kontrolle" className="w-full h-full object-cover" />
+                </div>
+                <h4 className="font-display text-lg text-foreground mb-2">Volle Kontrolle</h4>
+                <p className="text-muted-foreground text-sm">Sie können die Session jederzeit anpassen oder beenden. Ihr Wohlbefinden hat oberste Priorität.</p>
+              </GlowCard>
+            </motion.div>
           </div>
         </div>
       </section>
