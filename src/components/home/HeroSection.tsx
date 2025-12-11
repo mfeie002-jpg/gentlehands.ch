@@ -15,21 +15,31 @@ const trustBadges = [
 
 export const HeroSection = () => {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 800], [0, 200]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-  const scale = useTransform(scrollY, [0, 800], [1, 1.1]);
+  const y = useTransform(scrollY, [0, 1000], [0, 300]);
+  const opacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const scale = useTransform(scrollY, [0, 1000], [1, 1.2]);
+  const rotate = useTransform(scrollY, [0, 1000], [0, 3]);
+  const blur = useTransform(scrollY, [0, 500], [0, 5]);
 
   return (
     <section 
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       aria-label="Willkommen bei GentleHands"
     >
-      {/* Background Image with Parallax & Scale */}
-      <motion.div className="absolute inset-0" style={{ y, scale }}>
+      {/* Background Image with Enhanced Parallax */}
+      <motion.div 
+        className="absolute inset-0 origin-center" 
+        style={{ 
+          y, 
+          scale, 
+          rotateZ: rotate,
+          filter: `blur(${blur}px)`
+        }}
+      >
         <img 
           src={heroImage} 
           alt="GentleHands Massage - Sanfte, professionelle Hände auf einem entspannten Rücken" 
-          className="w-full h-full object-cover"
+          className="w-full h-[120%] object-cover"
           loading="eager"
           fetchPriority="high"
           width={1920}

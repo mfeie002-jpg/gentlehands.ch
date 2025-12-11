@@ -54,6 +54,8 @@ import { AnimatedTestimonialSlider } from "@/components/testimonials/AnimatedTes
 import { VirtualTourViewer } from "@/components/tour/VirtualTourViewer";
 import { AnimatedStatsSection } from "@/components/stats/AnimatedStatsSection";
 import { BeforeAfterSlider } from "@/components/comparison/BeforeAfterSlider";
+import { PriceCalculator } from "@/components/pricing/PriceCalculator";
+import { ParallaxHero } from "@/components/shared/ParallaxHero";
 
 const Index = () => {
   const jsonLd = {
@@ -228,6 +230,12 @@ const Index = () => {
       <AnimatedSection animation="fadeUp">
         <PricePreviewSection />
       </AnimatedSection>
+      
+      <section className="py-16 bg-secondary/20">
+        <div className="container mx-auto px-4">
+          <PriceCalculator />
+        </div>
+      </section>
       
       <AnimatedSection animation="fadeUp">
         <BookingBenefitsSection />

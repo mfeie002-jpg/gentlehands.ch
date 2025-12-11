@@ -13,7 +13,7 @@ import { FavoritesTab } from "@/components/dashboard/FavoritesTab";
 import { JournalTab } from "@/components/dashboard/JournalTab";
 import { SettingsTab } from "@/components/dashboard/SettingsTab";
 import { ProfileCompletion } from "@/components/dashboard/ProfileCompletion";
-import { LoyaltyRewards } from "@/components/dashboard/LoyaltyRewards";
+import { LoyaltyDashboard } from "@/components/dashboard/LoyaltyDashboard";
 import { BookingReminders } from "@/components/dashboard/BookingReminders";
 import { QuickRebook } from "@/components/dashboard/QuickRebook";
 import { BookingExport } from "@/components/dashboard/BookingExport";
@@ -415,9 +415,10 @@ const Dashboard = () => {
                 )}
 
                 {activeTab === "rewards" && (
-                  <LoyaltyRewards 
+                  <LoyaltyDashboard 
                     points={profile?.loyalty_points || 0} 
-                    totalBookings={profile?.total_bookings || bookings.length} 
+                    totalBookings={profile?.total_bookings || bookings.length}
+                    memberSince={profile?.member_since ? new Date(profile.member_since).toLocaleDateString('de-CH', { month: 'long', year: 'numeric' }) : undefined}
                   />
                 )}
 
