@@ -6,8 +6,11 @@ interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   alt: string;
   placeholderClassName?: string;
   wrapperClassName?: string;
+  containerClassName?: string;
   threshold?: number;
   rootMargin?: string;
+  aspectRatio?: "square" | "video" | "portrait" | "auto";
+  priority?: boolean;
 }
 
 export const LazyImage = ({
@@ -16,15 +19,23 @@ export const LazyImage = ({
   className,
   placeholderClassName,
   wrapperClassName,
+  containerClassName,
   threshold = 0.1,
-  rootMargin = '50px',
+  rootMargin = '200px',
+  aspectRatio,
+  priority = false,
   ...props
 }: LazyImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(false);
+  const [isInView, setIsInView] = useState(priority);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
+    if (priority) {
+      setIsInView(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -40,10 +51,22 @@ export const LazyImage = ({
     }
 
     return () => observer.disconnect();
-  }, [threshold, rootMargin]);
+  }, [threshold, rootMargin, priority]);
+
+  const aspectClasses = {
+    square: "aspect-square",
+    video: "aspect-video",
+    portrait: "aspect-[3/4]",
+    auto: "",
+  };
 
   return (
-    <div className={cn('relative overflow-hidden', wrapperClassName)}>
+    <div className={cn(
+      'relative overflow-hidden', 
+      aspectRatio && aspectClasses[aspectRatio],
+      wrapperClassName,
+      containerClassName
+    )}>
       {/* Placeholder skeleton */}
       <div
         className={cn(
@@ -59,12 +82,12 @@ export const LazyImage = ({
         src={isInView ? src : undefined}
         alt={alt}
         className={cn(
-          'transition-opacity duration-500',
+          'w-full h-full object-cover transition-opacity duration-500',
           isLoaded ? 'opacity-100' : 'opacity-0',
           className
         )}
         onLoad={() => setIsLoaded(true)}
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
         {...props}
       />

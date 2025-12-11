@@ -1,35 +1,44 @@
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
-import { Lock, Eye, Shield, UserX, FileX, Server } from "lucide-react";
+import { LazyImage } from "@/components/shared/LazyImage";
+import { Lock } from "lucide-react";
+
+// Import images
+import secureImage from "@/assets/privacy-secure.jpg";
+import anonymousImage from "@/assets/privacy-anonymous.jpg";
+import discreetImage from "@/assets/privacy-discreet.jpg";
+import entranceImage from "@/assets/emotional-discreet-entrance.jpg";
+import privateImage from "@/assets/emotional-private-moment.jpg";
+import relaxedImage from "@/assets/emotional-no-rush.jpg";
 
 const promises = [
   {
-    icon: Lock,
+    image: secureImage,
     title: "Verschlüsselte Kommunikation",
     description: "Alle Ihre Daten werden SSL-verschlüsselt übertragen.",
   },
   {
-    icon: Eye,
+    image: anonymousImage,
     title: "Keine Überwachung",
     description: "Wir tracken Sie nicht und verkaufen keine Daten.",
   },
   {
-    icon: UserX,
+    image: privateImage,
     title: "Anonyme Buchung möglich",
     description: "Sie können unter Pseudonym buchen, wenn Sie möchten.",
   },
   {
-    icon: FileX,
+    image: relaxedImage,
     title: "Datenlöschung auf Wunsch",
     description: "Ihre Daten werden auf Anfrage vollständig gelöscht.",
   },
   {
-    icon: Shield,
+    image: entranceImage,
     title: "Diskreter Eingang",
     description: "Unser Studio ist unauffällig und ohne auffällige Beschilderung.",
   },
   {
-    icon: Server,
+    image: discreetImage,
     title: "Schweizer Server",
     description: "Alle Daten werden in der Schweiz gespeichert.",
   },
@@ -58,11 +67,17 @@ export const PrivacyPromiseSection = () => {
           {promises.map((promise, index) => (
             <ScrollReveal key={promise.title} delay={index * 0.05}>
               <motion.div
-                className="flex items-start gap-4 p-4 bg-card/50 rounded-xl border border-border/50 hover:border-petrol/30 transition-colors"
+                className="group flex items-start gap-4 p-4 bg-card/50 rounded-xl border border-border/50 hover:border-petrol/30 transition-colors overflow-hidden"
                 whileHover={{ x: 4 }}
               >
-                <div className="w-10 h-10 rounded-lg bg-petrol/10 flex items-center justify-center shrink-0">
-                  <promise.icon size={18} className="text-petrol" />
+                {/* Thumbnail image */}
+                <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
+                  <LazyImage
+                    src={promise.image}
+                    alt={promise.title}
+                    className="group-hover:scale-110 transition-transform duration-500"
+                    aspectRatio="square"
+                  />
                 </div>
                 <div>
                   <h3 className="text-foreground font-medium text-sm mb-1">{promise.title}</h3>

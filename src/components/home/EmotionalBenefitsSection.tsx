@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { LazyImage } from "@/components/shared/LazyImage";
 
 // Import emotional images
 import stressReleaseImage from "@/assets/emotional-stress-release.jpg";
@@ -94,10 +95,11 @@ export const EmotionalBenefitsSection = () => {
               >
                 {/* Image */}
                 <div className="relative h-48 overflow-hidden">
-                  <img
+                  <LazyImage
                     src={benefit.image}
                     alt={benefit.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="group-hover:scale-110 transition-transform duration-700"
+                    aspectRatio="auto"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
                 </div>
