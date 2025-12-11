@@ -52,6 +52,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Login"));
 const Empfehlen = lazy(() => import("./pages/Empfehlen"));
+const Philosophie = lazy(() => import("./pages/Philosophie"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -129,6 +130,7 @@ const App = () => (
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/empfehlen" element={<Empfehlen />} />
+                <Route path="/philosophie" element={<Philosophie />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

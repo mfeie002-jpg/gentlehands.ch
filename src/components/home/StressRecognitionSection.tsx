@@ -3,6 +3,9 @@ import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { AlertCircle, Check, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { LazyImage } from "@/components/shared/LazyImage";
+
+import emotionalStressRelease from "@/assets/emotional-stress-release.jpg";
 
 const stressSigns = [
   { sign: "Schlafen Sie schlecht oder liegen nachts wach?", common: true },
@@ -60,36 +63,47 @@ export const StressRecognitionSection = () => {
             </div>
           </ScrollReveal>
 
-          {/* Right - Solution */}
+          {/* Right - Solution with Image */}
           <ScrollReveal delay={0.2}>
             <motion.div
-              className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-copper/10 via-card to-secondary/50 border border-copper/20"
+              className="rounded-2xl overflow-hidden bg-card border border-border"
               whileHover={{ scale: 1.01 }}
             >
-              <h3 className="text-xl sm:text-2xl font-display text-foreground mb-4">
-                Wenn Sie auch nur einen Punkt angekreuzt haben...
-              </h3>
-
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                ...dann ist es Zeit, etwas für sich zu tun. Nicht morgen. Nicht «irgendwann». 
-                Jetzt. Ihr Körper und Ihre Seele brauchen Regeneration – und Sie verdienen es, 
-                sich diese zu gönnen.
-              </p>
-
-              <div className="p-4 rounded-xl bg-background/50 border border-border mb-6">
-                <p className="text-foreground/90 text-sm italic">
-                  «Nach meiner ersten Session bei GentleHands habe ich zum ersten Mal seit Monaten 
-                  wieder durchgeschlafen. Ich wusste nicht, wie sehr ich das gebraucht habe.»
-                </p>
-                <p className="text-muted-foreground text-xs mt-2">— Marina, 38</p>
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <LazyImage
+                  src={emotionalStressRelease}
+                  alt="Stress loslassen"
+                  className="transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
               </div>
+              
+              <div className="p-8">
+                <h3 className="text-xl sm:text-2xl font-display text-foreground mb-4">
+                  Wenn Sie auch nur einen Punkt angekreuzt haben...
+                </h3>
 
-              <Button variant="copper" size="lg" className="w-full" asChild>
-                <Link to="/buchung">
-                  Meine erste Session buchen
-                  <ArrowRight size={18} className="ml-2" />
-                </Link>
-              </Button>
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  ...dann ist es Zeit, etwas für sich zu tun. Nicht morgen. Nicht «irgendwann». 
+                  Jetzt. Ihr Körper und Ihre Seele brauchen Regeneration – und Sie verdienen es, 
+                  sich diese zu gönnen.
+                </p>
+
+                <div className="p-4 rounded-xl bg-secondary/50 border border-border mb-6">
+                  <p className="text-foreground/90 text-sm italic">
+                    «Nach meiner ersten Session bei GentleHands habe ich zum ersten Mal seit Monaten 
+                    wieder durchgeschlafen. Ich wusste nicht, wie sehr ich das gebraucht habe.»
+                  </p>
+                  <p className="text-muted-foreground text-xs mt-2">— Marina, 38</p>
+                </div>
+
+                <Button variant="copper" size="lg" className="w-full" asChild>
+                  <Link to="/buchung">
+                    Meine erste Session buchen
+                    <ArrowRight size={18} className="ml-2" />
+                  </Link>
+                </Button>
+              </div>
             </motion.div>
           </ScrollReveal>
         </div>

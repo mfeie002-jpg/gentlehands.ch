@@ -20,6 +20,7 @@ const footerLinks = {
   ],
   information: [
     { href: "/ueber-uns", label: "Über uns" },
+    { href: "/philosophie", label: "Philosophie" },
     { href: "/erfahrungen", label: "Erfahrungen" },
     { href: "/vorbereitung", label: "Vorbereitung" },
     { href: "/faq", label: "FAQ" },
