@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, memo } from "react";
+import { useState, useRef, useEffect, memo, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -6,6 +6,7 @@ interface OptimizedImageLoaderProps {
   src: string;
   alt: string;
   className?: string;
+  containerClassName?: string;
   aspectRatio?: "square" | "video" | "portrait" | "wide" | "auto";
   priority?: boolean;
   blur?: boolean;
@@ -13,6 +14,7 @@ interface OptimizedImageLoaderProps {
   onLoadComplete?: () => void;
   width?: number;
   height?: number;
+  sizes?: string;
 }
 
 const aspectRatioClasses = {
@@ -27,14 +29,17 @@ const aspectRatioClasses = {
  * Optimized image component with:
  * - Intersection Observer for lazy loading
  * - Blur-up effect on load
- * - Skeleton placeholder
- * - Priority loading option
+ * - Skeleton placeholder with shimmer
+ * - Priority loading option with preload
  * - ARIA accessibility
+ * - Native lazy loading fallback
+ * - fetchPriority for LCP optimization
  */
 export const OptimizedImageLoader = memo(({
   src,
   alt,
   className,
+  containerClassName,
   aspectRatio = "auto",
   priority = false,
   blur = true,
@@ -42,6 +47,7 @@ export const OptimizedImageLoader = memo(({
   onLoadComplete,
   width,
   height,
+  sizes,
 }: OptimizedImageLoaderProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
@@ -52,7 +58,15 @@ export const OptimizedImageLoader = memo(({
   useEffect(() => {
     if (priority) {
       setIsInView(true);
-      return;
+      // Preload priority images
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+      return () => {
+        document.head.removeChild(link);
+      };
     }
 
     const observer = new IntersectionObserver(
@@ -64,7 +78,7 @@ export const OptimizedImageLoader = memo(({
       },
       { 
         threshold: 0.01,
-        rootMargin: "100px 0px" 
+        rootMargin: "300px 0px" 
       }
     );
 
@@ -73,38 +87,41 @@ export const OptimizedImageLoader = memo(({
     }
 
     return () => observer.disconnect();
-  }, [priority]);
+  }, [priority, src]);
 
-  const handleLoad = () => {
+  const handleLoad = useCallback(() => {
     setIsLoaded(true);
     onLoadComplete?.();
-  };
+  }, [onLoadComplete]);
 
-  const handleError = () => {
+  const handleError = useCallback(() => {
     setHasError(true);
-  };
+  }, []);
 
   return (
     <div 
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden bg-muted",
+        "relative overflow-hidden bg-muted/30",
         aspectRatioClasses[aspectRatio],
-        className
+        containerClassName
       )}
       role="img"
       aria-label={alt}
     >
-      {/* Skeleton placeholder */}
+      {/* Skeleton placeholder with shimmer */}
       <AnimatePresence>
         {showSkeleton && !isLoaded && !hasError && (
           <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 skeleton-pulse"
+            transition={{ duration: 0.4 }}
+            className="absolute inset-0 bg-gradient-to-br from-muted via-muted/60 to-muted"
             aria-hidden="true"
-          />
+          >
+            {/* Shimmer animation */}
+            <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -115,7 +132,7 @@ export const OptimizedImageLoader = memo(({
         </div>
       )}
 
-      {/* Actual image */}
+      {/* Actual image with blur-up effect */}
       {isInView && !hasError && (
         <motion.img
           ref={imgRef}
@@ -123,22 +140,25 @@ export const OptimizedImageLoader = memo(({
           alt={alt}
           width={width}
           height={height}
+          sizes={sizes}
           onLoad={handleLoad}
           onError={handleError}
           loading={priority ? "eager" : "lazy"}
           decoding={priority ? "sync" : "async"}
-          initial={blur ? { opacity: 0, filter: "blur(20px)" } : { opacity: 0 }}
+          // @ts-ignore - fetchPriority is valid but not in types yet
+          fetchpriority={priority ? "high" : "auto"}
+          initial={blur ? { opacity: 0, filter: "blur(20px)", scale: 1.05 } : { opacity: 0 }}
           animate={
             isLoaded 
-              ? { opacity: 1, filter: "blur(0px)" } 
+              ? { opacity: 1, filter: "blur(0px)", scale: 1 } 
               : blur 
-                ? { opacity: 0.5, filter: "blur(20px)" } 
+                ? { opacity: 0.3, filter: "blur(20px)", scale: 1.05 } 
                 : { opacity: 0 }
           }
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           className={cn(
             "w-full h-full object-cover",
-            !isLoaded && "invisible"
+            className
           )}
         />
       )}
