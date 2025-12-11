@@ -26,6 +26,7 @@ import { TestimonialHighlight } from "@/components/home/TestimonialHighlight";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FeaturedReviewSection } from "@/components/home/FeaturedReviewSection";
 import { ClientSuccessStories } from "@/components/home/ClientSuccessStories";
+import { VideoTestimonials } from "@/components/shared/VideoTestimonials";
 import { FAQPreviewSection } from "@/components/home/FAQPreviewSection";
 import { FirstVisitGuideSection } from "@/components/home/FirstVisitGuideSection";
 import { PricePreviewSection } from "@/components/home/PricePreviewSection";
@@ -195,6 +196,10 @@ const Index = () => {
       
       <AnimatedSection animation="fadeUp">
         <ClientSuccessStories />
+      </AnimatedSection>
+      
+      <AnimatedSection animation="fadeUp">
+        <VideoTestimonials />
       </AnimatedSection>
       
       <AnimatedSection animation="fadeUp">
