@@ -30,6 +30,8 @@ import { WelcomeCard } from "@/components/dashboard/WelcomeCard";
 import { UpcomingBooking } from "@/components/dashboard/UpcomingBooking";
 import { RecentSessions } from "@/components/dashboard/RecentSessions";
 import { WellnessProgress } from "@/components/dashboard/WellnessProgress";
+import { MoodTracker } from "@/components/dashboard/MoodTracker";
+import { BookingHeatmap } from "@/components/admin/BookingHeatmap";
 
 interface UserProfile {
   full_name: string | null;
@@ -289,6 +291,12 @@ const Dashboard = () => {
                         theme: upcomingBookings[0].theme
                       }} />
                     )}
+
+                    {/* Mood Tracker */}
+                    <MoodTracker />
+
+                    {/* Booking Availability Heatmap */}
+                    <BookingHeatmap />
 
                     {/* Wellness Progress */}
                     <WellnessProgress />
