@@ -13,6 +13,9 @@ import { GlowCard } from "@/components/shared/GlowCard";
 import { VoucherPreviewCard } from "@/components/voucher/VoucherPreviewCard";
 import { VoucherValueSelector } from "@/components/voucher/VoucherValueSelector";
 import { GiftCardChecker } from "@/components/shared/GiftCardChecker";
+import { LazyImage } from "@/components/shared/LazyImage";
+import giftCardPresentation from "@/assets/gift-card-presentation.jpg";
+
 const giftCards = [
   {
     id: "discovery",
@@ -111,43 +114,71 @@ const Gutscheine = () => {
         <FloatingElements variant="dots" />
         
         <div className="container-wide relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-20 h-20 rounded-2xl bg-copper/10 flex items-center justify-center mx-auto mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
               <motion.div
-                animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="w-20 h-20 rounded-2xl bg-copper/10 flex items-center justify-center mb-6"
+              >
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  <Gift size={40} className="text-copper" />
+                </motion.div>
+              </motion.div>
+              
+              <motion.h1 
+                className="text-foreground mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Schenken Sie <span className="text-gradient-copper">Entspannung</span>
+              </motion.h1>
+              <motion.p 
+                className="text-muted-foreground text-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                Das perfekte Geschenk für besondere Menschen – ein unvergessliches GentleHands-Erlebnis.
+              </motion.p>
+            </motion.div>
+
+            {/* Emotional Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="relative hidden lg:block"
+            >
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                <LazyImage
+                  src={giftCardPresentation}
+                  alt="Elegante Gutschein-Präsentation im GentleHands Spa"
+                  className="w-full h-80 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent" />
+              </div>
+              
+              {/* Floating badge */}
+              <motion.div
+                className="absolute -bottom-4 -left-4 bg-card p-4 rounded-2xl shadow-xl border border-border"
+                animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
-                <Gift size={40} className="text-copper" />
+                <p className="text-copper text-sm font-medium">Ab CHF 180</p>
+                <p className="text-muted-foreground text-xs">Unvergessliche Momente schenken</p>
               </motion.div>
             </motion.div>
-            
-            <motion.h1 
-              className="text-foreground mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              Schenken Sie <span className="text-gradient-copper">Entspannung</span>
-            </motion.h1>
-            <motion.p 
-              className="text-muted-foreground text-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              Das perfekte Geschenk für besondere Menschen – ein unvergessliches GentleHands-Erlebnis.
-            </motion.p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
