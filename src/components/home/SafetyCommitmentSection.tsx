@@ -1,25 +1,32 @@
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
-import { Shield, AlertCircle, Hand, MessageCircle, Lock, Heart } from "lucide-react";
+import { LazyImage } from "@/components/shared/LazyImage";
+import { Shield, AlertCircle } from "lucide-react";
+
+// Import emotional images
+import controlImage from "@/assets/safety-control.jpg";
+import communicationImage from "@/assets/safety-communication.jpg";
+import trustImage from "@/assets/safety-trust.jpg";
+import careImage from "@/assets/safety-care.jpg";
 
 const commitments = [
   {
-    icon: Hand,
+    image: controlImage,
     title: "Jederzeit stoppen",
     description: "Sie können die Session jederzeit unterbrechen oder beenden – ohne Erklärung.",
   },
   {
-    icon: MessageCircle,
+    image: communicationImage,
     title: "Offene Kommunikation",
     description: "Sagen Sie uns, was sich gut anfühlt und was nicht. Wir hören zu.",
   },
   {
-    icon: Lock,
+    image: trustImage,
     title: "Keine-Fragen-Garantie",
     description: "Wenn Sie abbrechen möchten, respektieren wir das ohne Nachfragen.",
   },
   {
-    icon: Heart,
+    image: careImage,
     title: "Trauma-informiert",
     description: "Unser Team ist im achtsamen Umgang mit Grenzen geschult.",
   },
@@ -48,14 +55,25 @@ export const SafetyCommitmentSection = () => {
           {commitments.map((commitment, index) => (
             <ScrollReveal key={commitment.title} delay={index * 0.08}>
               <motion.div
-                className="bg-card/50 rounded-xl p-5 border border-petrol/20 hover:border-petrol/40 transition-all h-full"
+                className="group rounded-xl overflow-hidden border border-petrol/20 hover:border-petrol/40 transition-all h-full bg-card/50"
                 whileHover={{ y: -4 }}
               >
-                <div className="w-10 h-10 rounded-lg bg-petrol/15 flex items-center justify-center mb-4">
-                  <commitment.icon size={18} className="text-petrol" />
+                {/* Image */}
+                <div className="relative h-40 overflow-hidden">
+                  <LazyImage
+                    src={commitment.image}
+                    alt={commitment.title}
+                    className="group-hover:scale-110 transition-transform duration-500"
+                    aspectRatio="auto"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
                 </div>
-                <h3 className="text-foreground font-medium text-sm mb-2">{commitment.title}</h3>
-                <p className="text-muted-foreground text-xs leading-relaxed">{commitment.description}</p>
+                
+                {/* Content */}
+                <div className="p-5 -mt-6 relative">
+                  <h3 className="text-foreground font-medium text-sm mb-2">{commitment.title}</h3>
+                  <p className="text-muted-foreground text-xs leading-relaxed">{commitment.description}</p>
+                </div>
               </motion.div>
             </ScrollReveal>
           ))}

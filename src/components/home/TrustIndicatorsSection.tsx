@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { LazyImage } from "@/components/shared/LazyImage";
 
 // Import emotional images
 import womenOnlyImage from "@/assets/emotional-private-moment.jpg";
@@ -73,10 +74,11 @@ export const TrustIndicatorsSection = () => {
               >
                 {/* Image container */}
                 <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden">
-                  <img
+                  <LazyImage
                     src={indicator.image}
                     alt={indicator.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="group-hover:scale-110 transition-transform duration-500"
+                    aspectRatio="square"
                   />
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

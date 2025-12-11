@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { LazyImage } from "@/components/shared/LazyImage";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Clock, ChevronRight } from "lucide-react";
@@ -77,10 +78,11 @@ export const FirstVisitGuideSection = () => {
                 >
                   {/* Image */}
                   <div className="relative aspect-square overflow-hidden">
-                    <img
+                    <LazyImage
                       src={step.image}
                       alt={step.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="group-hover:scale-110 transition-transform duration-500"
+                      aspectRatio="square"
                     />
                     {/* Dark overlay with gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
