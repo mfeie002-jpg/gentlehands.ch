@@ -51,6 +51,9 @@ import { SEOHead } from "@/components/shared/SEOHead";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { ExperienceThemeGallery } from "@/components/experience/ExperienceThemeGallery";
 import { AnimatedTestimonialSlider } from "@/components/testimonials/AnimatedTestimonialSlider";
+import { VirtualTourViewer } from "@/components/tour/VirtualTourViewer";
+import { AnimatedStatsSection } from "@/components/stats/AnimatedStatsSection";
+import { BeforeAfterSlider } from "@/components/comparison/BeforeAfterSlider";
 
 const Index = () => {
   const jsonLd = {
@@ -128,6 +131,8 @@ const Index = () => {
         <BeforeAfterSection />
       </AnimatedSection>
       
+      <BeforeAfterSlider />
+      
       <AnimatedSection animation="fadeUp">
         <EmotionalBenefitsSection />
       </AnimatedSection>
@@ -157,6 +162,8 @@ const Index = () => {
       </AnimatedSection>
       
       <ExperienceThemeGallery />
+      
+      <VirtualTourViewer />
       
       <AnimatedSection animation="fadeUp">
         <RoomComparisonSection />
@@ -207,6 +214,8 @@ const Index = () => {
       <AnimatedSection animation="fadeUp">
         <VideoTestimonials />
       </AnimatedSection>
+      
+      <AnimatedStatsSection />
       
       <AnimatedSection animation="fadeUp">
         <FAQPreviewSection />
