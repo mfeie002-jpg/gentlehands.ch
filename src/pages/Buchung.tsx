@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { format, addDays, isBefore, startOfToday } from "date-fns";
 import { de } from "date-fns/locale";
-import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
+import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -26,6 +26,7 @@ import { bookingContactSchema, bookingPreferencesSchema } from "@/lib/validation
 import { z } from "zod";
 import { useThrottle } from "@/hooks/useThrottle";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import TherapistAvailabilityCalendar from "@/components/shared/TherapistAvailabilityCalendar";
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
@@ -510,61 +511,50 @@ const Buchung = () => {
               </p>
             </div>
 
-            {/* Calendar & Time Selection */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              {/* Calendar */}
-              <div className="space-y-4">
-                <Label className="text-base font-medium">Wunschtermin wählen *</Label>
-                <div className="p-4 rounded-2xl bg-card border border-border">
-                  <CalendarComponent
-                    mode="single"
-                    selected={formData.selectedDate}
-                    onSelect={(date) => updateFormData("selectedDate", date)}
-                    disabled={(date) => 
-                      isBefore(date, startOfToday()) || 
-                      date.getDay() === 0 || // No Sundays
-                      isBefore(addDays(new Date(), 60), date) // Max 60 days ahead
+            {/* Therapist Availability Calendar */}
+            <div className="mb-8">
+              <TherapistAvailabilityCalendar
+                onSelectSlot={(therapist, date, time) => {
+                  updateFormData("selectedDate", date);
+                  updateFormData("selectedTime", time);
+                  // Optionally update masseur if not already selected
+                  if (formData.masseur === "none" || formData.masseur === "") {
+                    const masseurMap: Record<string, string> = {
+                      'Anna': 'anna',
+                      'Luca': 'luca', 
+                      'Morris': 'morris'
+                    };
+                    if (masseurMap[therapist]) {
+                      updateFormData("masseur", masseurMap[therapist]);
                     }
-                    locale={de}
-                    className="pointer-events-auto mx-auto"
-                    classNames={{
-                      day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-                      day_today: "bg-accent text-accent-foreground",
-                    }}
-                  />
-                  {formData.selectedDate && (
-                    <p className="text-center text-sm text-copper mt-4 font-medium">
-                      {format(formData.selectedDate, "EEEE, d. MMMM yyyy", { locale: de })}
+                  }
+                  triggerHaptic('medium');
+                  toast({
+                    title: "Termin ausgewählt",
+                    description: `${format(date, "d. MMMM yyyy", { locale: de })} um ${time} Uhr bei ${therapist}`,
+                  });
+                }}
+                className="mb-6"
+              />
+              
+              {/* Selected appointment display */}
+              {formData.selectedDate && formData.selectedTime && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-center gap-4"
+                >
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">Ausgewählter Termin</p>
+                    <p className="text-sm text-muted-foreground">
+                      {format(formData.selectedDate, "EEEE, d. MMMM yyyy", { locale: de })} um {formData.selectedTime} Uhr
                     </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Time Slots */}
-              <div className="space-y-4">
-                <Label className="text-base font-medium">Uhrzeit wählen *</Label>
-                <div className="grid grid-cols-2 gap-3">
-                  {timeSlots.map((time) => (
-                    <button
-                      key={time}
-                      type="button"
-                      onClick={() => updateFormData("selectedTime", time)}
-                      className={cn(
-                        "p-4 rounded-xl border-2 transition-all text-center",
-                        formData.selectedTime === time
-                          ? "border-primary bg-primary/10 text-foreground"
-                          : "border-border bg-card hover:border-primary/50 text-muted-foreground hover:text-foreground"
-                      )}
-                    >
-                      <Clock className="w-5 h-5 mx-auto mb-2 opacity-70" />
-                      <span className="font-medium">{time} Uhr</span>
-                    </button>
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Termine sind begrenzt verfügbar. Bei hoher Nachfrage kontaktieren wir Sie für Alternativen.
-                </p>
-              </div>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
