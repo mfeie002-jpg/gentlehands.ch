@@ -32,6 +32,7 @@ import { RecentSessions } from "@/components/dashboard/RecentSessions";
 import { WellnessProgress } from "@/components/dashboard/WellnessProgress";
 import { MoodTracker } from "@/components/dashboard/MoodTracker";
 import { BookingHeatmap } from "@/components/admin/BookingHeatmap";
+import { SessionTimeline } from "@/components/dashboard/SessionTimeline";
 
 interface UserProfile {
   full_name: string | null;
@@ -303,6 +304,24 @@ const Dashboard = () => {
 
                     {/* Recent Sessions */}
                     <RecentSessions />
+
+                    {/* Session Timeline */}
+                    {pastBookings.length > 0 && (
+                      <SessionTimeline 
+                        sessions={pastBookings.map(b => ({
+                          id: b.id,
+                          date: new Date(b.appointment_date).toLocaleDateString('de-CH'),
+                          time: b.appointment_time,
+                          massage: b.massage,
+                          therapist: b.masseur,
+                          theme: b.theme,
+                          duration: b.duration,
+                          rating: 5,
+                          moodBefore: "angespannt",
+                          moodAfter: "sehr_gut"
+                        }))}
+                      />
+                    )}
 
                     {/* Booking Reminders */}
                     {upcomingBookings.length > 0 && (
