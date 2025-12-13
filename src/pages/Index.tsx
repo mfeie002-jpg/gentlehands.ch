@@ -1,63 +1,27 @@
 import { Layout } from "@/components/layout/Layout";
 import { HeroSection } from "@/components/home/HeroSection";
 import { TrustIndicatorsSection } from "@/components/home/TrustIndicatorsSection";
-import { QuickFactsBar } from "@/components/home/QuickFactsBar";
-import { SocialProofBanner } from "@/components/home/SocialProofBanner";
 import { PhilosophySection } from "@/components/home/PhilosophySection";
-import { GuaranteeSection } from "@/components/home/GuaranteeSection";
-import { WellnessJourneySection } from "@/components/home/WellnessJourneySection";
-import { BeforeAfterSection } from "@/components/home/BeforeAfterSection";
 import { EmotionalBenefitsSection } from "@/components/home/EmotionalBenefitsSection";
-import { EmotionalReliefSection } from "@/components/home/EmotionalReliefSection";
-import { StressRecognitionSection } from "@/components/home/StressRecognitionSection";
-import { SelfCarePermissionSection } from "@/components/home/SelfCarePermissionSection";
-import { TransformationStoriesSection } from "@/components/home/TransformationStoriesSection";
 import { ExclusiveServicesSection } from "@/components/home/ExclusiveServicesSection";
-import { ScentPreviewSection } from "@/components/home/ScentPreviewSection";
-import { MusicPreviewSection } from "@/components/home/MusicPreviewSection";
 import { ExperiencePreviewSection } from "@/components/home/ExperiencePreviewSection";
-import { RoomComparisonSection } from "@/components/home/RoomComparisonSection";
-import { TouchPhilosophySection } from "@/components/home/TouchPhilosophySection";
 import { TherapistSpotlightSection } from "@/components/home/TherapistSpotlightSection";
-import { TeamPhilosophySection } from "@/components/home/TeamPhilosophySection";
 import { SafetyCommitmentSection } from "@/components/home/SafetyCommitmentSection";
-import { PrivacyPromiseSection } from "@/components/home/PrivacyPromiseSection";
-import { TestimonialHighlight } from "@/components/home/TestimonialHighlight";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { FeaturedReviewSection } from "@/components/home/FeaturedReviewSection";
-import { ClientSuccessStories } from "@/components/home/ClientSuccessStories";
-import { VideoTestimonials } from "@/components/shared/VideoTestimonials";
 import { FAQPreviewSection } from "@/components/home/FAQPreviewSection";
 import { FirstVisitGuideSection } from "@/components/home/FirstVisitGuideSection";
 import { PricePreviewSection } from "@/components/home/PricePreviewSection";
-import { BookingBenefitsSection } from "@/components/home/BookingBenefitsSection";
-import { CountdownSection } from "@/components/home/CountdownSection";
 import { WellnessQuizTeaser } from "@/components/home/WellnessQuizTeaser";
-import { SeasonalHighlightSection } from "@/components/home/SeasonalHighlightSection";
 import { LocationPreviewSection } from "@/components/home/LocationPreviewSection";
 import { GiftIdeaSection } from "@/components/home/GiftIdeaSection";
 import { MembershipTeaser } from "@/components/home/MembershipTeaser";
-import { CorporateWellnessTeaser } from "@/components/home/CorporateWellnessTeaser";
 import { BlogPreviewSection } from "@/components/home/BlogPreviewSection";
-import { SustainabilitySection } from "@/components/home/SustainabilitySection";
-import { AwardsSection } from "@/components/home/AwardsSection";
-import { InstagramFeedSection } from "@/components/home/InstagramFeedSection";
-import { QuickContactSection } from "@/components/home/QuickContactSection";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { FinalCTASection } from "@/components/home/FinalCTASection";
-import { UrgencyBanner } from "@/components/home/UrgencyBanner";
 import { QuickBookingWidget } from "@/components/home/QuickBookingWidget";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
-import { ExperienceThemeGallery } from "@/components/experience/ExperienceThemeGallery";
 import { AnimatedTestimonialSlider } from "@/components/testimonials/AnimatedTestimonialSlider";
-import { VirtualTourViewer } from "@/components/tour/VirtualTourViewer";
 import { AnimatedStatsSection } from "@/components/stats/AnimatedStatsSection";
-import { BeforeAfterSlider } from "@/components/comparison/BeforeAfterSlider";
-import { PriceCalculator } from "@/components/pricing/PriceCalculator";
-import { ParallaxHero } from "@/components/shared/ParallaxHero";
-import { TherapistMatcher } from "@/components/quiz/TherapistMatcher";
-import { CountdownTimer } from "@/components/shared/CountdownTimer";
 
 const Index = () => {
   const jsonLd = {
@@ -100,218 +64,99 @@ const Index = () => {
         jsonLd={jsonLd}
       />
 
+      {/* 1. HERO - Erster Eindruck, emotionaler Hook */}
       <HeroSection />
-      <UrgencyBanner />
       
+      {/* 2. TRUST - Sofortige Glaubwürdigkeit nach Hero */}
       <AnimatedSection animation="fadeUp">
         <TrustIndicatorsSection />
       </AnimatedSection>
       
-      <AnimatedSection animation="fadeUp" delay={0.1}>
-        <QuickFactsBar />
-      </AnimatedSection>
+      {/* 3. QUICK BOOKING - Frühe Conversion-Möglichkeit für Entschlossene */}
+      <QuickBookingWidget />
       
-      <SocialProofBanner />
-      
+      {/* 4. PHILOSOPHIE - Wer wir sind, was uns ausmacht */}
       <AnimatedSection animation="fadeUp">
         <PhilosophySection />
       </AnimatedSection>
       
-      <AnimatedSection animation="scale">
-        <GuaranteeSection />
-      </AnimatedSection>
-      
-      <QuickBookingWidget />
-      
-      <AnimatedSection animation="fadeUp">
-        <WellnessJourneySection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <StressRecognitionSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <BeforeAfterSection />
-      </AnimatedSection>
-      
-      <BeforeAfterSlider />
-      
+      {/* 5. EMOTIONAL BENEFITS - Warum es wichtig ist (Schmerzpunkte ansprechen) */}
       <AnimatedSection animation="fadeUp">
         <EmotionalBenefitsSection />
       </AnimatedSection>
       
-      <AnimatedSection animation="fadeUp">
-        <EmotionalReliefSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <SelfCarePermissionSection />
-      </AnimatedSection>
-      
+      {/* 6. SERVICES - Was wir anbieten (Massagen) */}
       <AnimatedSection animation="fadeUp">
         <ExclusiveServicesSection />
       </AnimatedSection>
       
-      <AnimatedSection animation="fadeLeft">
-        <ScentPreviewSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeRight">
-        <MusicPreviewSection />
-      </AnimatedSection>
-      
+      {/* 7. EXPERIENCES - Die einzigartigen Themenräume */}
       <AnimatedSection animation="scale">
         <ExperiencePreviewSection />
       </AnimatedSection>
       
-      <ExperienceThemeGallery />
-      
-      <VirtualTourViewer />
-      
-      <AnimatedSection animation="fadeUp">
-        <RoomComparisonSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <TouchPhilosophySection />
-      </AnimatedSection>
-      
+      {/* 8. TEAM - Wer führt die Behandlungen durch */}
       <AnimatedSection animation="fadeUp">
         <TherapistSpotlightSection />
       </AnimatedSection>
       
-      <AnimatedSection animation="fadeUp">
-        <TeamPhilosophySection />
-      </AnimatedSection>
-      
+      {/* 9. SICHERHEIT & DISKRETION - Bedenken zerstreuen */}
       <AnimatedSection animation="fadeUp">
         <SafetyCommitmentSection />
       </AnimatedSection>
       
-      <AnimatedSection animation="fadeUp">
-        <PrivacyPromiseSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <TestimonialHighlight />
-      </AnimatedSection>
-      
+      {/* 10. TESTIMONIALS - Social Proof */}
       <AnimatedTestimonialSlider />
       
-      <AnimatedSection animation="fadeUp">
-        <TransformationStoriesSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <TestimonialsSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <FeaturedReviewSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <ClientSuccessStories />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <VideoTestimonials />
-      </AnimatedSection>
-      
+      {/* 11. STATS - Zahlen die überzeugen */}
       <AnimatedStatsSection />
       
-      <AnimatedSection animation="fadeUp">
-        <FAQPreviewSection />
-      </AnimatedSection>
-      
+      {/* 12. ERSTER BESUCH - Unsicherheit nehmen */}
       <AnimatedSection animation="fadeUp">
         <FirstVisitGuideSection />
       </AnimatedSection>
       
+      {/* 13. PREISE - Transparenz schaffen */}
       <AnimatedSection animation="fadeUp">
         <PricePreviewSection />
       </AnimatedSection>
       
-      <section className="py-16 bg-secondary/20">
-        <div className="container mx-auto px-4">
-          <PriceCalculator />
-        </div>
-      </section>
-      
-      <AnimatedSection animation="fadeUp">
-        <BookingBenefitsSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="scale">
-        <CountdownSection />
-      </AnimatedSection>
-      
-      {/* Countdown Timer for Seasonal Offer */}
-      <section className="py-16 bg-secondary/20">
-        <div className="container mx-auto px-4">
-          <CountdownTimer 
-            targetDate={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
-            title="Winter-Special"
-            offerText="20% auf alle Hot Stone Massagen"
-            description="Wärme und Entspannung für die kalte Jahreszeit"
-            ctaText="Jetzt sichern"
-            ctaLink="/buchung"
-          />
-        </div>
-      </section>
-      
+      {/* 14. QUIZ - Personalisierte Empfehlung → Engagement */}
       <AnimatedSection animation="fadeUp">
         <WellnessQuizTeaser />
       </AnimatedSection>
       
-      {/* Therapist Matcher */}
-      <TherapistMatcher />
-      
-      <AnimatedSection animation="fadeUp">
-        <SeasonalHighlightSection />
-      </AnimatedSection>
-      
+      {/* 15. STANDORT - Wo wir sind */}
       <AnimatedSection animation="fadeUp">
         <LocationPreviewSection />
       </AnimatedSection>
       
+      {/* 16. GESCHENK - Zusätzliche Conversion-Option */}
       <AnimatedSection animation="fadeUp">
         <GiftIdeaSection />
       </AnimatedSection>
       
+      {/* 17. MEMBERSHIP - Wiederkehrende Kunden */}
       <AnimatedSection animation="fadeUp">
         <MembershipTeaser />
       </AnimatedSection>
       
+      {/* 18. FAQ - Letzte Fragen beantworten */}
       <AnimatedSection animation="fadeUp">
-        <CorporateWellnessTeaser />
+        <FAQPreviewSection />
       </AnimatedSection>
       
+      {/* 19. BLOG - SEO Content & Expertise zeigen */}
       <AnimatedSection animation="fadeUp">
         <BlogPreviewSection />
       </AnimatedSection>
       
-      <AnimatedSection animation="fadeUp">
-        <SustainabilitySection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <AwardsSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <InstagramFeedSection />
-      </AnimatedSection>
-      
-      <AnimatedSection animation="fadeUp">
-        <QuickContactSection />
-      </AnimatedSection>
-      
+      {/* 20. NEWSLETTER - Lead Capture */}
       <AnimatedSection animation="fadeUp">
         <NewsletterSection />
       </AnimatedSection>
       
+      {/* 21. FINAL CTA - Letzte Conversion-Chance */}
       <FinalCTASection />
     </Layout>
   );
