@@ -26,6 +26,7 @@ interface BookingData {
     intuitive: boolean;
   };
   additionalNotes: string;
+  pendingVerification?: boolean;
 }
 
 const BuchungBestaetigung = () => {
@@ -82,27 +83,50 @@ const BuchungBestaetigung = () => {
     return () => clearTimeout(timer);
   }, [hasAnimated]);
 
-  const nextSteps = [
-    {
-      icon: Mail,
-      title: "Bestätigung per E-Mail",
-      description: "Sie erhalten in Kürze eine detaillierte Buchungsbestätigung per E-Mail.",
-      time: "Innerhalb weniger Minuten"
-    },
-    {
-      icon: Phone,
-      title: "Persönliche Kontaktaufnahme",
-      description: "Unser Team meldet sich bei Ihnen, um letzte Details zu besprechen und Ihre Wünsche aufzunehmen.",
-      time: "Innerhalb von 24 Stunden"
-    },
-    {
-      icon: Calendar,
-      title: "Vorbereitung auf Ihr Erlebnis",
-      description: "Lesen Sie unsere Tipps zur optimalen Vorbereitung auf Ihre Massage.",
-      time: "Vor Ihrem Termin",
-      link: "/vorbereitung"
-    }
-  ];
+  const nextSteps = bookingData?.pendingVerification 
+    ? [
+        {
+          icon: Mail,
+          title: "E-Mail bestätigen",
+          description: `Wir haben eine Bestätigungsmail an ${bookingData?.email || "Ihre E-Mail"} gesendet. Bitte klicken Sie auf den Link, um Ihre Buchung abzuschliessen.`,
+          time: "Bitte jetzt prüfen",
+          important: true
+        },
+        {
+          icon: Phone,
+          title: "Persönliche Kontaktaufnahme",
+          description: "Nach Ihrer E-Mail-Bestätigung meldet sich unser Team bei Ihnen, um letzte Details zu besprechen.",
+          time: "Nach Verifizierung"
+        },
+        {
+          icon: Calendar,
+          title: "Vorbereitung auf Ihr Erlebnis",
+          description: "Lesen Sie unsere Tipps zur optimalen Vorbereitung auf Ihre Massage.",
+          time: "Vor Ihrem Termin",
+          link: "/vorbereitung"
+        }
+      ]
+    : [
+        {
+          icon: Mail,
+          title: "Bestätigung per E-Mail",
+          description: "Sie erhalten in Kürze eine detaillierte Buchungsbestätigung per E-Mail.",
+          time: "Innerhalb weniger Minuten"
+        },
+        {
+          icon: Phone,
+          title: "Persönliche Kontaktaufnahme",
+          description: "Unser Team meldet sich bei Ihnen, um letzte Details zu besprechen und Ihre Wünsche aufzunehmen.",
+          time: "Innerhalb von 24 Stunden"
+        },
+        {
+          icon: Calendar,
+          title: "Vorbereitung auf Ihr Erlebnis",
+          description: "Lesen Sie unsere Tipps zur optimalen Vorbereitung auf Ihre Massage.",
+          time: "Vor Ihrem Termin",
+          link: "/vorbereitung"
+        }
+      ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -227,16 +251,20 @@ const BuchungBestaetigung = () => {
             {/* Success Badge */}
             <motion.div variants={itemVariants} className="mb-6">
               <motion.span 
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-copper/20 to-copper/10 text-copper text-sm font-medium border border-copper/20"
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border ${
+                  bookingData?.pendingVerification 
+                    ? "bg-gradient-to-r from-amber-500/20 to-amber-400/10 text-amber-600 border-amber-500/20"
+                    : "bg-gradient-to-r from-copper/20 to-copper/10 text-copper border-copper/20"
+                }`}
                 whileHover={{ scale: 1.05 }}
               >
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                 >
-                  <Sparkles className="w-4 h-4" />
+                  {bookingData?.pendingVerification ? <Mail className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
                 </motion.div>
-                Buchungsanfrage erfolgreich
+                {bookingData?.pendingVerification ? "E-Mail-Bestätigung erforderlich" : "Buchungsanfrage erfolgreich"}
               </motion.span>
             </motion.div>
 

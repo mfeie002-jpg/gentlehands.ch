@@ -8,3 +8,9 @@ verify_jwt = true
 
 [functions.chat-support]
 verify_jwt = false
+
+[functions.send-booking-verification]
+verify_jwt = true
+
+[functions.verify-booking]
+verify_jwt = false

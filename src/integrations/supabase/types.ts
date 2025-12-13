@@ -61,6 +61,7 @@ export type Database = {
           intensity_preference: string | null
           intuitive: boolean | null
           is_available: boolean | null
+          is_verified: boolean | null
           massage: string
           masseur: string
           music_preference: string | null
@@ -69,6 +70,8 @@ export type Database = {
           status: string | null
           theme: string
           updated_at: string
+          verification_sent_at: string | null
+          verification_token: string | null
         }
         Insert: {
           additional_notes?: string | null
@@ -86,6 +89,7 @@ export type Database = {
           intensity_preference?: string | null
           intuitive?: boolean | null
           is_available?: boolean | null
+          is_verified?: boolean | null
           massage: string
           masseur: string
           music_preference?: string | null
@@ -94,6 +98,8 @@ export type Database = {
           status?: string | null
           theme: string
           updated_at?: string
+          verification_sent_at?: string | null
+          verification_token?: string | null
         }
         Update: {
           additional_notes?: string | null
@@ -111,6 +117,7 @@ export type Database = {
           intensity_preference?: string | null
           intuitive?: boolean | null
           is_available?: boolean | null
+          is_verified?: boolean | null
           massage?: string
           masseur?: string
           music_preference?: string | null
@@ -119,6 +126,8 @@ export type Database = {
           status?: string | null
           theme?: string
           updated_at?: string
+          verification_sent_at?: string | null
+          verification_token?: string | null
         }
         Relationships: []
       }
