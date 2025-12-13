@@ -369,9 +369,23 @@ const Erlebnisse = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Themenräume | GentleHands Zürich"
-        description="Entdecken Sie unsere 6 einzigartigen Themenräume: Ozean & Palmen, Alpine Stille, Deep Dark Relax, Urban Loft, Zen Garden und Surprise Experience. Atmosphärische Entspannung."
+        title="Themenräume – 6 atmosphärische Welten | GentleHands Zürich"
+        description="Entdecken Sie unsere 6 Themenräume: Ozean & Palmen, Alpine Stille, Deep Dark Relax, Urban Loft, Zen Garden und Surprise Experience. Jeder Raum ein einzigartiges Entspannungserlebnis."
         canonical="https://gentlehands.ch/erlebnisse"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "GentleHands Themenräume",
+          "description": "6 atmosphärisch gestaltete Themenräume für Tiefenentspannung",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Ozean & Palmen", "description": "Tropische Entspannung mit Meeresrauschen" },
+            { "@type": "ListItem", "position": 2, "name": "Alpine Stille", "description": "Berghütten-Geborgenheit mit Naturklängen" },
+            { "@type": "ListItem", "position": 3, "name": "Deep Dark Relax", "description": "Tiefenentspannung in geschützter Dunkelheit" },
+            { "@type": "ListItem", "position": 4, "name": "Urban Loft", "description": "Moderner City-Wellness-Style" },
+            { "@type": "ListItem", "position": 5, "name": "Zen Garden", "description": "Minimalistisch-asiatische Ruhe" },
+            { "@type": "ListItem", "position": 6, "name": "Surprise Experience", "description": "Intuitiv gestaltete Überraschung" }
+          ]
+        }}
       />
 
       {/* Hero with Parallax */}

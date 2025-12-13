@@ -95,6 +95,17 @@ const Team = () => {
         title="Team – Zertifizierte Therapeut:innen | GentleHands Zürich"
         description="Lernen Sie unsere zertifizierten Therapeut:innen kennen. Jahrelange Erfahrung in Tiefenentspannung, individueller Stil und respektvoller Umgang in unseren Themenräumen."
         canonical="https://gentlehands.ch/team"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "GentleHands Therapeut:innen",
+          "description": "Zertifizierte Therapeut:innen für professionelle Entspannungsmassagen",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Morris", "description": "Inhaber & Leitender Masseur, 12+ Jahre Erfahrung" },
+            { "@type": "ListItem", "position": 2, "name": "Anna", "description": "Masseurin, spezialisiert auf sanfte Techniken" },
+            { "@type": "ListItem", "position": 3, "name": "Luca", "description": "Masseur, spezialisiert auf Deep Tissue" }
+          ]
+        }}
       />
 
       {/* Hero */}

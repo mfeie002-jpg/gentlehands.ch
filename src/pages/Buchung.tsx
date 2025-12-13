@@ -30,7 +30,7 @@ import TherapistAvailabilityCalendar from "@/components/shared/TherapistAvailabi
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
-  { id: 2, title: "Erlebnis", icon: Sparkles },
+  { id: 2, title: "Themenraum", icon: Sparkles },
   { id: 3, title: "Massage", icon: Clock },
   { id: 4, title: "Präferenzen", icon: Settings },
   { id: 5, title: "Termin", icon: Calendar },
@@ -777,8 +777,8 @@ const Buchung = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Buchung | GentleHands Zürich"
-        description="Buchen Sie Ihr exklusives GentleHands-Erlebnis. Wählen Sie Masseur:in, Theme, Massage und Ihre persönlichen Präferenzen."
+        title="Online Buchen – Themenraum & Massage wählen | GentleHands Zürich"
+        description="Buchen Sie Ihre Tiefenentspannung online: Wählen Sie Therapeut:in, Themenraum, Massageart und Ihre persönlichen Präferenzen. In 6 einfachen Schritten."
         canonical="https://gentlehands.ch/buchung"
       />
 
