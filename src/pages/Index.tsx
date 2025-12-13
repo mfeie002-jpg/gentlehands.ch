@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { HeroSection } from "@/components/home/HeroSection";
 import { TrustIndicatorsSection } from "@/components/home/TrustIndicatorsSection";
@@ -18,8 +19,22 @@ import { SEOHead } from "@/components/shared/SEOHead";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { AnimatedTestimonialSlider } from "@/components/testimonials/AnimatedTestimonialSlider";
 import { AnimatedStatsSection } from "@/components/stats/AnimatedStatsSection";
+import { initPerformanceOptimizations } from "@/hooks/useLCPOptimization";
 
 const Index = () => {
+  // Initialize performance optimizations
+  useEffect(() => {
+    initPerformanceOptimizations();
+  }, []);
+
+  // hreflang links for multilingual support
+  const hreflangLinks = [
+    { lang: 'de-CH', href: 'https://gentlehands.ch/' },
+    { lang: 'de', href: 'https://gentlehands.ch/' },
+    { lang: 'en', href: 'https://gentlehands.ch/en' },
+    { lang: 'x-default', href: 'https://gentlehands.ch/' },
+  ];
+
   // Organization Schema
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -148,6 +163,7 @@ const Index = () => {
         canonical="https://gentlehands.ch/"
         type="website"
         jsonLd={combinedJsonLd}
+        hreflang={hreflangLinks}
       />
 
       {/* === ATTENTION === */}
