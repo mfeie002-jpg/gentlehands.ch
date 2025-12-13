@@ -24,6 +24,11 @@ const heroVariants = [
     headline: ["Exklusive Wellness", "nur für Sie"],
     subline: "Limitierte Termine, handverlesene Therapeut:innen, sechs einzigartige Themenräume in Zürich.",
   },
+  {
+    id: "safety",
+    headline: ["Ihre Sicherheit.", "Unsere Priorität."],
+    subline: "Diskreter Standort, keine Kameras, absolute Vertraulichkeit. Sie bestimmen jederzeit Ihre Grenzen – wir respektieren sie.",
+  },
 ];
 
 const trustBadges = [
