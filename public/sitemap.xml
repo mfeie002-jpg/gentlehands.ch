@@ -1,205 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Pages -->
+  <!-- Hauptseiten (Höchste Priorität) -->
   <url>
     <loc>https://gentlehands.ch/</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://gentlehands.ch/buchung</loc>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  
+  <!-- Kernangebot (Hohe Priorität) -->
+  <url>
     <loc>https://gentlehands.ch/erlebnisse</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/massagen</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/team</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/preise</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
   
-  <!-- Booking Flow -->
-  <url>
-    <loc>https://gentlehands.ch/buchung</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <!-- About & Trust -->
-  <url>
-    <loc>https://gentlehands.ch/ueber-uns</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  <!-- Trust & Social Proof -->
   <url>
     <loc>https://gentlehands.ch/erfahrungen</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/faq</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   
-  <!-- Contact & Support -->
-  <url>
-    <loc>https://gentlehands.ch/kontakt</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://gentlehands.ch/vorbereitung</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <!-- Products & Services -->
+  <!-- Conversion-Seiten -->
   <url>
     <loc>https://gentlehands.ch/gutscheine</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/membership</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://gentlehands.ch/geschenkideen</loc>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://gentlehands.ch/geschenkideen</loc>
-    <lastmod>2024-12-08</lastmod>
+    <loc>https://gentlehands.ch/quiz</loc>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
-  <!-- Specialty Services -->
+  <!-- Über uns & Vertrauen -->
+  <url>
+    <loc>https://gentlehands.ch/ueber-uns</loc>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gentlehands.ch/kontakt</loc>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gentlehands.ch/vorbereitung</loc>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+  
+  <!-- Zusatzangebote -->
   <url>
     <loc>https://gentlehands.ch/aromatherapie</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/soundtherapie</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://gentlehands.ch/saisonal</loc>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
-  <!-- Content Pages -->
+  <!-- Content & Engagement -->
   <url>
     <loc>https://gentlehands.ch/ratgeber</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/galerie</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.55</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/virtual-tour</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.55</priority>
+  </url>
+  <url>
+    <loc>https://gentlehands.ch/vergleich</loc>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
-  <!-- Business & Partners -->
-  <url>
-    <loc>https://gentlehands.ch/business</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://gentlehands.ch/partner</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <!-- Engagement -->
-  <url>
-    <loc>https://gentlehands.ch/quiz</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  <!-- Warteliste & Empfehlungen -->
   <url>
     <loc>https://gentlehands.ch/warteliste</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.55</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/empfehlen</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <!-- Company Info -->
-  <url>
-    <loc>https://gentlehands.ch/nachhaltigkeit</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  
+  <!-- Business & Partner -->
+  <url>
+    <loc>https://gentlehands.ch/business</loc>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.55</priority>
+  </url>
+  <url>
+    <loc>https://gentlehands.ch/partner</loc>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.45</priority>
+  </url>
+  
+  <!-- Unternehmensinformationen -->
+  <url>
+    <loc>https://gentlehands.ch/nachhaltigkeit</loc>
+    <lastmod>2024-12-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.45</priority>
+  </url>
   <url>
     <loc>https://gentlehands.ch/presse</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://gentlehands.ch/karriere</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   
-  <!-- Seasonal -->
-  <url>
-    <loc>https://gentlehands.ch/saisonal</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://gentlehands.ch/vergleich</loc>
-    <lastmod>2024-12-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <!-- Legal -->
+  <!-- Rechtliches (Niedrigste Priorität) -->
   <url>
     <loc>https://gentlehands.ch/rechtliches</loc>
-    <lastmod>2024-12-08</lastmod>
+    <lastmod>2024-12-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
