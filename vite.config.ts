@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
+import { imagetools } from "vite-imagetools";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -13,6 +14,18 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === "development" && componentTagger(),
+    imagetools({
+      defaultDirectives: (url) => {
+        if (url.searchParams.has('optimized')) {
+          return new URLSearchParams({
+            format: 'webp',
+            quality: '80',
+            progressive: 'true',
+          });
+        }
+        return new URLSearchParams();
+      },
+    }),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "og-image.jpg", "robots.txt"],
@@ -58,6 +71,17 @@ export default defineConfig(({ mode }) => ({
               },
             },
           },
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "images-cache",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+            },
+          },
         ],
       },
     }),
@@ -65,6 +89,20 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name?.split('.') || [];
+          const ext = info[info.length - 1];
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(ext)) {
+            return `assets/images/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
+      },
     },
   },
 }));
