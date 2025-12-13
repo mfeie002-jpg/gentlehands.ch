@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Clock, Car, Train, Send, MessageCircle, Sparkles } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -93,6 +94,7 @@ const Kontakt = () => {
         <FloatingElements variant="dots" />
         
         <div className="container-wide relative z-10 px-4 sm:px-6">
+          <Breadcrumbs className="mb-6 justify-center" />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

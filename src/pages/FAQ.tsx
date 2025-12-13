@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, HelpCircle, Sparkles, CreditCard } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import {
   Accordion,
@@ -178,6 +179,7 @@ const FAQ = () => {
         <FloatingElements variant="dots" />
         
         <div className="container-wide relative z-10 px-4 sm:px-6">
+          <Breadcrumbs className="mb-6" />
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Text Content */}
             <motion.div

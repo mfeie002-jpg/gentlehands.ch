@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { Waves, Mountain, Moon, Building, Leaf, Sparkles, Check, ArrowRight, Play, Volume2 } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { GlowCard } from "@/components/shared/GlowCard";
@@ -423,6 +424,9 @@ const Erlebnisse = () => {
         </div>
         
         <div className="container-wide relative z-10 px-4 sm:px-6">
+          {/* Breadcrumbs */}
+          <Breadcrumbs className="mb-6 justify-center" />
+          
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
