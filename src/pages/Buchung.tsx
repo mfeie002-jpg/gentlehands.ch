@@ -79,6 +79,9 @@ const Buchung = () => {
     maxAttempts: 3,
     windowMs: 60000,
   });
+  // Honeypot field for spam protection - bots will fill this, humans won't see it
+  const [honeypot, setHoneypot] = useState("");
+  
   const [formData, setFormData] = useState({
     masseur: "",
     theme: "",
@@ -628,6 +631,24 @@ const Buchung = () => {
               </div>
             </div>
 
+            {/* Honeypot field - hidden from humans, bots will fill it */}
+            <div 
+              className="absolute -left-[9999px] opacity-0 h-0 overflow-hidden" 
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              <label htmlFor="website_url">Website (leave empty)</label>
+              <input
+                type="text"
+                id="website_url"
+                name="website_url"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                autoComplete="off"
+                tabIndex={-1}
+              />
+            </div>
+
             <div className="space-y-4 pt-6">
               <div className="flex items-start space-x-3">
                 <Checkbox
@@ -895,6 +916,21 @@ const Buchung = () => {
                         : "Zu viele Versuche. Bitte warten Sie eine Minute.",
                       variant: "destructive",
                     });
+                    return;
+                  }
+
+                  // Check honeypot - if filled, silently reject (bot detected)
+                  if (honeypot) {
+                    console.warn("Honeypot triggered - potential bot submission blocked");
+                    // Simulate success to avoid revealing detection
+                    setIsSubmitting(true);
+                    setTimeout(() => {
+                      setIsSubmitting(false);
+                      toast({
+                        title: "Buchung erfolgreich",
+                        description: "Wir melden uns in Kürze bei Ihnen.",
+                      });
+                    }, 1500);
                     return;
                   }
 

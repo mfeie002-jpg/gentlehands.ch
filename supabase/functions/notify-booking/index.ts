@@ -51,6 +51,37 @@ interface BookingNotification {
   appointment_date?: string;
   appointment_time?: string;
   special_notes?: string;
+  honeypot?: string; // For server-side honeypot validation
+}
+
+// Additional spam detection patterns
+function detectSpamPatterns(booking: BookingNotification): boolean {
+  // Check for honeypot
+  if (booking.honeypot && booking.honeypot.trim() !== '') {
+    console.warn('Server-side honeypot triggered');
+    return true;
+  }
+  
+  // Check for suspicious email patterns
+  const suspiciousEmailPatterns = [
+    /test@test\.com$/i,
+    /admin@admin\.com$/i,
+    /^[a-z]{20,}@/i, // Very long random local part
+  ];
+  
+  if (suspiciousEmailPatterns.some(p => p.test(booking.customer_email))) {
+    console.warn('Suspicious email pattern detected');
+    return true;
+  }
+  
+  // Check for gibberish names (all consonants or very short)
+  const name = booking.customer_name?.trim() || '';
+  if (name.length < 2 || !/[aeiouäöü]/i.test(name)) {
+    console.warn('Suspicious name pattern detected');
+    return true;
+  }
+  
+  return false;
 }
 
 serve(async (req) => {
@@ -71,6 +102,20 @@ serve(async (req) => {
     }
 
     const booking: BookingNotification = await req.json();
+
+    // Server-side spam detection
+    if (detectSpamPatterns(booking)) {
+      console.warn(`Spam detected for booking: ${booking.booking_number}`);
+      // Return success to avoid revealing detection to bots
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: 'Buchungsbenachrichtigung verarbeitet',
+          booking_number: booking.booking_number
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Log with masked PII for debugging (GDPR compliant)
     console.log('=== Neue Buchungsanfrage erhalten ===');
