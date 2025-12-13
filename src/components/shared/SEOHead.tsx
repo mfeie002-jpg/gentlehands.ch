@@ -1,6 +1,11 @@
 import { Helmet } from "react-helmet-async";
 import { memo } from "react";
 
+interface HreflangLink {
+  lang: string;
+  href: string;
+}
+
 interface SEOHeadProps {
   title: string;
   description: string;
@@ -14,6 +19,7 @@ interface SEOHeadProps {
   author?: string;
   publishedTime?: string;
   modifiedTime?: string;
+  hreflang?: HreflangLink[];
 }
 
 /**
@@ -33,6 +39,7 @@ export const SEOHead = memo(({
   author = "GentleHands",
   publishedTime,
   modifiedTime,
+  hreflang = [],
 }: SEOHeadProps) => {
   const fullTitle = title.includes("GentleHands") 
     ? title 
@@ -77,6 +84,24 @@ export const SEOHead = memo(({
       
       {/* Canonical */}
       {fullCanonical && <link rel="canonical" href={fullCanonical} />}
+      
+      {/* Hreflang for international/multilingual support */}
+      {hreflang.length > 0 && hreflang.map((link) => (
+        <link 
+          key={link.lang} 
+          rel="alternate" 
+          hrefLang={link.lang} 
+          href={link.href} 
+        />
+      ))}
+      {/* Default hreflang if none specified */}
+      {hreflang.length === 0 && fullCanonical && (
+        <>
+          <link rel="alternate" hrefLang="de-CH" href={fullCanonical} />
+          <link rel="alternate" hrefLang="de" href={fullCanonical} />
+          <link rel="alternate" hrefLang="x-default" href={fullCanonical} />
+        </>
+      )}
       
       {/* Robots */}
       {noIndex ? (

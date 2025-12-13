@@ -18,6 +18,7 @@ import { GlowCard } from "@/components/shared/GlowCard";
 import { FAQContactPrompt } from "@/components/faq/FAQContactPrompt";
 import { FAQQuickLinks } from "@/components/faq/FAQQuickLinks";
 import { LazyImage } from "@/components/shared/LazyImage";
+import { InternalLinkingWidget } from "@/components/shared/InternalLinkingWidget";
 
 // Import FAQ images
 import faqConsultation from "@/assets/faq-consultation.jpg";
@@ -452,6 +453,14 @@ const FAQ = () => {
 
       {/* Quick Links */}
       <FAQQuickLinks />
+      
+      {/* Internal Linking */}
+      <section className="py-12 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-serif font-bold mb-6 text-center">Weitere hilfreiche Seiten</h2>
+          <InternalLinkingWidget currentPath="/faq" variant="footer" maxLinks={3} />
+        </div>
+      </section>
 
       {/* Contact Prompt */}
       <FAQContactPrompt />
