@@ -60,66 +60,71 @@ const Index = () => {
         jsonLd={jsonLd}
       />
 
+      {/* === ATTENTION === */}
       {/* 1. HERO - Erster Eindruck, emotionaler Hook */}
       <HeroSection />
       
-      {/* 2. TRUST - Sofortige Glaubwürdigkeit nach Hero */}
+      {/* === TRUST === */}
+      {/* 2. TRUST INDICATORS - Sofortige Glaubwürdigkeit */}
       <AnimatedSection animation="fadeUp">
         <TrustIndicatorsSection />
       </AnimatedSection>
       
-      {/* 3. EMOTIONAL BENEFITS - Warum es wichtig ist (Schmerzpunkte ansprechen) */}
-      <AnimatedSection animation="fadeUp">
-        <EmotionalBenefitsSection />
-      </AnimatedSection>
+      {/* 3. TESTIMONIALS - Social Proof früh zeigen */}
+      <AnimatedTestimonialSlider />
       
-      {/* 4. SERVICES - Was wir anbieten (Massagen) */}
-      <AnimatedSection animation="fadeUp">
-        <ExclusiveServicesSection />
-      </AnimatedSection>
-      
-      {/* 5. EXPERIENCES - Die einzigartigen Themenräume */}
-      <AnimatedSection animation="scale">
-        <ExperiencePreviewSection />
-      </AnimatedSection>
-      
-      {/* 6. TEAM - Wer führt die Behandlungen durch */}
-      <AnimatedSection animation="fadeUp">
-        <TherapistSpotlightSection />
-      </AnimatedSection>
-      
-      {/* 7. SICHERHEIT & DISKRETION - Bedenken zerstreuen */}
+      {/* 4. SAFETY - Bedenken zerstreuen */}
       <AnimatedSection animation="fadeUp">
         <SafetyCommitmentSection />
       </AnimatedSection>
       
-      {/* 8. TESTIMONIALS - Social Proof */}
-      <AnimatedTestimonialSlider />
+      {/* === UNDERSTANDING === */}
+      {/* 5. EMOTIONAL BENEFITS - Warum es wichtig ist */}
+      <AnimatedSection animation="fadeUp">
+        <EmotionalBenefitsSection />
+      </AnimatedSection>
       
-      {/* 9. STATS - Zahlen die überzeugen */}
-      <AnimatedStatsSection />
+      {/* 6. EXPERIENCES - Die einzigartigen Themenräume */}
+      <AnimatedSection animation="scale">
+        <ExperiencePreviewSection />
+      </AnimatedSection>
       
-      {/* 10. ERSTER BESUCH - Unsicherheit nehmen */}
+      {/* 7. SERVICES - Was wir anbieten (Massagen) */}
+      <AnimatedSection animation="fadeUp">
+        <ExclusiveServicesSection />
+      </AnimatedSection>
+      
+      {/* 8. TEAM - Wer führt die Behandlungen durch */}
+      <AnimatedSection animation="fadeUp">
+        <TherapistSpotlightSection />
+      </AnimatedSection>
+      
+      {/* 9. FIRST VISIT - Unsicherheit nehmen */}
       <AnimatedSection animation="fadeUp">
         <FirstVisitGuideSection />
       </AnimatedSection>
+      
+      {/* === CONVICTION === */}
+      {/* 10. STATS - Zahlen die überzeugen */}
+      <AnimatedStatsSection />
       
       {/* 11. PREISE - Transparenz schaffen */}
       <AnimatedSection animation="fadeUp">
         <PricePreviewSection />
       </AnimatedSection>
       
-      {/* 12. QUIZ - Personalisierte Empfehlung → Engagement */}
+      {/* 12. FAQ - Letzte Fragen beantworten */}
+      <AnimatedSection animation="fadeUp">
+        <FAQPreviewSection />
+      </AnimatedSection>
+      
+      {/* === CONVERSION === */}
+      {/* 13. QUIZ - Personalisierte Empfehlung */}
       <AnimatedSection animation="fadeUp">
         <WellnessQuizTeaser />
       </AnimatedSection>
       
-      {/* 13. STANDORT - Wo wir sind */}
-      <AnimatedSection animation="fadeUp">
-        <LocationPreviewSection />
-      </AnimatedSection>
-      
-      {/* 14. GESCHENK - Zusätzliche Conversion-Option */}
+      {/* 14. GESCHENK - Alternative Conversion */}
       <AnimatedSection animation="fadeUp">
         <GiftIdeaSection />
       </AnimatedSection>
@@ -129,12 +134,12 @@ const Index = () => {
         <MembershipTeaser />
       </AnimatedSection>
       
-      {/* 16. FAQ - Letzte Fragen beantworten */}
+      {/* 16. STANDORT - Praktische Info vor CTA */}
       <AnimatedSection animation="fadeUp">
-        <FAQPreviewSection />
+        <LocationPreviewSection />
       </AnimatedSection>
       
-      {/* 17. FINAL CTA mit Newsletter - Letzte Conversion-Chance */}
+      {/* 17. FINAL CTA - Letzte Conversion-Chance */}
       <FinalCTASection />
     </Layout>
   );
