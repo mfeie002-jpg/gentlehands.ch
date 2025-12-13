@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { FloatingCTA } from "@/components/shared/FloatingCTA";
 import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
@@ -132,7 +132,7 @@ const App = () => (
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/empfehlen" element={<Empfehlen />} />
-                <Route path="/philosophie" element={<Philosophie />} />
+                <Route path="/philosophie" element={<Navigate to="/ueber-uns" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

@@ -15,12 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const navLinks = [
-  { href: "/erlebnisse", label: "Erlebnisse" },
+  { href: "/erlebnisse", label: "Themenräume" },
   { href: "/massagen", label: "Massagen" },
   { href: "/team", label: "Team" },
-  { href: "/philosophie", label: "Philosophie" },
-  { href: "/ueber-uns", label: "Über uns" },
-  { href: "/erfahrungen", label: "Erfahrungen" },
+  { href: "/erfahrungen", label: "Kundenstimmen" },
   { href: "/faq", label: "FAQ" },
   { href: "/kontakt", label: "Kontakt" },
 ];
