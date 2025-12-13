@@ -3,12 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>GentleHands – Exklusive Erlebnismassagen für Frauen | Zürich</title>
-    <meta name="description" content="GentleHands bietet exklusive Erlebnismassagen nur für Frauen in Zürich. Tiefenentspannung, thematische Erlebnisräume und persönliche Betreuung." />
+    <title>GentleHands – Exklusive Massagen in Themenräumen | Zürich</title>
+    <meta name="description" content="GentleHands bietet exklusive Tiefenentspannung für Frauen in Zürich. 6 atmosphärische Themenräume, professionelle Therapeut:innen und absolute Diskretion." />
     <meta name="author" content="GentleHands" />
-    <meta name="keywords" content="Erlebnismassage, Massage für Frauen, Entspannungsmassage Zürich, Premium Massage, Wellness Frauen, Tiefenentspannung" />
+    <meta name="keywords" content="Massage Zürich, Massage für Frauen, Themenräume, Tiefenentspannung, Wellness Frauen, Premium Massage, Entspannungsmassage" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://gentlehands.ch/" />
+    
+    <!-- hreflang for language/region targeting -->
+    <link rel="alternate" hreflang="de-CH" href="https://gentlehands.ch/" />
+    <link rel="alternate" hreflang="de" href="https://gentlehands.ch/" />
+    <link rel="alternate" hreflang="x-default" href="https://gentlehands.ch/" />
     
     <!-- Performance optimizations -->
     <meta http-equiv="x-dns-prefetch-control" content="on" />
@@ -19,31 +24,32 @@
     <link rel="modulepreload" href="/src/main.tsx" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="GentleHands – Exklusive Erlebnismassagen für Frauen" />
-    <meta property="og:description" content="Tiefenentspannung in atmosphärischen Erlebnisräumen. Nur für Frauen. Zürich." />
+    <meta property="og:title" content="GentleHands – Exklusive Massagen in Themenräumen für Frauen" />
+    <meta property="og:description" content="Tiefenentspannung in 6 atmosphärischen Themenräumen. Nur für Frauen. Zürich." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://gentlehands.ch/" />
     <meta property="og:image" content="https://gentlehands.ch/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="GentleHands - Premium Massage Experience" />
+    <meta property="og:image:alt" content="GentleHands - Premium Massage in Themenräumen" />
     <meta property="og:locale" content="de_CH" />
     <meta property="og:site_name" content="GentleHands" />
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="GentleHands – Exklusive Erlebnismassagen für Frauen" />
-    <meta name="twitter:description" content="Tiefenentspannung in atmosphärischen Erlebnisräumen. Nur für Frauen. Zürich." />
+    <meta name="twitter:title" content="GentleHands – Exklusive Massagen in Themenräumen für Frauen" />
+    <meta name="twitter:description" content="Tiefenentspannung in 6 atmosphärischen Themenräumen. Nur für Frauen. Zürich." />
     <meta name="twitter:image" content="https://gentlehands.ch/og-image.jpg" />
-    <meta name="twitter:image:alt" content="GentleHands - Premium Massage Experience" />
+    <meta name="twitter:image:alt" content="GentleHands - Premium Massage in Themenräumen" />
 
-    <!-- Structured Data -->
+    <!-- Structured Data - LocalBusiness -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "HealthAndBeautyBusiness",
+      "@id": "https://gentlehands.ch/#organization",
       "name": "GentleHands",
-      "description": "Exklusive Erlebnismassagen für Frauen in Zürich. Tiefenentspannung in atmosphärisch gestalteten Themenräumen.",
+      "description": "Exklusive Massagen für Frauen in Zürich. Tiefenentspannung in 6 atmosphärisch gestalteten Themenräumen mit zertifizierten Therapeut:innen.",
       "url": "https://gentlehands.ch",
       "telephone": "+41000000000",
       "email": "kontakt@gentlehands.ch",
@@ -53,6 +59,7 @@
         "@type": "PostalAddress",
         "addressLocality": "Zürich",
         "addressRegion": "ZH",
+        "postalCode": "8000",
         "addressCountry": "CH"
       },
       "geo": {
@@ -68,26 +75,51 @@
           "closes": "21:00"
         }
       ],
-      "priceRange": "$$$$",
+      "priceRange": "CHF 180-400",
+      "currenciesAccepted": "CHF",
+      "paymentAccepted": "Cash, Credit Card, TWINT",
+      "areaServed": {
+        "@type": "City",
+        "name": "Zürich",
+        "containedInPlace": {
+          "@type": "AdministrativeArea",
+          "name": "Kanton Zürich"
+        }
+      },
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
-        "reviewCount": "127"
+        "reviewCount": "127",
+        "bestRating": "5",
+        "worstRating": "1"
       },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Massage Services",
+        "name": "Massage-Angebote",
         "itemListElement": [
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Erlebnismassage",
-              "description": "Premium massage experience in themed rooms"
-            }
+              "name": "Deep Release Session",
+              "description": "Intensive Tiefenentspannung für maximales körperliches Loslassen"
+            },
+            "price": "260",
+            "priceCurrency": "CHF"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Stress Reset",
+              "description": "Fliessende Techniken gegen mentale Erschöpfung"
+            },
+            "price": "180",
+            "priceCurrency": "CHF"
           }
         ]
-      }
+      },
+      "sameAs": []
     }
     </script>
     
