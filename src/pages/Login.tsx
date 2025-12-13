@@ -6,7 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight, User } from "lucide-react";
+import { loginSchema, signupSchema } from "@/lib/validations";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,9 +19,27 @@ const Login = () => {
     password: "",
     fullName: "",
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+    
+    // Validate with Zod
+    const schema = isLogin ? loginSchema : signupSchema;
+    const result = schema.safeParse(formData);
+    
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as string] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -45,6 +64,7 @@ const Login = () => {
             data: {
               full_name: formData.fullName,
             },
+            emailRedirectTo: `${window.location.origin}/dashboard`,
           },
         });
 
@@ -110,14 +130,19 @@ const Login = () => {
                 {!isLogin && (
                   <div>
                     <label className="block text-sm font-medium mb-2">Name</label>
-                    <input
-                      type="text"
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-muted border border-border focus:border-copper focus:ring-2 focus:ring-copper/20 outline-none"
-                      placeholder="Ihr vollständiger Name"
-                      required={!isLogin}
-                    />
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <input
+                        type="text"
+                        value={formData.fullName}
+                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        className={`w-full pl-12 pr-4 py-3 rounded-xl bg-muted border ${errors.fullName ? 'border-destructive' : 'border-border'} focus:border-copper focus:ring-2 focus:ring-copper/20 outline-none`}
+                        placeholder="Ihr vollständiger Name"
+                      />
+                    </div>
+                    {errors.fullName && (
+                      <p className="text-destructive text-sm mt-1">{errors.fullName}</p>
+                    )}
                   </div>
                 )}
 
@@ -129,11 +154,13 @@ const Login = () => {
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full pl-12 pr-4 py-3 rounded-xl bg-muted border border-border focus:border-copper focus:ring-2 focus:ring-copper/20 outline-none"
+                      className={`w-full pl-12 pr-4 py-3 rounded-xl bg-muted border ${errors.email ? 'border-destructive' : 'border-border'} focus:border-copper focus:ring-2 focus:ring-copper/20 outline-none`}
                       placeholder="ihre@email.ch"
-                      required
                     />
                   </div>
+                  {errors.email && (
+                    <p className="text-destructive text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
 
                 <div>
@@ -144,10 +171,8 @@ const Login = () => {
                       type={showPassword ? "text" : "password"}
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      className="w-full pl-12 pr-12 py-3 rounded-xl bg-muted border border-border focus:border-copper focus:ring-2 focus:ring-copper/20 outline-none"
+                      className={`w-full pl-12 pr-12 py-3 rounded-xl bg-muted border ${errors.password ? 'border-destructive' : 'border-border'} focus:border-copper focus:ring-2 focus:ring-copper/20 outline-none`}
                       placeholder="••••••••"
-                      required
-                      minLength={6}
                     />
                     <button
                       type="button"
@@ -157,6 +182,9 @@ const Login = () => {
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
+                  {errors.password && (
+                    <p className="text-destructive text-sm mt-1">{errors.password}</p>
+                  )}
                 </div>
 
                 {isLogin && (

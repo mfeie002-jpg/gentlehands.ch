@@ -458,6 +458,14 @@ export type Database = {
           theme: string
         }[]
       }
+      redeem_gift_card: {
+        Args: { p_amount: number; p_booking_id?: string; p_code: string }
+        Returns: {
+          message: string
+          new_balance: number
+          success: boolean
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
