@@ -369,8 +369,8 @@ const Erlebnisse = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Themenräume & Erlebnisse | GentleHands Zürich"
-        description="Entdecken Sie unsere professionell gestalteten Themenräume: Ozean & Palmen, Alpine Stille, Deep Dark Relax und mehr. Jeder Raum bietet eine einzigartige Entspannungsatmosphäre."
+        title="Themenräume | GentleHands Zürich"
+        description="Entdecken Sie unsere 6 einzigartigen Themenräume: Ozean & Palmen, Alpine Stille, Deep Dark Relax, Urban Loft, Zen Garden und Surprise Experience. Atmosphärische Entspannung."
         canonical="https://gentlehands.ch/erlebnisse"
       />
 

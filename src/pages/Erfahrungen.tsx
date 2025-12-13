@@ -120,8 +120,8 @@ const Erfahrungen = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Erfahrungen & Bewertungen | GentleHands Zürich"
-        description="Lesen Sie Erfahrungsberichte unserer Kundinnen. Echte Geschichten über Entspannung, Transformation und tiefes Loslassen bei GentleHands."
+        title="Kundenstimmen & Bewertungen | GentleHands Zürich"
+        description="Lesen Sie Erfahrungsberichte unserer Kundinnen. Echte Geschichten über Entspannung in unseren Themenräumen und tiefes Loslassen bei GentleHands."
         canonical="/erfahrungen"
         jsonLd={reviewSchema}
       />

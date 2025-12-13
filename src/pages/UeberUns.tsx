@@ -19,6 +19,25 @@ import philosophyRelax from "@/assets/philosophy-pure-relaxation.jpg";
 import teamWorking from "@/assets/team-working-moment.jpg";
 import teamConsultation from "@/assets/team-consultation.jpg";
 
+// Philosophie-Grundsätze (erweitert von der ehemaligen Philosophie-Seite)
+const philosophyPrinciples = [
+  {
+    title: "Würdevoller Raum",
+    description: "Jede Frau verdient einen Ort, an dem sie sich vollkommen sicher und respektiert fühlt. Wir schaffen diesen Raum – ohne Erwartungen, ohne Bewertung.",
+    image: philosophySafe,
+  },
+  {
+    title: "Achtsame Berührung",
+    description: "Berührung ist Kommunikation. Unsere Hände hören zu, bevor sie arbeiten. Wir spüren, was der Körper braucht – oft bevor Sie es selbst wissen.",
+    image: philosophyHands,
+  },
+  {
+    title: "Echte Präsenz",
+    description: "Während Ihrer Session sind wir vollkommen für Sie da. Keine Ablenkung, keine Routine – nur aufmerksame, fokussierte Zuwendung.",
+    image: philosophyCaring,
+  },
+];
+
 const values = [
   {
     image: philosophySafe,
@@ -61,8 +80,8 @@ const UeberUns = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Über uns | GentleHands Zürich"
-        description="Erfahren Sie mehr über GentleHands: Unsere Vision, unsere Werte und warum wir exklusive Erlebnismassagen nur für Frauen anbieten."
+        title="Über uns – Philosophie & Werte | GentleHands Zürich"
+        description="Erfahren Sie, wofür GentleHands steht: Unsere Philosophie, Werte und warum wir exklusive Themenräume nur für Frauen anbieten. Würdevoller Raum, achtsame Berührung."
         canonical="https://gentlehands.ch/ueber-uns"
       />
 
@@ -243,6 +262,69 @@ const UeberUns = () => {
               Atmosphäre, Qualität und Beziehung – nicht in Quantität.
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Philosophie Principles - NEU integriert */}
+      <section className="section-padding-sm bg-secondary/30">
+        <div className="container-wide">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-copper/10 border border-copper/20 mb-6"
+            >
+              <Heart size={16} className="text-copper" />
+              <span className="text-copper text-sm font-medium">Unsere Philosophie</span>
+            </motion.div>
+            <h2 className="text-foreground mb-4">
+              Drei <span className="text-gradient-copper">Grundsätze</span>
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Diese Überzeugungen leiten alles, was wir tun.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {philosophyPrinciples.map((principle, index) => (
+              <motion.div
+                key={principle.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+              >
+                <GlowCard className="h-full overflow-hidden group">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <LazyImage 
+                      src={principle.image} 
+                      alt={principle.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 text-xs bg-copper/20 text-copper-light rounded-full backdrop-blur-sm">
+                        Grundsatz {index + 1}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-display text-xl text-foreground mb-3">
+                      {principle.title}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed">{principle.description}</p>
+                  </div>
+                </GlowCard>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
