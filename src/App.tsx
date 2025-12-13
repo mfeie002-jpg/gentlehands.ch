@@ -53,6 +53,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Login"));
 const Empfehlen = lazy(() => import("./pages/Empfehlen"));
 const Philosophie = lazy(() => import("./pages/Philosophie"));
+const BuchungVerifizieren = lazy(() => import("./pages/BuchungVerifizieren"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -108,6 +109,7 @@ const App = () => (
                 <Route path="/rechtliches" element={<Rechtliches />} />
                 <Route path="/buchung" element={<Buchung />} />
                 <Route path="/buchung/bestaetigung" element={<BuchungBestaetigung />} />
+                <Route path="/buchung/verifizieren" element={<BuchungVerifizieren />} />
                 <Route path="/gutscheine" element={<Gutscheine />} />
                 <Route path="/warteliste" element={<Warteliste />} />
                 <Route path="/preise" element={<Preise />} />

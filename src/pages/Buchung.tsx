@@ -968,8 +968,8 @@ const Buchung = () => {
                     // Generate booking number
                     const bookingNumber = `GH-${Date.now().toString(36).toUpperCase()}`;
                     
-                    // Save to database
-                    const { error } = await supabase.from("bookings").insert({
+                    // Save to database with status 'pending_verification'
+                    const { data: insertedBooking, error } = await supabase.from("bookings").insert({
                       booking_number: bookingNumber,
                       masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
                       theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
@@ -988,7 +988,9 @@ const Buchung = () => {
                       intuitive: formData.intuitive,
                       additional_notes: formData.additionalNotes?.trim() || null,
                       newsletter_consent: formData.newsletter,
-                    });
+                      status: "pending_verification", // New status for email verification
+                      is_verified: false,
+                    }).select("id, verification_token").single();
 
                     if (error) {
                       console.error("Booking error:", error);
@@ -1001,26 +1003,20 @@ const Buchung = () => {
                       return;
                     }
 
-                    // Send notification via edge function
+                    // Send verification email via edge function
                     try {
-                      await supabase.functions.invoke("notify-booking", {
+                      await supabase.functions.invoke("send-booking-verification", {
                         body: {
+                          booking_id: insertedBooking.id,
+                          customer_email: formData.email.trim().toLowerCase(),
+                          customer_name: formData.name.trim(),
                           booking_number: bookingNumber,
-                          customer_name: formData.name,
-                          customer_email: formData.email,
-                          customer_phone: formData.phone,
-                          masseur: masseurs.find(m => m.id === formData.masseur)?.name,
-                          theme: themes.find(t => t.id === formData.theme)?.title,
-                          massage_type: massages.find(m => m.id === formData.massage)?.title,
-                          duration: formData.duration,
-                          appointment_date: formData.selectedDate ? format(formData.selectedDate, "yyyy-MM-dd") : null,
-                          appointment_time: formData.selectedTime,
-                          special_notes: formData.additionalNotes,
+                          verification_token: insertedBooking.verification_token,
                         },
                       });
-                    } catch (notifyError) {
-                      console.error("Notification error:", notifyError);
-                      // Don't block booking if notification fails
+                    } catch (verifyError) {
+                      console.error("Verification email error:", verifyError);
+                      // Don't block - user can still verify later
                     }
 
                     // Save to localStorage for confirmation page
@@ -1043,10 +1039,11 @@ const Buchung = () => {
                         intuitive: formData.intuitive,
                       },
                       additionalNotes: formData.additionalNotes,
+                      pendingVerification: true, // Flag for confirmation page
                     };
                     localStorage.setItem("gentlehands_booking", JSON.stringify(bookingData));
                     
-                    // Track successful booking conversion
+                    // Track booking (note: not complete until verified)
                     trackBookingComplete(bookingNumber);
                     
                     navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
