@@ -6,7 +6,7 @@ import { Logo } from "@/components/shared/Logo";
 
 const footerLinks = {
   erlebnisse: [
-    { href: "/erlebnisse", label: "Alle Erlebnisse" },
+    { href: "/erlebnisse", label: "Themenräume" },
     { href: "/quiz", label: "Erlebnis-Finder Quiz" },
     { href: "/galerie", label: "Galerie" },
     { href: "/preise", label: "Preise" },
@@ -20,8 +20,7 @@ const footerLinks = {
   ],
   information: [
     { href: "/ueber-uns", label: "Über uns" },
-    { href: "/philosophie", label: "Philosophie" },
-    { href: "/erfahrungen", label: "Erfahrungen" },
+    { href: "/erfahrungen", label: "Kundenstimmen" },
     { href: "/vorbereitung", label: "Vorbereitung" },
     { href: "/faq", label: "FAQ" },
     { href: "/business", label: "Corporate Wellness" },
@@ -106,9 +105,9 @@ export const Footer = () => {
             </div>
           </ScrollReveal>
 
-          {/* Erlebnisse */}
+          {/* Themenräume */}
           <ScrollReveal direction="up" delay={0.1}>
-            <h4 className="font-display text-base sm:text-lg mb-3 sm:mb-4 text-foreground">Erlebnisse</h4>
+            <h4 className="font-display text-base sm:text-lg mb-3 sm:mb-4 text-foreground">Themenräume</h4>
             <ul className="space-y-2 sm:space-y-2.5">
               {footerLinks.erlebnisse.map((link) => (
                 <FooterLink key={link.href} {...link} />
