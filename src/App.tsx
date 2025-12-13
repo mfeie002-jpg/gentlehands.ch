@@ -55,6 +55,7 @@ const Empfehlen = lazy(() => import("./pages/Empfehlen"));
 const Philosophie = lazy(() => import("./pages/Philosophie"));
 const BuchungVerifizieren = lazy(() => import("./pages/BuchungVerifizieren"));
 const Performance = lazy(() => import("./pages/Performance"));
+const LogoPreview = lazy(() => import("./pages/LogoPreview"));
 
 // English pages
 const IndexEN = lazy(() => import("./pages/en/Index"));
@@ -139,6 +140,7 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/empfehlen" element={<Empfehlen />} />
                 <Route path="/performance" element={<Performance />} />
+                <Route path="/logo-preview" element={<LogoPreview />} />
                 {/* English routes */}
                 <Route path="/en" element={<IndexEN />} />
                 <Route path="/en/experiences" element={<ExperiencesEN />} />
