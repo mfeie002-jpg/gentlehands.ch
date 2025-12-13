@@ -1,8 +1,10 @@
-import { LogoOptionsPreview, LogoOption1, LogoOption2, LogoOption3, LogoOption4, LogoOption5 } from "@/components/shared/LogoOptions";
+import { LogoOption1, LogoOption2, LogoOption3, LogoOption4, LogoOption5 } from "@/components/shared/LogoOptions";
+import { Layout } from "@/components/layout/Layout";
 
 const LogoPreview = () => {
   return (
-    <div className="min-h-screen bg-background py-12">
+    <Layout>
+    <div className="min-h-screen bg-background py-12 pt-32">
       <div className="container max-w-4xl mx-auto px-4">
         <h1 className="font-display text-4xl text-foreground mb-4">Logo Options</h1>
         <p className="text-muted-foreground mb-12">Choose your preferred logo design featuring hands imagery:</p>
@@ -82,6 +84,7 @@ const LogoPreview = () => {
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
 
