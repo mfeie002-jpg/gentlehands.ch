@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Home } from "lucide-react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 interface BreadcrumbItem {
   label: string;
@@ -11,15 +12,16 @@ interface BreadcrumbsProps {
   items?: BreadcrumbItem[];
   showHome?: boolean;
   className?: string;
+  includeSchema?: boolean;
 }
 
 // German route labels mapping
 const routeLabels: Record<string, string> = {
-  erlebnisse: "Erlebnisse",
+  erlebnisse: "Themenräume",
   massagen: "Massagen",
   team: "Team",
   "ueber-uns": "Über uns",
-  erfahrungen: "Erfahrungen",
+  erfahrungen: "Kundenstimmen",
   faq: "FAQ",
   kontakt: "Kontakt",
   buchung: "Buchung",
@@ -53,8 +55,10 @@ export const Breadcrumbs = ({
   items,
   showHome = true,
   className = "",
+  includeSchema = true,
 }: BreadcrumbsProps) => {
   const location = useLocation();
+  const baseUrl = "https://gentlehands.ch";
   
   // Auto-generate breadcrumbs from current path if not provided
   const breadcrumbItems: BreadcrumbItem[] = items || (() => {
@@ -73,51 +77,83 @@ export const Breadcrumbs = ({
     return null;
   }
 
+  // Generate Schema.org BreadcrumbList
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      ...(showHome ? [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Start",
+        "item": baseUrl
+      }] : []),
+      ...breadcrumbItems.map((item, index) => ({
+        "@type": "ListItem",
+        "position": showHome ? index + 2 : index + 1,
+        "name": item.label,
+        "item": item.href 
+          ? `${baseUrl}${item.href}` 
+          : `${baseUrl}${location.pathname}`
+      }))
+    ]
+  };
+
   return (
-    <nav
-      aria-label="Breadcrumb"
-      className={`flex items-center text-sm text-muted-foreground ${className}`}
-    >
-      <ol className="flex items-center gap-1 flex-wrap">
-        {showHome && (
-          <li className="flex items-center">
-            <Link
-              to="/"
-              className="flex items-center gap-1 hover:text-copper transition-colors p-1 -m-1 rounded"
-              aria-label="Startseite"
-            >
-              <Home size={14} />
-              <span className="sr-only sm:not-sr-only">Start</span>
-            </Link>
-            {breadcrumbItems.length > 0 && (
-              <ChevronRight size={14} className="mx-1 text-muted-foreground/50" aria-hidden="true" />
-            )}
-          </li>
-        )}
-        
-        {breadcrumbItems.map((item, index) => (
-          <li key={index} className="flex items-center">
-            {item.href ? (
-              <motion.div whileHover={{ x: 2 }}>
-                <Link
-                  to={item.href}
-                  className="hover:text-copper transition-colors p-1 -m-1 rounded"
-                >
+    <>
+      {includeSchema && (
+        <Helmet>
+          <script type="application/ld+json">
+            {JSON.stringify(schemaData)}
+          </script>
+        </Helmet>
+      )}
+      
+      <nav
+        aria-label="Breadcrumb"
+        className={`flex items-center text-sm text-muted-foreground ${className}`}
+      >
+        <ol className="flex items-center gap-1 flex-wrap">
+          {showHome && (
+            <li className="flex items-center">
+              <Link
+                to="/"
+                className="flex items-center gap-1 hover:text-copper transition-colors p-1 -m-1 rounded"
+                aria-label="Startseite"
+              >
+                <Home size={14} />
+                <span className="sr-only sm:not-sr-only">Start</span>
+              </Link>
+              {breadcrumbItems.length > 0 && (
+                <ChevronRight size={14} className="mx-1 text-muted-foreground/50" aria-hidden="true" />
+              )}
+            </li>
+          )}
+          
+          {breadcrumbItems.map((item, index) => (
+            <li key={index} className="flex items-center">
+              {item.href ? (
+                <motion.div whileHover={{ x: 2 }}>
+                  <Link
+                    to={item.href}
+                    className="hover:text-copper transition-colors p-1 -m-1 rounded"
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ) : (
+                <span className="text-foreground font-medium" aria-current="page">
                   {item.label}
-                </Link>
-              </motion.div>
-            ) : (
-              <span className="text-foreground font-medium" aria-current="page">
-                {item.label}
-              </span>
-            )}
-            
-            {index < breadcrumbItems.length - 1 && (
-              <ChevronRight size={14} className="mx-1 text-muted-foreground/50" aria-hidden="true" />
-            )}
-          </li>
-        ))}
-      </ol>
-    </nav>
+                </span>
+              )}
+              
+              {index < breadcrumbItems.length - 1 && (
+                <ChevronRight size={14} className="mx-1 text-muted-foreground/50" aria-hidden="true" />
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </>
   );
 };

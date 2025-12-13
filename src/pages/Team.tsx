@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Languages, Award, Heart, Star, GraduationCap, Quote, ArrowRight, Users } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import { TeamHeroEnhanced } from "@/components/team/TeamHeroEnhanced";
@@ -126,6 +127,7 @@ const Team = () => {
         <FloatingElements variant="dots" />
         
         <div className="container-wide relative z-10 px-4 sm:px-6">
+          <Breadcrumbs className="mb-6 justify-center" />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

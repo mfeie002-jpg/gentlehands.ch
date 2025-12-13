@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Star, Clock, Info, Gift, Percent, Sparkles, ArrowRight, Zap } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { GlowCard } from "@/components/shared/GlowCard";
 import { FloatingElements } from "@/components/shared/FloatingElements";
@@ -117,6 +118,7 @@ const Preise = () => {
         </div>
         
         <div className="container-wide relative z-10 px-4 sm:px-6">
+          <Breadcrumbs className="mb-6" />
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Text Content */}
             <motion.div
