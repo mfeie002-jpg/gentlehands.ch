@@ -56,6 +56,11 @@ const Philosophie = lazy(() => import("./pages/Philosophie"));
 const BuchungVerifizieren = lazy(() => import("./pages/BuchungVerifizieren"));
 const Performance = lazy(() => import("./pages/Performance"));
 
+// English pages
+const IndexEN = lazy(() => import("./pages/en/Index"));
+const ExperiencesEN = lazy(() => import("./pages/en/Experiences"));
+const MassagesEN = lazy(() => import("./pages/en/Massages"));
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -134,6 +139,10 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/empfehlen" element={<Empfehlen />} />
                 <Route path="/performance" element={<Performance />} />
+                {/* English routes */}
+                <Route path="/en" element={<IndexEN />} />
+                <Route path="/en/experiences" element={<ExperiencesEN />} />
+                <Route path="/en/massages" element={<MassagesEN />} />
                 <Route path="/philosophie" element={<Navigate to="/ueber-uns" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
