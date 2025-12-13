@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Sparkles, User, LogOut, LayoutDashboard, Heart, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo, useScroll } from "framer-motion";
 import { Logo } from "@/components/shared/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
@@ -33,6 +33,9 @@ export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
+  
+  // Scroll progress for indicator
+  const { scrollYProgress } = useScroll();
   
   // Touch gesture handling
   const dragY = useMotionValue(0);
@@ -105,7 +108,6 @@ export const Header = () => {
   };
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    // Close menu if dragged up more than 80px or with high velocity
     if (info.offset.y < -80 || info.velocity.y < -500) {
       triggerHaptic('light');
       setIsMobileMenuOpen(false);
@@ -125,6 +127,12 @@ export const Header = () => {
             : "bg-transparent py-4 sm:py-5"
         }`}
       >
+        {/* Scroll Progress Indicator */}
+        <motion.div 
+          className="absolute bottom-0 left-0 right-0 h-[2px] bg-copper origin-left"
+          style={{ scaleX: scrollYProgress }}
+        />
+        
         <div className="container-wide flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="group relative">
@@ -209,7 +217,7 @@ export const Header = () => {
               <Button variant="copper" asChild className="shadow-copper group">
                 <Link to="/buchung">
                   <Sparkles size={16} className="mr-1.5 group-hover:rotate-12 transition-transform" />
-                  Erlebnis anfragen
+                  Termin anfragen
                 </Link>
               </Button>
             </motion.div>
@@ -373,7 +381,7 @@ export const Header = () => {
                   <Button variant="copper" className="w-full shadow-copper active:scale-[0.98] transition-transform" size="lg" asChild>
                     <Link to="/buchung">
                       <Sparkles size={16} className="mr-1.5" />
-                      Erlebnis anfragen
+                      Termin anfragen
                     </Link>
                   </Button>
                 </motion.div>
