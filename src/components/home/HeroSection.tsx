@@ -1,10 +1,30 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, Clock, Heart, ChevronDown, Sparkles, Lock } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { Shield, Clock, Heart, ChevronDown, Sparkles, Lock, ArrowRight } from "lucide-react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { FloatingElements } from "@/components/shared/FloatingElements";
 import heroImage from "@/assets/massage-hands-back.jpg";
+
+// A/B Test Variants - can be controlled via localStorage, URL params, or backend
+const heroVariants = [
+  {
+    id: "emotional",
+    headline: ["Ein geschützter Raum", "für tiefe Entspannung"],
+    subline: "Für Frauen, die täglich alles geben – und endlich einen Ort verdienen, an dem sie sich vollständig fallen lassen können.",
+  },
+  {
+    id: "benefit",
+    headline: ["Stress loslassen.", "Kraft zurückgewinnen."],
+    subline: "Professionelle Erlebnismassagen in atmosphärischen Themenräumen. Nur für Frauen. 100% diskret.",
+  },
+  {
+    id: "exclusive",
+    headline: ["Exklusive Wellness", "nur für Sie"],
+    subline: "Limitierte Termine, handverlesene Therapeut:innen, sechs einzigartige Themenräume in Zürich.",
+  },
+];
 
 const trustBadges = [
   { icon: Shield, label: "Nur für Frauen", sublabel: "Geschützter Raum" },
@@ -13,7 +33,25 @@ const trustBadges = [
   { icon: Heart, label: "Professionell", sublabel: "Diplomierte Therapeut:innen" },
 ];
 
+// Get variant from URL or localStorage for A/B testing
+const getActiveVariant = () => {
+  if (typeof window !== "undefined") {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlVariant = urlParams.get("hero");
+    if (urlVariant && heroVariants.some(v => v.id === urlVariant)) {
+      return heroVariants.find(v => v.id === urlVariant)!;
+    }
+    
+    const storedVariant = localStorage.getItem("hero_variant");
+    if (storedVariant && heroVariants.some(v => v.id === storedVariant)) {
+      return heroVariants.find(v => v.id === storedVariant)!;
+    }
+  }
+  return heroVariants[0]; // Default to emotional variant
+};
+
 export const HeroSection = () => {
+  const [activeVariant, setActiveVariant] = useState(heroVariants[0]);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, 300]);
   const opacity = useTransform(scrollY, [0, 500], [1, 0]);
@@ -21,10 +59,15 @@ export const HeroSection = () => {
   const rotate = useTransform(scrollY, [0, 1000], [0, 3]);
   const blur = useTransform(scrollY, [0, 500], [0, 5]);
 
+  useEffect(() => {
+    setActiveVariant(getActiveVariant());
+  }, []);
+
   return (
     <section 
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       aria-label="Willkommen bei GentleHands"
+      data-hero-variant={activeVariant.id}
     >
       {/* Background Image with Enhanced Parallax */}
       <motion.div 
@@ -89,49 +132,45 @@ export const HeroSection = () => {
             />
           </motion.div>
 
-          {/* Main Headline with staggered reveal */}
-          <div className="overflow-hidden mb-2 sm:mb-4">
-            <motion.h1
-              initial={{ y: 120, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-foreground text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl px-4 sm:px-0"
-            >
-              Ein geschützter Raum
-            </motion.h1>
-          </div>
-          <div className="overflow-hidden mb-4 sm:mb-6">
-            <motion.h1
-              initial={{ y: 120, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-foreground text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl px-4 sm:px-0"
-            >
-              für <span className="text-gradient-copper">tiefe Entspannung</span>
-            </motion.h1>
-          </div>
+          {/* A/B Testable Headlines */}
+          <AnimatePresence mode="wait">
+            <motion.div key={activeVariant.id}>
+              <div className="overflow-hidden mb-2 sm:mb-4">
+                <motion.h1
+                  initial={{ y: 120, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="text-foreground text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl px-4 sm:px-0"
+                >
+                  {activeVariant.headline[0]}
+                </motion.h1>
+              </div>
+              <div className="overflow-hidden mb-4 sm:mb-6">
+                <motion.h1
+                  initial={{ y: 120, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="text-foreground text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl px-4 sm:px-0"
+                >
+                  {activeVariant.id === "emotional" ? (
+                    <>für <span className="text-gradient-copper">{activeVariant.headline[1].replace("für ", "")}</span></>
+                  ) : (
+                    <span className="text-gradient-copper">{activeVariant.headline[1]}</span>
+                  )}
+                </motion.h1>
+              </div>
 
-          {/* Subline with fade - emotional trigger */}
-          <motion.p
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6 }}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed font-light px-4 sm:px-0"
-          >
-            Für Frauen, die täglich alles geben – und endlich einen Ort verdienen, 
-            an dem sie sich vollständig fallen lassen können.
-          </motion.p>
-
-          {/* Secondary emotional hook */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.75 }}
-            className="text-sm sm:text-base text-muted-foreground/90 max-w-xl mx-auto mb-3 px-4 sm:px-0"
-          >
-            Professionelle Massagen in atmosphärischen Themenräumen • 
-            Ihre Grenzen werden respektiert • Sie haben die Kontrolle
-          </motion.p>
+              {/* Subline */}
+              <motion.p
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.6 }}
+                className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed font-light px-4 sm:px-0"
+              >
+                {activeVariant.subline}
+              </motion.p>
+            </motion.div>
+          </AnimatePresence>
 
           {/* Trust note */}
           <motion.p
@@ -143,7 +182,7 @@ export const HeroSection = () => {
             Professionelle Körperarbeit • Sicher • Diskret
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - Stronger CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -151,16 +190,20 @@ export const HeroSection = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mb-12 sm:mb-16 px-4 sm:px-0"
           >
             <MagneticButton>
-              <Button variant="copper" size="lg" asChild className="w-full sm:w-auto min-w-[200px] shadow-copper">
+              <Button variant="copper" size="lg" asChild className="w-full sm:w-auto min-w-[220px] shadow-copper group">
                 <Link to="/buchung">
-                  <Sparkles size={18} className="mr-2" />
-                  Erlebnis anfragen
+                  <Sparkles size={18} className="mr-2 group-hover:rotate-12 transition-transform" />
+                  Termin anfragen
+                  <ArrowRight size={16} className="ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </Link>
               </Button>
             </MagneticButton>
             <MagneticButton>
-              <Button variant="outline" size="lg" asChild className="w-full sm:w-auto min-w-[200px] border-copper/30 hover:border-copper hover:bg-copper/5">
-                <Link to="/erlebnisse">Erlebnisse entdecken</Link>
+              <Button variant="outline" size="lg" asChild className="w-full sm:w-auto min-w-[200px] border-copper/30 hover:border-copper hover:bg-copper/5 group">
+                <Link to="/erlebnisse">
+                  6 Themenräume entdecken
+                  <ArrowRight size={16} className="ml-2 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                </Link>
               </Button>
             </MagneticButton>
           </motion.div>
@@ -195,7 +238,7 @@ export const HeroSection = () => {
 
       </motion.div>
 
-      {/* Scroll Indicator - positioned outside the fade container */}
+      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
