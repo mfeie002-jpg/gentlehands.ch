@@ -168,8 +168,8 @@ const Massagen = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Professionelle Entspannungsmassagen | GentleHands Zürich"
-        description="Entdecken Sie unsere professionellen Entspannungsmassagen: Deep Release, Stress Reset, Emotional Grounding und mehr. Jede Massage kombinierbar mit unseren Themenräumen."
+        title="Massagen – Deep Release, Stress Reset & mehr | GentleHands Zürich"
+        description="Professionelle Entspannungsmassagen für Frauen: Deep Release, Stress Reset, Emotional Grounding. Kombinierbar mit 6 atmosphärischen Themenräumen in Zürich."
         canonical="https://gentlehands.ch/massagen"
       />
 

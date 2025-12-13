@@ -82,8 +82,8 @@ const Preise = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Preise – Professionelle Entspannungsmassagen | GentleHands Zürich"
-        description="Transparente Preise für professionelle Entspannungsmassagen bei GentleHands. 60, 90 oder 120 Minuten – finden Sie Ihr perfektes Erlebnis."
+        title="Preise – Transparente Massage-Preise | GentleHands Zürich"
+        description="Transparente Preise für Tiefenentspannung: 60, 90 oder 120 Minuten professionelle Massage in atmosphärischen Themenräumen. Ab CHF 180."
         canonical="https://gentlehands.ch/preise"
       />
 

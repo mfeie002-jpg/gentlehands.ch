@@ -92,8 +92,8 @@ const Team = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Unser Team – Professionelle Therapeut:innen | GentleHands Zürich"
-        description="Lernen Sie unser Team professionell ausgebildeter Therapeut:innen kennen. Jahrelange Erfahrung, individueller Stil, respektvoller Umgang."
+        title="Team – Zertifizierte Therapeut:innen | GentleHands Zürich"
+        description="Lernen Sie unsere zertifizierten Therapeut:innen kennen. Jahrelange Erfahrung in Tiefenentspannung, individueller Stil und respektvoller Umgang in unseren Themenräumen."
         canonical="https://gentlehands.ch/team"
       />
 

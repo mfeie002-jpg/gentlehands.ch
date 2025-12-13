@@ -148,9 +148,9 @@ const Quiz = () => {
   return (
     <Layout>
       <SEOHead
-        title="Finden Sie Ihr Erlebnis | GentleHands Zürich"
-        description="Entdecken Sie in wenigen Fragen, welches GentleHands-Erlebnis perfekt zu Ihnen passt. Personalisierte Massage-Empfehlungen in Zürich."
-        canonical="/quiz"
+        title="Wellness-Quiz – Finden Sie Ihren Themenraum | GentleHands Zürich"
+        description="Entdecken Sie in 2 Minuten, welcher Themenraum und welche Massage perfekt zu Ihnen passt. Personalisierte Empfehlungen für Ihre Tiefenentspannung."
+        canonical="https://gentlehands.ch/quiz"
       />
 
       <section className="pt-32 pb-20 min-h-screen relative overflow-hidden">
