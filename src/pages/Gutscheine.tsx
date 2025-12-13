@@ -16,6 +16,52 @@ import { GiftCardChecker } from "@/components/shared/GiftCardChecker";
 import { LazyImage } from "@/components/shared/LazyImage";
 import giftCardPresentation from "@/assets/gift-card-presentation.jpg";
 
+// Generate combined Product schema for gift cards
+const productSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Product",
+      "name": "GentleHands Entdeckungs-Gutschein",
+      "description": "60 Minuten Massage-Erlebnis mit freier Theme-Wahl",
+      "image": "https://gentlehands.ch/og-image.jpg",
+      "brand": { "@type": "Brand", "name": "GentleHands" },
+      "offers": {
+        "@type": "Offer",
+        "price": "180",
+        "priceCurrency": "CHF",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@type": "Product",
+      "name": "GentleHands Signature Experience",
+      "description": "90 Minuten Premium-Massage mit Aromatherapie",
+      "image": "https://gentlehands.ch/og-image.jpg",
+      "brand": { "@type": "Brand", "name": "GentleHands" },
+      "offers": {
+        "@type": "Offer",
+        "price": "260",
+        "priceCurrency": "CHF",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@type": "Product",
+      "name": "GentleHands Premium Retreat",
+      "description": "120 Minuten ultimatives Entspannungserlebnis",
+      "image": "https://gentlehands.ch/og-image.jpg",
+      "brand": { "@type": "Brand", "name": "GentleHands" },
+      "offers": {
+        "@type": "Offer",
+        "price": "340",
+        "priceCurrency": "CHF",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+  ]
+};
+
 const giftCards = [
   {
     id: "discovery",
@@ -94,6 +140,7 @@ const Gutscheine = () => {
         title="Gutscheine – Entspannung verschenken | GentleHands Zürich"
         description="Verschenken Sie Tiefenentspannung: Exklusive GentleHands Gutscheine für unvergessliche Massagen in atmosphärischen Themenräumen. Das perfekte Geschenk."
         canonical="https://gentlehands.ch/gutscheine"
+        jsonLd={productSchema}
       />
 
       {/* Hero */}
