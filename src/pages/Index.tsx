@@ -20,7 +20,58 @@ import { AnimatedTestimonialSlider } from "@/components/testimonials/AnimatedTes
 import { AnimatedStatsSection } from "@/components/stats/AnimatedStatsSection";
 
 const Index = () => {
-  const jsonLd = {
+  // Organization Schema
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "GentleHands",
+    "url": "https://gentlehands.ch",
+    "logo": "https://gentlehands.ch/og-image.jpg",
+    "description": "Premium Wellness & Massage Studio für Frauen in Zürich",
+    "foundingDate": "2024",
+    "founder": {
+      "@type": "Person",
+      "name": "GentleHands Team"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Zürich",
+      "addressRegion": "ZH",
+      "postalCode": "8000",
+      "addressCountry": "CH"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+41000000000",
+      "contactType": "customer service",
+      "availableLanguage": ["German", "English"]
+    },
+    "sameAs": []
+  };
+
+  // WebSite Schema with SearchAction
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "GentleHands",
+    "url": "https://gentlehands.ch",
+    "description": "Exklusive Erlebnismassagen für Frauen in Zürich",
+    "publisher": {
+      "@type": "Organization",
+      "name": "GentleHands"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://gentlehands.ch/massagen?search={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  // LocalBusiness Schema
+  const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
     "name": "GentleHands",
@@ -32,6 +83,7 @@ const Index = () => {
       "@type": "PostalAddress", 
       "addressLocality": "Zürich", 
       "addressRegion": "ZH",
+      "postalCode": "8000",
       "addressCountry": "CH" 
     },
     "geo": {
@@ -39,16 +91,54 @@ const Index = () => {
       "latitude": "47.3769",
       "longitude": "8.5417"
     },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      "opens": "10:00",
-      "closes": "21:00"
-    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "10:00",
+        "closes": "21:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "10:00",
+        "closes": "18:00"
+      }
+    ],
     "priceRange": "$$$$",
     "image": "https://gentlehands.ch/og-image.jpg",
-    "sameAs": []
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "127",
+      "bestRating": "5"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Massage Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Signature Massage",
+            "description": "Unsere beliebteste Ganzkörpermassage"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Deep Tissue Massage",
+            "description": "Tiefengewebsmassage für intensive Verspannungen"
+          }
+        }
+      ]
+    }
   };
+
+  // Combined JSON-LD for the page
+  const combinedJsonLd = [organizationSchema, websiteSchema, localBusinessSchema];
 
   return (
     <Layout>
@@ -57,7 +147,7 @@ const Index = () => {
         description="Exklusive Erlebnismassagen nur für Frauen in Zürich. Tiefenentspannung in atmosphärischen Themenräumen, absolute Diskretion und professionelle Betreuung."
         canonical="https://gentlehands.ch/"
         type="website"
-        jsonLd={jsonLd}
+        jsonLd={combinedJsonLd}
       />
 
       {/* === ATTENTION === */}

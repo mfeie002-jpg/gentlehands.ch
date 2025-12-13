@@ -1,461 +1,299 @@
-import { useState, useEffect, useCallback } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { motion } from "framer-motion";
-import { Activity, Gauge, Timer, LayoutDashboard, CheckCircle, AlertTriangle, XCircle, RefreshCw, Code, ExternalLink } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
-import { Button } from "@/components/ui/button";
-import { GlowCard } from "@/components/shared/GlowCard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { SchemaValidator } from "@/components/shared/SchemaValidator";
+import { SEOAuditDashboard } from "@/components/seo/SEOAuditDashboard";
+import { useState, useEffect } from "react";
+import { 
+  Gauge, 
+  Clock, 
+  Layout as LayoutIcon, 
+  MousePointer, 
+  Zap,
+  FileSearch,
+  Search
+} from "lucide-react";
 
 interface WebVital {
   name: string;
   value: number | null;
-  rating: "good" | "needs-improvement" | "poor" | "unknown";
+  rating: 'good' | 'needs-improvement' | 'poor' | 'pending';
+  threshold: { good: number; needsImprovement: number };
   unit: string;
   description: string;
-  thresholds: { good: number; poor: number };
 }
 
 const Performance = () => {
-  const [metrics, setMetrics] = useState<WebVital[]>([
+  const [vitals, setVitals] = useState<WebVital[]>([
     {
-      name: "LCP",
+      name: 'LCP',
       value: null,
-      rating: "unknown",
-      unit: "ms",
-      description: "Largest Contentful Paint - Zeit bis das grösste sichtbare Element geladen ist",
-      thresholds: { good: 2500, poor: 4000 }
+      rating: 'pending',
+      threshold: { good: 2500, needsImprovement: 4000 },
+      unit: 'ms',
+      description: 'Largest Contentful Paint – Zeit bis zum größten sichtbaren Element'
     },
     {
-      name: "FID",
+      name: 'FID',
       value: null,
-      rating: "unknown",
-      unit: "ms",
-      description: "First Input Delay - Reaktionszeit auf erste Benutzerinteraktion",
-      thresholds: { good: 100, poor: 300 }
+      rating: 'pending',
+      threshold: { good: 100, needsImprovement: 300 },
+      unit: 'ms',
+      description: 'First Input Delay – Reaktionszeit auf erste Interaktion'
     },
     {
-      name: "CLS",
+      name: 'CLS',
       value: null,
-      rating: "unknown",
-      unit: "",
-      description: "Cumulative Layout Shift - Visuelle Stabilität der Seite",
-      thresholds: { good: 0.1, poor: 0.25 }
+      rating: 'pending',
+      threshold: { good: 0.1, needsImprovement: 0.25 },
+      unit: '',
+      description: 'Cumulative Layout Shift – Visuelle Stabilität'
     },
     {
-      name: "FCP",
+      name: 'FCP',
       value: null,
-      rating: "unknown",
-      unit: "ms",
-      description: "First Contentful Paint - Zeit bis zum ersten sichtbaren Inhalt",
-      thresholds: { good: 1800, poor: 3000 }
+      rating: 'pending',
+      threshold: { good: 1800, needsImprovement: 3000 },
+      unit: 'ms',
+      description: 'First Contentful Paint – Zeit bis zum ersten Inhalt'
     },
     {
-      name: "TTFB",
+      name: 'TTFB',
       value: null,
-      rating: "unknown",
-      unit: "ms",
-      description: "Time to First Byte - Server-Antwortzeit",
-      thresholds: { good: 800, poor: 1800 }
+      rating: 'pending',
+      threshold: { good: 800, needsImprovement: 1800 },
+      unit: 'ms',
+      description: 'Time to First Byte – Serverantwortzeit'
     },
     {
-      name: "INP",
+      name: 'INP',
       value: null,
-      rating: "unknown",
-      unit: "ms",
-      description: "Interaction to Next Paint - Reaktionszeit auf Benutzerinteraktionen",
-      thresholds: { good: 200, poor: 500 }
+      rating: 'pending',
+      threshold: { good: 200, needsImprovement: 500 },
+      unit: 'ms',
+      description: 'Interaction to Next Paint – Interaktionslatenz'
     }
   ]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-
-  const getRating = (name: string, value: number): "good" | "needs-improvement" | "poor" => {
-    const metric = metrics.find(m => m.name === name);
-    if (!metric) return "unknown" as any;
-    
-    if (value <= metric.thresholds.good) return "good";
-    if (value <= metric.thresholds.poor) return "needs-improvement";
-    return "poor";
-  };
-
-  const updateMetric = useCallback((name: string, value: number) => {
-    setMetrics(prev => prev.map(m => 
-      m.name === name 
-        ? { ...m, value, rating: getRating(name, value) }
-        : m
-    ));
-  }, []);
-
-  const collectMetrics = useCallback(() => {
-    setIsLoading(true);
-    
-    if (typeof window === "undefined" || !("PerformanceObserver" in window)) {
-      setIsLoading(false);
-      return;
-    }
-
-    // LCP
-    try {
-      const lcpObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1];
-        if (lastEntry) {
-          updateMetric("LCP", lastEntry.startTime);
-        }
-      });
-      lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
-    } catch (e) {}
-
-    // FID
-    try {
-      const fidObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        entries.forEach((entry) => {
-          if ("processingStart" in entry) {
-            const fidEntry = entry as PerformanceEventTiming;
-            updateMetric("FID", fidEntry.processingStart - fidEntry.startTime);
-          }
-        });
-      });
-      fidObserver.observe({ type: "first-input", buffered: true });
-    } catch (e) {}
-
-    // CLS
-    try {
-      let clsValue = 0;
-      const clsObserver = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          if (!(entry as any).hadRecentInput) {
-            clsValue += (entry as any).value;
-          }
-        }
-        updateMetric("CLS", clsValue);
-      });
-      clsObserver.observe({ type: "layout-shift", buffered: true });
-    } catch (e) {}
-
-    // FCP
-    try {
-      const fcpObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        const fcpEntry = entries.find((entry) => entry.name === "first-contentful-paint");
-        if (fcpEntry) {
-          updateMetric("FCP", fcpEntry.startTime);
-        }
-      });
-      fcpObserver.observe({ type: "paint", buffered: true });
-    } catch (e) {}
-
-    // TTFB
-    try {
-      const navEntries = performance.getEntriesByType("navigation");
-      if (navEntries.length > 0) {
-        const navEntry = navEntries[0] as PerformanceNavigationTiming;
-        updateMetric("TTFB", navEntry.responseStart - navEntry.requestStart);
-      }
-    } catch (e) {}
-
-    // INP (Interaction to Next Paint)
-    try {
-      const inpObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        let maxDuration = 0;
-        entries.forEach((entry) => {
-          if ("duration" in entry && entry.duration > maxDuration) {
-            maxDuration = entry.duration;
-          }
-        });
-        if (maxDuration > 0) {
-          updateMetric("INP", maxDuration);
-        }
-      });
-      inpObserver.observe({ type: "event", buffered: true });
-    } catch (e) {}
-
-    setLastUpdated(new Date());
-    setTimeout(() => setIsLoading(false), 1000);
-  }, [updateMetric]);
 
   useEffect(() => {
-    collectMetrics();
-  }, [collectMetrics]);
+    // Measure Core Web Vitals
+    const measureVitals = () => {
+      // LCP
+      if ('PerformanceObserver' in window) {
+        try {
+          const lcpObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries[entries.length - 1] as PerformanceEntry & { startTime: number };
+            updateVital('LCP', lastEntry.startTime);
+          });
+          lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
-  const getRatingIcon = (rating: string) => {
-    switch (rating) {
-      case "good":
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case "needs-improvement":
-        return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-      case "poor":
-        return <XCircle className="w-5 h-5 text-red-500" />;
-      default:
-        return <Activity className="w-5 h-5 text-muted-foreground" />;
-    }
-  };
+          // FID
+          const fidObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach((entry: PerformanceEntry & { processingStart: number; startTime: number }) => {
+              updateVital('FID', entry.processingStart - entry.startTime);
+            });
+          });
+          fidObserver.observe({ type: 'first-input', buffered: true });
+
+          // CLS
+          let clsValue = 0;
+          const clsObserver = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry: PerformanceEntry & { hadRecentInput: boolean; value: number }) => {
+              if (!entry.hadRecentInput) {
+                clsValue += entry.value;
+                updateVital('CLS', clsValue);
+              }
+            });
+          });
+          clsObserver.observe({ type: 'layout-shift', buffered: true });
+
+          // FCP
+          const fcpObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const fcpEntry = entries.find(e => e.name === 'first-contentful-paint');
+            if (fcpEntry) {
+              updateVital('FCP', fcpEntry.startTime);
+            }
+          });
+          fcpObserver.observe({ type: 'paint', buffered: true });
+        } catch (e) {
+          console.log('PerformanceObserver not fully supported');
+        }
+      }
+
+      // TTFB
+      const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      if (navigationEntry) {
+        updateVital('TTFB', navigationEntry.responseStart - navigationEntry.requestStart);
+      }
+    };
+
+    const updateVital = (name: string, value: number) => {
+      setVitals(prev => prev.map(vital => {
+        if (vital.name === name) {
+          const rating = getRating(value, vital.threshold);
+          return { ...vital, value, rating };
+        }
+        return vital;
+      }));
+    };
+
+    const getRating = (value: number, threshold: { good: number; needsImprovement: number }): 'good' | 'needs-improvement' | 'poor' => {
+      if (value <= threshold.good) return 'good';
+      if (value <= threshold.needsImprovement) return 'needs-improvement';
+      return 'poor';
+    };
+
+    measureVitals();
+  }, []);
 
   const getRatingColor = (rating: string) => {
     switch (rating) {
-      case "good":
-        return "text-green-500";
-      case "needs-improvement":
-        return "text-yellow-500";
-      case "poor":
-        return "text-red-500";
-      default:
-        return "text-muted-foreground";
+      case 'good': return 'bg-green-500';
+      case 'needs-improvement': return 'bg-amber-500';
+      case 'poor': return 'bg-red-500';
+      default: return 'bg-muted';
     }
   };
 
-  const getRatingBg = (rating: string) => {
+  const getRatingLabel = (rating: string) => {
     switch (rating) {
-      case "good":
-        return "bg-green-500/10 border-green-500/20";
-      case "needs-improvement":
-        return "bg-yellow-500/10 border-yellow-500/20";
-      case "poor":
-        return "bg-red-500/10 border-red-500/20";
-      default:
-        return "bg-secondary border-border";
+      case 'good': return 'Gut';
+      case 'needs-improvement': return 'Verbesserungswürdig';
+      case 'poor': return 'Schlecht';
+      default: return 'Messung...';
     }
   };
 
-  const overallScore = metrics.filter(m => m.value !== null).length > 0
-    ? Math.round(
-        (metrics.filter(m => m.rating === "good").length / 
-         metrics.filter(m => m.value !== null).length) * 100
-      )
-    : 0;
+  const vitalIcons: Record<string, typeof Gauge> = {
+    LCP: LayoutIcon,
+    FID: MousePointer,
+    CLS: LayoutIcon,
+    FCP: Clock,
+    TTFB: Zap,
+    INP: MousePointer
+  };
 
   return (
     <Layout>
-      <SEOHead 
-        title="Core Web Vitals Report | GentleHands"
-        description="Analyse der Core Web Vitals: LCP, CLS, FID und weitere Performance-Metriken."
-        canonical="/performance"
+      <SEOHead
+        title="Performance & SEO Dashboard"
+        description="Core Web Vitals und SEO-Analyse für GentleHands"
         noIndex={true}
       />
 
-      {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-secondary/30 to-background">
-        <div className="container-wide">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <div className="w-16 h-16 rounded-2xl bg-copper/10 flex items-center justify-center mx-auto mb-6">
-              <Gauge size={32} className="text-copper" />
-            </div>
-            <h1 className="text-foreground mb-4">Core Web Vitals Report</h1>
-            <p className="text-muted-foreground text-lg">
-              Echtzeit-Analyse der Performance-Metriken für diese Seite
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold mb-2">Performance & SEO Dashboard</h1>
+          <p className="text-muted-foreground mb-8">
+            Überwachen Sie Core Web Vitals, SEO-Metriken und strukturierte Daten
+          </p>
 
-      {/* Overall Score */}
-      <section className="py-8 border-b border-border">
-        <div className="container-wide">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-6">
-              <motion.div
-                className={`w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold ${
-                  overallScore >= 80 ? "bg-green-500/10 text-green-500" :
-                  overallScore >= 50 ? "bg-yellow-500/10 text-yellow-500" :
-                  "bg-red-500/10 text-red-500"
-                }`}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3, type: "spring" }}
-              >
-                {overallScore}%
-              </motion.div>
-              <div>
-                <h2 className="font-display text-xl text-foreground">Gesamtbewertung</h2>
-                <p className="text-muted-foreground text-sm">
-                  {overallScore >= 80 ? "Ausgezeichnete Performance" :
-                   overallScore >= 50 ? "Verbesserungspotenzial" :
-                   "Optimierung erforderlich"}
-                </p>
+          <Tabs defaultValue="vitals" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="vitals" className="flex items-center gap-2">
+                <Gauge className="h-4 w-4" />
+                Core Web Vitals
+              </TabsTrigger>
+              <TabsTrigger value="seo" className="flex items-center gap-2">
+                <Search className="h-4 w-4" />
+                SEO-Audit
+              </TabsTrigger>
+              <TabsTrigger value="schema" className="flex items-center gap-2">
+                <FileSearch className="h-4 w-4" />
+                Schema.org
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="vitals" className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {vitals.map((vital) => {
+                  const Icon = vitalIcons[vital.name] || Gauge;
+                  return (
+                    <Card key={vital.name}>
+                      <CardHeader className="pb-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Icon className="h-5 w-5 text-muted-foreground" />
+                            <CardTitle className="text-lg">{vital.name}</CardTitle>
+                          </div>
+                          <Badge 
+                            variant="secondary" 
+                            className={`${getRatingColor(vital.rating)} text-white`}
+                          >
+                            {getRatingLabel(vital.rating)}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-3xl font-bold mb-2">
+                          {vital.value !== null 
+                            ? vital.name === 'CLS' 
+                              ? vital.value.toFixed(3)
+                              : `${Math.round(vital.value)}${vital.unit}`
+                            : '—'
+                          }
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {vital.description}
+                        </p>
+                        <div className="mt-3 text-xs text-muted-foreground">
+                          <span className="text-green-500">Gut: ≤{vital.threshold.good}{vital.unit}</span>
+                          {' • '}
+                          <span className="text-red-500">Schlecht: {'>'}{vital.threshold.needsImprovement}{vital.unit}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
-            </div>
-            <div className="flex items-center gap-4">
-              {lastUpdated && (
-                <span className="text-sm text-muted-foreground">
-                  Aktualisiert: {lastUpdated.toLocaleTimeString("de-CH")}
-                </span>
-              )}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={collectMetrics}
-                disabled={isLoading}
-              >
-                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
-                Neu messen
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Metrics Grid */}
-      <section className="section-padding-sm">
-        <div className="container-wide">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {metrics.map((metric, index) => (
-              <motion.div
-                key={metric.name}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <GlowCard className={`p-6 h-full ${getRatingBg(metric.rating)}`}>
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      {metric.name === "LCP" && <LayoutDashboard className="w-5 h-5 text-copper" />}
-                      {metric.name === "FID" && <Timer className="w-5 h-5 text-copper" />}
-                      {metric.name === "CLS" && <Activity className="w-5 h-5 text-copper" />}
-                      {metric.name === "FCP" && <Gauge className="w-5 h-5 text-copper" />}
-                      {metric.name === "TTFB" && <Timer className="w-5 h-5 text-copper" />}
-                      {metric.name === "INP" && <Activity className="w-5 h-5 text-copper" />}
-                      <span className="font-bold text-foreground">{metric.name}</span>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Optimierungsempfehlungen</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-3">
+                    <div className="p-3 rounded-lg bg-muted/50">
+                      <h4 className="font-medium mb-1">LCP optimieren</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Bilder mit priority-Attribut laden, kritisches CSS inline einbinden, 
+                        Hero-Bilder vorladen.
+                      </p>
                     </div>
-                    {getRatingIcon(metric.rating)}
+                    <div className="p-3 rounded-lg bg-muted/50">
+                      <h4 className="font-medium mb-1">CLS minimieren</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Feste Dimensionen für Bilder und eingebettete Elemente, 
+                        Fonts mit font-display: swap laden.
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/50">
+                      <h4 className="font-medium mb-1">FID/INP verbessern</h4>
+                      <p className="text-sm text-muted-foreground">
+                        JavaScript aufteilen, lange Tasks vermeiden, 
+                        Event-Handler optimieren.
+                      </p>
+                    </div>
                   </div>
-                  
-                  <div className="mb-4">
-                    {metric.value !== null ? (
-                      <span className={`text-3xl font-bold ${getRatingColor(metric.rating)}`}>
-                        {metric.name === "CLS" 
-                          ? metric.value.toFixed(3) 
-                          : Math.round(metric.value)}
-                        <span className="text-lg ml-1">{metric.unit}</span>
-                      </span>
-                    ) : (
-                      <span className="text-2xl text-muted-foreground">Messung...</span>
-                    )}
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-4">{metric.description}</p>
-                  
-                  <div className="flex items-center gap-4 text-xs">
-                    <span className="text-green-500">
-                      Gut: ≤{metric.name === "CLS" ? metric.thresholds.good : `${metric.thresholds.good}ms`}
-                    </span>
-                    <span className="text-red-500">
-                      Schlecht: &gt;{metric.name === "CLS" ? metric.thresholds.poor : `${metric.thresholds.poor}ms`}
-                    </span>
-                  </div>
-                </GlowCard>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-      {/* Recommendations */}
-      <section className="section-padding bg-secondary/30">
-        <div className="container-narrow">
-          <h2 className="font-display text-2xl text-foreground mb-8 text-center">Optimierungsempfehlungen</h2>
-          
-          <div className="space-y-4">
-            {metrics.filter(m => m.rating === "needs-improvement" || m.rating === "poor").map(metric => (
-              <GlowCard key={metric.name} className="p-6">
-                <div className="flex items-start gap-4">
-                  {getRatingIcon(metric.rating)}
-                  <div>
-                    <h3 className="font-medium text-foreground mb-1">{metric.name} optimieren</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {metric.name === "LCP" && "Bilder komprimieren, kritische Ressourcen vorladen, Server-Response-Zeit verbessern."}
-                      {metric.name === "FID" && "JavaScript-Ausführung optimieren, lange Tasks aufteilen, Third-Party-Scripts reduzieren."}
-                      {metric.name === "CLS" && "Bildgrössen explizit angeben, Schriften vorladen, dynamische Inhalte reservieren."}
-                      {metric.name === "FCP" && "Kritisches CSS inlinen, Render-blockierende Ressourcen eliminieren."}
-                      {metric.name === "TTFB" && "Server-Caching verbessern, CDN nutzen, Datenbankabfragen optimieren."}
-                      {metric.name === "INP" && "Event-Handler optimieren, UI-Updates batchen, React-Rendering verbessern."}
-                    </p>
-                  </div>
-                </div>
-              </GlowCard>
-            ))}
-            
-            {metrics.filter(m => m.rating === "needs-improvement" || m.rating === "poor").length === 0 && (
-              <GlowCard className="p-8 text-center">
-                <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                <h3 className="font-display text-xl text-foreground mb-2">Ausgezeichnete Performance!</h3>
-                <p className="text-muted-foreground">
-                  Alle Core Web Vitals sind im grünen Bereich. Weiter so!
-                </p>
-              </GlowCard>
-            )}
-          </div>
-        </div>
-      </section>
+            <TabsContent value="seo">
+              <SEOAuditDashboard />
+            </TabsContent>
 
-      {/* Schema.org Validation */}
-      <section className="section-padding">
-        <div className="container-narrow">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-8"
-          >
-            <div className="w-12 h-12 rounded-xl bg-copper/10 flex items-center justify-center mx-auto mb-4">
-              <Code size={24} className="text-copper" />
-            </div>
-            <h2 className="font-display text-2xl text-foreground mb-2">Strukturierte Daten</h2>
-            <p className="text-muted-foreground">
-              Validierung der Schema.org-Implementierungen auf dieser Seite
-            </p>
-          </motion.div>
-          
-          <SchemaValidator />
-          
-          {/* External Tools */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <GlowCard className="p-6">
-              <h3 className="font-medium text-foreground mb-2 flex items-center gap-2">
-                <ExternalLink className="w-4 h-4" />
-                Google Rich Results Test
-              </h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Testen Sie, ob Ihre strukturierten Daten für Rich Results in der Google-Suche qualifiziert sind.
-              </p>
-              <Button variant="outline" size="sm" asChild>
-                <a 
-                  href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fgentlehands.ch" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  Test starten
-                </a>
-              </Button>
-            </GlowCard>
-            
-            <GlowCard className="p-6">
-              <h3 className="font-medium text-foreground mb-2 flex items-center gap-2">
-                <ExternalLink className="w-4 h-4" />
-                Schema.org Validator
-              </h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Überprüfen Sie die Syntax und Vollständigkeit Ihrer Schema.org-Markup-Daten.
-              </p>
-              <Button variant="outline" size="sm" asChild>
-                <a 
-                  href="https://validator.schema.org/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  Validator öffnen
-                </a>
-              </Button>
-            </GlowCard>
-          </div>
+            <TabsContent value="schema">
+              <SchemaValidator />
+            </TabsContent>
+          </Tabs>
         </div>
-      </section>
+      </div>
     </Layout>
   );
 };

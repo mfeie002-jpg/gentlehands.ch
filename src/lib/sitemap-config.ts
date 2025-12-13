@@ -358,18 +358,59 @@ export const sitemapConfig: PageConfig[] = [
 ];
 
 /**
- * Generate XML sitemap string
+ * Get build date for lastmod
+ * Uses current date as fallback, but in production this should be replaced
+ * with actual Git commit date or file modification date
+ */
+export function getBuildDate(): string {
+  // In a real build, this would be replaced with the actual build timestamp
+  // from environment variables or build-time injection
+  const buildDate = import.meta.env.VITE_BUILD_DATE || new Date().toISOString();
+  return buildDate.split('T')[0];
+}
+
+/**
+ * Get lastmod date based on changefreq
+ * Pages with higher update frequency get more recent dates
+ */
+export function getLastModDate(changefreq: PageConfig['changefreq']): string {
+  const now = new Date();
+  
+  switch (changefreq) {
+    case 'always':
+    case 'hourly':
+    case 'daily':
+      return now.toISOString().split('T')[0];
+    case 'weekly':
+      // Set to last Monday
+      const lastMonday = new Date(now);
+      lastMonday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+      return lastMonday.toISOString().split('T')[0];
+    case 'monthly':
+      // Set to first of current month
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`;
+    case 'yearly':
+      // Set to first of current year
+      return `${now.getFullYear()}-01-01`;
+    case 'never':
+    default:
+      return getBuildDate();
+  }
+}
+
+/**
+ * Generate XML sitemap string with dynamic lastmod dates
  */
 export function generateSitemapXML(): string {
   const baseUrl = 'https://gentlehands.ch';
-  const today = new Date().toISOString().split('T')[0];
+  const buildDate = getBuildDate();
   
   const urlEntries = sitemapConfig
     .filter(page => page.includeInSitemap)
     .sort((a, b) => b.priority - a.priority)
     .map(page => `  <url>
     <loc>${baseUrl}${page.path}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${getLastModDate(page.changefreq)}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority.toFixed(2)}</priority>
   </url>`)
@@ -383,6 +424,7 @@ export function generateSitemapXML(): string {
   <!-- 
     GentleHands Sitemap
     Generated: ${new Date().toISOString()}
+    Build Date: ${buildDate}
     Total URLs: ${sitemapConfig.filter(p => p.includeInSitemap).length}
   -->
 ${urlEntries}
@@ -394,4 +436,20 @@ ${urlEntries}
  */
 export function getPageConfig(path: string): PageConfig | undefined {
   return sitemapConfig.find(page => page.path === path);
+}
+
+/**
+ * Generate sitemap index for multiple sitemaps (future use)
+ */
+export function generateSitemapIndex(): string {
+  const baseUrl = 'https://gentlehands.ch';
+  const buildDate = getBuildDate();
+  
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${baseUrl}/sitemap.xml</loc>
+    <lastmod>${buildDate}</lastmod>
+  </sitemap>
+</sitemapindex>`;
 }

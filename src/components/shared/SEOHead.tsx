@@ -9,7 +9,7 @@ interface SEOHeadProps {
   type?: "website" | "article" | "product";
   noIndex?: boolean;
   schema?: Record<string, unknown>;
-  jsonLd?: Record<string, unknown>;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   keywords?: string[];
   author?: string;
   publishedTime?: string;
@@ -110,10 +110,18 @@ export const SEOHead = memo(({
       <meta name="twitter:image" content={image} />
       <meta name="twitter:image:alt" content={title} />
       
-      {/* JSON-LD Schema */}
-      <script type="application/ld+json">
-        {JSON.stringify(finalSchema)}
-      </script>
+      {/* JSON-LD Schema - supports single or multiple schemas */}
+      {Array.isArray(finalSchema) ? (
+        finalSchema.map((schema, index) => (
+          <script key={index} type="application/ld+json">
+            {JSON.stringify(schema)}
+          </script>
+        ))
+      ) : (
+        <script type="application/ld+json">
+          {JSON.stringify(finalSchema)}
+        </script>
+      )}
     </Helmet>
   );
 });
