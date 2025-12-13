@@ -16,6 +16,7 @@ import { ContactInfoCards } from "@/components/contact/ContactInfoCards";
 import { LocationMapSection } from "@/components/location/LocationMapSection";
 import { LocationArrivalGuide } from "@/components/location/LocationArrivalGuide";
 import { LazyImage } from "@/components/shared/LazyImage";
+import { InternalLinkingWidget } from "@/components/shared/InternalLinkingWidget";
 
 import zurichMap from "@/assets/zurich-map.jpg";
 import contactWelcome from "@/assets/contact-welcome.jpg";
@@ -458,6 +459,14 @@ const Kontakt = () => {
             </p>
           </motion.div>
         </div>
+      </div>
+    </section>
+    
+    {/* Internal Linking */}
+    <section className="py-12 bg-muted/30">
+      <div className="container mx-auto px-4">
+        <h2 className="text-2xl font-serif font-bold mb-6 text-center">Das könnte Sie auch interessieren</h2>
+        <InternalLinkingWidget currentPath="/kontakt" variant="footer" maxLinks={3} />
       </div>
     </section>
   </Layout>

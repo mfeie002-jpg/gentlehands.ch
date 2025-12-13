@@ -15,6 +15,7 @@ import { ThemeCombinationsSection } from "@/components/erlebnisse/ThemeCombinati
 import { ExperienceThemeCard } from "@/components/experience/ExperienceThemeCard";
 import { ExperienceCompareModal } from "@/components/experience/ExperienceCompareModal";
 import { LazyImage } from "@/components/shared/LazyImage";
+import { InternalLinkingWidget } from "@/components/shared/InternalLinkingWidget";
 
 import experienceOcean from "@/assets/experience-ocean.jpg";
 import experienceAlpine from "@/assets/experience-alpine.jpg";
@@ -622,6 +623,11 @@ const Erlebnisse = () => {
               <Button variant="petrol-outline" size="lg" asChild>
                 <Link to="/buchung?theme=surprise">Surprise Experience</Link>
               </Button>
+            </div>
+            
+            {/* Internal Linking for better crawlability */}
+            <div className="mt-12">
+              <InternalLinkingWidget currentPath="/erlebnisse" variant="footer" maxLinks={4} />
             </div>
           </motion.div>
         </div>

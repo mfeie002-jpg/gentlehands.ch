@@ -13,6 +13,7 @@ import { MassageComparisonTable } from "@/components/massagen/MassageComparisonT
 import { MassageBenefitsGrid } from "@/components/massagen/MassageBenefitsGrid";
 import { MassageProcessSection } from "@/components/massagen/MassageProcessSection";
 import { LazyImage } from "@/components/shared/LazyImage";
+import { InternalLinkingWidget } from "@/components/shared/InternalLinkingWidget";
 
 import massageDeepRelease from "@/assets/massage-deep-release.jpg";
 import massageStressReset from "@/assets/massage-stress-reset.jpg";
@@ -536,6 +537,11 @@ const Massagen = () => {
               <Button variant="petrol-outline" size="lg" asChild>
                 <Link to="/erlebnisse">Themes entdecken</Link>
               </Button>
+            </div>
+            
+            {/* Internal Linking for better crawlability */}
+            <div className="mt-12">
+              <InternalLinkingWidget currentPath="/massagen" variant="footer" maxLinks={4} />
             </div>
           </motion.div>
         </div>
