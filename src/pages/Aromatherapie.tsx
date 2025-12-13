@@ -79,9 +79,20 @@ const Aromatherapie = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Aromatherapie | GentleHands Zürich"
-        description="Entdecken Sie die Kraft der Düfte. Unsere Aromatherapie-Optionen verstärken Ihr Massage-Erlebnis und fördern tiefe Entspannung."
+        title="Aromatherapie – Düfte für Ihre Massage | GentleHands Zürich"
+        description="Verstärken Sie Ihre Tiefenentspannung mit therapeutischen Düften. Lavendel, Rose, Zedernholz und mehr – passend zu Ihrem Themenraum."
         canonical="https://gentlehands.ch/aromatherapie"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "serviceType": "Aromatherapie",
+          "provider": {
+            "@type": "HealthAndBeautyBusiness",
+            "name": "GentleHands",
+            "address": { "@type": "PostalAddress", "addressLocality": "Zürich", "addressCountry": "CH" }
+          },
+          "description": "Aromatherapie-Behandlung mit 100% reinen ätherischen Ölen zur Verstärkung der Massage-Wirkung"
+        }}
       />
 
       {/* Hero */}

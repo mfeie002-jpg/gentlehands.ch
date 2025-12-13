@@ -85,6 +85,16 @@ const Preise = () => {
         title="Preise – Transparente Massage-Preise | GentleHands Zürich"
         description="Transparente Preise für Tiefenentspannung: 60, 90 oder 120 Minuten professionelle Massage in atmosphärischen Themenräumen. Ab CHF 180."
         canonical="https://gentlehands.ch/preise"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "PriceSpecification",
+          "priceCurrency": "CHF",
+          "eligibleQuantity": {
+            "@type": "QuantitativeValue",
+            "unitText": "Minuten"
+          },
+          "description": "Massage-Preise bei GentleHands Zürich: 60 Min ab CHF 180, 90 Min ab CHF 260, 120 Min ab CHF 340"
+        }}
       />
 
       {/* Hero with Image */}

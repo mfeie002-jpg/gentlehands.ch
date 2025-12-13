@@ -171,6 +171,18 @@ const Massagen = () => {
         title="Massagen – Deep Release, Stress Reset & mehr | GentleHands Zürich"
         description="Professionelle Entspannungsmassagen für Frauen: Deep Release, Stress Reset, Emotional Grounding. Kombinierbar mit 6 atmosphärischen Themenräumen in Zürich."
         canonical="https://gentlehands.ch/massagen"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "GentleHands Massagen",
+          "description": "Professionelle Entspannungsmassagen für Frauen in Zürich",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Deep Release Session", "description": "Intensive Tiefenentspannung bei starken Verspannungen" },
+            { "@type": "ListItem", "position": 2, "name": "Stress Reset", "description": "Fliessende Bewegungen gegen mentale Erschöpfung" },
+            { "@type": "ListItem", "position": 3, "name": "Emotional Grounding", "description": "Sanfte Berührung für emotionale Balance" },
+            { "@type": "ListItem", "position": 4, "name": "Ganzkörper Tiefenentspannung", "description": "Vollständige körperliche und mentale Entspannung" }
+          ]
+        }}
       />
 
       {/* Hero with Parallax */}

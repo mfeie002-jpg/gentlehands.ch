@@ -75,9 +75,20 @@ const Soundtherapie = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Soundtherapie & Musik | GentleHands Zürich"
-        description="Die richtige Klangkulisse verstärkt Ihr Entspannungserlebnis. Entdecken Sie unsere Sound-Optionen von Naturklängen bis Stille."
+        title="Soundtherapie – Klänge für Ihre Massage | GentleHands Zürich"
+        description="Die perfekte Klangkulisse für Ihre Tiefenentspannung: Naturklänge, Klangschalen, Ambient Music oder bewusste Stille in unseren Themenräumen."
         canonical="https://gentlehands.ch/soundtherapie"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "serviceType": "Soundtherapie",
+          "provider": {
+            "@type": "HealthAndBeautyBusiness",
+            "name": "GentleHands",
+            "address": { "@type": "PostalAddress", "addressLocality": "Zürich", "addressCountry": "CH" }
+          },
+          "description": "Sound-Therapie mit Naturklängen, Klangschalen und Ambient Music zur Verstärkung der Entspannung"
+        }}
       />
 
       {/* Hero */}

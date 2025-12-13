@@ -60,9 +60,21 @@ const Vorbereitung = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Vorbereitung auf Ihre Session | GentleHands Zürich"
-        description="Tipps zur optimalen Vorbereitung auf Ihre professionelle Entspannungsmassage. Erfahren Sie, was Sie vor, während und nach Ihrer Session erwartet."
+        title="Vorbereitung – Tipps für Ihre Session | GentleHands Zürich"
+        description="Optimale Vorbereitung auf Ihre Massage in unseren Themenräumen. Erfahren Sie, was Sie vor, während und nach Ihrer Session erwartet."
         canonical="https://gentlehands.ch/vorbereitung"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "HowTo",
+          "name": "Vorbereitung auf Ihre GentleHands Session",
+          "description": "Schritt-für-Schritt-Anleitung für die optimale Vorbereitung auf Ihre Massage",
+          "step": [
+            { "@type": "HowToStep", "position": 1, "name": "Ankommen", "text": "Kommen Sie 10-15 Minuten vor Ihrem Termin an" },
+            { "@type": "HowToStep", "position": 2, "name": "Beratungsgespräch", "text": "Besprechen Sie Ihre Wünsche und eventuelle Bedenken" },
+            { "@type": "HowToStep", "position": 3, "name": "Vorbereitung", "text": "Der Themenraum wird nach Ihrem Wunsch eingerichtet" },
+            { "@type": "HowToStep", "position": 4, "name": "Session", "text": "Geniessen Sie Ihre personalisierte Massage" }
+          ]
+        }}
       />
 
       {/* Hero with Image */}
