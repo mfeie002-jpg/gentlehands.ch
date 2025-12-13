@@ -2,12 +2,28 @@ import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Phone, ArrowRight } from "lucide-react";
+import { Sparkles, Phone, ArrowRight, Mail } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import heroImage from "@/assets/massage-hands-shoulders.jpg";
 
 export const FinalCTASection = () => {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setIsLoading(false);
+    setEmail("");
+    toast.success("Vielen Dank! Sie erhalten bald Neuigkeiten von uns.");
+  };
+
   return (
-    <section className="relative min-h-[50vh] sm:min-h-[60vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <img
@@ -64,7 +80,7 @@ export const FinalCTASection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
+              className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12"
             >
               <Button variant="copper" size="xl" asChild className="min-w-[180px] sm:min-w-[200px] w-full sm:w-auto">
                 <Link to="/buchung">
@@ -85,13 +101,47 @@ export const FinalCTASection = () => {
               </Button>
             </motion.div>
 
+            {/* Newsletter Integration */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="border-t border-background/20 pt-8 sm:pt-10"
+            >
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Mail size={18} className="text-copper" />
+                <span className="text-background/80 text-sm font-medium">Newsletter</span>
+              </div>
+              <p className="text-background/60 text-sm mb-4 max-w-md mx-auto">
+                Exklusive Angebote und Wellness-Tipps direkt in Ihr Postfach.
+              </p>
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Ihre E-Mail-Adresse"
+                  className="flex-1 px-4 py-3 rounded-xl bg-background/10 border border-background/20 focus:border-copper focus:outline-none focus:ring-2 focus:ring-copper/20 text-background placeholder:text-background/50 transition-colors backdrop-blur-sm"
+                  required
+                />
+                <Button type="submit" variant="copper" disabled={isLoading} className="whitespace-nowrap">
+                  {isLoading ? "..." : "Anmelden"}
+                  <ArrowRight size={16} className="ml-1" />
+                </Button>
+              </form>
+              <p className="text-background/40 text-xs mt-3">
+                Mit der Anmeldung akzeptieren Sie unsere Datenschutzbestimmungen.
+              </p>
+            </motion.div>
+
             {/* Trust Note */}
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
-              className="text-background/60 text-xs sm:text-sm mt-6 sm:mt-8 px-4"
+              className="text-background/60 text-xs sm:text-sm mt-8 sm:mt-10 px-4"
             >
               <span className="block sm:inline">Professionelle Entspannungsmassagen</span>
               <span className="hidden sm:inline"> • </span>
