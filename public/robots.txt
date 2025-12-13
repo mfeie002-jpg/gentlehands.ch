@@ -1,26 +1,51 @@
-# GentleHands - Exklusive Erlebnismassagen für Frauen
+# GentleHands - Exklusive Massage-Erlebnisse für Frauen in Zürich
 # https://gentlehands.ch
 
+# Standard crawling rules
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /admin/*
 Disallow: /dashboard
+Disallow: /dashboard/*
 Disallow: /login
 Disallow: /buchung/bestaetigung
+Disallow: /buchung/verifizieren
+Disallow: /api/
+Disallow: /_next/
+Disallow: /supabase/
 
-# Crawl delay for polite crawling
+# Private/internal paths
+Disallow: /*?token=
+Disallow: /*?verification=
+
+# Polite crawling
 Crawl-delay: 1
 
 # Sitemap location
 Sitemap: https://gentlehands.ch/sitemap.xml
 
-# Major search engines
+# Major search engines - full access
 User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
 Allow: /
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+# Social media bots - full access for rich previews
 User-agent: Twitterbot
 Allow: /
 
@@ -30,7 +55,28 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-# Block AI scrapers (optional - can be adjusted based on preference)
+User-agent: Pinterest
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+# SEO tools - allow for analysis
+User-agent: Screaming Frog SEO Spider
+Allow: /
+
+User-agent: AhrefsBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: SemrushBot
+Allow: /
+Crawl-delay: 2
+
+# Block AI training scrapers
 User-agent: GPTBot
 Disallow: /
 
@@ -45,3 +91,31 @@ Disallow: /
 
 User-agent: Claude-Web
 Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+# Block bad bots and scrapers
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: magpie-crawler
+Disallow: /
+
+# Host directive for search engines
+Host: https://gentlehands.ch
