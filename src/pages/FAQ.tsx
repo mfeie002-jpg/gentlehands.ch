@@ -153,8 +153,8 @@ const FAQ = () => {
   return (
     <Layout>
       <SEOHead 
-        title="FAQ – Häufige Fragen | GentleHands Zürich"
-        description="Antworten auf häufige Fragen zu GentleHands: Was ist das genau? Für wen? Ist es ein Erotikstudio? Alle wichtigen Infos auf einen Blick."
+        title="FAQ – Häufige Fragen zu Themenräumen & Massagen | GentleHands"
+        description="Antworten auf häufige Fragen zu GentleHands: Was sind Themenräume? Wie läuft eine Session ab? Für wen ist es geeignet? Alle wichtigen Infos."
         canonical="https://gentlehands.ch/faq"
         jsonLd={faqJsonLd}
       />

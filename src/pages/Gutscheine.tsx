@@ -91,8 +91,8 @@ const Gutscheine = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Gutscheine | GentleHands Zürich"
-        description="Verschenken Sie Entspannung: Exklusive GentleHands Gutscheine für unvergessliche Massage-Erlebnisse."
+        title="Gutscheine – Entspannung verschenken | GentleHands Zürich"
+        description="Verschenken Sie Tiefenentspannung: Exklusive GentleHands Gutscheine für unvergessliche Massagen in atmosphärischen Themenräumen. Das perfekte Geschenk."
         canonical="https://gentlehands.ch/gutscheine"
       />
 

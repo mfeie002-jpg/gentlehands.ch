@@ -70,8 +70,8 @@ const Kontakt = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Kontakt | GentleHands Zürich"
-        description="Kontaktieren Sie GentleHands in Zürich. Fragen, Terminanfragen oder persönliche Beratung – wir sind für Sie da."
+        title="Kontakt – Terminanfragen & Beratung | GentleHands Zürich"
+        description="Kontaktieren Sie GentleHands in Zürich. Fragen zu Themenräumen, Terminanfragen oder persönliche Beratung – wir antworten innerhalb 24h."
         canonical="https://gentlehands.ch/kontakt"
       />
 

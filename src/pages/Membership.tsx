@@ -88,8 +88,8 @@ const Membership = () => {
   return (
     <Layout>
       <SEOHead 
-        title="Membership | GentleHands Zürich"
-        description="GentleHands Membership Programme für regelmässige Entspannung. Exklusive Vorteile, bevorzugte Termine und besondere Erlebnisse."
+        title="Membership – Regelmässige Entspannung | GentleHands Zürich"
+        description="GentleHands Membership für regelmässige Tiefenentspannung. Exklusive Vorteile, bevorzugte Termine und Zugang zu allen Themenräumen."
         canonical="https://gentlehands.ch/membership"
       />
 
