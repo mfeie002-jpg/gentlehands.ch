@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
-import { Activity, Gauge, Timer, LayoutDashboard, CheckCircle, AlertTriangle, XCircle, RefreshCw } from "lucide-react";
+import { Activity, Gauge, Timer, LayoutDashboard, CheckCircle, AlertTriangle, XCircle, RefreshCw, Code, ExternalLink } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { Button } from "@/components/ui/button";
 import { GlowCard } from "@/components/shared/GlowCard";
+import { SchemaValidator } from "@/components/shared/SchemaValidator";
 
 interface WebVital {
   name: string;
@@ -389,6 +390,69 @@ const Performance = () => {
                 </p>
               </GlowCard>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* Schema.org Validation */}
+      <section className="section-padding">
+        <div className="container-narrow">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <div className="w-12 h-12 rounded-xl bg-copper/10 flex items-center justify-center mx-auto mb-4">
+              <Code size={24} className="text-copper" />
+            </div>
+            <h2 className="font-display text-2xl text-foreground mb-2">Strukturierte Daten</h2>
+            <p className="text-muted-foreground">
+              Validierung der Schema.org-Implementierungen auf dieser Seite
+            </p>
+          </motion.div>
+          
+          <SchemaValidator />
+          
+          {/* External Tools */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <GlowCard className="p-6">
+              <h3 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                <ExternalLink className="w-4 h-4" />
+                Google Rich Results Test
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Testen Sie, ob Ihre strukturierten Daten für Rich Results in der Google-Suche qualifiziert sind.
+              </p>
+              <Button variant="outline" size="sm" asChild>
+                <a 
+                  href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fgentlehands.ch" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  Test starten
+                </a>
+              </Button>
+            </GlowCard>
+            
+            <GlowCard className="p-6">
+              <h3 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                <ExternalLink className="w-4 h-4" />
+                Schema.org Validator
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Überprüfen Sie die Syntax und Vollständigkeit Ihrer Schema.org-Markup-Daten.
+              </p>
+              <Button variant="outline" size="sm" asChild>
+                <a 
+                  href="https://validator.schema.org/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  Validator öffnen
+                </a>
+              </Button>
+            </GlowCard>
           </div>
         </div>
       </section>
