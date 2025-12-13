@@ -108,14 +108,36 @@ const Erfahrungen = () => {
   const nextStory = () => setActiveStory((prev) => (prev + 1) % stories.length);
   const prevStory = () => setActiveStory((prev) => (prev - 1 + stories.length) % stories.length);
 
-  // Generate Review schema for structured data
-  const reviewSchema = generateReviewSchema(
-    testimonials.map(t => ({
-      author: t.name,
-      rating: t.rating,
-      content: t.content,
+  // Generate comprehensive Review schema for structured data
+  const reviewSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "GentleHands",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "200",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": testimonials.map(t => ({
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "name": t.name
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": t.rating,
+        "bestRating": "5"
+      },
+      "reviewBody": t.content,
+      "itemReviewed": {
+        "@type": "Service",
+        "name": `Massage im ${t.theme} Themenraum`
+      }
     }))
-  );
+  };
 
   return (
     <Layout>
