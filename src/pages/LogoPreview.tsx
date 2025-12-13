@@ -1,4 +1,7 @@
-import { LogoOption1, LogoOption2, LogoOption3, LogoOption4, LogoOption5 } from "@/components/shared/LogoOptions";
+import { 
+  LogoOption1, LogoOption2, LogoOption3, LogoOption4, LogoOption5,
+  LogoOption6, LogoOption7, LogoOption8, LogoOption9, LogoOption10
+} from "@/components/shared/LogoOptions";
 import { Layout } from "@/components/layout/Layout";
 
 const LogoPreview = () => {
@@ -7,7 +10,7 @@ const LogoPreview = () => {
     <div className="min-h-screen bg-background py-12 pt-32">
       <div className="container max-w-4xl mx-auto px-4">
         <h1 className="font-display text-4xl text-foreground mb-4">Logo Options</h1>
-        <p className="text-muted-foreground mb-12">Choose your preferred logo design featuring hands imagery:</p>
+        <p className="text-muted-foreground mb-12">Choose your preferred logo design — hands, feelings of completeness, relaxation & satisfaction:</p>
         
         <div className="space-y-12">
           {/* Option 1 */}
@@ -74,12 +77,82 @@ const LogoPreview = () => {
               <LogoOption5 size="lg" />
             </div>
           </div>
+
+          {/* Divider */}
+          <div className="border-t border-border/30 pt-8">
+            <p className="text-lg font-display text-foreground mb-6">Emotional Concepts</p>
+          </div>
+
+          {/* Option 6 */}
+          <div className="p-8 rounded-2xl border border-border/50 bg-card">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-copper/20 text-copper text-sm font-medium px-3 py-1 rounded-full">Option 6</span>
+              <span className="text-muted-foreground text-sm">Embracing Circle — completeness, wholeness</span>
+            </div>
+            <div className="flex flex-wrap gap-8 items-center">
+              <LogoOption6 size="sm" />
+              <LogoOption6 size="md" />
+              <LogoOption6 size="lg" />
+            </div>
+          </div>
+
+          {/* Option 7 */}
+          <div className="p-8 rounded-2xl border border-border/50 bg-card">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-copper/20 text-copper text-sm font-medium px-3 py-1 rounded-full">Option 7</span>
+              <span className="text-muted-foreground text-sm">Breath Wave — relaxation, flow (stacked text)</span>
+            </div>
+            <div className="flex flex-wrap gap-8 items-center">
+              <LogoOption7 size="sm" />
+              <LogoOption7 size="md" />
+              <LogoOption7 size="lg" />
+            </div>
+          </div>
+
+          {/* Option 8 */}
+          <div className="p-8 rounded-2xl border border-border/50 bg-card">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-copper/20 text-copper text-sm font-medium px-3 py-1 rounded-full">Option 8</span>
+              <span className="text-muted-foreground text-sm">Infinity Touch — continuous care, satisfaction (all caps)</span>
+            </div>
+            <div className="flex flex-wrap gap-8 items-center">
+              <LogoOption8 size="sm" />
+              <LogoOption8 size="md" />
+              <LogoOption8 size="lg" />
+            </div>
+          </div>
+
+          {/* Option 9 */}
+          <div className="p-8 rounded-2xl border border-border/50 bg-card">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-copper/20 text-copper text-sm font-medium px-3 py-1 rounded-full">Option 9</span>
+              <span className="text-muted-foreground text-sm">Nested Comfort — safety, being held (reversed colors)</span>
+            </div>
+            <div className="flex flex-wrap gap-8 items-center">
+              <LogoOption9 size="sm" />
+              <LogoOption9 size="md" />
+              <LogoOption9 size="lg" />
+            </div>
+          </div>
+
+          {/* Option 10 */}
+          <div className="p-8 rounded-2xl border border-border/50 bg-card">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-copper/20 text-copper text-sm font-medium px-3 py-1 rounded-full">Option 10</span>
+              <span className="text-muted-foreground text-sm">Soft Touch — unique, personal connection (dot separator)</span>
+            </div>
+            <div className="flex flex-wrap gap-8 items-center">
+              <LogoOption10 size="sm" />
+              <LogoOption10 size="md" />
+              <LogoOption10 size="lg" />
+            </div>
+          </div>
         </div>
 
         <div className="mt-12 p-6 rounded-xl bg-muted/30 border border-border/30">
           <p className="text-foreground font-medium mb-2">How to use:</p>
           <p className="text-muted-foreground text-sm">
-            Tell me which option you prefer (1-5) and I'll update the main Logo component to use that design across the entire site.
+            Tell me which option you prefer (1-10) and I'll update the main Logo component to use that design across the entire site.
           </p>
         </div>
       </div>
