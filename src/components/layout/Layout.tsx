@@ -2,7 +2,6 @@ import { ReactNode, useCallback, useEffect, memo } from "react";
 import { useLocation } from "react-router-dom";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-import { CustomCursor } from "@/components/shared/CustomCursor";
 import { ScrollProgress } from "@/components/shared/ScrollProgress";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SmoothScrollProvider } from "@/components/shared/SmoothScroll";
@@ -59,7 +58,6 @@ export const Layout = memo(({ children }: LayoutProps) => {
             isRefreshing={isRefreshing} 
             progress={pullProgress} 
           />
-          <CustomCursor />
           <ScrollProgress />
           <Header />
           <main 
