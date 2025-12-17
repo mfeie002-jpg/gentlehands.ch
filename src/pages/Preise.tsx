@@ -12,6 +12,7 @@ import { FloatingElements } from "@/components/shared/FloatingElements";
 import { PriceTierCard } from "@/components/pricing/PriceTierCard";
 import { PriceComparisonRow } from "@/components/pricing/PriceComparisonRow";
 import { LazyImage } from "@/components/shared/LazyImage";
+import { TherapistPricingSection } from "@/components/pricing/TherapistPricingSection";
 import pricingPremiumImage from "@/assets/pricing-premium.jpg";
 const pricingTiers = [
   {
@@ -552,6 +553,9 @@ const Preise = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Therapist Pricing Section */}
+      <TherapistPricingSection />
     </Layout>
   );
 };
