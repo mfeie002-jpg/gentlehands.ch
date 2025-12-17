@@ -396,6 +396,59 @@ export type Database = {
           },
         ]
       }
+      massage_trainings: {
+        Row: {
+          content: string
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          duration_minutes: number | null
+          id: string
+          is_active: boolean | null
+          massage_type_id: string | null
+          step_by_step_guide: Json | null
+          title: string
+          updated_at: string | null
+          video_url: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          massage_type_id?: string | null
+          step_by_step_guide?: Json | null
+          title: string
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          massage_type_id?: string | null
+          step_by_step_guide?: Json | null
+          title?: string
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "massage_trainings_massage_type_id_fkey"
+            columns: ["massage_type_id"]
+            isOneToOne: false
+            referencedRelation: "massage_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       massage_types: {
         Row: {
           base_price: number | null
@@ -608,6 +661,67 @@ export type Database = {
         }
         Relationships: []
       }
+      therapist_certifications: {
+        Row: {
+          attempts: number | null
+          certified_at: string | null
+          created_at: string | null
+          id: string
+          massage_type_id: string
+          passed: boolean | null
+          quiz_score: number | null
+          therapist_id: string
+          training_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          attempts?: number | null
+          certified_at?: string | null
+          created_at?: string | null
+          id?: string
+          massage_type_id: string
+          passed?: boolean | null
+          quiz_score?: number | null
+          therapist_id: string
+          training_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          attempts?: number | null
+          certified_at?: string | null
+          created_at?: string | null
+          id?: string
+          massage_type_id?: string
+          passed?: boolean | null
+          quiz_score?: number | null
+          therapist_id?: string
+          training_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "therapist_certifications_massage_type_id_fkey"
+            columns: ["massage_type_id"]
+            isOneToOne: false
+            referencedRelation: "massage_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapist_certifications_therapist_id_fkey"
+            columns: ["therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "therapist_certifications_training_id_fkey"
+            columns: ["training_id"]
+            isOneToOne: false
+            referencedRelation: "massage_trainings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       therapist_earnings: {
         Row: {
           amount: number
@@ -742,6 +856,47 @@ export type Database = {
           working_hours_start?: string | null
         }
         Relationships: []
+      }
+      training_quizzes: {
+        Row: {
+          correct_answer: number
+          created_at: string | null
+          display_order: number | null
+          explanation: string | null
+          id: string
+          options: Json
+          question: string
+          training_id: string
+        }
+        Insert: {
+          correct_answer: number
+          created_at?: string | null
+          display_order?: number | null
+          explanation?: string | null
+          id?: string
+          options: Json
+          question: string
+          training_id: string
+        }
+        Update: {
+          correct_answer?: number
+          created_at?: string | null
+          display_order?: number | null
+          explanation?: string | null
+          id?: string
+          options?: Json
+          question?: string
+          training_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_quizzes_training_id_fkey"
+            columns: ["training_id"]
+            isOneToOne: false
+            referencedRelation: "massage_trainings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
