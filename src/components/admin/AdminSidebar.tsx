@@ -9,7 +9,8 @@ import {
   Settings,
   LogOut,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  UserCog
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/shared/Logo";
@@ -25,6 +26,7 @@ interface AdminSidebarProps {
 const menuItems = [
   { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { id: 'bookings', icon: Calendar, label: 'Buchungen' },
+  { id: 'therapists', icon: UserCog, label: 'Therapeuten' },
   { id: 'testimonials', icon: MessageSquare, label: 'Testimonials' },
   { id: 'giftcards', icon: Gift, label: 'Gutscheine' },
   { id: 'activity', icon: Activity, label: 'Aktivität' },

@@ -45,6 +45,7 @@ import { BookingHeatmap } from "@/components/admin/BookingHeatmap";
 import { QuickNotes } from "@/components/admin/QuickNotes";
 import { SystemHealth } from "@/components/admin/SystemHealth";
 import { GoalTracker } from "@/components/admin/GoalTracker";
+import { TherapistsManager } from "@/components/admin/TherapistsManager";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -117,6 +118,7 @@ const Admin = () => {
     switch (activeTab) {
       case 'dashboard': return 'Dashboard';
       case 'bookings': return 'Buchungen';
+      case 'therapists': return 'Therapeuten';
       case 'testimonials': return 'Testimonials';
       case 'giftcards': return 'Gutscheine';
       case 'activity': return 'Aktivität';
@@ -288,6 +290,17 @@ const Admin = () => {
                     onUpdateStatus={updateBookingStatus}
                     onDelete={deleteBooking}
                   />
+                </motion.div>
+              )}
+
+              {activeTab === "therapists" && (
+                <motion.div
+                  key="therapists"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  <TherapistsManager />
                 </motion.div>
               )}
 
