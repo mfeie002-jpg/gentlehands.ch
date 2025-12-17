@@ -22,6 +22,7 @@ export interface Therapist {
   color: string | null;
   total_bookings: number;
   average_rating: number;
+  hourly_rate: number | null;
   created_at: string;
 }
 

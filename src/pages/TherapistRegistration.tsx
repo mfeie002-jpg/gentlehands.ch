@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { 
   User, Mail, Phone, Briefcase, Award, Heart, 
-  Upload, CheckCircle, Sparkles, Shield, Star 
+  Upload, CheckCircle, Sparkles, Shield, Star, Banknote 
 } from "lucide-react";
 
 const specialtyOptions = [
@@ -36,6 +36,7 @@ const TherapistRegistration = () => {
     phone: "",
     bio: "",
     experience_years: "",
+    hourly_rate: "120",
     specialties: [] as string[],
     qualifications: "",
     agreeTerms: false,
@@ -75,6 +76,7 @@ const TherapistRegistration = () => {
           phone: formData.phone || null,
           bio: formData.bio || null,
           experience_years: parseInt(formData.experience_years) || 0,
+          hourly_rate: parseFloat(formData.hourly_rate) || 120,
           specialty: formData.specialties,
           qualifications: formData.qualifications.split(',').map(q => q.trim()).filter(Boolean),
           status: 'pending'
@@ -234,18 +236,38 @@ const TherapistRegistration = () => {
                 <h2 className="text-xl font-display text-foreground mb-6">Qualifikationen</h2>
                 
                 <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="experience" className="flex items-center gap-2 mb-2">
-                      <Briefcase size={16} /> Jahre Berufserfahrung *
-                    </Label>
-                    <Input
-                      id="experience"
-                      type="number"
-                      min="0"
-                      value={formData.experience_years}
-                      onChange={(e) => updateField('experience_years', e.target.value)}
-                      placeholder="z.B. 5"
-                    />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="experience" className="flex items-center gap-2 mb-2">
+                        <Briefcase size={16} /> Berufserfahrung *
+                      </Label>
+                      <Input
+                        id="experience"
+                        type="number"
+                        min="0"
+                        value={formData.experience_years}
+                        onChange={(e) => updateField('experience_years', e.target.value)}
+                        placeholder="Jahre"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="hourlyRate" className="flex items-center gap-2 mb-2">
+                        <Banknote size={16} /> Stundensatz (CHF) *
+                      </Label>
+                      <Input
+                        id="hourlyRate"
+                        type="number"
+                        min="80"
+                        max="300"
+                        value={formData.hourly_rate}
+                        onChange={(e) => updateField('hourly_rate', e.target.value)}
+                        placeholder="120"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Empfohlen: 100-180 CHF/Stunde
+                      </p>
+                    </div>
                   </div>
 
                   <div>
@@ -291,7 +313,7 @@ const TherapistRegistration = () => {
                   </Button>
                   <Button 
                     onClick={() => setStep(3)}
-                    disabled={!formData.experience_years || formData.specialties.length === 0}
+                    disabled={!formData.experience_years || formData.specialties.length === 0 || !formData.hourly_rate}
                     className="flex-1"
                   >
                     Weiter
