@@ -388,6 +388,25 @@ const TherapistSchool = () => {
                         </div>
                       </div>
 
+                      {/* Video Section Placeholder */}
+                      <div className="mb-8 p-6 rounded-xl bg-secondary/50 border border-border">
+                        <div className="flex items-center gap-4">
+                          <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl bg-muted flex items-center justify-center">
+                            <Play className="w-10 h-10 text-muted-foreground/50" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-foreground mb-1">Video-Tutorial</h3>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              Das Video-Tutorial für diese Schulung wird in Kürze verfügbar sein.
+                            </p>
+                            <Badge variant="outline" className="text-amber-600 border-amber-600/30">
+                              <Clock size={12} className="mr-1" />
+                              Kommt bald
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Content */}
                       <div className="prose prose-sm max-w-none dark:prose-invert">
                         {selectedTraining.content.split("\n").map((line, i) => {
