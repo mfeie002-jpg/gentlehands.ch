@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ import { z } from "zod";
 import { useThrottle } from "@/hooks/useThrottle";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import TherapistAvailabilityCalendar from "@/components/shared/TherapistAvailabilityCalendar";
+import { useApprovedTherapists, useExperienceThemes, useMassageTypes } from "@/hooks/useTherapists";
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
@@ -37,28 +38,28 @@ const steps = [
   { id: 6, title: "Bestätigung", icon: CheckCircle },
 ];
 
-const masseurs = [
+// Fallback static data (used if DB is empty)
+const fallbackMasseurs = [
   { id: "morris", name: "Morris", role: "Inhaber & Leitender Masseur", specialties: ["Tiefenentspannung", "Emotional Grounding"] },
   { id: "anna", name: "Anna", role: "Masseurin", specialties: ["Sanfte Massage", "Stress Reset"] },
   { id: "luca", name: "Luca", role: "Masseur", specialties: ["Deep Tissue", "Körperarbeit"] },
-  { id: "none", name: "Keine Präferenz", role: "Wir wählen intuitiv", specialties: [] },
 ];
 
-const themes = [
-  { id: "ozean", title: "Ozean & Palmen", icon: Waves, description: "Tropische Leichtigkeit" },
-  { id: "alpine", title: "Alpine Stille", icon: Mountain, description: "Berghütten-Geborgenheit" },
-  { id: "dark", title: "Deep Dark Relax", icon: Moon, description: "Maximale Tiefe" },
-  { id: "urban", title: "Urban Loft", icon: Building, description: "City-Wellness" },
-  { id: "zen", title: "Zen Garden", icon: Leaf, description: "Asiatische Ruhe" },
-  { id: "surprise", title: "Surprise Experience", icon: Sparkles, description: "Vertrauen & Hingabe" },
-];
+const themeIcons: Record<string, React.ElementType> = {
+  "Ozean & Palmen": Waves,
+  "Alpine Stille": Mountain,
+  "Deep Dark Relax": Moon,
+  "Urban Loft": Building,
+  "Zen Garden": Leaf,
+  "Surprise Experience": Sparkles,
+};
 
-const massages = [
-  { id: "deep-release", title: "Deep Release Session", icon: Heart, durations: ["90 Min", "120 Min"] },
-  { id: "stress-reset", title: "Stress Reset", icon: Zap, durations: ["60 Min", "90 Min"] },
-  { id: "emotional-grounding", title: "Emotional Grounding", icon: Moon, durations: ["90 Min"] },
-  { id: "ganzkoerper", title: "Ganzkörper Tiefenentspannung", icon: Star, durations: ["120 Min"] },
-];
+const massageIcons: Record<string, React.ElementType> = {
+  "Deep Release Session": Heart,
+  "Stress Reset": Zap,
+  "Emotional Grounding": Moon,
+  "Ganzkörper Tiefenentspannung": Star,
+};
 
 const Buchung = () => {
   const navigate = useNavigate();
@@ -67,6 +68,70 @@ const Buchung = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  
+  // Fetch dynamic data from database
+  const { therapists: dbTherapists, isLoading: therapistsLoading } = useApprovedTherapists();
+  const { themes: dbThemes, isLoading: themesLoading } = useExperienceThemes();
+  const { massageTypes: dbMassageTypes, isLoading: massagesLoading } = useMassageTypes();
+  
+  // Build masseurs list from database + "Keine Präferenz" option
+  const masseurs = useMemo(() => {
+    const dynamicMasseurs = dbTherapists.length > 0 
+      ? dbTherapists.map(t => ({
+          id: t.id,
+          name: t.name,
+          role: t.specialty?.join(", ") || "Therapeut:in",
+          specialties: t.specialty || []
+        }))
+      : fallbackMasseurs;
+    
+    return [
+      ...dynamicMasseurs,
+      { id: "none", name: "Keine Präferenz", role: "Wir wählen intuitiv", specialties: [] }
+    ];
+  }, [dbTherapists]);
+  
+  // Build themes list from database
+  const themes = useMemo(() => {
+    if (dbThemes.length > 0) {
+      return dbThemes.map(t => ({
+        id: t.id,
+        title: t.name,
+        icon: themeIcons[t.name] || Sparkles,
+        description: t.short_description || t.description || ""
+      }));
+    }
+    // Fallback
+    return [
+      { id: "ozean", title: "Ozean & Palmen", icon: Waves, description: "Tropische Leichtigkeit" },
+      { id: "alpine", title: "Alpine Stille", icon: Mountain, description: "Berghütten-Geborgenheit" },
+      { id: "dark", title: "Deep Dark Relax", icon: Moon, description: "Maximale Tiefe" },
+      { id: "urban", title: "Urban Loft", icon: Building, description: "City-Wellness" },
+      { id: "zen", title: "Zen Garden", icon: Leaf, description: "Asiatische Ruhe" },
+      { id: "surprise", title: "Surprise Experience", icon: Sparkles, description: "Vertrauen & Hingabe" },
+    ];
+  }, [dbThemes]);
+  
+  // Build massages list from database
+  const massages = useMemo(() => {
+    if (dbMassageTypes.length > 0) {
+      return dbMassageTypes.map(m => ({
+        id: m.id,
+        title: m.name,
+        icon: massageIcons[m.name] || Heart,
+        durations: Array.isArray(m.durations) 
+          ? m.durations.map((d: any) => d.duration || d) 
+          : ["90 Min"]
+      }));
+    }
+    // Fallback
+    return [
+      { id: "deep-release", title: "Deep Release Session", icon: Heart, durations: ["90 Min", "120 Min"] },
+      { id: "stress-reset", title: "Stress Reset", icon: Zap, durations: ["60 Min", "90 Min"] },
+      { id: "emotional-grounding", title: "Emotional Grounding", icon: Moon, durations: ["90 Min"] },
+      { id: "ganzkoerper", title: "Ganzkörper Tiefenentspannung", icon: Star, durations: ["120 Min"] },
+    ];
+  }, [dbMassageTypes]);
   
   // Track booking start on mount
   useEffect(() => {
