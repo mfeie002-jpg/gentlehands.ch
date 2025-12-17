@@ -671,6 +671,7 @@ export type Database = {
           display_order: number | null
           email: string
           experience_years: number | null
+          hourly_rate: number | null
           id: string
           is_featured: boolean | null
           name: string
@@ -697,6 +698,7 @@ export type Database = {
           display_order?: number | null
           email: string
           experience_years?: number | null
+          hourly_rate?: number | null
           id?: string
           is_featured?: boolean | null
           name: string
@@ -723,6 +725,7 @@ export type Database = {
           display_order?: number | null
           email?: string
           experience_years?: number | null
+          hourly_rate?: number | null
           id?: string
           is_featured?: boolean | null
           name?: string

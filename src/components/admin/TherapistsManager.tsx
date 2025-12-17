@@ -19,7 +19,8 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-  Eye
+  Eye,
+  Banknote
 } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
@@ -40,6 +41,7 @@ interface Therapist {
   specialty: string[] | null;
   qualifications: string[] | null;
   experience_years: number | null;
+  hourly_rate: number | null;
   status: "pending" | "approved" | "rejected" | "suspended";
   average_rating: number | null;
   total_bookings: number | null;
@@ -254,6 +256,12 @@ export const TherapistsManager = () => {
                           {therapist.experience_years} Jahre
                         </span>
                       )}
+                      {therapist.hourly_rate && (
+                        <span className="flex items-center gap-1 text-copper font-medium">
+                          <Banknote className="w-3 h-3" />
+                          {therapist.hourly_rate} CHF/h
+                        </span>
+                      )}
                       {therapist.average_rating && (
                         <span className="flex items-center gap-1">
                           <Star className="w-3 h-3 text-amber-400" />
@@ -398,6 +406,10 @@ export const TherapistsManager = () => {
                 <div>
                   <p className="text-sm text-muted-foreground">Erfahrung</p>
                   <p>{selectedTherapist.experience_years ? `${selectedTherapist.experience_years} Jahre` : "-"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Stundensatz</p>
+                  <p className="text-copper font-medium">{selectedTherapist.hourly_rate ? `${selectedTherapist.hourly_rate} CHF` : "120 CHF"}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Buchungen</p>
