@@ -169,6 +169,28 @@ const Buchung = () => {
     additionalNotes: "",
   });
 
+  // Calculate dynamic price based on selected therapist and duration
+  const calculatedPrice = useMemo(() => {
+    if (!formData.masseur || formData.masseur === "none" || !formData.duration) {
+      return null;
+    }
+    
+    // Find selected therapist
+    const selectedTherapist = dbTherapists.find(t => t.id === formData.masseur);
+    if (!selectedTherapist?.hourly_rate) {
+      return null;
+    }
+    
+    // Parse duration (e.g., "90 Min" -> 90)
+    const durationMatch = formData.duration.match(/(\d+)/);
+    if (!durationMatch) return null;
+    
+    const durationMinutes = parseInt(durationMatch[1], 10);
+    const price = (selectedTherapist.hourly_rate / 60) * durationMinutes;
+    
+    return Math.round(price);
+  }, [formData.masseur, formData.duration, dbTherapists]);
+
   const timeSlots = [
     "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"
   ];
@@ -811,6 +833,21 @@ const Buchung = () => {
                   <p className="text-foreground font-medium">{formData.selectedTime} Uhr</p>
                 </div>
               </div>
+              
+              {/* Dynamic Price Display */}
+              {calculatedPrice && (
+                <div className="mt-6 pt-4 border-t border-border">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Geschätzter Preis</span>
+                    <span className="text-2xl font-display text-copper font-semibold">
+                      CHF {calculatedPrice}.-
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Basierend auf dem Stundensatz von {dbTherapists.find(t => t.id === formData.masseur)?.name}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 text-center">

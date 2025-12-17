@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
-import { User, Sparkles, Clock, Settings } from "lucide-react";
+import { User, Sparkles, Clock, Settings, Banknote } from "lucide-react";
 
 interface BookingSummaryCardProps {
   masseur: string;
   theme: string;
   massage: string;
   duration: string;
+  price?: number | null;
 }
 
-export const BookingSummaryCard = ({ masseur, theme, massage, duration }: BookingSummaryCardProps) => {
+export const BookingSummaryCard = ({ masseur, theme, massage, duration, price }: BookingSummaryCardProps) => {
   const items = [
     { icon: User, label: "Therapeut:in", value: masseur || "Noch nicht gewählt" },
     { icon: Sparkles, label: "Theme", value: theme || "Noch nicht gewählt" },
@@ -38,6 +39,19 @@ export const BookingSummaryCard = ({ masseur, theme, massage, duration }: Bookin
             </div>
           </div>
         ))}
+        
+        {/* Dynamic Price Display */}
+        {price !== undefined && price !== null && price > 0 && (
+          <div className="flex items-start gap-3 pt-2 border-t border-border/50">
+            <div className="w-8 h-8 rounded-lg bg-copper/20 flex items-center justify-center shrink-0">
+              <Banknote size={16} className="text-copper" />
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Geschätzter Preis</p>
+              <p className="text-lg text-copper font-semibold">CHF {price.toFixed(0)}.-</p>
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );
