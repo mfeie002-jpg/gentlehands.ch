@@ -24,6 +24,7 @@ const footerLinks = {
     { href: "/vorbereitung", label: "Vorbereitung" },
     { href: "/faq", label: "FAQ" },
     { href: "/business", label: "Corporate Wellness" },
+    { href: "/therapeut/registrierung", label: "Werde Therapeut:in" },
   ],
   rechtliches: [
     { href: "/rechtliches", label: "Impressum" },
