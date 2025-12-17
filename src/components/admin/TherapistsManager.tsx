@@ -20,7 +20,8 @@ import {
   XCircle,
   AlertCircle,
   Eye,
-  Banknote
+  Banknote,
+  Edit
 } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
@@ -30,6 +31,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { TherapistRateEditor } from "./TherapistRateEditor";
 
 interface Therapist {
   id: string;
@@ -54,6 +56,7 @@ export const TherapistsManager = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedTherapist, setSelectedTherapist] = useState<Therapist | null>(null);
+  const [editingRate, setEditingRate] = useState<Therapist | null>(null);
 
   const { data: therapists = [], isLoading } = useQuery({
     queryKey: ["admin-therapists"],
@@ -326,19 +329,33 @@ export const TherapistsManager = () => {
                     )}
                     
                     {therapist.status === "approved" && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="text-destructive border-destructive/30"
-                        onClick={() => updateStatusMutation.mutate({ 
-                          id: therapist.id, 
-                          status: "suspended" 
-                        })}
-                        disabled={updateStatusMutation.isPending}
-                      >
-                        <AlertCircle className="w-4 h-4 mr-1" />
-                        Sperren
-                      </Button>
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-copper border-copper/30"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingRate(therapist);
+                          }}
+                        >
+                          <Edit className="w-4 h-4 mr-1" />
+                          Preis
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-destructive border-destructive/30"
+                          onClick={() => updateStatusMutation.mutate({ 
+                            id: therapist.id, 
+                            status: "suspended" 
+                          })}
+                          disabled={updateStatusMutation.isPending}
+                        >
+                          <AlertCircle className="w-4 h-4 mr-1" />
+                          Sperren
+                        </Button>
+                      </>
                     )}
                     
                     {therapist.status === "suspended" && (
@@ -449,6 +466,15 @@ export const TherapistsManager = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Rate Editor Dialog */}
+      {editingRate && (
+        <TherapistRateEditor
+          therapist={editingRate}
+          open={!!editingRate}
+          onOpenChange={(open) => !open && setEditingRate(null)}
+        />
+      )}
     </div>
   );
 };

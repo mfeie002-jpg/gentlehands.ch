@@ -59,6 +59,7 @@ const LogoPreview = lazy(() => import("./pages/LogoPreview"));
 const TherapistRegistration = lazy(() => import("./pages/TherapistRegistration"));
 const TherapistDashboard = lazy(() => import("./pages/TherapistDashboard"));
 const TherapistConfirmation = lazy(() => import("./pages/TherapistConfirmation"));
+const TherapistSchool = lazy(() => import("./pages/TherapistSchool"));
 
 // English pages
 const IndexEN = lazy(() => import("./pages/en/Index"));
@@ -148,6 +149,7 @@ const App = () => (
                 <Route path="/therapeut/registrierung" element={<TherapistRegistration />} />
                 <Route path="/therapeut/dashboard" element={<TherapistDashboard />} />
                 <Route path="/therapeut/bestaetigung" element={<TherapistConfirmation />} />
+                <Route path="/therapeut/schulung" element={<TherapistSchool />} />
                 {/* English routes */}
                 <Route path="/en" element={<IndexEN />} />
                 <Route path="/en/experiences" element={<ExperiencesEN />} />
