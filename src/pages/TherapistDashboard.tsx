@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useTherapistDashboard } from "@/hooks/useTherapists";
@@ -14,13 +15,30 @@ import { de } from "date-fns/locale";
 import { 
   Calendar, Clock, User, Star, TrendingUp, CreditCard,
   MessageSquare, Settings, LogOut, ChevronRight, CheckCircle,
-  AlertCircle, Loader2
+  AlertCircle, Loader2, GraduationCap, BookOpen, Award
 } from "lucide-react";
+
+interface Certification {
+  id: string;
+  massage_type_id: string;
+  passed: boolean;
+  quiz_score: number | null;
+  certified_at: string | null;
+  massage_type?: { name: string };
+}
+
+interface MassageType {
+  id: string;
+  name: string;
+}
 
 const TherapistDashboard = () => {
   const navigate = useNavigate();
   const { therapist, bookings, earnings, feedback, isLoading } = useTherapistDashboard();
   const [activeTab, setActiveTab] = useState("overview");
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [massageTypes, setMassageTypes] = useState<MassageType[]>([]);
+  const [certificationsLoading, setCertificationsLoading] = useState(true);
 
   useEffect(() => {
     // Check if user is logged in and is a therapist
@@ -32,6 +50,36 @@ const TherapistDashboard = () => {
     };
     checkAuth();
   }, [navigate]);
+
+  // Fetch certifications and massage types
+  useEffect(() => {
+    const fetchCertifications = async () => {
+      if (!therapist?.id) return;
+      
+      setCertificationsLoading(true);
+      try {
+        // Get all massage types
+        const { data: types } = await supabase
+          .from('massage_types')
+          .select('id, name')
+          .eq('is_active', true);
+        setMassageTypes(types || []);
+
+        // Get therapist's certifications
+        const { data: certs } = await supabase
+          .from('therapist_certifications')
+          .select('*')
+          .eq('therapist_id', therapist.id);
+        setCertifications(certs || []);
+      } catch (err) {
+        console.error('Failed to fetch certifications:', err);
+      } finally {
+        setCertificationsLoading(false);
+      }
+    };
+
+    fetchCertifications();
+  }, [therapist?.id]);
 
   if (isLoading) {
     return (
@@ -176,8 +224,12 @@ const TherapistDashboard = () => {
 
           {/* Main Content */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 flex-wrap">
               <TabsTrigger value="overview">Übersicht</TabsTrigger>
+              <TabsTrigger value="training" className="flex items-center gap-1.5">
+                <GraduationCap size={14} />
+                Schulung
+              </TabsTrigger>
               <TabsTrigger value="bookings">Termine</TabsTrigger>
               <TabsTrigger value="earnings">Einnahmen</TabsTrigger>
               <TabsTrigger value="feedback">Bewertungen</TabsTrigger>
@@ -268,6 +320,138 @@ const TherapistDashboard = () => {
                       ))}
                     </div>
                   )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Training & Certifications Tab */}
+            <TabsContent value="training" className="space-y-6">
+              {/* Certification Progress */}
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Award size={20} className="text-copper" />
+                    Zertifizierungsstatus
+                  </CardTitle>
+                  <Button variant="copper" size="sm" asChild>
+                    <Link to="/therapeut/schulung">
+                      <BookOpen size={16} className="mr-2" />
+                      Zur Schulung
+                    </Link>
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  {certificationsLoading ? (
+                    <div className="flex justify-center py-8">
+                      <Loader2 className="animate-spin text-copper" size={24} />
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {/* Overall Progress */}
+                      <div className="p-4 rounded-xl bg-secondary/50 mb-6">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-foreground">Gesamtfortschritt</span>
+                          <span className="text-sm text-copper font-semibold">
+                            {certifications.filter(c => c.passed).length} / {massageTypes.length} Zertifizierungen
+                          </span>
+                        </div>
+                        <Progress 
+                          value={massageTypes.length > 0 ? (certifications.filter(c => c.passed).length / massageTypes.length) * 100 : 0} 
+                          className="h-2"
+                        />
+                      </div>
+
+                      {/* Individual Certifications */}
+                      <div className="grid gap-3">
+                        {massageTypes.map((type) => {
+                          const cert = certifications.find(c => c.massage_type_id === type.id);
+                          const isPassed = cert?.passed;
+                          
+                          return (
+                            <div 
+                              key={type.id}
+                              className={`flex items-center justify-between p-4 rounded-xl border ${
+                                isPassed 
+                                  ? 'bg-green-50 border-green-200' 
+                                  : 'bg-secondary/30 border-border'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                  isPassed ? 'bg-green-100' : 'bg-muted'
+                                }`}>
+                                  {isPassed ? (
+                                    <CheckCircle size={20} className="text-green-600" />
+                                  ) : (
+                                    <BookOpen size={20} className="text-muted-foreground" />
+                                  )}
+                                </div>
+                                <div>
+                                  <p className={`font-medium ${isPassed ? 'text-green-900' : 'text-foreground'}`}>
+                                    {type.name}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {isPassed 
+                                      ? `Zertifiziert am ${cert?.certified_at ? format(new Date(cert.certified_at), 'd. MMM yyyy', { locale: de }) : '-'}`
+                                      : cert?.quiz_score 
+                                        ? `Letzter Versuch: ${cert.quiz_score}%`
+                                        : 'Noch nicht begonnen'
+                                    }
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                {isPassed ? (
+                                  <Badge variant="default" className="bg-green-600">
+                                    Zertifiziert
+                                  </Badge>
+                                ) : (
+                                  <Button variant="outline" size="sm" asChild>
+                                    <Link to={`/therapeut/schulung?massage=${type.id}`}>
+                                      Starten
+                                    </Link>
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {massageTypes.length === 0 && (
+                        <p className="text-muted-foreground text-center py-8">
+                          Keine Schulungen verfügbar
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Training Info */}
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-copper/10 flex items-center justify-center shrink-0">
+                      <GraduationCap size={24} className="text-copper" />
+                    </div>
+                    <div>
+                      <h3 className="font-display text-lg text-foreground mb-2">
+                        Werden Sie zertifiziert
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Absolvieren Sie unsere Schulungen für jede Massageart, um diese bei GentleHands 
+                        anbieten zu können. Jede Schulung beinhaltet detaillierte Anleitungen und einen 
+                        Abschlussquiz.
+                      </p>
+                      <Button variant="copper" asChild>
+                        <Link to="/therapeut/schulung">
+                          Schulungen ansehen
+                          <ChevronRight size={16} />
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
