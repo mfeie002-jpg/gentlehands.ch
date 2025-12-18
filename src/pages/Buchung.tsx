@@ -35,6 +35,11 @@ import { BookingStepTransition } from "@/components/booking/BookingStepTransitio
 import { BookingSmartRecommendations } from "@/components/booking/BookingSmartRecommendations";
 import { BookingTherapistVideo, TherapistVideoPlayButton } from "@/components/booking/BookingTherapistVideo";
 import { BookingRealtimeCalendar } from "@/components/booking/BookingRealtimeCalendar";
+import { MassageDetailModal } from "@/components/booking/MassageDetailModal";
+import { MassageVideoPreview } from "@/components/booking/MassageVideoPreview";
+import { BookingStepHelp } from "@/components/booking/BookingStepHelp";
+import { BookingEstimatedTime } from "@/components/booking/BookingEstimatedTime";
+import { BookingMobileStepIndicator } from "@/components/booking/BookingMobileStepIndicator";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { useBookingAutosave } from "@/hooks/useBookingAutosave";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
@@ -139,6 +144,10 @@ const Buchung = () => {
     therapist: null,
   });
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [massageDetailModal, setMassageDetailModal] = useState<{ isOpen: boolean; massageTitle: string }>({
+    isOpen: false,
+    massageTitle: ""
+  });
 
   // Track booking start on mount
   useEffect(() => {
@@ -642,18 +651,23 @@ const Buchung = () => {
                         : "border-transparent hover:border-copper/50"
                     )}
                   >
-                    {/* Background Image */}
-                    <img
-                      src={massageImage}
-                      alt={massage.title}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    {/* Video Preview on Hover */}
+                    <MassageVideoPreview
+                      massageTitle={massage.title}
+                      imageUrl={massageImage}
+                      isSelected={isSelected}
+                      onSelect={() => {
+                        updateFormData("massage", massage.id);
+                        updateFormData("duration", "");
+                      }}
+                      onShowDetails={() => setMassageDetailModal({ isOpen: true, massageTitle: massage.title })}
                     />
                     
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
                     
                     {/* Content */}
-                    <div className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-end">
+                    <div className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-end pointer-events-none">
                       <h3 className="font-display text-sm sm:text-lg text-white mb-1 leading-tight">
                         {massage.title}
                       </h3>
@@ -667,7 +681,7 @@ const Buchung = () => {
                       <motion.div 
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 bg-copper rounded-full flex items-center justify-center shadow-lg"
+                        className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 bg-copper rounded-full flex items-center justify-center shadow-lg pointer-events-none"
                       >
                         <Check size={14} className="text-accent-foreground sm:hidden" />
                         <Check size={18} className="text-accent-foreground hidden sm:block" />
