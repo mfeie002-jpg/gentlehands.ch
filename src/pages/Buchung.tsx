@@ -39,6 +39,23 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { useCustomerJourney } from "@/hooks/useCustomerJourney";
 import { useApprovedTherapists, useExperienceThemes, useMassageTypes } from "@/hooks/useTherapists";
 
+// Theme images
+import themeOcean from "@/assets/themes/theme-ocean.jpg";
+import themeAlpine from "@/assets/themes/theme-alpine.jpg";
+import themeDark from "@/assets/themes/theme-dark.jpg";
+import themeUrban from "@/assets/themes/theme-urban.jpg";
+import themeZen from "@/assets/themes/theme-zen.jpg";
+import themeSurprise from "@/assets/themes/theme-surprise.jpg";
+
+const themeImages: Record<string, string> = {
+  "Ozean & Palmen": themeOcean,
+  "Alpine Stille": themeAlpine,
+  "Deep Dark Relax": themeDark,
+  "Urban Loft": themeUrban,
+  "Zen Garden": themeZen,
+  "Surprise Experience": themeSurprise,
+};
+
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
   { id: 2, title: "Themenraum", icon: Sparkles },
@@ -511,10 +528,10 @@ const Buchung = () => {
                 Jeder Themenraum bietet eine einzigartige Entspannungserfahrung.
               </p>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {themes.map((theme) => {
                 const isSelected = formData.theme === theme.id;
-                const themeData = dbThemes.find(t => t.id === theme.id);
+                const themeImage = themeImages[theme.title] || themeSurprise;
                 
                 return (
                   <motion.button
@@ -525,41 +542,41 @@ const Buchung = () => {
                     }}
                     whileTap={{ scale: 0.98 }}
                     className={cn(
-                      "relative p-3 sm:p-6 rounded-xl sm:rounded-2xl border-2 text-left transition-all min-h-[100px] sm:min-h-[140px] touch-manipulation overflow-hidden",
+                      "relative rounded-xl sm:rounded-2xl border-2 text-left transition-all overflow-hidden group aspect-[4/3]",
                       isSelected
-                        ? "border-copper bg-copper/5 shadow-md"
-                        : "border-border hover:border-copper/50"
+                        ? "border-copper shadow-lg ring-2 ring-copper/30"
+                        : "border-transparent hover:border-copper/50"
                     )}
                   >
-                    {/* Subtle gradient background based on theme color */}
-                    {themeData?.color && (
-                      <div 
-                        className="absolute inset-0 opacity-5"
-                        style={{ background: `linear-gradient(135deg, ${themeData.color}, transparent)` }}
-                      />
-                    )}
+                    {/* Background Image */}
+                    <img
+                      src={themeImage}
+                      alt={theme.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                     
-                    <div className="relative z-10">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-primary/10 mb-2 sm:mb-4 flex items-center justify-center">
-                        <theme.icon size={20} className="text-primary sm:hidden" />
-                        <theme.icon size={24} className="text-primary hidden sm:block" />
-                      </div>
-                      <h3 className="font-display text-sm sm:text-lg text-foreground mb-0.5 sm:mb-1 leading-tight">
+                    {/* Gradient overlay for text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    
+                    {/* Content */}
+                    <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 z-10">
+                      <h3 className="font-display text-sm sm:text-lg text-white mb-0.5 leading-tight drop-shadow-md">
                         {theme.title}
                       </h3>
-                      <p className="text-[10px] sm:text-sm text-muted-foreground line-clamp-2">
+                      <p className="text-[10px] sm:text-xs text-white/80 line-clamp-2 drop-shadow">
                         {theme.description}
                       </p>
                     </div>
                     
+                    {/* Selection indicator */}
                     {isSelected && (
                       <motion.div 
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="absolute top-2 right-2 sm:top-3 sm:right-3 w-5 h-5 sm:w-6 sm:h-6 bg-copper rounded-full flex items-center justify-center z-10"
+                        className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-7 sm:h-7 bg-copper rounded-full flex items-center justify-center z-10 shadow-lg"
                       >
-                        <Check size={10} className="text-accent-foreground sm:hidden" />
-                        <Check size={12} className="text-accent-foreground hidden sm:block" />
+                        <Check size={12} className="text-white sm:hidden" />
+                        <Check size={14} className="text-white hidden sm:block" />
                       </motion.div>
                     )}
                   </motion.button>
