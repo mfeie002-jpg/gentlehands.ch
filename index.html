@@ -19,9 +19,14 @@
     <meta http-equiv="x-dns-prefetch-control" content="on" />
     <link rel="preconnect" href="https://hrindypsfxbiijxgtdmi.supabase.co" crossorigin />
     <link rel="dns-prefetch" href="https://hrindypsfxbiijxgtdmi.supabase.co" />
-    
-    <!-- Critical CSS inline hint -->
-    <link rel="modulepreload" href="/src/main.tsx" />
+
+    <!-- Fonts (avoid preview CORS issues with bundled font files) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+    />
 
     <!-- Open Graph -->
     <meta property="og:title" content="GentleHands – Exklusive Massagen in Themenräumen für Frauen" />
@@ -135,9 +140,7 @@
     <link rel="apple-touch-icon" sizes="512x512" href="/pwa-512x512.png" />
     <link rel="mask-icon" href="/pwa-maskable-512x512.png" color="#B5784F" />
     
-    <!-- Security headers via meta -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <!-- Security -->
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
     
