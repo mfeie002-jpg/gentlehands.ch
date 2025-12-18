@@ -9,7 +9,8 @@ import {
   Mail,
   Calendar,
   MoreHorizontal,
-  UserPlus
+  UserPlus,
+  Link2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,13 @@ export const UsersManager = () => {
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
+  
+  // Admin tools state
+  const [adminEmail, setAdminEmail] = useState("");
+  const [therapistEmail, setTherapistEmail] = useState("");
+  const [isGrantingAdmin, setIsGrantingAdmin] = useState(false);
+  const [isLinkingTherapist, setIsLinkingTherapist] = useState(false);
+  
   const { toast } = useToast();
 
   const fetchData = async () => {
@@ -92,7 +100,6 @@ export const UsersManager = () => {
     const existingRole = roles.find(r => r.user_id === selectedUser.id);
 
     if (existingRole) {
-      // Update existing role
       const { error } = await supabase
         .from('user_roles')
         .update({ role: selectedRole as 'admin' | 'moderator' | 'user' })
@@ -103,7 +110,6 @@ export const UsersManager = () => {
         return;
       }
     } else {
-      // Insert new role
       const { error } = await supabase
         .from('user_roles')
         .insert({ user_id: selectedUser.id, role: selectedRole as 'admin' | 'moderator' | 'user' });
@@ -117,6 +123,52 @@ export const UsersManager = () => {
     toast({ title: 'Erfolg', description: 'Rolle aktualisiert' });
     setIsRoleDialogOpen(false);
     fetchData();
+  };
+
+  const handleGrantAdmin = async () => {
+    if (!adminEmail.trim()) return;
+    setIsGrantingAdmin(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-tools', {
+        body: { action: 'grant_admin', target_email: adminEmail.trim() }
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast({ title: 'Erfolg', description: `${adminEmail} ist jetzt Admin` });
+      setAdminEmail("");
+      fetchData();
+    } catch (err: any) {
+      toast({ title: 'Fehler', description: err.message, variant: 'destructive' });
+    } finally {
+      setIsGrantingAdmin(false);
+    }
+  };
+
+  const handleLinkTherapist = async () => {
+    if (!therapistEmail.trim()) return;
+    setIsLinkingTherapist(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-tools', {
+        body: { action: 'link_therapist_admin', therapist_email: therapistEmail.trim() }
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast({ 
+        title: 'Erfolg', 
+        description: `${data.therapist_name || therapistEmail} wurde verknüpft` 
+      });
+      setTherapistEmail("");
+    } catch (err: any) {
+      toast({ title: 'Fehler', description: err.message, variant: 'destructive' });
+    } finally {
+      setIsLinkingTherapist(false);
+    }
   };
 
   const filteredProfiles = profiles.filter(p => {
@@ -146,6 +198,58 @@ export const UsersManager = () => {
   return (
     <>
       <div className="space-y-6">
+        {/* Admin Tools */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Grant Admin */}
+          <div className="p-4 rounded-xl border border-border bg-card">
+            <div className="flex items-center gap-2 mb-3">
+              <ShieldCheck className="w-5 h-5 text-red-500" />
+              <h4 className="font-medium">Admin ernennen</h4>
+            </div>
+            <div className="flex gap-2">
+              <Input
+                placeholder="E-Mail-Adresse"
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
+                className="flex-1"
+              />
+              <Button 
+                onClick={handleGrantAdmin} 
+                disabled={isGrantingAdmin || !adminEmail.trim()}
+                size="sm"
+              >
+                {isGrantingAdmin ? "..." : "Ernennen"}
+              </Button>
+            </div>
+          </div>
+
+          {/* Link Therapist */}
+          <div className="p-4 rounded-xl border border-border bg-card">
+            <div className="flex items-center gap-2 mb-3">
+              <Link2 className="w-5 h-5 text-primary" />
+              <h4 className="font-medium">Therapeut:in verknüpfen</h4>
+            </div>
+            <div className="flex gap-2">
+              <Input
+                placeholder="E-Mail (Therapeut + Login)"
+                value={therapistEmail}
+                onChange={(e) => setTherapistEmail(e.target.value)}
+                className="flex-1"
+              />
+              <Button 
+                onClick={handleLinkTherapist} 
+                disabled={isLinkingTherapist || !therapistEmail.trim()}
+                size="sm"
+              >
+                {isLinkingTherapist ? "..." : "Verknüpfen"}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Verknüpft Therapeut:in-Profil mit dem Benutzeraccount (gleiche E-Mail)
+            </p>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
