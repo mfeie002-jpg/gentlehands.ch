@@ -53,6 +53,14 @@ import themeUrban from "@/assets/themes/theme-urban.jpg";
 import themeZen from "@/assets/themes/theme-zen.jpg";
 import themeSurprise from "@/assets/themes/theme-surprise.jpg";
 
+// Massage images
+import massageRelaxation from "@/assets/massages/massage-relaxation.jpg";
+import massageDeepTissue from "@/assets/massages/massage-deep-tissue.jpg";
+import massageAroma from "@/assets/massages/massage-aroma.jpg";
+import massageHotstone from "@/assets/massages/massage-hotstone.jpg";
+import massageSound from "@/assets/massages/massage-sound.jpg";
+import massageFullbody from "@/assets/massages/massage-fullbody.jpg";
+
 const themeImages: Record<string, string> = {
   "Ozean & Palmen": themeOcean,
   "Alpine Stille": themeAlpine,
@@ -60,6 +68,18 @@ const themeImages: Record<string, string> = {
   "Urban Loft": themeUrban,
   "Zen Garden": themeZen,
   "Surprise Experience": themeSurprise,
+};
+
+const massageImages: Record<string, string> = {
+  "Deep Release Session": massageDeepTissue,
+  "Stress Reset": massageRelaxation,
+  "Emotional Grounding": massageSound,
+  "Ganzkörper Tiefenentspannung": massageFullbody,
+  "Aromatherapie": massageAroma,
+  "Hot Stone": massageHotstone,
+  "Klangtherapie": massageSound,
+  "Swedish Massage": massageRelaxation,
+  "Tiefenentspannung": massageFullbody,
 };
 
 const steps = [
@@ -601,36 +621,61 @@ const Buchung = () => {
                 Welche Art der Entspannung wünschen Sie?
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-6 sm:mb-8">
-              {massages.map((massage) => (
-                <button
-                  key={massage.id}
-                  onClick={() => {
-                    updateFormData("massage", massage.id);
-                    updateFormData("duration", "");
-                    triggerHaptic('light');
-                  }}
-                  className={`relative p-3 sm:p-6 rounded-xl sm:rounded-2xl border-2 text-left transition-all min-h-[90px] sm:min-h-[120px] touch-manipulation active:scale-[0.98] ${
-                    formData.massage === massage.id
-                      ? "border-copper bg-copper/5"
-                      : "border-border active:border-copper/50"
-                  }`}
-                >
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-primary/10 mb-2 sm:mb-4 flex items-center justify-center">
-                    <massage.icon size={18} className="text-primary sm:hidden" />
-                    <massage.icon size={24} className="text-primary hidden sm:block" />
-                  </div>
-                  <h3 className="font-display text-xs sm:text-lg text-foreground leading-tight">
-                    {massage.title}
-                  </h3>
-                  {formData.massage === massage.id && (
-                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-5 h-5 sm:w-6 sm:h-6 bg-copper rounded-full flex items-center justify-center">
-                      <Check size={10} className="text-accent-foreground sm:hidden" />
-                      <Check size={12} className="text-accent-foreground hidden sm:block" />
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+              {massages.map((massage) => {
+                const isSelected = formData.massage === massage.id;
+                const massageImage = massageImages[massage.title] || massageFullbody;
+                
+                return (
+                  <motion.button
+                    key={massage.id}
+                    onClick={() => {
+                      updateFormData("massage", massage.id);
+                      updateFormData("duration", "");
+                      triggerHaptic('light');
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    className={cn(
+                      "relative rounded-xl sm:rounded-2xl border-2 text-left transition-all overflow-hidden group aspect-[4/3]",
+                      isSelected
+                        ? "border-copper shadow-lg ring-2 ring-copper/30"
+                        : "border-transparent hover:border-copper/50"
+                    )}
+                  >
+                    {/* Background Image */}
+                    <img
+                      src={massageImage}
+                      alt={massage.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                    
+                    {/* Content */}
+                    <div className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-end">
+                      <h3 className="font-display text-sm sm:text-lg text-white mb-1 leading-tight">
+                        {massage.title}
+                      </h3>
+                      <p className="text-xs text-white/70 line-clamp-1">
+                        {massage.durations.join(" / ")}
+                      </p>
                     </div>
-                  )}
-                </button>
-              ))}
+                    
+                    {/* Selection Indicator */}
+                    {isSelected && (
+                      <motion.div 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 bg-copper rounded-full flex items-center justify-center shadow-lg"
+                      >
+                        <Check size={14} className="text-accent-foreground sm:hidden" />
+                        <Check size={18} className="text-accent-foreground hidden sm:block" />
+                      </motion.div>
+                    )}
+                  </motion.button>
+                );
+              })}
             </div>
 
             {formData.massage && (
