@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { FloatingCTA } from "@/components/shared/FloatingCTA";
-import { NewsletterPopup } from "@/components/shared/NewsletterPopup";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { LiveChatWidget } from "@/components/shared/LiveChatWidget";
 import { PageLoadingFallback } from "@/components/shared/PageLoadingFallback";
@@ -172,7 +171,6 @@ const App = () => (
             </Suspense>
             <CriticalImagePreloader />
             <FloatingCTA />
-            <NewsletterPopup />
             <LiveChatWidget />
           </ErrorBoundary>
         </BrowserRouter>
