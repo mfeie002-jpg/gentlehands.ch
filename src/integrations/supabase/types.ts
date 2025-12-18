@@ -14,6 +14,92 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_test_results: {
+        Row: {
+          conversion_type: string | null
+          conversion_value: number | null
+          converted: boolean
+          created_at: string
+          id: string
+          metadata: Json | null
+          session_id: string
+          test_id: string
+          user_id: string | null
+          variant_id: string
+        }
+        Insert: {
+          conversion_type?: string | null
+          conversion_value?: number | null
+          converted?: boolean
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          session_id: string
+          test_id: string
+          user_id?: string | null
+          variant_id: string
+        }
+        Update: {
+          conversion_type?: string | null
+          conversion_value?: number | null
+          converted?: boolean
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          session_id?: string
+          test_id?: string
+          user_id?: string | null
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_test_results_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "ab_tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ab_tests: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          is_active: boolean
+          name: string
+          start_date: string
+          test_type: string
+          updated_at: string
+          variants: Json
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          start_date?: string
+          test_type?: string
+          updated_at?: string
+          variants?: Json
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          start_date?: string
+          test_type?: string
+          updated_at?: string
+          variants?: Json
+        }
+        Relationships: []
+      }
       activity_logs: {
         Row: {
           action: string
@@ -219,6 +305,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      customer_journeys: {
+        Row: {
+          completed_at: string | null
+          conversion_type: string | null
+          created_at: string
+          device_type: string | null
+          events: Json
+          id: string
+          session_id: string
+          source: string | null
+          started_at: string
+          updated_at: string
+          user_id: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          conversion_type?: string | null
+          created_at?: string
+          device_type?: string | null
+          events?: Json
+          id?: string
+          session_id: string
+          source?: string | null
+          started_at?: string
+          updated_at?: string
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          conversion_type?: string | null
+          created_at?: string
+          device_type?: string | null
+          events?: Json
+          id?: string
+          session_id?: string
+          source?: string | null
+          started_at?: string
+          updated_at?: string
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
       }
       experience_themes: {
         Row: {
