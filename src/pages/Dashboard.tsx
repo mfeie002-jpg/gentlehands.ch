@@ -68,23 +68,52 @@ const Dashboard = () => {
   const [isTherapist, setIsTherapist] = useState(false);
 
   useEffect(() => {
-    checkUser();
-  }, []);
+    let mounted = true;
 
-  const checkUser = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      navigate("/login");
-      return;
-    }
-    setUser(session.user);
-    fetchAllData(session.user.id, session.user.email);
-  };
+    const handleSession = (session: any | null) => {
+      if (!mounted) return;
+
+      if (!session) {
+        setUser(null);
+        setProfile(null);
+        setBookings([]);
+        setFavorites([]);
+        setJournalEntries([]);
+        setIsTherapist(false);
+        setLoading(false);
+        navigate("/login", { replace: true });
+        return;
+      }
+
+      setUser(session.user);
+      setLoading(true);
+
+      setTimeout(() => {
+        if (!mounted) return;
+        fetchAllData(session.user.id, session.user.email);
+      }, 0);
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      handleSession(session);
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      handleSession(session);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
 
   const fetchAllData = async (userId: string, email: string | undefined) => {
     try {
       const [profileRes, bookingsRes, favoritesRes, journalRes, therapistRes] = await Promise.all([
-        supabase.from('profiles').select('*').eq('id', userId).single(),
+        supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
         email ? supabase.from('bookings').select('*').eq('customer_email', email).order('appointment_date', { ascending: false }) : Promise.resolve({ data: [], error: null }),
         supabase.from('favorites').select('*').eq('user_id', userId),
         supabase.from('session_notes').select('*').eq('user_id', userId),
