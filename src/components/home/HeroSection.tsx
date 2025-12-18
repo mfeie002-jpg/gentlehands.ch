@@ -94,11 +94,11 @@ export const HeroSection = () => {
           width={1920}
           height={1080}
         />
-        {/* Multi-layer gradient overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/60 to-background" aria-hidden="true" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" aria-hidden="true" />
+        {/* Multi-layer gradient overlay for depth - enhanced for better text visibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/85 to-background/95" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/40 to-background/70" aria-hidden="true" />
         {/* Warm copper tint overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-copper/8 via-transparent to-petrol/8" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-br from-copper/5 via-transparent to-petrol/5" aria-hidden="true" />
       </motion.div>
       
       {/* Floating Elements */}
@@ -171,7 +171,7 @@ export const HeroSection = () => {
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.6 }}
-                className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed font-light px-4 sm:px-0"
+                className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/70 max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed font-light px-4 sm:px-0 drop-shadow-sm"
               >
                 {activeVariant.subline}
               </motion.p>
