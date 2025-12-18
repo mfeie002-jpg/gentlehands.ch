@@ -189,9 +189,13 @@ const Login = () => {
 
                 {isLogin && (
                   <div className="text-right">
-                    <a href="#" className="text-sm text-copper hover:underline">
+                    <button 
+                      type="button"
+                      onClick={() => toast({ title: "Passwort zurücksetzen", description: "Bitte kontaktieren Sie uns unter kontakt@gentlehands.ch" })}
+                      className="text-sm text-copper hover:underline"
+                    >
                       Passwort vergessen?
-                    </a>
+                    </button>
                   </div>
                 )}
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -746,9 +746,9 @@ const Buchung = () => {
                 />
                 <Label htmlFor="agb" className="text-sm">
                   Ich habe die{" "}
-                  <a href="/rechtliches#agb" className="text-primary underline">
+                  <Link to="/rechtliches#agb" className="text-primary underline" target="_blank" onClick={(e) => e.stopPropagation()}>
                     AGB
-                  </a>{" "}
+                  </Link>{" "}
                   gelesen und akzeptiere sie. *
                 </Label>
               </div>
@@ -761,9 +761,9 @@ const Buchung = () => {
                 />
                 <Label htmlFor="datenschutz" className="text-sm">
                   Ich habe die{" "}
-                  <a href="/rechtliches#datenschutz" className="text-primary underline">
+                  <Link to="/rechtliches#datenschutz" className="text-primary underline" target="_blank" onClick={(e) => e.stopPropagation()}>
                     Datenschutzerklärung
-                  </a>{" "}
+                  </Link>{" "}
                   gelesen. *
                 </Label>
               </div>

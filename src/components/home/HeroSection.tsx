@@ -89,7 +89,8 @@ export const HeroSection = () => {
           alt="GentleHands Massage - Sanfte, professionelle Hände auf einem entspannten Rücken" 
           className="w-full h-[120%] object-cover"
           loading="eager"
-          fetchPriority="high"
+          // @ts-ignore - fetchpriority is a valid HTML attribute
+          fetchpriority="high"
           width={1920}
           height={1080}
         />
