@@ -54,39 +54,53 @@ export const Header = () => {
   }, [location]);
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user || null);
-      
-      if (session?.user) {
-        const { data } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
-        setIsAdmin(!!data);
-      }
+    let mounted = true;
+
+    const fetchAdminRole = async (userId: string) => {
+      const { data } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (!mounted) return;
+      setIsAdmin(!!data);
     };
 
-    checkUser();
+    const handleSession = (session: any | null) => {
+      if (!mounted) return;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user || null);
+
       if (session?.user) {
-        const { data } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
-        setIsAdmin(!!data);
+        // Default until role check finishes
+        setIsAdmin(false);
+        setTimeout(() => {
+          if (!mounted) return;
+          fetchAdminRole(session.user.id);
+        }, 0);
       } else {
         setIsAdmin(false);
       }
+    };
+
+    // Listener FIRST to avoid missing events
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      handleSession(session);
     });
 
-    return () => subscription.unsubscribe();
+    // THEN initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      handleSession(session);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Prevent body scroll when mobile menu is open

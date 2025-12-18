@@ -60,44 +60,52 @@ export const useAdminAuth = () => {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const checkAdmin = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session?.user) {
-        setUser(session.user);
-        const { data } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
-        
-        setIsAdmin(!!data);
-      }
+    let mounted = true;
+
+    const fetchAdminRole = async (userId: string) => {
+      const { data } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (!mounted) return;
+      setIsAdmin(!!data);
       setIsLoading(false);
     };
 
-    checkAdmin();
+    const handleSession = (session: any | null) => {
+      if (!mounted) return;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
         setUser(session.user);
-        const { data } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
-        
-        setIsAdmin(!!data);
+        setIsAdmin(false);
+        setTimeout(() => {
+          if (!mounted) return;
+          fetchAdminRole(session.user.id);
+        }, 0);
       } else {
         setUser(null);
         setIsAdmin(false);
+        setIsLoading(false);
       }
-      setIsLoading(false);
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      handleSession(session);
     });
 
-    return () => subscription.unsubscribe();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      handleSession(session);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   return { isAdmin, isLoading, user };
