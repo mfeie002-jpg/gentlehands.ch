@@ -40,6 +40,8 @@ import { MassageVideoPreview } from "@/components/booking/MassageVideoPreview";
 import { BookingStepHelp } from "@/components/booking/BookingStepHelp";
 import { BookingEstimatedTime } from "@/components/booking/BookingEstimatedTime";
 import { BookingMobileStepIndicator } from "@/components/booking/BookingMobileStepIndicator";
+import { BookingTherapistAvailability } from "@/components/booking/BookingTherapistAvailability";
+import { BookingWaitlistModal } from "@/components/booking/BookingWaitlistModal";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { useBookingAutosave } from "@/hooks/useBookingAutosave";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
@@ -49,6 +51,7 @@ import { useThrottle } from "@/hooks/useThrottle";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useCustomerJourney } from "@/hooks/useCustomerJourney";
 import { useApprovedTherapists, useExperienceThemes, useMassageTypes } from "@/hooks/useTherapists";
+import { useTherapistsLiveAvailability } from "@/hooks/useTherapistLiveAvailability";
 
 // Theme images
 import themeOcean from "@/assets/themes/theme-ocean.jpg";
@@ -148,6 +151,11 @@ const Buchung = () => {
     isOpen: false,
     massageTitle: ""
   });
+  const [waitlistModal, setWaitlistModal] = useState<{
+    isOpen: boolean;
+    therapistId?: string;
+    therapistName?: string;
+  }>({ isOpen: false });
 
   // Track booking start on mount
   useEffect(() => {
@@ -166,6 +174,10 @@ const Buchung = () => {
   const { therapists: dbTherapists, isLoading: therapistsLoading } = useApprovedTherapists();
   const { themes: dbThemes, isLoading: themesLoading } = useExperienceThemes();
   const { massageTypes: dbMassageTypes, isLoading: massagesLoading } = useMassageTypes();
+  
+  // Get therapist IDs for live availability
+  const therapistIds = useMemo(() => dbTherapists.map(t => t.id), [dbTherapists]);
+  const { availability: therapistAvailability, isLoading: availabilityLoading } = useTherapistsLiveAvailability(therapistIds);
   
   // Build masseurs list from database + "Keine Präferenz" option
   const masseurs = useMemo(() => {
@@ -534,6 +546,21 @@ const Buchung = () => {
                                 </span>
                               ))}
                             </div>
+                          )}
+                          {/* Live availability indicator */}
+                          {masseur.id !== "none" && (
+                            <BookingTherapistAvailability
+                              hasAvailableToday={therapistAvailability.get(masseur.id)?.hasAvailableToday || false}
+                              availableTodayCount={therapistAvailability.get(masseur.id)?.availableTodayCount || 0}
+                              nextAvailableSlot={therapistAvailability.get(masseur.id)?.nextAvailableSlot || null}
+                              isLoading={availabilityLoading}
+                              onWaitlistClick={() => setWaitlistModal({
+                                isOpen: true,
+                                therapistId: masseur.id,
+                                therapistName: masseur.name
+                              })}
+                              compact
+                            />
                           )}
                         </div>
                       </div>
@@ -1712,6 +1739,19 @@ const Buchung = () => {
             updateFormData("duration", "");
           }
         }}
+      />
+      
+      {/* Waitlist Modal */}
+      <BookingWaitlistModal
+        isOpen={waitlistModal.isOpen}
+        onClose={() => setWaitlistModal({ isOpen: false })}
+        therapistId={waitlistModal.therapistId}
+        therapistName={waitlistModal.therapistName}
+        selectedDate={formData.selectedDate}
+        selectedTime={formData.selectedTime}
+        massageType={formData.massage ? massages.find(m => m.id === formData.massage)?.title : undefined}
+        theme={formData.theme ? themes.find(t => t.id === formData.theme)?.title : undefined}
+        duration={formData.duration}
       />
     </Layout>
   );
