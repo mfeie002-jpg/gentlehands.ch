@@ -25,6 +25,8 @@ import { BookingDraftRecovery } from "@/components/booking/BookingDraftRecovery"
 import { BookingSocialProof } from "@/components/booking/BookingSocialProof";
 import { BookingFOMOPopup } from "@/components/booking/BookingFOMOPopup";
 import { BookingTestimonialSlider } from "@/components/booking/BookingTestimonialSlider";
+import { BookingCountdownTimer } from "@/components/booking/BookingCountdownTimer";
+import { BookingLiveVisitors } from "@/components/booking/BookingLiveVisitors";
 import { BookingGiftCardInput } from "@/components/booking/BookingGiftCardInput";
 import { BookingTherapistCompare } from "@/components/booking/BookingTherapistCompare";
 import { BookingStepTransition } from "@/components/booking/BookingStepTransition";
@@ -886,6 +888,13 @@ const Buchung = () => {
                 </motion.div>
               )}
               
+              {/* Countdown Timer for selected time */}
+              {formData.selectedTime && (
+                <div className="mt-4">
+                  <BookingCountdownTimer selectedTime={formData.selectedTime} />
+                </div>
+              )}
+              
               {/* Social Proof */}
               <div className="mt-4">
                 <BookingSocialProof 
@@ -1289,6 +1298,13 @@ const Buchung = () => {
             <span>Wischen zum Navigieren</span>
             <ChevronRight size={14} />
           </div>
+
+          {/* Live Visitors */}
+          {currentStep < 6 && (
+            <div className="mb-6">
+              <BookingLiveVisitors />
+            </div>
+          )}
 
           {/* Smart Recommendations */}
           {currentStep <= 3 && (
