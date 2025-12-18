@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Calendar, Heart, Gift, Star, Clock, User, Settings, LogOut, 
-  ChevronRight, Sparkles, BookOpen, Award, Bell, TrendingUp
+  ChevronRight, Sparkles, BookOpen, Award, Bell, TrendingUp, GraduationCap
 } from "lucide-react";
 import { FavoritesTab } from "@/components/dashboard/FavoritesTab";
 import { JournalTab } from "@/components/dashboard/JournalTab";
@@ -65,6 +65,7 @@ const Dashboard = () => {
   const [journalEntries, setJournalEntries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
+  const [isTherapist, setIsTherapist] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -81,17 +82,21 @@ const Dashboard = () => {
   };
 
   const fetchAllData = async (userId: string, email: string | undefined) => {
-    const [profileRes, bookingsRes, favoritesRes, journalRes] = await Promise.all([
+    const [profileRes, bookingsRes, favoritesRes, journalRes, therapistRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', userId).single(),
       email ? supabase.from('bookings').select('*').eq('customer_email', email).order('appointment_date', { ascending: false }) : Promise.resolve({ data: [] }),
       supabase.from('favorites').select('*').eq('user_id', userId),
       supabase.from('session_notes').select('*').eq('user_id', userId),
+      supabase.from('therapists').select('id, status').eq('user_id', userId).maybeSingle(),
     ]);
 
     if (profileRes.data) setProfile(profileRes.data);
     if (bookingsRes.data) setBookings(bookingsRes.data);
     if (favoritesRes.data) setFavorites(favoritesRes.data);
     if (journalRes.data) setJournalEntries(journalRes.data);
+    if (therapistRes.data && therapistRes.data.status === 'approved') {
+      setIsTherapist(true);
+    }
     setLoading(false);
   };
 
@@ -241,6 +246,27 @@ const Dashboard = () => {
                     </button>
                   ))}
                 </nav>
+
+                {/* Therapist Section */}
+                {isTherapist && (
+                  <div className="mt-4 pt-4 border-t border-border/50">
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-4 mb-2">Therapeut:in</p>
+                    <Link 
+                      to="/therapeut/schulung"
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                    >
+                      <GraduationCap className="w-5 h-5" />
+                      <span className="font-medium">Schulung</span>
+                    </Link>
+                    <Link 
+                      to="/therapist-dashboard"
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                    >
+                      <User className="w-5 h-5" />
+                      <span className="font-medium">Therapeuten-Bereich</span>
+                    </Link>
+                  </div>
+                )}
 
                 <div className="mt-6 pt-6 border-t border-border/50">
                   <Button variant="copper" className="w-full" asChild>
