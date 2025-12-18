@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { format, addDays, isBefore, startOfToday } from "date-fns";
 import { de } from "date-fns/locale";
-import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle, Users, Volume2, VolumeX, Volume1, MessageCircle, MessageCircleOff, Hand, Feather, Shield, Award } from "lucide-react";
+import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle, Users, Volume2, VolumeX, Volume1, MessageCircle, MessageCircleOff, Hand, Feather, Shield, Award, Scale, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -20,7 +20,14 @@ import { BookingProgressIndicator } from "@/components/booking/BookingProgressIn
 import { BookingIntroduction } from "@/components/booking/BookingIntroduction";
 import { BookingSummaryCard } from "@/components/booking/BookingSummaryCard";
 import { BookingTrustBadges } from "@/components/booking/BookingTrustBadges";
+import { BookingFloatingSummary } from "@/components/booking/BookingFloatingSummary";
+import { BookingDraftRecovery } from "@/components/booking/BookingDraftRecovery";
+import { BookingSocialProof } from "@/components/booking/BookingSocialProof";
+import { BookingGiftCardInput } from "@/components/booking/BookingGiftCardInput";
+import { BookingTherapistCompare } from "@/components/booking/BookingTherapistCompare";
+import { BookingStepTransition } from "@/components/booking/BookingStepTransition";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
+import { useBookingAutosave } from "@/hooks/useBookingAutosave";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
 import { bookingContactSchema, bookingPreferencesSchema } from "@/lib/validations";
 import { z } from "zod";
@@ -68,6 +75,9 @@ const Buchung = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [stepDirection, setStepDirection] = useState<"forward" | "backward">("forward");
+  const [showCompareModal, setShowCompareModal] = useState(false);
+  const [appliedGiftCard, setAppliedGiftCard] = useState<{ code: string; discount: number } | null>(null);
   
   // Fetch dynamic data from database
   const { therapists: dbTherapists, isLoading: therapistsLoading } = useApprovedTherapists();
@@ -191,6 +201,27 @@ const Buchung = () => {
     
     return Math.round(price);
   }, [formData.masseur, formData.duration, dbTherapists]);
+
+  // Final price with gift card discount
+  const finalPrice = useMemo(() => {
+    if (!calculatedPrice) return null;
+    if (appliedGiftCard) {
+      return Math.max(0, calculatedPrice - appliedGiftCard.discount);
+    }
+    return calculatedPrice;
+  }, [calculatedPrice, appliedGiftCard]);
+
+  // Autosave functionality
+  const handleRestoreBooking = useCallback((data: Record<string, unknown>, step: number) => {
+    setFormData(prev => ({ ...prev, ...data }));
+    setCurrentStep(step);
+  }, []);
+
+  const { hasDraft, draftAge, restoreDraft, dismissDraft, clearDraft } = useBookingAutosave(
+    formData as unknown as Record<string, unknown>,
+    currentStep,
+    handleRestoreBooking
+  );
 
   const timeSlots = [
     "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"
@@ -409,6 +440,17 @@ const Buchung = () => {
                   );
                 })}
               </div>
+            )}
+            
+            {/* Compare therapists button */}
+            {!therapistsLoading && dbTherapists.length > 1 && (
+              <button
+                onClick={() => setShowCompareModal(true)}
+                className="flex items-center gap-2 text-sm text-petrol hover:text-petrol/80 transition-colors mx-auto mt-4"
+              >
+                <Scale size={16} />
+                <span>Therapeut:innen vergleichen</span>
+              </button>
             )}
           </div>
         );
@@ -776,6 +818,25 @@ const Buchung = () => {
                   </div>
                 </motion.div>
               )}
+              
+              {/* Social Proof */}
+              <div className="mt-4">
+                <BookingSocialProof 
+                  selectedTime={formData.selectedTime}
+                  selectedDate={formData.selectedDate}
+                />
+              </div>
+            </div>
+            
+            {/* Gift Card Input */}
+            <div className="mb-6">
+              <BookingGiftCardInput
+                onApply={(code, discount) => setAppliedGiftCard({ code, discount })}
+                onRemove={() => setAppliedGiftCard(null)}
+                appliedCode={appliedGiftCard?.code}
+                appliedDiscount={appliedGiftCard?.discount}
+                maxDiscount={calculatedPrice || undefined}
+              />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1021,6 +1082,47 @@ const Buchung = () => {
         canonical="https://gentlehands.ch/buchung"
       />
 
+      {/* Draft Recovery Banner */}
+      <BookingDraftRecovery
+        isVisible={hasDraft}
+        draftAge={draftAge}
+        onRestore={restoreDraft}
+        onDismiss={dismissDraft}
+      />
+
+      {/* Floating Summary Sidebar (Desktop) */}
+      <BookingFloatingSummary
+        currentStep={currentStep}
+        formData={formData}
+        masseurs={masseurs}
+        themes={themes}
+        massages={massages}
+        calculatedPrice={calculatedPrice}
+        appliedGiftCard={appliedGiftCard}
+      />
+
+      {/* Therapist Compare Modal */}
+      <BookingTherapistCompare
+        isOpen={showCompareModal}
+        onClose={() => setShowCompareModal(false)}
+        therapists={dbTherapists.map(t => ({
+          id: t.id,
+          name: t.name,
+          specialties: t.specialty || [],
+          photo_url: t.photo_url,
+          hourly_rate: t.hourly_rate,
+          average_rating: t.average_rating,
+          total_bookings: t.total_bookings,
+          experience_years: t.experience_years,
+          is_featured: t.is_featured,
+        }))}
+        selectedId={formData.masseur}
+        onSelect={(id) => {
+          updateFormData("masseur", id);
+          triggerHaptic('success');
+        }}
+      />
+
       <section className="pt-24 sm:pt-32 pb-8 sm:pb-16 min-h-screen">
         <div className="container-narrow px-3 sm:px-6">
           {/* Progress Steps - Mobile Optimized */}
@@ -1147,6 +1249,7 @@ const Buchung = () => {
               <Button
                 variant="outline"
                 onClick={() => {
+                  setStepDirection("backward");
                   setCurrentStep((prev) => prev - 1);
                   triggerHaptic('light');
                 }}
@@ -1162,6 +1265,7 @@ const Buchung = () => {
               <Button
                 variant="copper"
                 onClick={() => {
+                  setStepDirection("forward");
                   const nextStep = currentStep + 1;
                   setCurrentStep(nextStep);
                   trackBookingStep(nextStep, steps[nextStep - 1]?.title || '');
@@ -1316,6 +1420,9 @@ const Buchung = () => {
                     
                     // Track booking (note: not complete until verified)
                     trackBookingComplete(bookingNumber);
+                    
+                    // Clear draft on successful submission
+                    clearDraft();
                     
                     navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
                   } catch (err) {
