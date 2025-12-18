@@ -259,7 +259,7 @@ const Dashboard = () => {
                       <span className="font-medium">Schulung</span>
                     </Link>
                     <Link 
-                      to="/therapist-dashboard"
+                      to="/therapeut/dashboard"
                       className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                     >
                       <User className="w-5 h-5" />
