@@ -1,12 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Save, User, Phone, Mail, Clock, Briefcase } from "lucide-react";
+import { Loader2, Save, User, Phone, Mail, Clock, Briefcase, Calendar, Camera, Upload } from "lucide-react";
+
+const DAYS_OF_WEEK = [
+  { id: "Montag", label: "Montag" },
+  { id: "Dienstag", label: "Dienstag" },
+  { id: "Mittwoch", label: "Mittwoch" },
+  { id: "Donnerstag", label: "Donnerstag" },
+  { id: "Freitag", label: "Freitag" },
+  { id: "Samstag", label: "Samstag" },
+];
 
 interface TherapistSettingsTabProps {
   therapistId: string;
@@ -20,12 +31,17 @@ interface TherapistSettingsTabProps {
     working_hours_start?: string | null;
     working_hours_end?: string | null;
     specialty?: string[] | null;
+    available_days?: string[] | null;
+    photo_url?: string | null;
   };
 }
 
 export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSettingsTabProps) => {
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState(initialData.photo_url || "");
   const [profile, setProfile] = useState({
     name: initialData.name || "",
     phone: initialData.phone || "",
@@ -34,13 +50,91 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
     hourly_rate: initialData.hourly_rate || 120,
     working_hours_start: initialData.working_hours_start || "09:00",
     working_hours_end: initialData.working_hours_end || "20:00",
+    available_days: initialData.available_days || ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
   });
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Ungültiger Dateityp",
+        description: "Bitte wählen Sie eine Bilddatei aus.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Datei zu gross",
+        description: "Maximale Dateigrösse ist 5MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${therapistId}-${Date.now()}.${fileExt}`;
+
+      // Upload to storage
+      const { error: uploadError } = await supabase.storage
+        .from("therapist-photos")
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from("therapist-photos")
+        .getPublicUrl(fileName);
+
+      const newPhotoUrl = urlData.publicUrl;
+
+      // Update therapist record
+      const { error: updateError } = await supabase
+        .from("therapists")
+        .update({ photo_url: newPhotoUrl, updated_at: new Date().toISOString() })
+        .eq("id", therapistId);
+
+      if (updateError) throw updateError;
+
+      setPhotoUrl(newPhotoUrl);
+      toast({
+        title: "Foto hochgeladen",
+        description: "Ihr Profilbild wurde aktualisiert.",
+      });
+    } catch (err) {
+      console.error("Photo upload failed:", err);
+      toast({
+        title: "Fehler",
+        description: "Foto konnte nicht hochgeladen werden.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const toggleDay = (day: string) => {
+    setProfile((prev) => ({
+      ...prev,
+      available_days: prev.available_days.includes(day)
+        ? prev.available_days.filter((d) => d !== day)
+        : [...prev.available_days, day],
+    }));
+  };
 
   const handleSave = async () => {
     setSaving(true);
     try {
       const { error } = await supabase
-        .from('therapists')
+        .from("therapists")
         .update({
           name: profile.name,
           phone: profile.phone || null,
@@ -49,9 +143,10 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
           hourly_rate: profile.hourly_rate,
           working_hours_start: profile.working_hours_start,
           working_hours_end: profile.working_hours_end,
+          available_days: profile.available_days,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', therapistId);
+        .eq("id", therapistId);
 
       if (error) throw error;
 
@@ -60,7 +155,7 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
         description: "Ihre Einstellungen wurden aktualisiert.",
       });
     } catch (err) {
-      console.error('Failed to save settings:', err);
+      console.error("Failed to save settings:", err);
       toast({
         title: "Fehler",
         description: "Einstellungen konnten nicht gespeichert werden.",
@@ -73,6 +168,55 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
 
   return (
     <div className="space-y-6">
+      {/* Profile Photo */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Camera size={20} />
+            Profilbild
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-6">
+            <Avatar className="h-24 w-24 border-2 border-border">
+              <AvatarImage src={photoUrl} alt={profile.name} />
+              <AvatarFallback className="text-2xl bg-copper/10 text-copper">
+                {profile.name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-2">
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handlePhotoUpload}
+                accept="image/*"
+                className="hidden"
+              />
+              <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+              >
+                {uploading ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin mr-2" />
+                    Hochladen...
+                  </>
+                ) : (
+                  <>
+                    <Upload size={16} className="mr-2" />
+                    Foto ändern
+                  </>
+                )}
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                JPG, PNG oder WebP. Max. 5MB.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Profile Settings */}
       <Card>
         <CardHeader>
@@ -164,6 +308,38 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
               />
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Availability Days */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar size={20} />
+            Verfügbare Tage
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {DAYS_OF_WEEK.map((day) => (
+              <div key={day.id} className="flex items-center space-x-3">
+                <Checkbox
+                  id={day.id}
+                  checked={profile.available_days.includes(day.id)}
+                  onCheckedChange={() => toggleDay(day.id)}
+                />
+                <Label
+                  htmlFor={day.id}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                >
+                  {day.label}
+                </Label>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground mt-3">
+            Wählen Sie die Tage, an denen Sie für Buchungen verfügbar sind.
+          </p>
         </CardContent>
       </Card>
 
