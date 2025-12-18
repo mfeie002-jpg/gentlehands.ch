@@ -23,7 +23,7 @@ import { BookingTrustBadges } from "@/components/booking/BookingTrustBadges";
 import { BookingFloatingSummary } from "@/components/booking/BookingFloatingSummary";
 import { BookingDraftRecovery } from "@/components/booking/BookingDraftRecovery";
 import { BookingSocialProof } from "@/components/booking/BookingSocialProof";
-import { BookingFOMOPopup } from "@/components/booking/BookingFOMOPopup";
+
 import { BookingTestimonialSlider } from "@/components/booking/BookingTestimonialSlider";
 import { BookingCountdownTimer } from "@/components/booking/BookingCountdownTimer";
 import { BookingLiveVisitors } from "@/components/booking/BookingLiveVisitors";
@@ -1237,8 +1237,6 @@ const Buchung = () => {
         canonical="https://gentlehands.ch/buchung"
       />
 
-      {/* FOMO Popup */}
-      <BookingFOMOPopup />
 
       {/* Draft Recovery Banner */}
       <BookingDraftRecovery
