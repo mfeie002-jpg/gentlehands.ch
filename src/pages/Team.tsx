@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Languages, Award, Heart, Star, GraduationCap, Quote, ArrowRight, Users } from "lucide-react";
+import { Languages, Award, Heart, Star, GraduationCap, Quote, ArrowRight, Users, Loader2 } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
@@ -13,80 +13,13 @@ import { TeamTestimonialsSection } from "@/components/team/TeamTestimonialsSecti
 import { TherapistProfileCard } from "@/components/team/TherapistProfileCard";
 import { TeamPhilosophyCard } from "@/components/team/TeamPhilosophyCard";
 import { LazyImage } from "@/components/shared/LazyImage";
-import teamMorris from "@/assets/team-morris-new.jpg";
-import teamAnna from "@/assets/team-anna-new.jpg";
-import teamLuca from "@/assets/team-luca-new.jpg";
+import { useApprovedTherapists } from "@/hooks/useTherapists";
 import teamWorkingMoment from "@/assets/team-working-moment.jpg";
 import teamConsultation from "@/assets/team-consultation.jpg";
 import emotionalTherapistHands from "@/assets/emotional-therapist-hands.jpg";
 
-const team = [
-  {
-    id: "morris",
-    name: "Morris",
-    role: "Inhaber & Leitender Masseur",
-    isOwner: true,
-    image: teamMorris,
-    experience: "12+ Jahre",
-    languages: ["Deutsch", "English", "Français"],
-    specialties: ["Tiefenentspannung", "Intuitive Berührung", "Emotional Grounding"],
-    certifications: [
-      "Dipl. Masseur FA",
-      "Craniosacral-Therapie Grundlagen",
-      "Trauma-sensitive Körperarbeit",
-    ],
-    description:
-      "Morris gründete GentleHands aus der tiefen Überzeugung, dass Frauen einen geschützten Raum für echte Entspannung verdienen. Mit über einem Jahrzehnt Erfahrung in ganzheitlicher Körperarbeit verbindet er technisches Können mit intuitiver Präsenz.",
-    style:
-      "Ruhig, aufmerksam und sehr präsent. Morris ist bekannt für seine Fähigkeit, genau zu spüren, was der Körper braucht – oft bevor die Kundin es selbst weiss.",
-    quote:
-      "Mein Ziel ist es, dass Sie für einen Moment alles loslassen können – den Alltag, die Erwartungen, die Anspannung. Einfach nur sein.",
-  },
-  {
-    id: "anna",
-    name: "Anna",
-    role: "Masseurin",
-    isOwner: false,
-    image: teamAnna,
-    experience: "8 Jahre",
-    languages: ["Deutsch", "English"],
-    specialties: ["Sanfte Massage", "Stress Reset", "Nervensystem-Regulation"],
-    certifications: [
-      "Dipl. Masseurin",
-      "Ayurveda-Massage",
-      "Breathwork Facilitator",
-    ],
-    description:
-      "Anna bringt eine besonders sanfte, achtsame Herangehensweise mit. Ihr Fokus liegt auf dem Nervensystem und der Fähigkeit des Körpers, sich selbst zu regulieren.",
-    style:
-      "Sehr sanft und fliessend. Anna kreiert einen Raum der absoluten Sicherheit, in dem sich das Nervensystem von selbst beruhigt.",
-    quote:
-      "Ich glaube, dass echter Wandel im Körper nur in einem Zustand von Sicherheit und Geborgenheit passieren kann.",
-  },
-  {
-    id: "luca",
-    name: "Luca",
-    role: "Masseur",
-    isOwner: false,
-    image: teamLuca,
-    experience: "6 Jahre",
-    languages: ["Deutsch", "Italiano", "English"],
-    specialties: ["Deep Tissue", "Sportmassage", "Körperarbeit"],
-    certifications: [
-      "Dipl. Sportmasseur",
-      "Myofasziale Release Technik",
-      "Triggerpunkt-Therapie",
-    ],
-    description:
-      "Luca kommt aus dem sportlichen Bereich und bringt eine intensivere Technik mit. Perfekt für Frauen, die tiefe Verspannungen lösen und wirklich spüren möchten.",
-    style:
-      "Kraftvoller und direkter, aber immer im Dialog mit dem Körper. Luca arbeitet gezielt an Problemzonen und tiefen Blockaden.",
-    quote:
-      "Manchmal braucht der Körper klare Arbeit, um loszulassen. Ich finde den Punkt, wo Intensität in Entspannung umschlägt.",
-  },
-];
-
 const Team = () => {
+  const { therapists, isLoading } = useApprovedTherapists();
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
 
@@ -101,11 +34,12 @@ const Team = () => {
           "@type": "ItemList",
           "name": "GentleHands Therapeut:innen",
           "description": "Zertifizierte Therapeut:innen für professionelle Entspannungsmassagen",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Morris", "description": "Inhaber & Leitender Masseur, 12+ Jahre Erfahrung" },
-            { "@type": "ListItem", "position": 2, "name": "Anna", "description": "Masseurin, spezialisiert auf sanfte Techniken" },
-            { "@type": "ListItem", "position": 3, "name": "Luca", "description": "Masseur, spezialisiert auf Deep Tissue" }
-          ]
+          "itemListElement": therapists.map((t, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": t.name,
+            "description": `${t.experience_years || 0}+ Jahre Erfahrung`
+          }))
         }}
       />
 
@@ -141,7 +75,9 @@ const Team = () => {
               className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-copper/10 border border-copper/20 mb-4 sm:mb-6"
             >
               <Users size={14} className="sm:w-4 sm:h-4 text-copper" />
-              <span className="text-copper text-xs sm:text-sm font-medium">3 Expert:innen</span>
+              <span className="text-copper text-xs sm:text-sm font-medium">
+                {isLoading ? "..." : `${therapists.length} Expert:innen`}
+              </span>
             </motion.div>
             
             <motion.h1 
@@ -213,152 +149,194 @@ const Team = () => {
       {/* Team Members */}
       <section className="section-padding-sm px-4 sm:px-0">
         <div className="container-wide space-y-16 sm:space-y-24">
-          {team.map((member, index) => (
-            <motion.div
-              key={member.id}
-              id={member.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6 }}
-              className="scroll-mt-32"
-            >
-              <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10 ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
-                <div className={`${index % 2 === 1 ? "lg:[direction:ltr]" : ""}`}>
-                  <motion.div 
-                    className="aspect-[3/4] sm:aspect-[3/4] rounded-2xl sm:rounded-3xl relative overflow-hidden group"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {member.isOwner && (
-                      <motion.div 
-                        className="absolute top-4 right-4 z-10"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 }}
-                      >
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-copper text-accent-foreground text-xs font-medium rounded-full shadow-lg">
-                          <Star size={12} fill="currentColor" />
-                          Inhaber
-                        </span>
-                      </motion.div>
-                    )}
-                    <img 
-                      src={member.image} 
-                      alt={`${member.name} - ${member.role}`}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    
-                    {/* Gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
-                    {/* Name overlay on hover */}
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
-                    >
-                      <p className="text-white font-display text-xl">{member.name}</p>
-                      <p className="text-white/70 text-sm">{member.role}</p>
-                    </motion.div>
-                  </motion.div>
-                </div>
-
-                {/* Content */}
-                <div className={`lg:col-span-2 ${index % 2 === 1 ? "lg:[direction:ltr]" : ""}`}>
-                  <motion.div
-                    initial={{ opacity: 0, x: index % 2 === 1 ? -30 : 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <div className="flex items-center gap-4 mb-4">
-                      <h2 className="text-foreground">{member.name}</h2>
-                      <span className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">
-                        {member.role}
-                      </span>
-                    </div>
-                    <div className="divider-copper mb-6" />
-
-                    {/* Description */}
-                    <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
-                      {member.description}
-                    </p>
-
-                    {/* Style */}
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-copper" />
+            </div>
+          ) : therapists.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-muted-foreground">Aktuell keine Therapeuten verfügbar.</p>
+            </div>
+          ) : (
+            therapists.map((member, index) => (
+              <motion.div
+                key={member.id}
+                id={member.name.toLowerCase()}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6 }}
+                className="scroll-mt-32"
+              >
+                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10 ${index % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
+                  <div className={`${index % 2 === 1 ? "lg:[direction:ltr]" : ""}`}>
                     <motion.div 
-                      className="mb-6 p-5 rounded-xl bg-gradient-to-r from-secondary/50 to-secondary/30 border border-border/50"
-                      whileHover={{ scale: 1.01 }}
+                      className="aspect-[3/4] sm:aspect-[3/4] rounded-2xl sm:rounded-3xl relative overflow-hidden group"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <p className="text-foreground font-medium mb-2">Stil:</p>
-                      <p className="text-muted-foreground">{member.style}</p>
-                    </motion.div>
-
-                    {/* Quote */}
-                    <motion.blockquote 
-                      className="mb-8 pl-5 border-l-2 border-copper relative"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.3 }}
-                    >
-                      <Quote size={24} className="absolute -left-3 -top-2 text-copper/30" />
-                      <p className="text-foreground italic text-lg">„{member.quote}"</p>
-                    </motion.blockquote>
-
-                    {/* Details Grid */}
-                    <div className="grid grid-cols-1 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                      {[
-                        { icon: Award, title: "Erfahrung", content: member.experience },
-                        { icon: Languages, title: "Sprachen", content: member.languages.join(", ") },
-                        { icon: Heart, title: "Spezialisierungen", content: member.specialties },
-                        { icon: GraduationCap, title: "Ausbildungen", content: member.certifications },
-                      ].map((item, i) => (
-                        <motion.div
-                          key={item.title}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.1 * i }}
-                          className="group"
+                      {member.is_featured && (
+                        <motion.div 
+                          className="absolute top-4 right-4 z-10"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.5 }}
                         >
-                          <div className="flex items-center gap-2 mb-3">
-                            <motion.div
-                              whileHover={{ rotate: 360 }}
-                              transition={{ duration: 0.5 }}
-                            >
-                              <item.icon size={18} className="text-copper" />
-                            </motion.div>
-                            <h4 className="font-display text-foreground">{item.title}</h4>
-                          </div>
-                          {Array.isArray(item.content) ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-copper text-accent-foreground text-xs font-medium rounded-full shadow-lg">
+                            <Star size={12} fill="currentColor" />
+                            Top
+                          </span>
+                        </motion.div>
+                      )}
+                      {member.photo_url ? (
+                        <img 
+                          src={member.photo_url} 
+                          alt={member.name}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-sand flex items-center justify-center">
+                          <Users size={64} className="text-warm-gray" />
+                        </div>
+                      )}
+                      
+                      {/* Gradient overlay on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      
+                      {/* Name overlay on hover */}
+                      <motion.div
+                        className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+                      >
+                        <p className="text-white font-display text-xl">{member.name}</p>
+                        <p className="text-white/70 text-sm">Therapeut:in</p>
+                      </motion.div>
+                    </motion.div>
+                  </div>
+
+                  {/* Content */}
+                  <div className={`lg:col-span-2 ${index % 2 === 1 ? "lg:[direction:ltr]" : ""}`}>
+                    <motion.div
+                      initial={{ opacity: 0, x: index % 2 === 1 ? -30 : 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <div className="flex items-center gap-4 mb-4">
+                        <h2 className="text-foreground">{member.name}</h2>
+                        <span className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">
+                          Therapeut:in
+                        </span>
+                        {member.average_rating > 0 && (
+                          <span className="flex items-center gap-1 text-sm text-muted-foreground">
+                            <Star size={14} className="text-amber-500 fill-amber-500" />
+                            {member.average_rating.toFixed(1)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="divider-copper mb-6" />
+
+                      {/* Description */}
+                      {member.bio && (
+                        <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
+                          {member.bio}
+                        </p>
+                      )}
+
+                      {/* Details Grid */}
+                      <div className="grid grid-cols-1 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                        {member.experience_years > 0 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="group"
+                          >
+                            <div className="flex items-center gap-2 mb-3">
+                              <Award size={18} className="text-copper" />
+                              <h4 className="font-display text-foreground">Erfahrung</h4>
+                            </div>
+                            <p className="text-muted-foreground">{member.experience_years}+ Jahre</p>
+                          </motion.div>
+                        )}
+
+                        {member.specialty && member.specialty.length > 0 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="group"
+                          >
+                            <div className="flex items-center gap-2 mb-3">
+                              <Heart size={18} className="text-copper" />
+                              <h4 className="font-display text-foreground">Spezialisierungen</h4>
+                            </div>
                             <ul className="text-muted-foreground text-sm space-y-1">
-                              {item.content.map((s) => (
+                              {member.specialty.map((s) => (
                                 <li key={s} className="flex items-start gap-2">
                                   <span className="w-1 h-1 rounded-full bg-copper mt-2 shrink-0" />
                                   {s}
                                 </li>
                               ))}
                             </ul>
-                          ) : (
-                            <p className="text-muted-foreground">{item.content}</p>
-                          )}
-                        </motion.div>
-                      ))}
-                    </div>
+                          </motion.div>
+                        )}
 
-                    {/* CTA */}
-                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      <Button variant="copper" size="lg" asChild className="group">
-                        <Link to={`/buchung?masseur=${member.id}`}>
-                          Mit {member.name} buchen
-                          <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </Button>
+                        {member.qualifications && member.qualifications.length > 0 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                            className="group"
+                          >
+                            <div className="flex items-center gap-2 mb-3">
+                              <GraduationCap size={18} className="text-copper" />
+                              <h4 className="font-display text-foreground">Qualifikationen</h4>
+                            </div>
+                            <ul className="text-muted-foreground text-sm space-y-1">
+                              {member.qualifications.map((q) => (
+                                <li key={q} className="flex items-start gap-2">
+                                  <span className="w-1 h-1 rounded-full bg-copper mt-2 shrink-0" />
+                                  {q}
+                                </li>
+                              ))}
+                            </ul>
+                          </motion.div>
+                        )}
+
+                        {member.hourly_rate && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 }}
+                            className="group"
+                          >
+                            <div className="flex items-center gap-2 mb-3">
+                              <Award size={18} className="text-copper" />
+                              <h4 className="font-display text-foreground">Stundensatz</h4>
+                            </div>
+                            <p className="text-muted-foreground">CHF {member.hourly_rate}/Std.</p>
+                          </motion.div>
+                        )}
+                      </div>
+
+                      {/* CTA */}
+                      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                        <Button variant="copper" size="lg" asChild className="group">
+                          <Link to={`/buchung?masseur=${member.id}`}>
+                            Mit {member.name} buchen
+                            <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </Button>
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))
+          )}
         </div>
       </section>
 

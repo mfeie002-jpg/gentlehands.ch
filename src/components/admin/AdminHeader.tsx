@@ -45,12 +45,12 @@ export const AdminHeader = ({ title, onSearch, onRefresh, children }: AdminHeade
         <div>
           <h1 className="text-2xl font-playfair font-bold">{title}</h1>
           <p className="text-sm text-muted-foreground">
-            {currentTime.toLocaleDateString('de-CH', { 
+            {currentTime.toLocaleDateString('de-DE', { 
               weekday: 'long', 
               year: 'numeric', 
               month: 'long', 
               day: 'numeric' 
-            })} • {currentTime.toLocaleTimeString('de-CH')}
+            })} • {currentTime.toLocaleTimeString('de-DE')}
           </p>
         </div>
 
