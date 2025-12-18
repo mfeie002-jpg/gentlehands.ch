@@ -111,21 +111,71 @@ const Dashboard = () => {
   }, [navigate]);
 
   const fetchAllData = async (userId: string, email: string | undefined) => {
+    const withTimeout = async <T,>(promise: PromiseLike<T>, ms: number, label: string): Promise<T> => {
+      return await new Promise<T>((resolve, reject) => {
+        const t = window.setTimeout(() => {
+          reject(new Error(`Timeout while loading ${label}`));
+        }, ms);
+
+        Promise.resolve(promise)
+          .then((res) => {
+            window.clearTimeout(t);
+            resolve(res);
+          })
+          .catch((err) => {
+            window.clearTimeout(t);
+            reject(err);
+          });
+      });
+    };
+
     try {
+      const timeoutMs = 12000;
+
       const [profileRes, bookingsRes, favoritesRes, journalRes, therapistRes] = await Promise.all([
-        supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
-        email ? supabase.from('bookings').select('*').eq('customer_email', email).order('appointment_date', { ascending: false }) : Promise.resolve({ data: [], error: null }),
-        supabase.from('favorites').select('*').eq('user_id', userId),
-        supabase.from('session_notes').select('*').eq('user_id', userId),
-        supabase.from('therapists').select('id, status').eq('user_id', userId).maybeSingle(),
+        withTimeout(
+          supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
+          timeoutMs,
+          'profile'
+        ).catch((error) => ({ data: null, error })),
+        (email
+          ? withTimeout(
+              supabase
+                .from('bookings')
+                .select('*')
+                .eq('customer_email', email)
+                .order('appointment_date', { ascending: false }),
+              timeoutMs,
+              'bookings'
+            )
+          : Promise.resolve({ data: [], error: null })
+        ).catch((error) => ({ data: [], error })),
+        withTimeout(supabase.from('favorites').select('*').eq('user_id', userId), timeoutMs, 'favorites').catch((error) => ({ data: [], error })),
+        withTimeout(supabase.from('session_notes').select('*').eq('user_id', userId), timeoutMs, 'journal').catch((error) => ({ data: [], error })),
+        withTimeout(
+          supabase.from('therapists').select('id, status').eq('user_id', userId).maybeSingle(),
+          timeoutMs,
+          'therapist'
+        ).catch((error) => ({ data: null, error })),
       ]);
 
-      if (profileRes.data) setProfile(profileRes.data);
-      if (bookingsRes.data) setBookings(bookingsRes.data as Booking[]);
-      if (favoritesRes.data) setFavorites(favoritesRes.data);
-      if (journalRes.data) setJournalEntries(journalRes.data);
-      if (therapistRes.data && therapistRes.data.status === 'approved') {
-        setIsTherapist(true);
+      // Note: we intentionally don't block rendering if some queries fail (RLS or timeout)
+      if ((profileRes as any).data) setProfile((profileRes as any).data);
+      if ((bookingsRes as any).data) setBookings((bookingsRes as any).data as Booking[]);
+      if ((favoritesRes as any).data) setFavorites((favoritesRes as any).data);
+      if ((journalRes as any).data) setJournalEntries((journalRes as any).data);
+      if ((therapistRes as any).data && (therapistRes as any).data.status === 'approved') setIsTherapist(true);
+
+      const errors = [
+        (profileRes as any).error,
+        (bookingsRes as any).error,
+        (favoritesRes as any).error,
+        (journalRes as any).error,
+        (therapistRes as any).error,
+      ].filter(Boolean);
+
+      if (errors.length) {
+        console.error('Dashboard data load issues:', errors);
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
