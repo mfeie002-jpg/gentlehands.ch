@@ -36,6 +36,7 @@ import { bookingContactSchema, bookingPreferencesSchema } from "@/lib/validation
 import { z } from "zod";
 import { useThrottle } from "@/hooks/useThrottle";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useCustomerJourney } from "@/hooks/useCustomerJourney";
 import { useApprovedTherapists, useExperienceThemes, useMassageTypes } from "@/hooks/useTherapists";
 
 const steps = [
@@ -74,6 +75,16 @@ const Buchung = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { trackBookingStart, trackBookingStep, trackBookingComplete } = useAnalytics();
+  const { 
+    trackBookingStart: journeyBookingStart, 
+    trackBookingStep: journeyBookingStep, 
+    trackBookingComplete: journeyBookingComplete,
+    trackTherapistView,
+    trackExperienceView,
+    trackVideoPlay,
+    trackFormInteraction
+  } = useCustomerJourney();
+  
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -85,6 +96,12 @@ const Buchung = () => {
     therapist: null,
   });
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  // Track booking start on mount
+  useEffect(() => {
+    trackBookingStart();
+    journeyBookingStart();
+  }, []);
 
   // Check for authenticated user
   useEffect(() => {
