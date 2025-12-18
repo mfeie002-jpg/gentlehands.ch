@@ -8,6 +8,7 @@ export interface Therapist {
   email: string;
   phone: string | null;
   photo_url: string | null;
+  video_url: string | null;
   specialty: string[] | null;
   qualifications: string[] | null;
   bio: string | null;

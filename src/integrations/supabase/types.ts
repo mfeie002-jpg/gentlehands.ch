@@ -798,6 +798,7 @@ export type Database = {
           total_bookings: number | null
           updated_at: string | null
           user_id: string | null
+          video_url: string | null
           working_hours_end: string | null
           working_hours_start: string | null
         }
@@ -825,6 +826,7 @@ export type Database = {
           total_bookings?: number | null
           updated_at?: string | null
           user_id?: string | null
+          video_url?: string | null
           working_hours_end?: string | null
           working_hours_start?: string | null
         }
@@ -852,6 +854,7 @@ export type Database = {
           total_bookings?: number | null
           updated_at?: string | null
           user_id?: string | null
+          video_url?: string | null
           working_hours_end?: string | null
           working_hours_start?: string | null
         }
@@ -939,6 +942,33 @@ export type Database = {
           is_redeemed: boolean
           remaining_balance: number
           valid: boolean
+        }[]
+      }
+      get_all_availability: {
+        Args: { p_end_date: string; p_start_date: string }
+        Returns: {
+          date: string
+          is_available: boolean
+          therapist_id: string
+          therapist_name: string
+          time_slot: string
+        }[]
+      }
+      get_booking_recommendations: {
+        Args: { p_user_id?: string }
+        Returns: {
+          item_id: string
+          item_name: string
+          reason: string
+          recommendation_type: string
+          score: number
+        }[]
+      }
+      get_therapist_availability: {
+        Args: { p_date: string; p_therapist_id: string }
+        Returns: {
+          is_available: boolean
+          time_slot: string
         }[]
       }
       has_role: {
