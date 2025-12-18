@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -93,15 +94,31 @@ const Login = () => {
     }
   };
 
-  // Check if already logged in
+  // Check if already logged in / redirect immediately after auth settles
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+    let mounted = true;
+
+    const redirectIfSession = (session: Session | null) => {
+      if (!mounted) return;
       if (session) {
         navigate(redirect, { replace: true });
       }
     };
-    checkSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      redirectIfSession(session);
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      redirectIfSession(session);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, [navigate, redirect]);
 
   const pageCopy = useMemo(
@@ -157,7 +174,7 @@ const Login = () => {
           title: "Willkommä zrugg!",
           description: "Sie sind erfolgriich aamäldet.",
         });
-        navigate(redirect, { replace: true });
+        // Redirect happens via onAuthStateChange to avoid race conditions
       } else {
         const { error } = await supabase.auth.signUp({
           email: formData.email,
