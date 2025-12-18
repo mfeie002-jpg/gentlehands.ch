@@ -26,6 +26,9 @@ import { BookingSocialProof } from "@/components/booking/BookingSocialProof";
 import { BookingGiftCardInput } from "@/components/booking/BookingGiftCardInput";
 import { BookingTherapistCompare } from "@/components/booking/BookingTherapistCompare";
 import { BookingStepTransition } from "@/components/booking/BookingStepTransition";
+import { BookingSmartRecommendations } from "@/components/booking/BookingSmartRecommendations";
+import { BookingTherapistVideo, TherapistVideoPlayButton } from "@/components/booking/BookingTherapistVideo";
+import { BookingRealtimeCalendar } from "@/components/booking/BookingRealtimeCalendar";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { useBookingAutosave } from "@/hooks/useBookingAutosave";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
@@ -33,7 +36,6 @@ import { bookingContactSchema, bookingPreferencesSchema } from "@/lib/validation
 import { z } from "zod";
 import { useThrottle } from "@/hooks/useThrottle";
 import { useAnalytics } from "@/hooks/useAnalytics";
-import TherapistAvailabilityCalendar from "@/components/shared/TherapistAvailabilityCalendar";
 import { useApprovedTherapists, useExperienceThemes, useMassageTypes } from "@/hooks/useTherapists";
 
 const steps = [
@@ -78,6 +80,18 @@ const Buchung = () => {
   const [stepDirection, setStepDirection] = useState<"forward" | "backward">("forward");
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [appliedGiftCard, setAppliedGiftCard] = useState<{ code: string; discount: number } | null>(null);
+  const [videoModal, setVideoModal] = useState<{ isOpen: boolean; therapist: { name: string; videoUrl?: string | null; photoUrl?: string | null } | null }>({
+    isOpen: false,
+    therapist: null,
+  });
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  // Check for authenticated user
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setCurrentUserId(data.user?.id || null);
+    });
+  }, []);
   
   // Fetch dynamic data from database
   const { therapists: dbTherapists, isLoading: therapistsLoading } = useApprovedTherapists();
@@ -380,26 +394,42 @@ const Buchung = () => {
                       )}
                       
                       <div className="flex items-start gap-3 sm:gap-4">
-                        {masseur.photo_url ? (
-                          <img 
-                            src={masseur.photo_url} 
-                            alt={masseur.name}
-                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover flex-shrink-0 ring-2 ring-background"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-sand flex-shrink-0 flex items-center justify-center">
-                            {masseur.id === "none" ? (
-                              <Users size={20} className="text-warm-gray sm:hidden" />
-                            ) : (
-                              <User size={20} className="text-warm-gray sm:hidden" />
-                            )}
-                            {masseur.id === "none" ? (
-                              <Users size={24} className="text-warm-gray hidden sm:block" />
-                            ) : (
-                              <User size={24} className="text-warm-gray hidden sm:block" />
-                            )}
-                          </div>
-                        )}
+                        <div className="relative flex-shrink-0">
+                          {masseur.photo_url ? (
+                            <img 
+                              src={masseur.photo_url} 
+                              alt={masseur.name}
+                              className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover ring-2 ring-background"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-sand flex items-center justify-center">
+                              {masseur.id === "none" ? (
+                                <Users size={20} className="text-warm-gray sm:hidden" />
+                              ) : (
+                                <User size={20} className="text-warm-gray sm:hidden" />
+                              )}
+                              {masseur.id === "none" ? (
+                                <Users size={24} className="text-warm-gray hidden sm:block" />
+                              ) : (
+                                <User size={24} className="text-warm-gray hidden sm:block" />
+                              )}
+                            </div>
+                          )}
+                          {/* Video Play Button */}
+                          {therapistData?.video_url && (
+                            <TherapistVideoPlayButton
+                              hasVideo={!!therapistData.video_url}
+                              onClick={() => setVideoModal({
+                                isOpen: true,
+                                therapist: {
+                                  name: masseur.name,
+                                  videoUrl: therapistData.video_url,
+                                  photoUrl: masseur.photo_url,
+                                },
+                              })}
+                            />
+                          )}
+                        </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-display text-base sm:text-lg text-foreground mb-0.5 sm:mb-1">
                             {masseur.name}
@@ -774,30 +804,31 @@ const Buchung = () => {
               </p>
             </div>
 
-            {/* Therapist Availability Calendar */}
+            {/* Realtime Availability Calendar */}
             <div className="mb-8">
-              <TherapistAvailabilityCalendar
-                onSelectSlot={(therapist, date, time) => {
+              <BookingRealtimeCalendar
+                selectedTherapistId={formData.masseur}
+                therapists={masseurs.map(m => ({
+                  id: m.id,
+                  name: m.name,
+                  photo_url: m.photo_url,
+                  color: dbTherapists.find(t => t.id === m.id)?.color,
+                }))}
+                onSelectSlot={(therapistId, therapistName, date, time) => {
                   updateFormData("selectedDate", date);
                   updateFormData("selectedTime", time);
-                  // Optionally update masseur if not already selected
+                  // Update masseur if "none" was selected
                   if (formData.masseur === "none" || formData.masseur === "") {
-                    const masseurMap: Record<string, string> = {
-                      'Anna': 'anna',
-                      'Luca': 'luca', 
-                      'Morris': 'morris'
-                    };
-                    if (masseurMap[therapist]) {
-                      updateFormData("masseur", masseurMap[therapist]);
-                    }
+                    updateFormData("masseur", therapistId);
                   }
                   triggerHaptic('medium');
                   toast({
                     title: "Termin ausgewählt",
-                    description: `${format(date, "d. MMMM yyyy", { locale: de })} um ${time} Uhr bei ${therapist}`,
+                    description: `${format(date, "d. MMMM yyyy", { locale: de })} um ${time} Uhr bei ${therapistName}`,
                   });
                 }}
-                className="mb-6"
+                selectedDate={formData.selectedDate}
+                selectedTime={formData.selectedTime}
               />
               
               {/* Selected appointment display */}
@@ -805,7 +836,7 @@ const Buchung = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-center gap-4"
+                  className="mt-4 p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-center gap-4"
                 >
                   <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
                     <CheckCircle className="w-6 h-6 text-primary" />
@@ -1123,6 +1154,15 @@ const Buchung = () => {
         }}
       />
 
+      {/* Therapist Video Modal */}
+      <BookingTherapistVideo
+        therapistName={videoModal.therapist?.name || ""}
+        videoUrl={videoModal.therapist?.videoUrl}
+        photoUrl={videoModal.therapist?.photoUrl}
+        isOpen={videoModal.isOpen}
+        onClose={() => setVideoModal({ isOpen: false, therapist: null })}
+      />
+
       <section className="pt-24 sm:pt-32 pb-8 sm:pb-16 min-h-screen">
         <div className="container-narrow px-3 sm:px-6">
           {/* Progress Steps - Mobile Optimized */}
@@ -1205,6 +1245,29 @@ const Buchung = () => {
             <span>Wischen zum Navigieren</span>
             <ChevronRight size={14} />
           </div>
+
+          {/* Smart Recommendations */}
+          {currentStep <= 3 && (
+            <BookingSmartRecommendations
+              userId={currentUserId}
+              onSelectTherapist={(id) => {
+                updateFormData("masseur", id);
+                triggerHaptic('light');
+              }}
+              onSelectTheme={(id) => {
+                updateFormData("theme", id);
+                triggerHaptic('light');
+              }}
+              onSelectMassage={(id) => {
+                updateFormData("massage", id);
+                updateFormData("duration", "");
+                triggerHaptic('light');
+              }}
+              currentTherapist={formData.masseur}
+              currentTheme={formData.theme}
+              currentMassage={formData.massage}
+            />
+          )}
 
           {/* Step Content with Swipe */}
           <AnimatePresence mode="wait">
