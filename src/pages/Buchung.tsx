@@ -1689,6 +1689,20 @@ const Buchung = () => {
           </div>
         </div>
       </section>
+      
+      {/* Massage Detail Modal */}
+      <MassageDetailModal
+        isOpen={massageDetailModal.isOpen}
+        onClose={() => setMassageDetailModal({ isOpen: false, massageTitle: "" })}
+        massageTitle={massageDetailModal.massageTitle}
+        onSelect={() => {
+          const massage = massages.find(m => m.title === massageDetailModal.massageTitle);
+          if (massage) {
+            updateFormData("massage", massage.id);
+            updateFormData("duration", "");
+          }
+        }}
+      />
     </Layout>
   );
 };
