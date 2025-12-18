@@ -39,16 +39,32 @@ const TherapistDashboard = () => {
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [massageTypes, setMassageTypes] = useState<MassageType[]>([]);
   const [certificationsLoading, setCertificationsLoading] = useState(true);
+  const [linkingProfile, setLinkingProfile] = useState(false);
 
   useEffect(() => {
-    // Check if user is logged in and is a therapist
-    const checkAuth = async () => {
+    // Check if user is logged in; if this is a pre-seeded therapist profile (email match), link it once.
+    const checkAuthAndLink = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         navigate('/login?redirect=/therapeut/dashboard');
+        return;
       }
+
+      setLinkingProfile(true);
+      const { data, error } = await supabase.functions.invoke('admin-tools', {
+        body: { action: 'link_therapist' }
+      });
+
+      // If the backend linked the profile, reload once so the dashboard hook picks it up.
+      if (!error && data?.linked) {
+        window.location.reload();
+        return;
+      }
+
+      setLinkingProfile(false);
     };
-    checkAuth();
+
+    checkAuthAndLink();
   }, [navigate]);
 
   // Fetch certifications and massage types
@@ -81,7 +97,7 @@ const TherapistDashboard = () => {
     fetchCertifications();
   }, [therapist?.id]);
 
-  if (isLoading) {
+  if (isLoading || linkingProfile) {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
