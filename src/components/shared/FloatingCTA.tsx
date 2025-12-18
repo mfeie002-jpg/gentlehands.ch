@@ -101,37 +101,56 @@ export const FloatingCTA = () => {
             </div>
           </motion.div>
           
-          {/* Mobile floating bar */}
+          {/* Mobile floating bar - enhanced visibility */}
           <motion.div
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-0 left-0 right-0 z-40 md:hidden safe-area-bottom"
+            className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
+            style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
-            <div className="bg-background/95 backdrop-blur-xl border-t border-border/50 px-3 sm:px-4 py-2.5 sm:py-3">
-              <div className="flex items-center gap-2 sm:gap-3 max-w-lg mx-auto">
-                <Button
-                  variant="copper"
-                  className="flex-1 shadow-copper relative overflow-hidden h-11 sm:h-12 text-sm sm:text-base font-medium"
-                  asChild
-                >
-                  <Link to="/buchung">
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                      animate={{ x: ["-100%", "200%"] }}
-                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                    />
-                    <Calendar size={16} className="sm:w-[18px] sm:h-[18px] mr-1.5 sm:mr-2" />
-                    <span className="relative">Erlebnis anfragen</span>
-                  </Link>
-                </Button>
-                <motion.button
-                  onClick={() => setIsDismissed(true)}
-                  className="w-11 h-11 sm:w-12 sm:h-12 bg-secondary text-foreground rounded-xl flex items-center justify-center active:scale-95 transition-transform touch-manipulation flex-shrink-0"
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <X size={18} className="sm:w-5 sm:h-5" />
-                </motion.button>
+            {/* Gradient fade effect above the bar */}
+            <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-background/80 to-transparent pointer-events-none" />
+            
+            <div className="bg-background/98 backdrop-blur-xl border-t border-copper/20 shadow-[0_-4px_20px_rgba(181,120,79,0.15)]">
+              <div className="px-4 py-3">
+                <div className="flex items-center gap-3 max-w-lg mx-auto">
+                  {/* Main CTA Button */}
+                  <motion.div 
+                    className="flex-1 relative"
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {/* Subtle glow behind button */}
+                    <div className="absolute inset-0 bg-copper/20 rounded-xl blur-md" />
+                    
+                    <Button
+                      variant="copper"
+                      className="w-full relative overflow-hidden h-14 text-base font-semibold shadow-lg shadow-copper/25"
+                      asChild
+                    >
+                      <Link to="/buchung">
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                          animate={{ x: ["-100%", "200%"] }}
+                          transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1.5 }}
+                        />
+                        <Calendar size={20} className="mr-2" />
+                        <span className="relative">Jetzt Termin buchen</span>
+                        <Sparkles size={16} className="ml-2 opacity-80" />
+                      </Link>
+                    </Button>
+                  </motion.div>
+                  
+                  {/* Dismiss button */}
+                  <motion.button
+                    onClick={() => setIsDismissed(true)}
+                    className="w-14 h-14 bg-muted hover:bg-muted/80 text-muted-foreground rounded-xl flex items-center justify-center active:scale-95 transition-all touch-manipulation flex-shrink-0 border border-border/50"
+                    whileTap={{ scale: 0.9 }}
+                    aria-label="Schließen"
+                  >
+                    <X size={20} />
+                  </motion.button>
+                </div>
               </div>
             </div>
           </motion.div>
