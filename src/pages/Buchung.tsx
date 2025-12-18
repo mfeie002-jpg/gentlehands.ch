@@ -23,6 +23,8 @@ import { BookingTrustBadges } from "@/components/booking/BookingTrustBadges";
 import { BookingFloatingSummary } from "@/components/booking/BookingFloatingSummary";
 import { BookingDraftRecovery } from "@/components/booking/BookingDraftRecovery";
 import { BookingSocialProof } from "@/components/booking/BookingSocialProof";
+import { BookingFOMOPopup } from "@/components/booking/BookingFOMOPopup";
+import { BookingTestimonialSlider } from "@/components/booking/BookingTestimonialSlider";
 import { BookingGiftCardInput } from "@/components/booking/BookingGiftCardInput";
 import { BookingTherapistCompare } from "@/components/booking/BookingTherapistCompare";
 import { BookingStepTransition } from "@/components/booking/BookingStepTransition";
@@ -891,6 +893,11 @@ const Buchung = () => {
                   selectedDate={formData.selectedDate}
                 />
               </div>
+              
+              {/* Animated Testimonials */}
+              <div className="mt-6">
+                <BookingTestimonialSlider />
+              </div>
             </div>
             
             {/* Gift Card Input */}
@@ -1146,6 +1153,9 @@ const Buchung = () => {
         description="Buchen Sie Ihre Tiefenentspannung online: Wählen Sie Therapeut:in, Themenraum, Massageart und Ihre persönlichen Präferenzen. In 6 einfachen Schritten."
         canonical="https://gentlehands.ch/buchung"
       />
+
+      {/* FOMO Popup */}
+      <BookingFOMOPopup />
 
       {/* Draft Recovery Banner */}
       <BookingDraftRecovery
