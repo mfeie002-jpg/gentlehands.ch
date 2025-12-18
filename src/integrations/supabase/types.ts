@@ -190,6 +190,68 @@ export type Database = {
           },
         ]
       }
+      booking_waitlist: {
+        Row: {
+          created_at: string | null
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          duration: string | null
+          expires_at: string | null
+          id: string
+          massage_type: string | null
+          notification_sent_at: string | null
+          preferred_date: string
+          preferred_therapist_id: string | null
+          preferred_time: string | null
+          status: string
+          theme: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          duration?: string | null
+          expires_at?: string | null
+          id?: string
+          massage_type?: string | null
+          notification_sent_at?: string | null
+          preferred_date: string
+          preferred_therapist_id?: string | null
+          preferred_time?: string | null
+          status?: string
+          theme?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          duration?: string | null
+          expires_at?: string | null
+          id?: string
+          massage_type?: string | null
+          notification_sent_at?: string | null
+          preferred_date?: string
+          preferred_therapist_id?: string | null
+          preferred_time?: string | null
+          status?: string
+          theme?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_waitlist_preferred_therapist_id_fkey"
+            columns: ["preferred_therapist_id"]
+            isOneToOne: false
+            referencedRelation: "therapists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           additional_notes: string | null
@@ -1224,6 +1286,16 @@ export type Database = {
         Returns: {
           is_available: boolean
           time_slot: string
+        }[]
+      }
+      get_waitlist_for_slot: {
+        Args: { p_date: string; p_therapist_id?: string; p_time?: string }
+        Returns: {
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id: string
         }[]
       }
       has_role: {
