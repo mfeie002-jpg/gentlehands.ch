@@ -12,6 +12,7 @@ import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { SkipLinks } from "@/components/shared/SkipLinks";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { usePerformanceMonitor } from "@/hooks/usePerformanceMonitor";
+import { useCustomerJourney } from "@/hooks/useCustomerJourney";
 
 interface LayoutProps {
   children: ReactNode;
@@ -20,8 +21,28 @@ interface LayoutProps {
 export const Layout = memo(({ children }: LayoutProps) => {
   const location = useLocation();
   
+  // Initialize Customer Journey Tracking
+  const { trackScroll, trackCTAClick } = useCustomerJourney();
+  
   // Performance monitoring (only logs in development)
   usePerformanceMonitor(process.env.NODE_ENV === "development");
+  
+  // Track scroll depth
+  useEffect(() => {
+    let maxScroll = 0;
+    const handleScroll = () => {
+      const scrollPercent = Math.round(
+        (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+      );
+      if (scrollPercent > maxScroll && scrollPercent % 25 === 0) {
+        maxScroll = scrollPercent;
+        trackScroll(scrollPercent);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [trackScroll, location.pathname]);
   
   // Scroll to top on route change with smooth behavior for internal navigation
   useEffect(() => {
