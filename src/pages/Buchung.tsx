@@ -506,19 +506,31 @@ const Buchung = () => {
                           <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2">
                             {masseur.role}
                           </p>
-                          {therapistData?.hourly_rate && (
+                        {therapistData?.hourly_rate && (
                             <p className="text-xs text-copper font-medium mb-1">
                               CHF {therapistData.hourly_rate}/Std.
                             </p>
                           )}
                           {masseur.specialties.length > 0 && (
-                            <div className="flex flex-wrap gap-1">
+                            <div className="flex flex-wrap gap-1 mb-1">
                               {masseur.specialties.slice(0, 2).map((s) => (
                                 <span
                                   key={s}
                                   className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 bg-secondary rounded-full"
                                 >
                                   {s}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {therapistData?.qualifications && therapistData.qualifications.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {therapistData.qualifications.slice(0, 2).map((q) => (
+                                <span
+                                  key={q}
+                                  className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 bg-copper/10 text-copper rounded-full"
+                                >
+                                  {q}
                                 </span>
                               ))}
                             </div>
