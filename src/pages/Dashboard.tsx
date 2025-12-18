@@ -82,22 +82,27 @@ const Dashboard = () => {
   };
 
   const fetchAllData = async (userId: string, email: string | undefined) => {
-    const [profileRes, bookingsRes, favoritesRes, journalRes, therapistRes] = await Promise.all([
-      supabase.from('profiles').select('*').eq('id', userId).single(),
-      email ? supabase.from('bookings').select('*').eq('customer_email', email).order('appointment_date', { ascending: false }) : Promise.resolve({ data: [] }),
-      supabase.from('favorites').select('*').eq('user_id', userId),
-      supabase.from('session_notes').select('*').eq('user_id', userId),
-      supabase.from('therapists').select('id, status').eq('user_id', userId).maybeSingle(),
-    ]);
+    try {
+      const [profileRes, bookingsRes, favoritesRes, journalRes, therapistRes] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', userId).single(),
+        email ? supabase.from('bookings').select('*').eq('customer_email', email).order('appointment_date', { ascending: false }) : Promise.resolve({ data: [], error: null }),
+        supabase.from('favorites').select('*').eq('user_id', userId),
+        supabase.from('session_notes').select('*').eq('user_id', userId),
+        supabase.from('therapists').select('id, status').eq('user_id', userId).maybeSingle(),
+      ]);
 
-    if (profileRes.data) setProfile(profileRes.data);
-    if (bookingsRes.data) setBookings(bookingsRes.data);
-    if (favoritesRes.data) setFavorites(favoritesRes.data);
-    if (journalRes.data) setJournalEntries(journalRes.data);
-    if (therapistRes.data && therapistRes.data.status === 'approved') {
-      setIsTherapist(true);
+      if (profileRes.data) setProfile(profileRes.data);
+      if (bookingsRes.data) setBookings(bookingsRes.data as Booking[]);
+      if (favoritesRes.data) setFavorites(favoritesRes.data);
+      if (journalRes.data) setJournalEntries(journalRes.data);
+      if (therapistRes.data && therapistRes.data.status === 'approved') {
+        setIsTherapist(true);
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleLogout = async () => {
