@@ -196,6 +196,28 @@ const TherapistSchool = () => {
         title: "Herzlichen Glückwunsch! 🎉", 
         description: `Sie haben die Zertifizierung mit ${score}% bestanden.` 
       });
+
+      // Send certification notification email
+      try {
+        const { data: therapist } = await supabase
+          .from("therapists")
+          .select("email, name")
+          .eq("id", therapistId)
+          .single();
+
+        if (therapist) {
+          await supabase.functions.invoke("notify-certification", {
+            body: {
+              therapistEmail: therapist.email,
+              therapistName: therapist.name,
+              massageTypeName: selectedTraining.massage_types?.name || selectedTraining.title,
+              quizScore: score
+            }
+          });
+        }
+      } catch (notifyError) {
+        console.error("Failed to send certification notification:", notifyError);
+      }
     } else {
       toast({ 
         title: "Nicht bestanden", 
