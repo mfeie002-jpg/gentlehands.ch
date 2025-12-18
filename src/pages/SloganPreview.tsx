@@ -40,6 +40,31 @@ const slogans = [
     highlight: "die heilt",
     subtitle: "Professionelle Hände für tiefgreifende Entspannung."
   },
+  {
+    main: "Atme tief ein.",
+    highlight: "Lass los.",
+    subtitle: "Ein Ort, an dem du nichts sein musst – ausser du selbst."
+  },
+  {
+    main: "Sanfte Kraft",
+    highlight: "für starke Frauen",
+    subtitle: "Weil du es verdienst, auch mal schwach sein zu dürfen."
+  },
+  {
+    main: "Hier beginnt",
+    highlight: "deine Auszeit",
+    subtitle: "Schalte ab und finde zurück zu dir."
+  },
+  {
+    main: "Stille finden.",
+    highlight: "Kraft schöpfen.",
+    subtitle: "In unseren Themenräumen erwartet dich pure Regeneration."
+  },
+  {
+    main: "Mehr als Massage.",
+    highlight: "Ein Erlebnis.",
+    subtitle: "Sechs einzigartige Welten warten darauf, von dir entdeckt zu werden."
+  },
 ];
 
 const SloganPreview = () => {
