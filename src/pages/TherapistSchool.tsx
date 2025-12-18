@@ -10,12 +10,21 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   GraduationCap, BookOpen, CheckCircle, Clock, 
   Award, ChevronRight, Play, Lock, Star,
-  ArrowLeft, ArrowRight, AlertCircle
+  ArrowLeft, ArrowRight, AlertCircle, Lightbulb
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+
+interface TrainingStep {
+  step: number;
+  title: string;
+  description: string;
+  duration: string;
+  duration_minutes?: number;
+  tips?: string[];
+}
 
 interface Training {
   id: string;
@@ -23,7 +32,7 @@ interface Training {
   title: string;
   description: string;
   content: string;
-  step_by_step_guide: { step: number; title: string; description: string; duration: string }[];
+  step_by_step_guide: TrainingStep[];
   duration_minutes: number;
   massage_types?: { name: string };
 }
@@ -462,17 +471,39 @@ const TherapistSchool = () => {
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: index * 0.05 }}
-                              className="flex gap-4 p-4 rounded-xl bg-secondary/50"
+                              className="p-4 rounded-xl bg-secondary/50 border border-border/50"
                             >
-                              <div className="w-10 h-10 rounded-full bg-copper/20 text-copper flex items-center justify-center font-bold shrink-0">
-                                {step.step}
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-center justify-between mb-1">
-                                  <h3 className="font-semibold text-foreground">{step.title}</h3>
-                                  <span className="text-xs text-muted-foreground">{step.duration}</span>
+                              <div className="flex gap-4">
+                                <div className="w-10 h-10 rounded-full bg-copper/20 text-copper flex items-center justify-center font-bold shrink-0">
+                                  {step.step}
                                 </div>
-                                <p className="text-sm text-muted-foreground">{step.description}</p>
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <h3 className="font-semibold text-foreground">{step.title}</h3>
+                                    <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
+                                      {step.duration || `${step.duration_minutes} Min`}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground mb-3">{step.description}</p>
+                                  
+                                  {/* Tips Section */}
+                                  {step.tips && step.tips.length > 0 && (
+                                    <div className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <Lightbulb size={14} className="text-amber-500" />
+                                        <span className="text-xs font-medium text-amber-600 dark:text-amber-400">Profi-Tipps</span>
+                                      </div>
+                                      <ul className="space-y-1">
+                                        {step.tips.map((tip, tipIndex) => (
+                                          <li key={tipIndex} className="text-xs text-muted-foreground flex items-start gap-2">
+                                            <span className="text-amber-500 mt-0.5">•</span>
+                                            <span>{tip}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             </motion.div>
                           ))}
