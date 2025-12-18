@@ -27,6 +27,8 @@ import { BookingFOMOPopup } from "@/components/booking/BookingFOMOPopup";
 import { BookingTestimonialSlider } from "@/components/booking/BookingTestimonialSlider";
 import { BookingCountdownTimer } from "@/components/booking/BookingCountdownTimer";
 import { BookingLiveVisitors } from "@/components/booking/BookingLiveVisitors";
+import { BookingPersonalizedRecommendations } from "@/components/booking/BookingPersonalizedRecommendations";
+import { BookingAvailabilityIndicator } from "@/components/booking/BookingAvailabilityIndicator";
 import { BookingGiftCardInput } from "@/components/booking/BookingGiftCardInput";
 import { BookingTherapistCompare } from "@/components/booking/BookingTherapistCompare";
 import { BookingStepTransition } from "@/components/booking/BookingStepTransition";
@@ -842,6 +844,19 @@ const Buchung = () => {
               </p>
             </div>
 
+            {/* Availability Indicator - Hot Slots */}
+            <div className="mb-6">
+              <BookingAvailabilityIndicator
+                selectedDate={formData.selectedDate}
+                selectedTime={formData.selectedTime}
+                onSelectSlot={(date, time) => {
+                  updateFormData("selectedDate", date);
+                  updateFormData("selectedTime", time);
+                  triggerHaptic('medium');
+                }}
+              />
+            </div>
+
             {/* Realtime Availability Calendar */}
             <div className="mb-8">
               <BookingRealtimeCalendar
@@ -1304,6 +1319,29 @@ const Buchung = () => {
             <div className="mb-6">
               <BookingLiveVisitors />
             </div>
+          )}
+
+          {/* Personalized Recommendations */}
+          {currentStep === 1 && (
+            <BookingPersonalizedRecommendations
+              userEmail={formData.email}
+              onSelectTherapist={(id) => {
+                updateFormData("masseur", id);
+                triggerHaptic('light');
+              }}
+              onSelectTheme={(id) => {
+                updateFormData("theme", id);
+                triggerHaptic('light');
+              }}
+              onSelectMassage={(id) => {
+                updateFormData("massage", id);
+                triggerHaptic('light');
+              }}
+              onSelectTime={(time) => {
+                updateFormData("selectedTime", time);
+                triggerHaptic('light');
+              }}
+            />
           )}
 
           {/* Smart Recommendations */}
