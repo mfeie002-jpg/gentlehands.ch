@@ -4,17 +4,56 @@ import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, CheckCircle, Mail, Phone, MapPin } from "lucide-react";
+import { Send, CheckCircle, Mail, Phone, MapPin, AlertCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { contactFormSchema } from "@/lib/validations";
+import { z } from "zod";
+
+type FormErrors = Partial<Record<keyof z.infer<typeof contactFormSchema>, string>>;
 
 export const ContactFormSection = () => {
   const { trackContactSubmit } = useAnalytics();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error on change
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+    
+    // Validate with Zod
+    const result = contactFormSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: FormErrors = {};
+      result.error.errors.forEach(err => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as keyof FormErrors] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      toast({
+        title: "Bitte überprüfen Sie Ihre Eingaben",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
     
     // Simulate form submission
@@ -92,29 +131,87 @@ export const ContactFormSection = () => {
                 </p>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="p-8 rounded-2xl bg-card border border-border/50">
+              <form onSubmit={handleSubmit} className="p-8 rounded-2xl bg-card border border-border/50" noValidate>
                 <div className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm text-foreground mb-2 block">Name *</label>
-                      <Input placeholder="Ihr Name" required />
+                      <label htmlFor="name" className="text-sm text-foreground mb-2 block">Name *</label>
+                      <Input 
+                        id="name"
+                        name="name"
+                        placeholder="Ihr Name" 
+                        value={formData.name}
+                        onChange={handleChange}
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? "name-error" : undefined}
+                        className={errors.name ? "border-destructive" : ""}
+                      />
+                      {errors.name && (
+                        <p id="name-error" className="text-destructive text-sm mt-1 flex items-center gap-1">
+                          <AlertCircle size={14} />
+                          {errors.name}
+                        </p>
+                      )}
                     </div>
                     <div>
-                      <label className="text-sm text-foreground mb-2 block">E-Mail *</label>
-                      <Input type="email" placeholder="ihre@email.ch" required />
+                      <label htmlFor="email" className="text-sm text-foreground mb-2 block">E-Mail *</label>
+                      <Input 
+                        id="email"
+                        name="email"
+                        type="email" 
+                        placeholder="ihre@email.ch" 
+                        value={formData.email}
+                        onChange={handleChange}
+                        aria-invalid={!!errors.email}
+                        aria-describedby={errors.email ? "email-error" : undefined}
+                        className={errors.email ? "border-destructive" : ""}
+                      />
+                      {errors.email && (
+                        <p id="email-error" className="text-destructive text-sm mt-1 flex items-center gap-1">
+                          <AlertCircle size={14} />
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm text-foreground mb-2 block">Telefon</label>
-                    <Input placeholder="+41 79 123 45 67" />
+                    <label htmlFor="subject" className="text-sm text-foreground mb-2 block">Betreff *</label>
+                    <Input 
+                      id="subject"
+                      name="subject"
+                      placeholder="Worum geht es?" 
+                      value={formData.subject}
+                      onChange={handleChange}
+                      aria-invalid={!!errors.subject}
+                      aria-describedby={errors.subject ? "subject-error" : undefined}
+                      className={errors.subject ? "border-destructive" : ""}
+                    />
+                    {errors.subject && (
+                      <p id="subject-error" className="text-destructive text-sm mt-1 flex items-center gap-1">
+                        <AlertCircle size={14} />
+                        {errors.subject}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="text-sm text-foreground mb-2 block">Betreff *</label>
-                    <Input placeholder="Worum geht es?" required />
-                  </div>
-                  <div>
-                    <label className="text-sm text-foreground mb-2 block">Nachricht *</label>
-                    <Textarea placeholder="Ihre Nachricht..." rows={5} required />
+                    <label htmlFor="message" className="text-sm text-foreground mb-2 block">Nachricht *</label>
+                    <Textarea 
+                      id="message"
+                      name="message"
+                      placeholder="Ihre Nachricht..." 
+                      rows={5} 
+                      value={formData.message}
+                      onChange={handleChange}
+                      aria-invalid={!!errors.message}
+                      aria-describedby={errors.message ? "message-error" : undefined}
+                      className={errors.message ? "border-destructive" : ""}
+                    />
+                    {errors.message && (
+                      <p id="message-error" className="text-destructive text-sm mt-1 flex items-center gap-1">
+                        <AlertCircle size={14} />
+                        {errors.message}
+                      </p>
+                    )}
                   </div>
                   <Button 
                     type="submit" 
