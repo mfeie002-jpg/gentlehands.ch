@@ -33,9 +33,9 @@
     --secondary: 30 25% 88%;
     --secondary-foreground: 30 20% 15%;
 
-    /* Muted - Warm Gray */
+    /* Muted - Warm Gray - Enhanced contrast */
     --muted: 30 15% 90%;
-    --muted-foreground: 30 12% 45%;
+    --muted-foreground: 30 15% 35%;
 
     /* Accent - Rose Gold/Copper */
     --accent: 25 50% 55%;

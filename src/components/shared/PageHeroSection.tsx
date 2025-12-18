@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
 import { FloatingElements } from "./FloatingElements";
+import { ScrollIndicator } from "./ScrollIndicator";
 
 interface PageHeroSectionProps {
   icon?: LucideIcon;
@@ -9,6 +10,7 @@ interface PageHeroSectionProps {
   highlightedTitle?: string;
   description: string;
   children?: React.ReactNode;
+  showScrollIndicator?: boolean;
 }
 
 export const PageHeroSection = ({
@@ -18,6 +20,7 @@ export const PageHeroSection = ({
   highlightedTitle,
   description,
   children,
+  showScrollIndicator = true,
 }: PageHeroSectionProps) => {
   return (
     <section className="pt-32 pb-20 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
@@ -84,7 +87,7 @@ export const PageHeroSection = ({
           </h1>
 
           <motion.p
-            className="text-muted-foreground text-lg"
+            className="text-foreground/70 text-lg leading-relaxed"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -94,6 +97,12 @@ export const PageHeroSection = ({
 
           {children}
         </motion.div>
+        
+        {showScrollIndicator && (
+          <div className="mt-12 flex justify-center">
+            <ScrollIndicator variant="chevron" text="Mehr erfahren" />
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, Clock, Heart, ChevronDown, Sparkles, Lock, ArrowRight } from "lucide-react";
+import { Shield, Clock, Heart, Sparkles, Lock, ArrowRight } from "lucide-react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { FloatingElements } from "@/components/shared/FloatingElements";
+import { ScrollIndicator } from "@/components/shared/ScrollIndicator";
 import heroImage from "@/assets/massage-hands-back.jpg";
 
 // A/B Test Variants - can be controlled via localStorage, URL params, or backend
@@ -245,27 +246,9 @@ export const HeroSection = () => {
       </motion.div>
 
       {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 1 }}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 hidden lg:block"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 text-muted-foreground/50"
-        >
-          <span className="text-xs tracking-[0.2em] uppercase font-medium">Entdecken</span>
-          <div className="w-6 h-10 border-2 border-copper/30 rounded-full flex items-start justify-center p-1.5">
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="w-1.5 h-1.5 bg-copper/70 rounded-full"
-            />
-          </div>
-        </motion.div>
-      </motion.div>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden lg:block">
+        <ScrollIndicator variant="mouse" text="Entdecken" />
+      </div>
     </section>
   );
 };
