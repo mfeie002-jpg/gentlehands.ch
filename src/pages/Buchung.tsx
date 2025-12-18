@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { format, addDays, isBefore, startOfToday } from "date-fns";
 import { de } from "date-fns/locale";
-import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle, Users } from "lucide-react";
+import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle, Users, Volume2, VolumeX, Volume1, MessageCircle, MessageCircleOff, Hand, Feather, Shield, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -298,71 +298,118 @@ const Buchung = () => {
                 Jede:r unserer professionell ausgebildeten Therapeut:innen bringt einen eigenen Stil mit.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {masseurs.map((masseur) => (
-                <button
-                  key={masseur.id}
-                  onClick={() => {
-                    updateFormData("masseur", masseur.id);
-                    triggerHaptic('light');
-                  }}
-                  className={`relative p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 text-left transition-all min-h-[100px] touch-manipulation active:scale-[0.98] ${
-                    formData.masseur === masseur.id
-                      ? "border-copper bg-copper/5"
-                      : "border-border active:border-copper/50"
-                  }`}
-                >
-                  <div className="flex items-start gap-3 sm:gap-4">
-                    {masseur.photo_url ? (
-                      <img 
-                        src={masseur.photo_url} 
-                        alt={masseur.name}
-                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover flex-shrink-0"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-sand flex-shrink-0 flex items-center justify-center">
-                        {masseur.id === "none" ? (
-                          <Users size={20} className="text-warm-gray sm:hidden" />
-                        ) : (
-                          <User size={20} className="text-warm-gray sm:hidden" />
-                        )}
-                        {masseur.id === "none" ? (
-                          <Users size={24} className="text-warm-gray hidden sm:block" />
-                        ) : (
-                          <User size={24} className="text-warm-gray hidden sm:block" />
-                        )}
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-display text-base sm:text-lg text-foreground mb-0.5 sm:mb-1">
-                        {masseur.name}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2">
-                        {masseur.role}
-                      </p>
-                      {masseur.specialties.length > 0 && (
-                        <div className="flex flex-wrap gap-1">
-                          {masseur.specialties.map((s) => (
-                            <span
-                              key={s}
-                              className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 bg-secondary rounded-full"
-                            >
-                              {s}
-                            </span>
-                          ))}
+            
+            {/* Loading state */}
+            {therapistsLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 border-border animate-pulse">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-muted" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-5 bg-muted rounded w-24" />
+                        <div className="h-4 bg-muted rounded w-32" />
+                        <div className="flex gap-1">
+                          <div className="h-5 bg-muted rounded w-16" />
+                          <div className="h-5 bg-muted rounded w-20" />
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
-                  {formData.masseur === masseur.id && (
-                    <div className="absolute top-3 right-3 sm:top-4 sm:right-4 w-5 h-5 sm:w-6 sm:h-6 bg-copper rounded-full flex items-center justify-center">
-                      <Check size={12} className="text-accent-foreground sm:hidden" />
-                      <Check size={14} className="text-accent-foreground hidden sm:block" />
-                    </div>
-                  )}
-                </button>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {masseurs.map((masseur) => {
+                  const isSelected = formData.masseur === masseur.id;
+                  const therapistData = dbTherapists.find(t => t.id === masseur.id);
+                  const isFeatured = therapistData?.is_featured;
+                  
+                  return (
+                    <motion.button
+                      key={masseur.id}
+                      onClick={() => {
+                        updateFormData("masseur", masseur.id);
+                        triggerHaptic('light');
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                      className={cn(
+                        "relative p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 text-left transition-all min-h-[100px] touch-manipulation",
+                        isSelected
+                          ? "border-copper bg-copper/5 shadow-md"
+                          : "border-border hover:border-copper/50 active:border-copper/50"
+                      )}
+                    >
+                      {/* Featured badge */}
+                      {isFeatured && (
+                        <div className="absolute -top-2 -right-2 bg-copper text-accent-foreground text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <Award size={10} />
+                          <span>Top</span>
+                        </div>
+                      )}
+                      
+                      <div className="flex items-start gap-3 sm:gap-4">
+                        {masseur.photo_url ? (
+                          <img 
+                            src={masseur.photo_url} 
+                            alt={masseur.name}
+                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover flex-shrink-0 ring-2 ring-background"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-sand flex-shrink-0 flex items-center justify-center">
+                            {masseur.id === "none" ? (
+                              <Users size={20} className="text-warm-gray sm:hidden" />
+                            ) : (
+                              <User size={20} className="text-warm-gray sm:hidden" />
+                            )}
+                            {masseur.id === "none" ? (
+                              <Users size={24} className="text-warm-gray hidden sm:block" />
+                            ) : (
+                              <User size={24} className="text-warm-gray hidden sm:block" />
+                            )}
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-display text-base sm:text-lg text-foreground mb-0.5 sm:mb-1">
+                            {masseur.name}
+                          </h3>
+                          <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2">
+                            {masseur.role}
+                          </p>
+                          {therapistData?.hourly_rate && (
+                            <p className="text-xs text-copper font-medium mb-1">
+                              CHF {therapistData.hourly_rate}/Std.
+                            </p>
+                          )}
+                          {masseur.specialties.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {masseur.specialties.slice(0, 2).map((s) => (
+                                <span
+                                  key={s}
+                                  className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 bg-secondary rounded-full"
+                                >
+                                  {s}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      {isSelected && (
+                        <motion.div 
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute top-3 right-3 sm:top-4 sm:right-4 w-5 h-5 sm:w-6 sm:h-6 bg-copper rounded-full flex items-center justify-center"
+                        >
+                          <Check size={12} className="text-accent-foreground sm:hidden" />
+                          <Check size={14} className="text-accent-foreground hidden sm:block" />
+                        </motion.div>
+                      )}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
 
@@ -376,37 +423,59 @@ const Buchung = () => {
               </p>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-              {themes.map((theme) => (
-                <button
-                  key={theme.id}
-                  onClick={() => {
-                    updateFormData("theme", theme.id);
-                    triggerHaptic('light');
-                  }}
-                  className={`relative p-3 sm:p-6 rounded-xl sm:rounded-2xl border-2 text-left transition-all min-h-[100px] sm:min-h-[140px] touch-manipulation active:scale-[0.98] ${
-                    formData.theme === theme.id
-                      ? "border-copper bg-copper/5"
-                      : "border-border active:border-copper/50"
-                  }`}
-                >
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-primary/10 mb-2 sm:mb-4 flex items-center justify-center">
-                    <theme.icon size={20} className="text-primary sm:hidden" />
-                    <theme.icon size={24} className="text-primary hidden sm:block" />
-                  </div>
-                  <h3 className="font-display text-sm sm:text-lg text-foreground mb-0.5 sm:mb-1 leading-tight">
-                    {theme.title}
-                  </h3>
-                  <p className="text-[10px] sm:text-sm text-muted-foreground line-clamp-2">
-                    {theme.description}
-                  </p>
-                  {formData.theme === theme.id && (
-                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-5 h-5 sm:w-6 sm:h-6 bg-copper rounded-full flex items-center justify-center">
-                      <Check size={10} className="text-accent-foreground sm:hidden" />
-                      <Check size={12} className="text-accent-foreground hidden sm:block" />
+              {themes.map((theme) => {
+                const isSelected = formData.theme === theme.id;
+                const themeData = dbThemes.find(t => t.id === theme.id);
+                
+                return (
+                  <motion.button
+                    key={theme.id}
+                    onClick={() => {
+                      updateFormData("theme", theme.id);
+                      triggerHaptic('light');
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    className={cn(
+                      "relative p-3 sm:p-6 rounded-xl sm:rounded-2xl border-2 text-left transition-all min-h-[100px] sm:min-h-[140px] touch-manipulation overflow-hidden",
+                      isSelected
+                        ? "border-copper bg-copper/5 shadow-md"
+                        : "border-border hover:border-copper/50"
+                    )}
+                  >
+                    {/* Subtle gradient background based on theme color */}
+                    {themeData?.color && (
+                      <div 
+                        className="absolute inset-0 opacity-5"
+                        style={{ background: `linear-gradient(135deg, ${themeData.color}, transparent)` }}
+                      />
+                    )}
+                    
+                    <div className="relative z-10">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-primary/10 mb-2 sm:mb-4 flex items-center justify-center">
+                        <theme.icon size={20} className="text-primary sm:hidden" />
+                        <theme.icon size={24} className="text-primary hidden sm:block" />
+                      </div>
+                      <h3 className="font-display text-sm sm:text-lg text-foreground mb-0.5 sm:mb-1 leading-tight">
+                        {theme.title}
+                      </h3>
+                      <p className="text-[10px] sm:text-sm text-muted-foreground line-clamp-2">
+                        {theme.description}
+                      </p>
                     </div>
-                  )}
-                </button>
-              ))}
+                    
+                    {isSelected && (
+                      <motion.div 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="absolute top-2 right-2 sm:top-3 sm:right-3 w-5 h-5 sm:w-6 sm:h-6 bg-copper rounded-full flex items-center justify-center z-10"
+                      >
+                        <Check size={10} className="text-accent-foreground sm:hidden" />
+                        <Check size={12} className="text-accent-foreground hidden sm:block" />
+                      </motion.div>
+                    )}
+                  </motion.button>
+                );
+              })}
             </div>
           </div>
         );
@@ -453,7 +522,7 @@ const Buchung = () => {
             </div>
 
             {formData.massage && (
-              <div>
+              <div className="space-y-4">
                 <Label className="mb-3 sm:mb-4 block text-sm sm:text-base">Dauer wählen</Label>
                 <div className="flex flex-wrap gap-2 sm:gap-3">
                   {massages
@@ -475,6 +544,25 @@ const Buchung = () => {
                       </button>
                     ))}
                 </div>
+                
+                {/* Price Display */}
+                {calculatedPrice && formData.duration && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 p-4 bg-copper/5 border border-copper/20 rounded-xl"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Geschätzter Preis</span>
+                      <span className="font-display text-2xl text-copper font-medium">
+                        CHF {calculatedPrice}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Basierend auf Therapeut:in & Dauer (exkl. MwSt.)
+                    </p>
+                  </motion.div>
+                )}
               </div>
             )}
           </div>
@@ -492,27 +580,32 @@ const Buchung = () => {
 
             <div className="space-y-6">
               <div>
-                <Label className="mb-4 block">Musik</Label>
+                <Label className="mb-4 block flex items-center gap-2">
+                  <Volume2 size={16} className="text-copper" />
+                  Musik
+                </Label>
                 <RadioGroup
                   value={formData.music}
                   onValueChange={(v) => updateFormData("music", v)}
                   className="flex flex-wrap gap-3"
                 >
                   {[
-                    { value: "leise", label: "Sehr leise" },
-                    { value: "normal", label: "Normal" },
-                    { value: "keine", label: "Keine Musik" },
+                    { value: "leise", label: "Sehr leise", icon: Volume1 },
+                    { value: "normal", label: "Normal", icon: Volume2 },
+                    { value: "keine", label: "Keine Musik", icon: VolumeX },
                   ].map((opt) => (
                     <div key={opt.value} className="flex items-center">
                       <RadioGroupItem value={opt.value} id={`music-${opt.value}`} className="peer sr-only" />
                       <Label
                         htmlFor={`music-${opt.value}`}
-                        className={`px-4 py-2 rounded-lg border cursor-pointer transition-all ${
+                        className={cn(
+                          "px-4 py-2.5 rounded-lg border cursor-pointer transition-all flex items-center gap-2",
                           formData.music === opt.value
-                            ? "border-copper bg-copper/10"
+                            ? "border-copper bg-copper/10 text-copper"
                             : "border-border hover:border-copper/50"
-                        }`}
+                        )}
                       >
+                        <opt.icon size={16} />
                         {opt.label}
                       </Label>
                     </div>
@@ -521,27 +614,32 @@ const Buchung = () => {
               </div>
 
               <div>
-                <Label className="mb-4 block">Gespräch</Label>
+                <Label className="mb-4 block flex items-center gap-2">
+                  <MessageCircle size={16} className="text-copper" />
+                  Gespräch
+                </Label>
                 <RadioGroup
                   value={formData.conversation}
                   onValueChange={(v) => updateFormData("conversation", v)}
                   className="flex flex-wrap gap-3"
                 >
                   {[
-                    { value: "schweigend", label: "Bitte schweigend" },
-                    { value: "smalltalk", label: "Leichter Smalltalk ok" },
-                    { value: "spontan", label: "Ich entscheide spontan" },
+                    { value: "schweigend", label: "Bitte schweigend", icon: MessageCircleOff },
+                    { value: "smalltalk", label: "Leichter Smalltalk ok", icon: MessageCircle },
+                    { value: "spontan", label: "Ich entscheide spontan", icon: Sparkles },
                   ].map((opt) => (
                     <div key={opt.value} className="flex items-center">
                       <RadioGroupItem value={opt.value} id={`conv-${opt.value}`} className="peer sr-only" />
                       <Label
                         htmlFor={`conv-${opt.value}`}
-                        className={`px-4 py-2 rounded-lg border cursor-pointer transition-all ${
+                        className={cn(
+                          "px-4 py-2.5 rounded-lg border cursor-pointer transition-all flex items-center gap-2",
                           formData.conversation === opt.value
-                            ? "border-copper bg-copper/10"
+                            ? "border-copper bg-copper/10 text-copper"
                             : "border-border hover:border-copper/50"
-                        }`}
+                        )}
                       >
+                        <opt.icon size={16} />
                         {opt.label}
                       </Label>
                     </div>
@@ -550,27 +648,32 @@ const Buchung = () => {
               </div>
 
               <div>
-                <Label className="mb-4 block">Berührungsintensität</Label>
+                <Label className="mb-4 block flex items-center gap-2">
+                  <Hand size={16} className="text-copper" />
+                  Berührungsintensität
+                </Label>
                 <RadioGroup
                   value={formData.intensity}
                   onValueChange={(v) => updateFormData("intensity", v)}
                   className="flex flex-wrap gap-3"
                 >
                   {[
-                    { value: "sanft", label: "Sehr sanft" },
-                    { value: "mittel", label: "Mittel" },
-                    { value: "tief", label: "Tief, aber nicht schmerzhaft" },
+                    { value: "sanft", label: "Sehr sanft", icon: Feather },
+                    { value: "mittel", label: "Mittel", icon: Hand },
+                    { value: "tief", label: "Tief, aber nicht schmerzhaft", icon: Heart },
                   ].map((opt) => (
                     <div key={opt.value} className="flex items-center">
                       <RadioGroupItem value={opt.value} id={`int-${opt.value}`} className="peer sr-only" />
                       <Label
                         htmlFor={`int-${opt.value}`}
-                        className={`px-4 py-2 rounded-lg border cursor-pointer transition-all ${
+                        className={cn(
+                          "px-4 py-2.5 rounded-lg border cursor-pointer transition-all flex items-center gap-2",
                           formData.intensity === opt.value
-                            ? "border-copper bg-copper/10"
+                            ? "border-copper bg-copper/10 text-copper"
                             : "border-border hover:border-copper/50"
-                        }`}
+                        )}
                       >
+                        <opt.icon size={16} />
                         {opt.label}
                       </Label>
                     </div>
@@ -589,21 +692,32 @@ const Buchung = () => {
                 />
               </div>
 
-              <div className="flex items-start space-x-3 p-4 bg-secondary/50 rounded-xl">
+              <motion.div 
+                className={cn(
+                  "flex items-start space-x-3 p-4 rounded-xl border-2 transition-all cursor-pointer",
+                  formData.intuitive 
+                    ? "bg-copper/10 border-copper" 
+                    : "bg-secondary/50 border-transparent hover:border-copper/30"
+                )}
+                onClick={() => updateFormData("intuitive", !formData.intuitive)}
+                whileTap={{ scale: 0.99 }}
+              >
                 <Checkbox
                   id="intuitive"
                   checked={formData.intuitive}
                   onCheckedChange={(c) => updateFormData("intuitive", c)}
+                  className="mt-0.5"
                 />
                 <div>
-                  <Label htmlFor="intuitive" className="font-medium">
+                  <Label htmlFor="intuitive" className="font-medium cursor-pointer flex items-center gap-2">
+                    <Sparkles size={16} className="text-copper" />
                     Ich überlasse GentleHands vieles intuitiv
                   </Label>
-                  <p className="text-sm text-muted-foreground">
-                    Wir entscheiden basierend auf Ihrem Zustand vor Ort.
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Wir entscheiden basierend auf Ihrem Zustand vor Ort – für maximale Entspannung.
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         );
@@ -911,20 +1025,34 @@ const Buchung = () => {
         <div className="container-narrow px-3 sm:px-6">
           {/* Progress Steps - Mobile Optimized */}
           <div className="mb-8 sm:mb-12">
-            {/* Mobile: Simple step indicator */}
-            <div className="flex items-center justify-center gap-2 sm:hidden mb-4">
-              <span className="text-sm font-medium text-copper">Schritt {currentStep}</span>
-              <span className="text-sm text-muted-foreground">von {steps.length}</span>
-            </div>
-            <div className="flex sm:hidden items-center justify-center gap-1.5 mb-4">
-              {steps.map((step) => (
-                <div
-                  key={step.id}
-                  className={`h-1.5 rounded-full transition-all ${
-                    currentStep >= step.id ? "bg-copper w-8" : "bg-border w-4"
-                  }`}
-                />
-              ))}
+            {/* Mobile: Enhanced step indicator */}
+            <div className="flex flex-col items-center sm:hidden mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-full bg-copper/10 flex items-center justify-center">
+                  {(() => {
+                    const StepIcon = steps[currentStep - 1]?.icon || User;
+                    return <StepIcon size={16} className="text-copper" />;
+                  })()}
+                </div>
+                <div>
+                  <span className="text-sm font-medium text-foreground">{steps[currentStep - 1]?.title}</span>
+                  <span className="text-xs text-muted-foreground ml-2">({currentStep}/{steps.length})</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-1.5 w-full max-w-[200px]">
+                {steps.map((step) => (
+                  <motion.div
+                    key={step.id}
+                    initial={false}
+                    animate={{
+                      width: currentStep >= step.id ? 32 : 16,
+                      backgroundColor: currentStep >= step.id ? 'hsl(var(--copper))' : 'hsl(var(--border))'
+                    }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="h-1.5 rounded-full"
+                  />
+                ))}
+              </div>
             </div>
             
             {/* Desktop: Full step indicator */}
@@ -994,6 +1122,24 @@ const Buchung = () => {
               {renderStep()}
             </motion.div>
           </AnimatePresence>
+
+          {/* Trust Badges */}
+          {currentStep < 6 && (
+            <div className="flex items-center justify-center gap-4 sm:gap-6 py-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <Shield size={14} className="text-copper" />
+                <span>100% Diskret</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle size={14} className="text-copper" />
+                <span>Kostenlose Stornierung</span>
+              </div>
+              <div className="hidden sm:flex items-center gap-1.5">
+                <Award size={14} className="text-copper" />
+                <span>Zertifizierte Therapeut:innen</span>
+              </div>
+            </div>
+          )}
 
           {/* Navigation - Mobile Optimized */}
           <div className="flex justify-between mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border gap-3">
