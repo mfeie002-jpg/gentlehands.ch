@@ -644,6 +644,8 @@ const TherapistDashboard = () => {
                   working_hours_start: therapist.working_hours_start,
                   working_hours_end: therapist.working_hours_end,
                   specialty: therapist.specialty,
+                  available_days: therapist.available_days,
+                  photo_url: therapist.photo_url,
                 }}
               />
             </TabsContent>
