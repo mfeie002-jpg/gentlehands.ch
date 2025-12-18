@@ -23,7 +23,7 @@ export const FinalCTASection = () => {
   };
 
   return (
-    <section className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[70vh] sm:min-h-[60vh] flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <img
@@ -31,11 +31,11 @@ export const FinalCTASection = () => {
           alt="Entspannende Massage"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/90" />
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/75 to-foreground/90" />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground via-transparent to-foreground/50" />
       </div>
 
-      <div className="container-narrow relative z-10 py-12 sm:py-20 px-4 sm:px-6">
+      <div className="container-narrow relative z-10 py-16 sm:py-20 px-4 sm:px-6">
         <ScrollReveal>
           <div className="text-center">
             {/* Overline */}
@@ -43,9 +43,9 @@ export const FinalCTASection = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mb-6"
+              className="mb-4 sm:mb-6"
             >
-              <span className="text-copper font-medium tracking-[0.2em] uppercase text-sm">
+              <span className="text-copper font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase text-xs sm:text-sm">
                 Bereit für Ihre Auszeit?
               </span>
             </motion.div>
@@ -82,7 +82,12 @@ export const FinalCTASection = () => {
               transition={{ delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12"
             >
-              <Button variant="copper" size="xl" asChild className="min-w-[180px] sm:min-w-[200px] w-full sm:w-auto">
+              <Button 
+                variant="copper" 
+                size="xl" 
+                asChild 
+                className="min-w-[200px] w-full sm:w-auto h-14 text-base font-semibold active:scale-[0.98] transition-transform touch-manipulation"
+              >
                 <Link to="/buchung">
                   <Sparkles size={18} className="mr-2" />
                   Erlebnis anfragen
@@ -92,7 +97,7 @@ export const FinalCTASection = () => {
                 variant="outline" 
                 size="xl" 
                 asChild 
-                className="min-w-[180px] sm:min-w-[200px] w-full sm:w-auto border-background/30 text-background hover:bg-background/10 hover:border-background/50"
+                className="min-w-[200px] w-full sm:w-auto h-14 border-background/30 text-background hover:bg-background/10 hover:border-background/50 active:scale-[0.98] transition-transform touch-manipulation"
               >
                 <Link to="/kontakt">
                   <Phone size={18} className="mr-2" />
@@ -109,8 +114,8 @@ export const FinalCTASection = () => {
               transition={{ delay: 0.4 }}
               className="border-t border-background/20 pt-8 sm:pt-10"
             >
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <Mail size={18} className="text-copper" />
+              <div className="flex items-center justify-center gap-2 mb-3 sm:mb-4">
+                <Mail size={16} className="sm:w-[18px] sm:h-[18px] text-copper" />
                 <span className="text-background/80 text-sm font-medium">Newsletter</span>
               </div>
               <p className="text-background/60 text-sm mb-4 max-w-md mx-auto">
@@ -122,10 +127,15 @@ export const FinalCTASection = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Ihre E-Mail-Adresse"
-                  className="flex-1 px-4 py-3 rounded-xl bg-background/10 border border-background/20 focus:border-copper focus:outline-none focus:ring-2 focus:ring-copper/20 text-background placeholder:text-background/50 transition-colors backdrop-blur-sm"
+                  className="flex-1 px-4 py-3.5 sm:py-3 rounded-xl bg-background/10 border border-background/20 focus:border-copper focus:outline-none focus:ring-2 focus:ring-copper/20 text-background placeholder:text-background/50 transition-colors backdrop-blur-sm text-base"
                   required
                 />
-                <Button type="submit" variant="copper" disabled={isLoading} className="whitespace-nowrap">
+                <Button 
+                  type="submit" 
+                  variant="copper" 
+                  disabled={isLoading} 
+                  className="whitespace-nowrap h-12 sm:h-auto touch-manipulation"
+                >
                   {isLoading ? "..." : "Anmelden"}
                   <ArrowRight size={16} className="ml-1" />
                 </Button>
@@ -141,7 +151,7 @@ export const FinalCTASection = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
-              className="text-background/60 text-xs sm:text-sm mt-8 sm:mt-10 px-4"
+              className="text-background/60 text-xs sm:text-sm mt-8 sm:mt-10"
             >
               <span className="block sm:inline">Professionelle Entspannungsmassagen</span>
               <span className="hidden sm:inline"> • </span>

@@ -40,60 +40,66 @@ const benefits = [
 
 export const EmotionalBenefitsSection = () => {
   return (
-    <section className="section-padding bg-gradient-to-b from-background to-secondary/10 relative overflow-hidden">
-      <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-copper/5 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute top-1/3 left-0 w-[300px] h-[300px] bg-rose-500/3 rounded-full blur-[100px] -translate-x-1/2" />
+    <section className="py-16 sm:py-20 md:py-24 bg-gradient-to-b from-background to-secondary/10 relative overflow-hidden">
+      {/* Ambient effects - desktop only */}
+      <div className="hidden md:block">
+        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-copper/5 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute top-1/3 left-0 w-[300px] h-[300px] bg-rose-500/3 rounded-full blur-[100px] -translate-x-1/2" />
+      </div>
 
       <div className="container-wide relative">
-        <ScrollReveal className="text-center mb-12 sm:mb-16">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-12" />
-            <span className="text-copper font-medium tracking-[0.2em] uppercase text-xs">
+        <ScrollReveal className="text-center mb-10 sm:mb-16 px-4">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-8 sm:w-12" />
+            <span className="text-copper font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase text-[10px] sm:text-xs">
               Was Sie erwartet
             </span>
-            <div className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-12" />
+            <div className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-8 sm:w-12" />
           </div>
-          <h2 className="text-foreground mb-4">
+          <h2 className="text-foreground mb-4 text-2xl sm:text-3xl md:text-4xl">
             Mehr als nur <span className="text-gradient-copper">Entspannung</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
             Eine Investition in Ihr Wohlbefinden, die Sie auf allen Ebenen spüren werden.
           </p>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-4 sm:px-0">
-          {benefits.map((benefit, index) => (
-            <ScrollReveal key={benefit.title} delay={index * 0.08}>
-              <motion.div
-                className="group relative h-full rounded-2xl overflow-hidden bg-card border border-border hover:border-copper/30 transition-all duration-500"
-                whileHover={{ y: -4 }}
-              >
-                {/* Image */}
-                <div className="relative h-44 sm:h-48 overflow-hidden">
-                  <LazyImage
-                    src={benefit.image}
-                    alt={benefit.title}
-                    className="group-hover:scale-110 transition-transform duration-700"
-                    aspectRatio="auto"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-                </div>
+        {/* Mobile: horizontal scroll, Desktop: grid */}
+        <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6 sm:px-4 md:px-0">
+          <div className="flex sm:contents gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 sm:px-0 -mx-4 sm:mx-0 pb-4 sm:pb-0">
+            {benefits.map((benefit, index) => (
+              <ScrollReveal key={benefit.title} delay={index * 0.08} className="contents sm:block">
+                <motion.div
+                  className="group relative flex-shrink-0 w-[280px] sm:w-auto snap-center sm:snap-align-none rounded-2xl overflow-hidden bg-card border border-border hover:border-copper/30 transition-all duration-500"
+                  whileHover={{ y: -4 }}
+                >
+                  {/* Image */}
+                  <div className="relative h-40 sm:h-48 overflow-hidden">
+                    <LazyImage
+                      src={benefit.image}
+                      alt={benefit.title}
+                      className="group-hover:scale-110 transition-transform duration-700"
+                      aspectRatio="auto"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                  </div>
 
-                {/* Content */}
-                <div className="p-5 sm:p-6 -mt-8 relative">
-                  <h3 className="text-lg font-display text-foreground mb-2">{benefit.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-3">{benefit.description}</p>
-                  
-                  {/* Emotional feeling tag */}
-                  <p className="text-xs text-copper/80 italic">«{benefit.feeling}»</p>
-                </div>
-              </motion.div>
-            </ScrollReveal>
-          ))}
+                  {/* Content */}
+                  <div className="p-4 sm:p-6 -mt-6 sm:-mt-8 relative">
+                    <h3 className="text-base sm:text-lg font-display text-foreground mb-2">{benefit.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-3">{benefit.description}</p>
+                    
+                    {/* Emotional feeling tag */}
+                    <p className="text-xs text-copper/80 italic">«{benefit.feeling}»</p>
+                  </div>
+                </motion.div>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
 
-        <ScrollReveal className="text-center mt-10 sm:mt-12">
-          <Button variant="ghost" size="lg" asChild className="group">
+        <ScrollReveal className="text-center mt-8 sm:mt-12 px-4">
+          <Button variant="ghost" size="lg" asChild className="group h-12 touch-manipulation">
             <Link to="/philosophie">
               Mehr über unseren Ansatz
               <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />

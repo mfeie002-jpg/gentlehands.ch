@@ -54,63 +54,65 @@ const services = [
 
 export const ExclusiveServicesSection = () => {
   return (
-    <section className="section-padding bg-gradient-to-b from-background via-secondary/10 to-background relative overflow-hidden">
-      {/* Decorative Elements */}
-      <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-copper/5 rounded-full blur-[120px] -translate-x-1/2" />
-      <div className="absolute top-1/4 right-0 w-[300px] h-[300px] bg-petrol/5 rounded-full blur-[100px] translate-x-1/2" />
+    <section className="py-16 sm:py-20 md:py-24 bg-gradient-to-b from-background via-secondary/10 to-background relative overflow-hidden">
+      {/* Decorative Elements - desktop only */}
+      <div className="hidden md:block">
+        <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-copper/5 rounded-full blur-[120px] -translate-x-1/2" />
+        <div className="absolute top-1/4 right-0 w-[300px] h-[300px] bg-petrol/5 rounded-full blur-[100px] translate-x-1/2" />
+      </div>
 
       <div className="container-wide relative">
-        <ScrollReveal className="text-center mb-12 sm:mb-16">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-12" />
-            <span className="text-copper font-medium tracking-[0.2em] uppercase text-xs">
+        <ScrollReveal className="text-center mb-10 sm:mb-16 px-4">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-8 sm:w-12" />
+            <span className="text-copper font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase text-[10px] sm:text-xs">
               6 Themenräume
             </span>
-            <div className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-12" />
+            <div className="h-px bg-gradient-to-r from-transparent via-copper to-transparent w-8 sm:w-12" />
           </div>
-          <h2 className="text-foreground mb-4">
+          <h2 className="text-foreground mb-4 text-2xl sm:text-3xl md:text-4xl">
             Welche <span className="text-gradient-copper">Atmosphäre</span><br className="hidden sm:block" />
             ruft nach Ihnen?
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
             Jeder Raum wurde für ein einzigartiges Sinneserlebnis gestaltet. 
             Wählen Sie nach Stimmung, nicht nach Behandlung.
           </p>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10 sm:mb-12 px-4 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-10 sm:mb-12 px-4 sm:px-4 lg:px-0">
           {services.map((service, index) => (
-            <ScrollReveal key={service.title} delay={index * 0.08}>
+            <ScrollReveal key={service.title} delay={index * 0.06}>
               <motion.div
-                className="group relative bg-card rounded-2xl p-5 sm:p-6 border border-border hover:border-copper/30 transition-all duration-500 h-full"
+                className="group relative bg-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border hover:border-copper/30 transition-all duration-500 h-full"
                 whileHover={{ y: -4 }}
               >
                 {/* Highlight Badge */}
                 {service.highlight && (
-                  <div className="absolute -top-3 right-4">
-                    <span className="bg-copper text-accent-foreground text-xs font-medium px-3 py-1 rounded-full">
+                  <div className="absolute -top-2.5 sm:-top-3 right-3 sm:right-4">
+                    <span className="bg-copper text-accent-foreground text-[10px] sm:text-xs font-medium px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full">
                       {service.highlight}
                     </span>
                   </div>
                 )}
 
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-3 sm:gap-4">
                   {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl bg-copper/10 flex items-center justify-center group-hover:bg-copper/20 transition-colors shrink-0">
-                    <service.icon className="w-6 h-6 text-copper" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-copper/10 flex items-center justify-center group-hover:bg-copper/20 transition-colors shrink-0">
+                    <service.icon className="w-5 h-5 sm:w-6 sm:h-6 text-copper" />
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-display text-foreground mb-1">{service.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                    <h3 className="text-base sm:text-lg font-display text-foreground mb-1">{service.title}</h3>
+                    <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3">
                       {service.description}
                     </p>
 
                     {/* Meta */}
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs text-muted-foreground">{service.duration}</span>
-                      <span className="text-xs text-copper font-medium px-2 py-1 rounded-full bg-copper/10">
+                      <span className="text-[10px] sm:text-xs text-muted-foreground">{service.duration}</span>
+                      <span className="text-[10px] sm:text-xs text-copper font-medium px-2 py-0.5 sm:py-1 rounded-full bg-copper/10">
                         {service.benefit}
                       </span>
                     </div>
@@ -118,22 +120,22 @@ export const ExclusiveServicesSection = () => {
                 </div>
 
                 {/* Hover Glow */}
-                <div className="absolute inset-0 bg-copper/0 group-hover:bg-copper/3 rounded-2xl transition-colors duration-500 -z-10" />
+                <div className="absolute inset-0 bg-copper/0 group-hover:bg-copper/3 rounded-xl sm:rounded-2xl transition-colors duration-500 -z-10" />
               </motion.div>
             </ScrollReveal>
           ))}
         </div>
 
-        <ScrollReveal className="text-center">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="copper" size="lg" asChild className="group">
+        <ScrollReveal className="text-center px-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <Button variant="copper" size="lg" asChild className="group w-full sm:w-auto h-12 touch-manipulation">
               <Link to="/erlebnisse">
                 <Sparkles size={16} className="mr-2" />
                 Alle Räume erkunden
                 <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" asChild className="group border-copper/30 hover:border-copper">
+            <Button variant="outline" size="lg" asChild className="group border-copper/30 hover:border-copper w-full sm:w-auto h-12 touch-manipulation">
               <Link to="/buchung">
                 Direkt buchen
                 <ArrowRight size={16} className="ml-2 opacity-50 group-hover:opacity-100 transition-opacity" />
