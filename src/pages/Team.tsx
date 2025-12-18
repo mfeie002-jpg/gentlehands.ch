@@ -13,13 +13,18 @@ import { TeamTestimonialsSection } from "@/components/team/TeamTestimonialsSecti
 import { TherapistProfileCard } from "@/components/team/TherapistProfileCard";
 import { TeamPhilosophyCard } from "@/components/team/TeamPhilosophyCard";
 import { LazyImage } from "@/components/shared/LazyImage";
+import { TherapistAvailabilityBadge } from "@/components/team/TherapistAvailabilityBadge";
 import { useApprovedTherapists } from "@/hooks/useTherapists";
+import { useTherapistsLiveAvailability } from "@/hooks/useTherapistLiveAvailability";
 import teamWorkingMoment from "@/assets/team-working-moment.jpg";
 import teamConsultation from "@/assets/team-consultation.jpg";
 import emotionalTherapistHands from "@/assets/emotional-therapist-hands.jpg";
+import { useMemo } from "react";
 
 const Team = () => {
   const { therapists, isLoading } = useApprovedTherapists();
+  const therapistIds = useMemo(() => therapists.map(t => t.id), [therapists]);
+  const { availability, isLoading: availabilityLoading } = useTherapistsLiveAvailability(therapistIds);
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
 
@@ -356,6 +361,29 @@ const Team = () => {
                             </div>
                           </motion.div>
                         )}
+
+                        {/* Live Availability */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.5 }}
+                          className="pt-4 border-t border-border/50"
+                        >
+                          {(() => {
+                            const therapistAvailability = availability.get(member.id);
+                            return (
+                              <TherapistAvailabilityBadge
+                                therapistId={member.id}
+                                therapistName={member.name}
+                                hasAvailableToday={therapistAvailability?.hasAvailableToday ?? false}
+                                availableTodayCount={therapistAvailability?.availableTodayCount ?? 0}
+                                nextAvailableSlot={therapistAvailability?.nextAvailableSlot ?? null}
+                                isLoading={availabilityLoading}
+                              />
+                            );
+                          })()}
+                        </motion.div>
                       </div>
 
                       {/* CTA */}
