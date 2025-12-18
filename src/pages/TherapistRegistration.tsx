@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { Button } from "@/components/ui/button";
@@ -351,7 +351,7 @@ const TherapistRegistration = () => {
                         onCheckedChange={(checked) => updateField('agreeTerms', checked)}
                       />
                       <Label htmlFor="terms" className="text-sm leading-relaxed cursor-pointer">
-                        Ich akzeptiere die <a href="/rechtliches" className="text-copper underline">AGB</a> und 
+                        Ich akzeptiere die <Link to="/rechtliches" className="text-copper underline" target="_blank" onClick={(e) => e.stopPropagation()}>AGB</Link> und 
                         die Zusammenarbeitsbedingungen von GentleHands. *
                       </Label>
                     </div>
@@ -363,7 +363,7 @@ const TherapistRegistration = () => {
                         onCheckedChange={(checked) => updateField('agreePrivacy', checked)}
                       />
                       <Label htmlFor="privacy" className="text-sm leading-relaxed cursor-pointer">
-                        Ich habe die <a href="/rechtliches" className="text-copper underline">Datenschutzrichtlinien</a> gelesen 
+                        Ich habe die <Link to="/rechtliches" className="text-copper underline" target="_blank" onClick={(e) => e.stopPropagation()}>Datenschutzrichtlinien</Link> gelesen 
                         und stimme der Verarbeitung meiner Daten zu. *
                       </Label>
                     </div>

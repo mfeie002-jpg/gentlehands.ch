@@ -60,7 +60,8 @@ const IndexEN = () => {
             src={heroImage} 
             alt="Professional massage therapy" 
             className="w-full h-full object-cover"
-            fetchPriority="high"
+            // @ts-ignore - fetchpriority is a valid HTML attribute
+            fetchpriority="high"
             loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
