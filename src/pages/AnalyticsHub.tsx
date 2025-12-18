@@ -47,6 +47,14 @@ const analyticsModules = [
     stats: { label: 'Datenpunkte', value: '15k' },
     color: 'from-orange-500 to-orange-600',
   },
+  {
+    title: 'Goal Tracking',
+    description: 'Conversion-Ziele verwalten und Alerts erhalten',
+    icon: Target,
+    href: '/goal-tracking',
+    stats: { label: 'Aktive Ziele', value: '4' },
+    color: 'from-pink-500 to-pink-600',
+  },
 ];
 
 const quickStats = [

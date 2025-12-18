@@ -306,6 +306,48 @@ export type Database = {
           },
         ]
       }
+      conversion_goals: {
+        Row: {
+          alert_threshold: number | null
+          created_at: string
+          current_value: number
+          description: string | null
+          goal_type: string
+          id: string
+          is_active: boolean | null
+          name: string
+          period: string
+          target_value: number
+          updated_at: string
+        }
+        Insert: {
+          alert_threshold?: number | null
+          created_at?: string
+          current_value?: number
+          description?: string | null
+          goal_type?: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          period?: string
+          target_value?: number
+          updated_at?: string
+        }
+        Update: {
+          alert_threshold?: number | null
+          created_at?: string
+          current_value?: number
+          description?: string | null
+          goal_type?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          period?: string
+          target_value?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       customer_journeys: {
         Row: {
           completed_at: string | null
@@ -479,6 +521,82 @@ export type Database = {
           value?: number
         }
         Relationships: []
+      }
+      goal_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string
+          goal_id: string
+          id: string
+          is_read: boolean | null
+          message: string
+        }
+        Insert: {
+          alert_type?: string
+          created_at?: string
+          goal_id: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string
+          goal_id?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_alerts_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "conversion_goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      goal_history: {
+        Row: {
+          achieved_value: number
+          created_at: string
+          goal_id: string
+          id: string
+          percentage_achieved: number | null
+          period_end: string
+          period_start: string
+          target_value: number
+        }
+        Insert: {
+          achieved_value?: number
+          created_at?: string
+          goal_id: string
+          id?: string
+          percentage_achieved?: number | null
+          period_end: string
+          period_start: string
+          target_value: number
+        }
+        Update: {
+          achieved_value?: number
+          created_at?: string
+          goal_id?: string
+          id?: string
+          percentage_achieved?: number | null
+          period_end?: string
+          period_start?: string
+          target_value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_history_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "conversion_goals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       health_questionnaires: {
         Row: {
