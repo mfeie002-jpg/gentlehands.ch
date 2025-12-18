@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo, useScro
 import { Logo } from "@/components/shared/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import { triggerHaptic } from "@/hooks/useHapticFeedback";
+import { useRoutePrefetch } from "@/hooks/useRoutePrefetch";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +32,7 @@ export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
+  const { prefetchOnHover } = useRoutePrefetch();
   
   // Scroll progress for indicator
   const { scrollYProgress } = useScroll();
@@ -147,6 +149,7 @@ export const Header = () => {
               <Link
                 key={link.href}
                 to={link.href}
+                {...prefetchOnHover(link.href)}
                 className={`relative px-4 py-2 text-sm font-medium transition-colors hover:text-copper ${
                   location.pathname === link.href
                     ? "text-copper"
