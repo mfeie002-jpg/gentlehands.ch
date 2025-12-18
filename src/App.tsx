@@ -55,7 +55,6 @@ const Philosophie = lazy(() => import("./pages/Philosophie"));
 const BuchungVerifizieren = lazy(() => import("./pages/BuchungVerifizieren"));
 const Performance = lazy(() => import("./pages/Performance"));
 const LogoPreview = lazy(() => import("./pages/LogoPreview"));
-const SloganPreview = lazy(() => import("./pages/SloganPreview"));
 const TherapistRegistration = lazy(() => import("./pages/TherapistRegistration"));
 const TherapistDashboard = lazy(() => import("./pages/TherapistDashboard"));
 const TherapistConfirmation = lazy(() => import("./pages/TherapistConfirmation"));
@@ -157,7 +156,6 @@ const App = () => (
                 <Route path="/empfehlen" element={<Empfehlen />} />
                 <Route path="/performance" element={<Performance />} />
                 <Route path="/logo-preview" element={<LogoPreview />} />
-                <Route path="/slogan-preview" element={<SloganPreview />} />
                 {/* Therapist Portal */}
                 <Route path="/therapeut/registrierung" element={<TherapistRegistration />} />
                 <Route path="/therapeut/dashboard" element={<TherapistDashboard />} />
