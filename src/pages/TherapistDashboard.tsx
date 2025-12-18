@@ -17,6 +17,7 @@ import {
   MessageSquare, Settings, LogOut, ChevronRight, CheckCircle,
   AlertCircle, Loader2, GraduationCap, BookOpen, Award
 } from "lucide-react";
+import { TherapistSettingsTab } from "@/components/therapist/TherapistSettingsTab";
 
 interface Certification {
   id: string;
@@ -249,6 +250,10 @@ const TherapistDashboard = () => {
               <TabsTrigger value="bookings">Termine</TabsTrigger>
               <TabsTrigger value="earnings">Einnahmen</TabsTrigger>
               <TabsTrigger value="feedback">Bewertungen</TabsTrigger>
+              <TabsTrigger value="settings" className="flex items-center gap-1.5">
+                <Settings size={14} />
+                Einstellungen
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6">
@@ -625,6 +630,22 @@ const TherapistDashboard = () => {
                   )}
                 </CardContent>
               </Card>
+            </TabsContent>
+            <TabsContent value="settings">
+              <TherapistSettingsTab
+                therapistId={therapist.id}
+                initialData={{
+                  name: therapist.name,
+                  email: therapist.email,
+                  phone: therapist.phone,
+                  bio: therapist.bio,
+                  experience_years: therapist.experience_years,
+                  hourly_rate: therapist.hourly_rate,
+                  working_hours_start: therapist.working_hours_start,
+                  working_hours_end: therapist.working_hours_end,
+                  specialty: therapist.specialty,
+                }}
+              />
             </TabsContent>
           </Tabs>
         </div>
