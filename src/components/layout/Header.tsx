@@ -292,55 +292,56 @@ export const Header = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -40 }}
               transition={{ duration: 0.35, type: "spring", stiffness: 300, damping: 30 }}
-              className="absolute top-16 sm:top-20 left-3 right-3 sm:left-4 sm:right-4 bg-card rounded-2xl shadow-2xl border border-border overflow-hidden max-h-[calc(100vh-5rem)] overflow-y-auto touch-pan-y"
+              className="absolute top-16 sm:top-20 left-3 right-3 sm:left-4 sm:right-4 bg-card rounded-2xl shadow-2xl border border-border/60 overflow-hidden max-h-[calc(100vh-6rem)] overflow-y-auto touch-pan-y"
             >
-              {/* Drag Handle Indicator */}
-              <div className="flex justify-center pt-3 pb-1">
-                <div className="w-10 h-1 bg-muted-foreground/30 rounded-full" />
+              {/* Drag Handle */}
+              <div className="flex justify-center pt-3 pb-2">
+                <div className="w-12 h-1.5 bg-muted-foreground/20 rounded-full" />
               </div>
               
-              {/* Swipe hint text */}
-              <p className="text-center text-xs text-muted-foreground/60 mb-2">
-                Nach oben wischen zum Schließen
-              </p>
-              
               {/* Decorative gradient */}
-              <div className="absolute top-0 right-0 w-40 h-40 bg-copper/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-copper/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
               
-              <div className="flex flex-col gap-1 relative px-4 pb-6">
-                {navLinks.map((link, index) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 + index * 0.04 }}
-                  >
-                    <Link
-                      to={link.href}
-                      className={`flex items-center justify-between px-4 py-3.5 text-base font-medium rounded-xl transition-all active:scale-[0.98] ${
-                        location.pathname === link.href
-                          ? "text-copper bg-copper/10"
-                          : "text-foreground hover:bg-secondary active:bg-secondary/80"
-                      }`}
+              <div className="flex flex-col relative px-3 pb-5">
+                {/* Navigation Links */}
+                <div className="space-y-0.5">
+                  {navLinks.map((link, index) => (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.03 + index * 0.03 }}
                     >
-                      <span>{link.label}</span>
-                      <ChevronRight size={18} className={`text-muted-foreground/50 ${location.pathname === link.href ? 'text-copper' : ''}`} />
-                    </Link>
-                  </motion.div>
-                ))}
+                      <Link
+                        to={link.href}
+                        className={`flex items-center justify-between px-4 py-4 text-base font-medium rounded-xl transition-all active:scale-[0.98] touch-manipulation min-h-[52px] ${
+                          location.pathname === link.href
+                            ? "text-copper bg-copper/10 border border-copper/20"
+                            : "text-foreground hover:bg-secondary/80 active:bg-secondary"
+                        }`}
+                      >
+                        <span>{link.label}</span>
+                        <ChevronRight 
+                          size={20} 
+                          className={`transition-colors ${location.pathname === link.href ? 'text-copper' : 'text-muted-foreground/40'}`} 
+                        />
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
 
-                {/* Mobile User Actions */}
+                {/* User Actions */}
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.35 }}
-                  className="mt-3 pt-3 border-t border-border"
+                  transition={{ delay: 0.25 }}
+                  className="mt-4 pt-4 border-t border-border/50"
                 >
                   {user ? (
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
                       <Link
                         to="/dashboard"
-                        className="flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-xl text-foreground hover:bg-secondary active:bg-secondary/80 active:scale-[0.98] transition-all"
+                        className="flex items-center gap-3 px-4 py-4 text-base font-medium rounded-xl text-foreground hover:bg-secondary/80 active:bg-secondary active:scale-[0.98] transition-all touch-manipulation min-h-[52px]"
                       >
                         <Heart className="w-5 h-5 text-copper" />
                         Mein Bereich
@@ -348,15 +349,15 @@ export const Header = () => {
                       {isAdmin && (
                         <Link
                           to="/admin"
-                          className="flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-xl text-foreground hover:bg-secondary active:bg-secondary/80 active:scale-[0.98] transition-all"
+                          className="flex items-center gap-3 px-4 py-4 text-base font-medium rounded-xl text-foreground hover:bg-secondary/80 active:bg-secondary active:scale-[0.98] transition-all touch-manipulation min-h-[52px]"
                         >
                           <LayoutDashboard className="w-5 h-5 text-petrol" />
-                          Admin
+                          Admin Dashboard
                         </Link>
                       )}
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-xl text-destructive hover:bg-destructive/10 active:bg-destructive/15 active:scale-[0.98] transition-all"
+                        className="w-full flex items-center gap-3 px-4 py-4 text-base font-medium rounded-xl text-destructive hover:bg-destructive/10 active:bg-destructive/15 active:scale-[0.98] transition-all touch-manipulation min-h-[52px]"
                       >
                         <LogOut className="w-5 h-5" />
                         Abmelden
@@ -365,7 +366,7 @@ export const Header = () => {
                   ) : (
                     <Link
                       to="/login"
-                      className="flex items-center gap-3 px-4 py-3.5 text-base font-medium rounded-xl text-foreground hover:bg-secondary active:bg-secondary/80 active:scale-[0.98] transition-all"
+                      className="flex items-center gap-3 px-4 py-4 text-base font-medium rounded-xl text-foreground hover:bg-secondary/80 active:bg-secondary active:scale-[0.98] transition-all touch-manipulation min-h-[52px]"
                     >
                       <User className="w-5 h-5 text-copper" />
                       Anmelden
@@ -373,16 +374,21 @@ export const Header = () => {
                   )}
                 </motion.div>
 
+                {/* Primary CTA */}
                 <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="mt-4 pt-4 border-t border-border"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-4"
                 >
-                  <Button variant="copper" className="w-full shadow-copper active:scale-[0.98] transition-transform" size="lg" asChild>
+                  <Button 
+                    variant="copper" 
+                    className="w-full shadow-lg shadow-copper/25 active:scale-[0.98] transition-transform h-14 text-base font-semibold" 
+                    asChild
+                  >
                     <Link to="/buchung">
-                      <Sparkles size={16} className="mr-1.5" />
-                      Termin anfragen
+                      <Sparkles size={18} className="mr-2" />
+                      Jetzt Termin buchen
                     </Link>
                   </Button>
                 </motion.div>
