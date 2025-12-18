@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { format, addDays, isBefore, startOfToday } from "date-fns";
 import { de } from "date-fns/locale";
-import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle, Users, Volume2, VolumeX, Volume1, MessageCircle, MessageCircleOff, Hand, Feather, Shield, Award, Scale, Gift } from "lucide-react";
+import { Check, ArrowLeft, ArrowRight, User, Sparkles, Clock, Settings, Calendar, CheckCircle, Waves, Mountain, Moon, Building, Leaf, Heart, Zap, Star, CalendarIcon, Loader2, ChevronLeft, ChevronRight, AlertCircle, Users, Volume2, VolumeX, Volume1, MessageCircle, MessageCircleOff, Hand, Feather, Shield, Award, Scale, Gift, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -1322,20 +1322,30 @@ const Buchung = () => {
             </motion.div>
           </AnimatePresence>
 
-          {/* Trust Badges */}
+          {/* Enhanced Trust Badges */}
           {currentStep < 6 && (
-            <div className="flex items-center justify-center gap-4 sm:gap-6 py-4 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1.5">
-                <Shield size={14} className="text-copper" />
-                <span>100% Diskret</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle size={14} className="text-copper" />
-                <span>Kostenlose Stornierung</span>
-              </div>
-              <div className="hidden sm:flex items-center gap-1.5">
-                <Award size={14} className="text-copper" />
-                <span>Zertifizierte Therapeut:innen</span>
+            <div className="mt-6 p-4 bg-gradient-to-r from-petrol/5 via-copper/5 to-petrol/5 rounded-xl border border-border/50">
+              <div className="flex items-center justify-center gap-3 sm:gap-6 flex-wrap text-xs sm:text-sm">
+                <div className="flex items-center gap-1.5">
+                  <Shield size={14} className="text-copper" />
+                  <span className="text-muted-foreground">100% Diskret</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Star size={14} className="text-copper" />
+                  <span className="text-muted-foreground">4.9/5 ★</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle size={14} className="text-copper" />
+                  <span className="text-muted-foreground">Kostenlose Stornierung</span>
+                </div>
+                <div className="hidden sm:flex items-center gap-1.5">
+                  <Award size={14} className="text-copper" />
+                  <span className="text-muted-foreground">Zertifizierte Therapeut:innen</span>
+                </div>
+                <div className="hidden md:flex items-center gap-1.5">
+                  <Lock size={14} className="text-copper" />
+                  <span className="text-muted-foreground">Sichere Buchung</span>
+                </div>
               </div>
             </div>
           )}
