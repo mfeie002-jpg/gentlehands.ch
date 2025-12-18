@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Languages, Award, Heart, Star, GraduationCap, Quote, ArrowRight, Users, Loader2 } from "lucide-react";
+import { Languages, Award, Heart, Star, GraduationCap, Quote, ArrowRight, Users, Loader2, Clock, Calendar } from "lucide-react";
 import { SEOHead } from "@/components/shared/SEOHead";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
@@ -318,6 +318,42 @@ const Team = () => {
                               <h4 className="font-display text-foreground">Stundensatz</h4>
                             </div>
                             <p className="text-muted-foreground">CHF {member.hourly_rate}/Std.</p>
+                          </motion.div>
+                        )}
+
+                        {/* Working Hours */}
+                        {(member.available_days?.length > 0 || member.working_hours_start) && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.4 }}
+                            className="group"
+                          >
+                            <div className="flex items-center gap-2 mb-3">
+                              <Clock size={18} className="text-copper" />
+                              <h4 className="font-display text-foreground">Verfügbarkeit</h4>
+                            </div>
+                            <div className="space-y-2">
+                              {member.working_hours_start && member.working_hours_end && (
+                                <p className="text-muted-foreground text-sm flex items-center gap-2">
+                                  <Clock size={14} className="text-copper/60" />
+                                  {member.working_hours_start.slice(0, 5)} – {member.working_hours_end.slice(0, 5)} Uhr
+                                </p>
+                              )}
+                              {member.available_days && member.available_days.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5">
+                                  {member.available_days.map((day) => (
+                                    <span
+                                      key={day}
+                                      className="text-xs px-2 py-1 bg-secondary rounded-md text-muted-foreground"
+                                    >
+                                      {day.slice(0, 2)}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                           </motion.div>
                         )}
                       </div>
