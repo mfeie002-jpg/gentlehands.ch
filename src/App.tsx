@@ -61,6 +61,8 @@ const TherapistDashboard = lazy(() => import("./pages/TherapistDashboard"));
 const TherapistConfirmation = lazy(() => import("./pages/TherapistConfirmation"));
 const TherapistSchool = lazy(() => import("./pages/TherapistSchool"));
 const AnalyticsDashboard = lazy(() => import("./pages/AnalyticsDashboard"));
+const CustomerJourneyDashboard = lazy(() => import("./pages/CustomerJourneyDashboard"));
+const ABTestDashboard = lazy(() => import("./pages/ABTestDashboard"));
 
 // English pages
 const IndexEN = lazy(() => import("./pages/en/Index"));
@@ -142,6 +144,8 @@ const App = () => (
                 <Route path="/geschenkideen" element={<Geschenkideen />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/analytics" element={<AnalyticsDashboard />} />
+                <Route path="/customer-journey" element={<CustomerJourneyDashboard />} />
+                <Route path="/ab-tests" element={<ABTestDashboard />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/empfehlen" element={<Empfehlen />} />
