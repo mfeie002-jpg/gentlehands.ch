@@ -646,6 +646,7 @@ const TherapistDashboard = () => {
                   specialty: therapist.specialty,
                   available_days: therapist.available_days,
                   photo_url: therapist.photo_url,
+                  qualifications: therapist.qualifications,
                 }}
               />
             </TabsContent>

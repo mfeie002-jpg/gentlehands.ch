@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Save, User, Phone, Mail, Clock, Briefcase, Calendar, Camera, Upload } from "lucide-react";
+import { Loader2, Save, User, Phone, Mail, Clock, Briefcase, Calendar, Camera, Upload, Award, Plus, X } from "lucide-react";
 
 const DAYS_OF_WEEK = [
   { id: "Montag", label: "Montag" },
@@ -33,6 +33,7 @@ interface TherapistSettingsTabProps {
     specialty?: string[] | null;
     available_days?: string[] | null;
     photo_url?: string | null;
+    qualifications?: string[] | null;
   };
 }
 
@@ -42,6 +43,8 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [photoUrl, setPhotoUrl] = useState(initialData.photo_url || "");
+  const [newQualification, setNewQualification] = useState("");
+  const [qualifications, setQualifications] = useState<string[]>(initialData.qualifications || []);
   const [profile, setProfile] = useState({
     name: initialData.name || "",
     phone: initialData.phone || "",
@@ -52,6 +55,18 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
     working_hours_end: initialData.working_hours_end || "20:00",
     available_days: initialData.available_days || ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
   });
+
+  const addQualification = () => {
+    const trimmed = newQualification.trim();
+    if (trimmed && !qualifications.includes(trimmed)) {
+      setQualifications([...qualifications, trimmed]);
+      setNewQualification("");
+    }
+  };
+
+  const removeQualification = (qual: string) => {
+    setQualifications(qualifications.filter((q) => q !== qual));
+  };
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -144,6 +159,7 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
           working_hours_start: profile.working_hours_start,
           working_hours_end: profile.working_hours_end,
           available_days: profile.available_days,
+          qualifications: qualifications,
           updated_at: new Date().toISOString(),
         })
         .eq("id", therapistId);
@@ -308,6 +324,57 @@ export const TherapistSettingsTab = ({ therapistId, initialData }: TherapistSett
               />
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Qualifications */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Award size={20} />
+            Qualifikationen & Zertifikate
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <Input
+              value={newQualification}
+              onChange={(e) => setNewQualification(e.target.value)}
+              placeholder="z.B. Dipl. Masseur EMR, Aromatherapie-Zertifikat..."
+              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addQualification())}
+            />
+            <Button type="button" variant="outline" onClick={addQualification} disabled={!newQualification.trim()}>
+              <Plus size={16} />
+            </Button>
+          </div>
+          
+          {qualifications.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {qualifications.map((qual, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-1 bg-muted px-3 py-1.5 rounded-full text-sm"
+                >
+                  <span>{qual}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeQualification(qual)}
+                    className="ml-1 text-muted-foreground hover:text-destructive transition-colors"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Noch keine Qualifikationen hinzugefügt.
+            </p>
+          )}
+          
+          <p className="text-xs text-muted-foreground">
+            Fügen Sie Ihre Ausbildungen, Zertifikate und Qualifikationen hinzu.
+          </p>
         </CardContent>
       </Card>
 
