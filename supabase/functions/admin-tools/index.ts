@@ -222,17 +222,21 @@ serve(async (req) => {
 
       if (!await isAdmin(adminClient, user.id)) {
         return new Response(
-          JSON.stringify({ error: "Forbidden" }),
+          JSON.stringify({ error: "Forbidden - Sie sind kein Admin" }),
           { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
 
       console.log(`Grant admin requested by ${user.email} for ${targetEmail}`);
 
+      // Find user by email
       let foundUserId: string | null = null;
       for (let page = 1; page <= 10; page++) {
         const { data, error } = await adminClient.auth.admin.listUsers({ page, perPage: 200 });
-        if (error) break;
+        if (error) {
+          console.error("Error listing users:", error);
+          break;
+        }
         const match = data.users.find((u) => (u.email ?? "").toLowerCase() === targetEmail);
         if (match?.id) {
           foundUserId = match.id;
@@ -243,22 +247,56 @@ serve(async (req) => {
 
       if (!foundUserId) {
         return new Response(
-          JSON.stringify({ error: "Benutzer nicht gefunden" }),
+          JSON.stringify({ error: `Benutzer mit E-Mail "${targetEmail}" nicht gefunden. Bitte registrieren Sie sich zuerst.` }),
           { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
 
-      const { error: upsertError } = await adminClient
-        .from("user_roles")
-        .upsert({ user_id: foundUserId, role: "admin" }, { onConflict: "user_id,role" });
+      console.log(`Found user ${foundUserId} for email ${targetEmail}`);
 
-      if (upsertError) {
+      // Check if user already has admin role
+      const { data: existingRole } = await adminClient
+        .from("user_roles")
+        .select("id, role")
+        .eq("user_id", foundUserId)
+        .maybeSingle();
+
+      if (existingRole?.role === "admin") {
         return new Response(
-          JSON.stringify({ error: "Failed to grant role" }),
-          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          JSON.stringify({ success: true, user_id: foundUserId, role: "admin", message: "Benutzer ist bereits Admin" }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
 
+      // Update or insert role
+      if (existingRole) {
+        const { error: updateError } = await adminClient
+          .from("user_roles")
+          .update({ role: "admin" })
+          .eq("user_id", foundUserId);
+
+        if (updateError) {
+          console.error("Error updating role:", updateError);
+          return new Response(
+            JSON.stringify({ error: `Fehler beim Aktualisieren der Rolle: ${updateError.message}` }),
+            { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          );
+        }
+      } else {
+        const { error: insertError } = await adminClient
+          .from("user_roles")
+          .insert({ user_id: foundUserId, role: "admin" });
+
+        if (insertError) {
+          console.error("Error inserting role:", insertError);
+          return new Response(
+            JSON.stringify({ error: `Fehler beim Erstellen der Rolle: ${insertError.message}` }),
+            { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          );
+        }
+      }
+
+      console.log(`Successfully granted admin role to ${foundUserId}`);
       return new Response(
         JSON.stringify({ success: true, user_id: foundUserId, role: "admin" }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },

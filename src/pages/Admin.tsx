@@ -46,6 +46,7 @@ import { QuickNotes } from "@/components/admin/QuickNotes";
 import { SystemHealth } from "@/components/admin/SystemHealth";
 import { GoalTracker } from "@/components/admin/GoalTracker";
 import { TherapistsManager } from "@/components/admin/TherapistsManager";
+import { TherapistLinkingManager } from "@/components/admin/TherapistLinkingManager";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -353,7 +354,9 @@ const Admin = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
+                  className="space-y-8"
                 >
+                  <TherapistLinkingManager />
                   <UsersManager />
                 </motion.div>
               )}
