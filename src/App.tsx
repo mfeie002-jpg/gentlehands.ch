@@ -65,6 +65,7 @@ const CustomerJourneyDashboard = lazy(() => import("./pages/CustomerJourneyDashb
 const ABTestDashboard = lazy(() => import("./pages/ABTestDashboard"));
 const HeatmapDashboard = lazy(() => import("./pages/HeatmapDashboard"));
 const AnalyticsHub = lazy(() => import("./pages/AnalyticsHub"));
+const GoalTrackingDashboard = lazy(() => import("./pages/GoalTrackingDashboard"));
 
 // English pages
 const IndexEN = lazy(() => import("./pages/en/Index"));
@@ -150,6 +151,7 @@ const App = () => (
                 <Route path="/customer-journey" element={<CustomerJourneyDashboard />} />
                 <Route path="/ab-tests" element={<ABTestDashboard />} />
                 <Route path="/heatmap" element={<HeatmapDashboard />} />
+                <Route path="/goal-tracking" element={<GoalTrackingDashboard />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/empfehlen" element={<Empfehlen />} />
