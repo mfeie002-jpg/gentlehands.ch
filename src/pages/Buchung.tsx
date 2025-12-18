@@ -81,13 +81,14 @@ const Buchung = () => {
           id: t.id,
           name: t.name,
           role: t.specialty?.join(", ") || "Therapeut:in",
-          specialties: t.specialty || []
+          specialties: t.specialty || [],
+          photo_url: t.photo_url
         }))
-      : fallbackMasseurs;
+      : fallbackMasseurs.map(m => ({ ...m, photo_url: null }));
     
     return [
       ...dynamicMasseurs,
-      { id: "none", name: "Keine Präferenz", role: "Wir wählen intuitiv", specialties: [] }
+      { id: "none", name: "Keine Präferenz", role: "Wir wählen intuitiv", specialties: [], photo_url: null }
     ];
   }, [dbTherapists]);
   
@@ -312,10 +313,26 @@ const Buchung = () => {
                   }`}
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-sand flex-shrink-0 flex items-center justify-center">
-                      <User size={20} className="text-warm-gray sm:hidden" />
-                      <User size={24} className="text-warm-gray hidden sm:block" />
-                    </div>
+                    {masseur.photo_url ? (
+                      <img 
+                        src={masseur.photo_url} 
+                        alt={masseur.name}
+                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl object-cover flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-sand flex-shrink-0 flex items-center justify-center">
+                        {masseur.id === "none" ? (
+                          <Users size={20} className="text-warm-gray sm:hidden" />
+                        ) : (
+                          <User size={20} className="text-warm-gray sm:hidden" />
+                        )}
+                        {masseur.id === "none" ? (
+                          <Users size={24} className="text-warm-gray hidden sm:block" />
+                        ) : (
+                          <User size={24} className="text-warm-gray hidden sm:block" />
+                        )}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <h3 className="font-display text-base sm:text-lg text-foreground mb-0.5 sm:mb-1">
                         {masseur.name}
@@ -658,9 +675,11 @@ const Buchung = () => {
                   className={formErrors.name ? "border-destructive" : ""}
                   maxLength={100}
                   required
+                  aria-invalid={!!formErrors.name}
+                  aria-describedby={formErrors.name ? "name-error" : undefined}
                 />
                 {formErrors.name && (
-                  <p className="text-sm text-destructive">{formErrors.name}</p>
+                  <p id="name-error" className="text-sm text-destructive" role="alert">{formErrors.name}</p>
                 )}
               </div>
               <div className="space-y-2">
@@ -674,9 +693,11 @@ const Buchung = () => {
                   className={formErrors.email ? "border-destructive" : ""}
                   maxLength={255}
                   required
+                  aria-invalid={!!formErrors.email}
+                  aria-describedby={formErrors.email ? "email-error" : undefined}
                 />
                 {formErrors.email && (
-                  <p className="text-sm text-destructive">{formErrors.email}</p>
+                  <p id="email-error" className="text-sm text-destructive" role="alert">{formErrors.email}</p>
                 )}
               </div>
               <div className="space-y-2">
@@ -690,9 +711,11 @@ const Buchung = () => {
                   className={formErrors.phone ? "border-destructive" : ""}
                   maxLength={20}
                   required
+                  aria-invalid={!!formErrors.phone}
+                  aria-describedby={formErrors.phone ? "phone-error" : undefined}
                 />
                 {formErrors.phone && (
-                  <p className="text-sm text-destructive">{formErrors.phone}</p>
+                  <p id="phone-error" className="text-sm text-destructive" role="alert">{formErrors.phone}</p>
                 )}
               </div>
               <div className="space-y-2">
