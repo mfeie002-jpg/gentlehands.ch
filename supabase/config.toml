@@ -23,3 +23,12 @@ verify_jwt = true
 
 [functions.admin-tools]
 verify_jwt = true
+
+[functions.capture-screenshot]
+verify_jwt = true
+
+[functions.fetch-html]
+verify_jwt = true
+
+[functions.lighthouse]
+verify_jwt = true
