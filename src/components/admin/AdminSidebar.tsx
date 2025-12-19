@@ -10,7 +10,8 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  UserCog
+  UserCog,
+  Camera
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/shared/Logo";
@@ -31,6 +32,7 @@ const menuItems = [
   { id: 'giftcards', icon: Gift, label: 'Gutscheine' },
   { id: 'activity', icon: Activity, label: 'Aktivität' },
   { id: 'users', icon: Users, label: 'Benutzer' },
+  { id: 'websitetools', icon: Camera, label: 'Website-Tools' },
   { id: 'settings', icon: Settings, label: 'Einstellungen' },
 ];
 
