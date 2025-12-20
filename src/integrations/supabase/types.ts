@@ -130,6 +130,60 @@ export type Database = {
         }
         Relationships: []
       }
+      billing_records: {
+        Row: {
+          billing_model: string
+          billing_period: string | null
+          created_at: string | null
+          id: string
+          invoice_number: string | null
+          lead_id: string | null
+          paid_at: string | null
+          price_chf: number
+          provider_id: string | null
+          status: string | null
+        }
+        Insert: {
+          billing_model: string
+          billing_period?: string | null
+          created_at?: string | null
+          id?: string
+          invoice_number?: string | null
+          lead_id?: string | null
+          paid_at?: string | null
+          price_chf: number
+          provider_id?: string | null
+          status?: string | null
+        }
+        Update: {
+          billing_model?: string
+          billing_period?: string | null
+          created_at?: string | null
+          id?: string
+          invoice_number?: string | null
+          lead_id?: string | null
+          paid_at?: string | null
+          price_chf?: number
+          provider_id?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billing_records_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_umzug"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "billing_records_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       booking_feedback: {
         Row: {
           allow_public_display: boolean | null
@@ -461,6 +515,45 @@ export type Database = {
         }
         Relationships: []
       }
+      estimate_sessions: {
+        Row: {
+          created_at: string | null
+          estimate: Json
+          expires_at: string | null
+          funnel_variant: string | null
+          id: string
+          matching_company_ids: string[] | null
+          move_details: Json
+          selected_companies: number | null
+          submitted_lead: boolean | null
+          viewed_companies: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          estimate?: Json
+          expires_at?: string | null
+          funnel_variant?: string | null
+          id?: string
+          matching_company_ids?: string[] | null
+          move_details?: Json
+          selected_companies?: number | null
+          submitted_lead?: boolean | null
+          viewed_companies?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          estimate?: Json
+          expires_at?: string | null
+          funnel_variant?: string | null
+          id?: string
+          matching_company_ids?: string[] | null
+          move_details?: Json
+          selected_companies?: number | null
+          submitted_lead?: boolean | null
+          viewed_companies?: boolean | null
+        }
+        Relationships: []
+      }
       experience_themes: {
         Row: {
           atmosphere_tags: string[] | null
@@ -713,6 +806,253 @@ export type Database = {
           },
         ]
       }
+      lead_bids: {
+        Row: {
+          bid_amount: number
+          created_at: string | null
+          id: string
+          lead_id: string | null
+          provider_id: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bid_amount: number
+          created_at?: string | null
+          id?: string
+          lead_id?: string | null
+          provider_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bid_amount?: number
+          created_at?: string | null
+          id?: string
+          lead_id?: string | null
+          provider_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_bids_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_umzug"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lead_bids_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_quality_factors: {
+        Row: {
+          completeness_score: number | null
+          created_at: string | null
+          id: string
+          lead_id: string | null
+          quality_score: number | null
+          urgency_score: number | null
+          value_score: number | null
+        }
+        Insert: {
+          completeness_score?: number | null
+          created_at?: string | null
+          id?: string
+          lead_id?: string | null
+          quality_score?: number | null
+          urgency_score?: number | null
+          value_score?: number | null
+        }
+        Update: {
+          completeness_score?: number | null
+          created_at?: string | null
+          id?: string
+          lead_id?: string | null
+          quality_score?: number | null
+          urgency_score?: number | null
+          value_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_quality_factors_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: true
+            referencedRelation: "leads_umzug"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_transactions: {
+        Row: {
+          actual_job_value: number | null
+          amount: number
+          conversion_date: string | null
+          conversion_notes: string | null
+          conversion_status: string | null
+          created_at: string | null
+          currency: string | null
+          id: string
+          lead_id: string | null
+          lost_reason: string | null
+          provider_id: string | null
+          purchased_at: string | null
+          status: string | null
+          stripe_payment_intent_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          actual_job_value?: number | null
+          amount: number
+          conversion_date?: string | null
+          conversion_notes?: string | null
+          conversion_status?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          lead_id?: string | null
+          lost_reason?: string | null
+          provider_id?: string | null
+          purchased_at?: string | null
+          status?: string | null
+          stripe_payment_intent_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          actual_job_value?: number | null
+          amount?: number
+          conversion_date?: string | null
+          conversion_notes?: string | null
+          conversion_status?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          lead_id?: string | null
+          lost_reason?: string | null
+          provider_id?: string | null
+          purchased_at?: string | null
+          status?: string | null
+          stripe_payment_intent_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_transactions_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_umzug"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lead_transactions_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads_umzug: {
+        Row: {
+          assigned_provider_ids: string[] | null
+          bid_count: number | null
+          bidding_closes_at: string | null
+          bidding_enabled: boolean | null
+          bundled_estimate_id: string | null
+          calculator_input: Json
+          calculator_output: Json
+          calculator_type: string
+          comments: string | null
+          created_at: string | null
+          current_highest_bid: number | null
+          email: string
+          estimate_session_id: string | null
+          from_city: string
+          from_postal: string
+          id: string
+          lead_source: string | null
+          move_date: string | null
+          name: string
+          phone: string | null
+          selected_company_ids: string[] | null
+          starting_bid: number | null
+          status: string | null
+          to_city: string
+          to_postal: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_provider_ids?: string[] | null
+          bid_count?: number | null
+          bidding_closes_at?: string | null
+          bidding_enabled?: boolean | null
+          bundled_estimate_id?: string | null
+          calculator_input?: Json
+          calculator_output?: Json
+          calculator_type: string
+          comments?: string | null
+          created_at?: string | null
+          current_highest_bid?: number | null
+          email: string
+          estimate_session_id?: string | null
+          from_city: string
+          from_postal: string
+          id?: string
+          lead_source?: string | null
+          move_date?: string | null
+          name: string
+          phone?: string | null
+          selected_company_ids?: string[] | null
+          starting_bid?: number | null
+          status?: string | null
+          to_city: string
+          to_postal: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_provider_ids?: string[] | null
+          bid_count?: number | null
+          bidding_closes_at?: string | null
+          bidding_enabled?: boolean | null
+          bundled_estimate_id?: string | null
+          calculator_input?: Json
+          calculator_output?: Json
+          calculator_type?: string
+          comments?: string | null
+          created_at?: string | null
+          current_highest_bid?: number | null
+          email?: string
+          estimate_session_id?: string | null
+          from_city?: string
+          from_postal?: string
+          id?: string
+          lead_source?: string | null
+          move_date?: string | null
+          name?: string
+          phone?: string | null
+          selected_company_ids?: string[] | null
+          starting_bid?: number | null
+          status?: string | null
+          to_city?: string
+          to_postal?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_leads_estimate_session"
+            columns: ["estimate_session_id"]
+            isOneToOne: false
+            referencedRelation: "estimate_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       massage_trainings: {
         Row: {
           content: string
@@ -829,6 +1169,7 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string | null
+          email: string | null
           full_name: string | null
           id: string
           loyalty_points: number | null
@@ -842,6 +1183,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          email?: string | null
           full_name?: string | null
           id: string
           loyalty_points?: number | null
@@ -855,6 +1197,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          email?: string | null
           full_name?: string | null
           id?: string
           loyalty_points?: number | null
@@ -867,6 +1210,180 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      provider_performance_metrics: {
+        Row: {
+          conversion_rate: number | null
+          created_at: string | null
+          customer_satisfaction_score: number | null
+          id: string
+          leads_contacted: number | null
+          leads_converted: number | null
+          leads_received: number | null
+          leads_viewed: number | null
+          metric_date: string | null
+          provider_id: string | null
+          response_time_avg_hours: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          conversion_rate?: number | null
+          created_at?: string | null
+          customer_satisfaction_score?: number | null
+          id?: string
+          leads_contacted?: number | null
+          leads_converted?: number | null
+          leads_received?: number | null
+          leads_viewed?: number | null
+          metric_date?: string | null
+          provider_id?: string | null
+          response_time_avg_hours?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          conversion_rate?: number | null
+          created_at?: string | null
+          customer_satisfaction_score?: number | null
+          id?: string
+          leads_contacted?: number | null
+          leads_converted?: number | null
+          leads_received?: number | null
+          leads_viewed?: number | null
+          metric_date?: string | null
+          provider_id?: string | null
+          response_time_avg_hours?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_performance_metrics_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_reviews: {
+        Row: {
+          comment: string
+          created_at: string | null
+          helpful_count: number | null
+          id: string
+          lead_id: string | null
+          photos: string[] | null
+          provider_id: string | null
+          rating: number
+          service_ratings: Json | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          comment: string
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: string
+          lead_id?: string | null
+          photos?: string[] | null
+          provider_id?: string | null
+          rating: number
+          service_ratings?: Json | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          comment?: string
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: string
+          lead_id?: string | null
+          photos?: string[] | null
+          provider_id?: string | null
+          rating?: number
+          service_ratings?: Json | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+          verified?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_reviews_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_umzug"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_reviews_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_subscriptions: {
+        Row: {
+          created_at: string | null
+          end_date: string | null
+          id: string
+          plan_id: string | null
+          provider_id: string | null
+          start_date: string | null
+          status: string | null
+          stripe_subscription_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          plan_id?: string | null
+          provider_id?: string | null
+          start_date?: string | null
+          status?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          plan_id?: string | null
+          provider_id?: string | null
+          start_date?: string | null
+          status?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_subscriptions_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       referrals: {
         Row: {
@@ -895,6 +1412,201 @@ export type Database = {
           referrer_id?: string
           reward_claimed?: boolean | null
           status?: string | null
+        }
+        Relationships: []
+      }
+      service_providers: {
+        Row: {
+          account_status: Database["public"]["Enums"]["account_status"] | null
+          avg_completion_time_hours: number | null
+          bidding_active: boolean | null
+          billing_model: string | null
+          booking_calendar_url: string | null
+          call_price_chf: number | null
+          call_tracking_enabled: boolean | null
+          cantons_served: string[] | null
+          certifications: string[] | null
+          cities_served: string[] | null
+          city: string
+          click_price_chf: number | null
+          company_name: string
+          contact_person_name: string
+          country: string | null
+          cpc_enabled: boolean | null
+          cpc_price_chf: number | null
+          cpl_enabled: boolean | null
+          cpl_price_chf: number | null
+          created_at: string | null
+          daily_budget_chf: number | null
+          daily_budget_remaining_chf: number | null
+          description: string | null
+          discount_offer: string | null
+          email: string
+          employees_count: number | null
+          featured_position: number | null
+          fleet_size: number | null
+          id: string
+          is_featured: boolean | null
+          lead_price_chf: number | null
+          logo_url: string | null
+          long_description: string | null
+          max_bid_chf: number | null
+          max_leads_per_month: number | null
+          min_job_value: number | null
+          monthly_fee_chf: number | null
+          phone: string
+          phone_tracking_number: string | null
+          preferred_regions: string[] | null
+          price_level: Database["public"]["Enums"]["price_level"] | null
+          profile_completeness: number | null
+          profile_gallery: string[] | null
+          quality_score: number | null
+          ranking_position: number | null
+          response_time_minutes: number | null
+          services_offered: string[] | null
+          short_description: string | null
+          slug: string | null
+          sponsored_tier: number | null
+          street: string
+          subscription_plan: string | null
+          success_rate: number | null
+          team_members: Json | null
+          updated_at: string | null
+          user_id: string | null
+          verification_status:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          website: string | null
+          working_hours: Json | null
+          zip: string
+        }
+        Insert: {
+          account_status?: Database["public"]["Enums"]["account_status"] | null
+          avg_completion_time_hours?: number | null
+          bidding_active?: boolean | null
+          billing_model?: string | null
+          booking_calendar_url?: string | null
+          call_price_chf?: number | null
+          call_tracking_enabled?: boolean | null
+          cantons_served?: string[] | null
+          certifications?: string[] | null
+          cities_served?: string[] | null
+          city: string
+          click_price_chf?: number | null
+          company_name: string
+          contact_person_name: string
+          country?: string | null
+          cpc_enabled?: boolean | null
+          cpc_price_chf?: number | null
+          cpl_enabled?: boolean | null
+          cpl_price_chf?: number | null
+          created_at?: string | null
+          daily_budget_chf?: number | null
+          daily_budget_remaining_chf?: number | null
+          description?: string | null
+          discount_offer?: string | null
+          email: string
+          employees_count?: number | null
+          featured_position?: number | null
+          fleet_size?: number | null
+          id?: string
+          is_featured?: boolean | null
+          lead_price_chf?: number | null
+          logo_url?: string | null
+          long_description?: string | null
+          max_bid_chf?: number | null
+          max_leads_per_month?: number | null
+          min_job_value?: number | null
+          monthly_fee_chf?: number | null
+          phone: string
+          phone_tracking_number?: string | null
+          preferred_regions?: string[] | null
+          price_level?: Database["public"]["Enums"]["price_level"] | null
+          profile_completeness?: number | null
+          profile_gallery?: string[] | null
+          quality_score?: number | null
+          ranking_position?: number | null
+          response_time_minutes?: number | null
+          services_offered?: string[] | null
+          short_description?: string | null
+          slug?: string | null
+          sponsored_tier?: number | null
+          street: string
+          subscription_plan?: string | null
+          success_rate?: number | null
+          team_members?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          website?: string | null
+          working_hours?: Json | null
+          zip: string
+        }
+        Update: {
+          account_status?: Database["public"]["Enums"]["account_status"] | null
+          avg_completion_time_hours?: number | null
+          bidding_active?: boolean | null
+          billing_model?: string | null
+          booking_calendar_url?: string | null
+          call_price_chf?: number | null
+          call_tracking_enabled?: boolean | null
+          cantons_served?: string[] | null
+          certifications?: string[] | null
+          cities_served?: string[] | null
+          city?: string
+          click_price_chf?: number | null
+          company_name?: string
+          contact_person_name?: string
+          country?: string | null
+          cpc_enabled?: boolean | null
+          cpc_price_chf?: number | null
+          cpl_enabled?: boolean | null
+          cpl_price_chf?: number | null
+          created_at?: string | null
+          daily_budget_chf?: number | null
+          daily_budget_remaining_chf?: number | null
+          description?: string | null
+          discount_offer?: string | null
+          email?: string
+          employees_count?: number | null
+          featured_position?: number | null
+          fleet_size?: number | null
+          id?: string
+          is_featured?: boolean | null
+          lead_price_chf?: number | null
+          logo_url?: string | null
+          long_description?: string | null
+          max_bid_chf?: number | null
+          max_leads_per_month?: number | null
+          min_job_value?: number | null
+          monthly_fee_chf?: number | null
+          phone?: string
+          phone_tracking_number?: string | null
+          preferred_regions?: string[] | null
+          price_level?: Database["public"]["Enums"]["price_level"] | null
+          profile_completeness?: number | null
+          profile_gallery?: string[] | null
+          quality_score?: number | null
+          ranking_position?: number | null
+          response_time_minutes?: number | null
+          services_offered?: string[] | null
+          short_description?: string | null
+          slug?: string | null
+          sponsored_tier?: number | null
+          street?: string
+          subscription_plan?: string | null
+          success_rate?: number | null
+          team_members?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          website?: string | null
+          working_hours?: Json | null
+          zip?: string
         }
         Relationships: []
       }
@@ -941,6 +1653,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      subscription_plans: {
+        Row: {
+          advanced_analytics: boolean | null
+          auto_bidding: boolean | null
+          competitor_insights: boolean | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          max_leads_per_month: number | null
+          name: string
+          price_monthly: number
+          price_yearly: number | null
+          priority_level: number | null
+          tier_name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          advanced_analytics?: boolean | null
+          auto_bidding?: boolean | null
+          competitor_insights?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          max_leads_per_month?: number | null
+          name: string
+          price_monthly: number
+          price_yearly?: number | null
+          priority_level?: number | null
+          tier_name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          advanced_analytics?: boolean | null
+          auto_bidding?: boolean | null
+          competitor_insights?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          max_leads_per_month?: number | null
+          name?: string
+          price_monthly?: number
+          price_yearly?: number | null
+          priority_level?: number | null
+          tier_name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       testimonial_submissions: {
         Row: {
@@ -1218,6 +1987,57 @@ export type Database = {
           },
         ]
       }
+      umzug_ab_tests: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          ended_at: string | null
+          id: string
+          name: string
+          started_at: string | null
+          status: string | null
+          variant_a_config: Json
+          variant_a_conversions: number | null
+          variant_a_impressions: number | null
+          variant_b_config: Json
+          variant_b_conversions: number | null
+          variant_b_impressions: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          name: string
+          started_at?: string | null
+          status?: string | null
+          variant_a_config?: Json
+          variant_a_conversions?: number | null
+          variant_a_impressions?: number | null
+          variant_b_config?: Json
+          variant_b_conversions?: number | null
+          variant_b_impressions?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          name?: string
+          started_at?: string | null
+          status?: string | null
+          variant_a_config?: Json
+          variant_a_conversions?: number | null
+          variant_a_impressions?: number | null
+          variant_b_config?: Json
+          variant_b_conversions?: number | null
+          variant_b_impressions?: number | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -1261,6 +2081,14 @@ export type Database = {
           valid: boolean
         }[]
       }
+      find_matching_providers: {
+        Args: {
+          estimated_value?: number
+          lead_from_postal: string
+          lead_to_postal: string
+        }
+        Returns: string[]
+      }
       get_all_availability: {
         Args: { p_end_date: string; p_start_date: string }
         Returns: {
@@ -1281,6 +2109,7 @@ export type Database = {
           score: number
         }[]
       }
+      get_canton_from_postal: { Args: { postal_code: string }; Returns: string }
       get_therapist_availability: {
         Args: { p_date: string; p_therapist_id: string }
         Returns: {
@@ -1328,6 +2157,14 @@ export type Database = {
           theme: string
         }[]
       }
+      place_bid: {
+        Args: { p_bid_amount: number; p_lead_id: string; p_provider_id: string }
+        Returns: Json
+      }
+      purchase_lead: {
+        Args: { p_amount: number; p_lead_id: string; p_provider_id: string }
+        Returns: Json
+      }
       redeem_gift_card: {
         Args: { p_amount: number; p_booking_id?: string; p_code: string }
         Returns: {
@@ -1336,10 +2173,17 @@ export type Database = {
           success: boolean
         }[]
       }
+      update_provider_quality_score: {
+        Args: { p_provider_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
+      account_status: "active" | "inactive"
       app_role: "admin" | "moderator" | "user"
+      price_level: "günstig" | "fair" | "premium"
       therapist_status: "pending" | "approved" | "rejected" | "suspended"
+      verification_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1467,8 +2311,11 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      account_status: ["active", "inactive"],
       app_role: ["admin", "moderator", "user"],
+      price_level: ["günstig", "fair", "premium"],
       therapist_status: ["pending", "approved", "rejected", "suspended"],
+      verification_status: ["pending", "approved", "rejected"],
     },
   },
 } as const
