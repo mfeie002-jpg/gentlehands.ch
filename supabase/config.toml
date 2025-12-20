@@ -32,3 +32,24 @@ verify_jwt = true
 
 [functions.lighthouse]
 verify_jwt = true
+
+[functions.create-funnel-lead]
+verify_jwt = false
+
+[functions.create-estimate-session]
+verify_jwt = false
+
+[functions.provider-signup]
+verify_jwt = false
+
+[functions.provider-login]
+verify_jwt = false
+
+[functions.place-bid]
+verify_jwt = true
+
+[functions.purchase-lead]
+verify_jwt = true
+
+[functions.send-lead-notification]
+verify_jwt = true
