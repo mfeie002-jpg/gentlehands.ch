@@ -40,6 +40,8 @@ import { MassageVideoPreview } from "@/components/booking/MassageVideoPreview";
 import { BookingStepHelp } from "@/components/booking/BookingStepHelp";
 import { BookingEstimatedTime } from "@/components/booking/BookingEstimatedTime";
 import { BookingMobileStepIndicator } from "@/components/booking/BookingMobileStepIndicator";
+import { BookingMobileProgressBar } from "@/components/booking/BookingMobileProgressBar";
+import { BookingMobileNavigation } from "@/components/booking/BookingMobileNavigation";
 import { BookingTherapistAvailability } from "@/components/booking/BookingTherapistAvailability";
 import { BookingWaitlistModal } from "@/components/booking/BookingWaitlistModal";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
@@ -394,6 +396,176 @@ const Buchung = () => {
         return formData.selectedDate && formData.selectedTime && formData.name && formData.email && formData.phone && formData.agb && formData.datenschutz;
       default:
         return true;
+    }
+  };
+
+  // Navigation handlers for mobile component
+  const handleNavigateBack = () => {
+    setStepDirection("backward");
+    setCurrentStep((prev) => prev - 1);
+    triggerHaptic('light');
+  };
+
+  const handleNavigateNext = () => {
+    setStepDirection("forward");
+    const nextStep = currentStep + 1;
+    setCurrentStep(nextStep);
+    trackBookingStep(nextStep, steps[nextStep - 1]?.title || '');
+    triggerHaptic('success');
+  };
+
+  const handleBookingSubmit = async () => {
+    // Check rate limiting first
+    if (!canSubmit) {
+      toast({
+        title: "Bitte warten Sie",
+        description: cooldownSeconds > 0 
+          ? `Sie können in ${cooldownSeconds} Sekunden erneut versuchen.`
+          : "Zu viele Versuche. Bitte warten Sie eine Minute.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check honeypot - if filled, silently reject (bot detected)
+    if (honeypot) {
+      console.warn("Honeypot triggered - potential bot submission blocked");
+      // Simulate success to avoid revealing detection
+      setIsSubmitting(true);
+      setTimeout(() => {
+        setIsSubmitting(false);
+        toast({
+          title: "Buchung erfolgreich",
+          description: "Wir melden uns in Kürze bei Ihnen.",
+        });
+      }, 1500);
+      return;
+    }
+
+    // Validate form before submission
+    if (!validateContactForm()) {
+      toast({
+        title: "Bitte überprüfen Sie Ihre Eingaben",
+        description: "Einige Felder enthalten ungültige Daten.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!validatePreferences()) {
+      toast({
+        title: "Bitte überprüfen Sie Ihre Präferenzen",
+        description: "Einige Felder sind zu lang.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Record the submission attempt for rate limiting
+    if (!recordSubmission()) {
+      toast({
+        title: "Zu schnell",
+        description: "Bitte warten Sie einen Moment vor dem nächsten Versuch.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsSubmitting(true);
+    try {
+      // Generate booking number
+      const bookingNumber = `GH-${Date.now().toString(36).toUpperCase()}`;
+      
+      // Save to database with status 'pending_verification'
+      const { data: insertedBooking, error } = await supabase.from("bookings").insert({
+        booking_number: bookingNumber,
+        masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
+        theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
+        massage: massages.find(m => m.id === formData.massage)?.title || formData.massage,
+        duration: formData.duration,
+        appointment_date: formData.selectedDate ? format(formData.selectedDate, "yyyy-MM-dd") : null,
+        appointment_time: formData.selectedTime,
+        customer_name: formData.name.trim(),
+        customer_email: formData.email.trim().toLowerCase(),
+        customer_phone: formData.phone.trim(),
+        preferred_contact: formData.preferredContact,
+        music_preference: formData.music,
+        conversation_preference: formData.conversation,
+        intensity_preference: formData.intensity,
+        avoid_areas: formData.avoidAreas?.trim() || null,
+        intuitive: formData.intuitive,
+        additional_notes: formData.additionalNotes?.trim() || null,
+        newsletter_consent: formData.newsletter,
+        status: "pending_verification",
+        is_verified: false,
+      }).select("id, verification_token").single();
+
+      if (error) {
+        console.error("Booking error:", error);
+        toast({
+          title: "Fehler bei der Buchung",
+          description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Send verification email via edge function
+      try {
+        await supabase.functions.invoke("send-booking-verification", {
+          body: {
+            booking_id: insertedBooking.id,
+            customer_email: formData.email.trim().toLowerCase(),
+            customer_name: formData.name.trim(),
+            booking_number: bookingNumber,
+            verification_token: insertedBooking.verification_token,
+          },
+        });
+      } catch (verifyError) {
+        console.error("Verification email error:", verifyError);
+        // Don't block - user can still verify later
+      }
+
+      // Save to localStorage for confirmation page
+      const bookingData = {
+        bookingNumber,
+        masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
+        theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
+        massage: massages.find(m => m.id === formData.massage)?.title || formData.massage,
+        duration: formData.duration,
+        date: formData.selectedDate ? format(formData.selectedDate, "EEEE, d. MMMM yyyy", { locale: de }) : "",
+        time: formData.selectedTime,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        preferences: {
+          music: formData.music,
+          conversation: formData.conversation,
+          intensity: formData.intensity,
+          avoidAreas: formData.avoidAreas,
+          intuitive: formData.intuitive,
+        },
+        additionalNotes: formData.additionalNotes,
+        pendingVerification: true,
+      };
+      localStorage.setItem("gentlehands_booking", JSON.stringify(bookingData));
+      
+      // Track booking (note: not complete until verified)
+      trackBookingComplete(bookingNumber);
+      
+      // Clear draft on successful submission
+      clearDraft();
+      
+      navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      toast({
+        title: "Fehler",
+        description: "Ein unerwarteter Fehler ist aufgetreten.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
     }
   };
 
@@ -1331,45 +1503,37 @@ const Buchung = () => {
         <div className="container-narrow px-3 sm:px-6">
           {/* Progress Steps - Mobile Optimized */}
           <div className="mb-8 sm:mb-12">
-            {/* Mobile: Enhanced step indicator */}
-            <div className="flex flex-col items-center sm:hidden mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-full bg-copper/10 flex items-center justify-center">
-                  {(() => {
-                    const StepIcon = steps[currentStep - 1]?.icon || User;
-                    return <StepIcon size={16} className="text-copper" />;
-                  })()}
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-foreground">{steps[currentStep - 1]?.title}</span>
-                  <span className="text-xs text-muted-foreground ml-2">({currentStep}/{steps.length})</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-1.5 w-full max-w-[200px]">
-                {steps.map((step) => (
-                  <motion.div
-                    key={step.id}
-                    initial={false}
-                    animate={{
-                      width: currentStep >= step.id ? 32 : 16,
-                      backgroundColor: currentStep >= step.id ? 'hsl(var(--copper))' : 'hsl(var(--border))'
-                    }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="h-1.5 rounded-full"
-                  />
-                ))}
-              </div>
-            </div>
+            {/* Mobile: New Enhanced Progress Bar */}
+            <BookingMobileStepIndicator
+              currentStep={currentStep}
+              totalSteps={steps.length}
+              steps={steps}
+              onStepClick={(step) => {
+                setStepDirection("backward");
+                setCurrentStep(step);
+                triggerHaptic('light');
+              }}
+            />
             
             {/* Desktop: Full step indicator */}
             <div className="hidden sm:flex items-center justify-between">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center flex-1 last:flex-none">
                   <div className="flex flex-col items-center min-w-[60px]">
-                    <div
+                    <motion.button
+                      onClick={() => {
+                        if (step.id < currentStep) {
+                          setStepDirection("backward");
+                          setCurrentStep(step.id);
+                          triggerHaptic('light');
+                        }
+                      }}
+                      disabled={step.id >= currentStep}
+                      whileHover={step.id < currentStep ? { scale: 1.1 } : {}}
+                      whileTap={step.id < currentStep ? { scale: 0.95 } : {}}
                       className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                         currentStep > step.id
-                          ? "bg-copper text-accent-foreground"
+                          ? "bg-copper text-accent-foreground cursor-pointer"
                           : currentStep === step.id
                           ? "bg-primary text-primary-foreground"
                           : "bg-secondary text-muted-foreground"
@@ -1380,7 +1544,7 @@ const Buchung = () => {
                       ) : (
                         <step.icon size={18} />
                       )}
-                    </div>
+                    </motion.button>
                     <span
                       className={`mt-2 text-xs text-center whitespace-nowrap ${
                         currentStep >= step.id
@@ -1392,8 +1556,11 @@ const Buchung = () => {
                     </span>
                   </div>
                   {index < steps.length - 1 && (
-                    <div
-                      className={`flex-1 h-px mx-2 min-w-[20px] ${
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: currentStep > step.id ? 1 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className={`flex-1 h-0.5 mx-2 min-w-[20px] origin-left ${
                         currentStep > step.id ? "bg-copper" : "bg-border"
                       }`}
                     />
@@ -1403,11 +1570,11 @@ const Buchung = () => {
             </div>
           </div>
 
-          {/* Swipe hint for mobile */}
-          <div className="flex sm:hidden items-center justify-center gap-2 text-xs text-muted-foreground mb-4">
-            <ChevronLeft size={14} />
+          {/* Swipe hint for mobile - more subtle */}
+          <div className="flex sm:hidden items-center justify-center gap-2 text-[10px] text-muted-foreground/60 mb-4">
+            <ChevronLeft size={12} />
             <span>Wischen zum Navigieren</span>
-            <ChevronRight size={14} />
+            <ChevronRight size={12} />
           </div>
 
           {/* Live Visitors */}
@@ -1510,20 +1677,29 @@ const Buchung = () => {
             </div>
           )}
 
-          {/* Navigation - Mobile Optimized */}
-          <div className="flex justify-between mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border gap-3">
+          {/* Navigation - Enhanced Mobile with Fixed Bottom Bar */}
+          <BookingMobileNavigation
+            currentStep={currentStep}
+            totalSteps={steps.length}
+            canProceed={canProceed()}
+            isSubmitting={isSubmitting}
+            canSubmit={canSubmit}
+            cooldownSeconds={cooldownSeconds}
+            onBack={handleNavigateBack}
+            onNext={handleNavigateNext}
+            onSubmit={handleBookingSubmit}
+          />
+          
+          {/* Desktop Navigation - kept for larger screens */}
+          <div className="hidden sm:flex justify-between mt-12 pt-8 border-t border-border gap-3">
             {currentStep > 1 && currentStep < 6 ? (
               <Button
                 variant="outline"
-                onClick={() => {
-                  setStepDirection("backward");
-                  setCurrentStep((prev) => prev - 1);
-                  triggerHaptic('light');
-                }}
-                className="min-h-[48px] px-4 sm:px-6"
+                onClick={handleNavigateBack}
+                className="min-h-[48px] px-6"
               >
-                <ArrowLeft size={16} className="mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">Zurück</span>
+                <ArrowLeft size={16} className="mr-2" />
+                <span>Zurück</span>
               </Button>
             ) : (
               <div />
@@ -1531,179 +1707,20 @@ const Buchung = () => {
             {currentStep < 5 && (
               <Button
                 variant="copper"
-                onClick={() => {
-                  setStepDirection("forward");
-                  const nextStep = currentStep + 1;
-                  setCurrentStep(nextStep);
-                  trackBookingStep(nextStep, steps[nextStep - 1]?.title || '');
-                  triggerHaptic('success');
-                }}
+                onClick={handleNavigateNext}
                 disabled={!canProceed()}
-                className="ml-auto min-h-[48px] px-6 sm:px-8"
+                className="ml-auto min-h-[48px] px-8"
               >
                 <span>Weiter</span>
-                <ArrowRight size={16} className="ml-1 sm:ml-2" />
+                <ArrowRight size={16} className="ml-2" />
               </Button>
             )}
             {currentStep === 5 && (
               <Button
                 variant="copper"
-                onClick={async () => {
-                  // Check rate limiting first
-                  if (!canSubmit) {
-                    toast({
-                      title: "Bitte warten Sie",
-                      description: cooldownSeconds > 0 
-                        ? `Sie können in ${cooldownSeconds} Sekunden erneut versuchen.`
-                        : "Zu viele Versuche. Bitte warten Sie eine Minute.",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-
-                  // Check honeypot - if filled, silently reject (bot detected)
-                  if (honeypot) {
-                    console.warn("Honeypot triggered - potential bot submission blocked");
-                    // Simulate success to avoid revealing detection
-                    setIsSubmitting(true);
-                    setTimeout(() => {
-                      setIsSubmitting(false);
-                      toast({
-                        title: "Buchung erfolgreich",
-                        description: "Wir melden uns in Kürze bei Ihnen.",
-                      });
-                    }, 1500);
-                    return;
-                  }
-
-                  // Validate form before submission
-                  if (!validateContactForm()) {
-                    toast({
-                      title: "Bitte überprüfen Sie Ihre Eingaben",
-                      description: "Einige Felder enthalten ungültige Daten.",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-                  
-                  if (!validatePreferences()) {
-                    toast({
-                      title: "Bitte überprüfen Sie Ihre Präferenzen",
-                      description: "Einige Felder sind zu lang.",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-
-                  // Record the submission attempt for rate limiting
-                  if (!recordSubmission()) {
-                    toast({
-                      title: "Zu schnell",
-                      description: "Bitte warten Sie einen Moment vor dem nächsten Versuch.",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-                  
-                  setIsSubmitting(true);
-                  try {
-                    // Generate booking number
-                    const bookingNumber = `GH-${Date.now().toString(36).toUpperCase()}`;
-                    
-                    // Save to database with status 'pending_verification'
-                    const { data: insertedBooking, error } = await supabase.from("bookings").insert({
-                      booking_number: bookingNumber,
-                      masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
-                      theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
-                      massage: massages.find(m => m.id === formData.massage)?.title || formData.massage,
-                      duration: formData.duration,
-                      appointment_date: formData.selectedDate ? format(formData.selectedDate, "yyyy-MM-dd") : null,
-                      appointment_time: formData.selectedTime,
-                      customer_name: formData.name.trim(),
-                      customer_email: formData.email.trim().toLowerCase(),
-                      customer_phone: formData.phone.trim(),
-                      preferred_contact: formData.preferredContact,
-                      music_preference: formData.music,
-                      conversation_preference: formData.conversation,
-                      intensity_preference: formData.intensity,
-                      avoid_areas: formData.avoidAreas?.trim() || null,
-                      intuitive: formData.intuitive,
-                      additional_notes: formData.additionalNotes?.trim() || null,
-                      newsletter_consent: formData.newsletter,
-                      status: "pending_verification", // New status for email verification
-                      is_verified: false,
-                    }).select("id, verification_token").single();
-
-                    if (error) {
-                      console.error("Booking error:", error);
-                      toast({
-                        title: "Fehler bei der Buchung",
-                        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
-                        variant: "destructive",
-                      });
-                      setIsSubmitting(false);
-                      return;
-                    }
-
-                    // Send verification email via edge function
-                    try {
-                      await supabase.functions.invoke("send-booking-verification", {
-                        body: {
-                          booking_id: insertedBooking.id,
-                          customer_email: formData.email.trim().toLowerCase(),
-                          customer_name: formData.name.trim(),
-                          booking_number: bookingNumber,
-                          verification_token: insertedBooking.verification_token,
-                        },
-                      });
-                    } catch (verifyError) {
-                      console.error("Verification email error:", verifyError);
-                      // Don't block - user can still verify later
-                    }
-
-                    // Save to localStorage for confirmation page
-                    const bookingData = {
-                      bookingNumber,
-                      masseur: masseurs.find(m => m.id === formData.masseur)?.name || formData.masseur,
-                      theme: themes.find(t => t.id === formData.theme)?.title || formData.theme,
-                      massage: massages.find(m => m.id === formData.massage)?.title || formData.massage,
-                      duration: formData.duration,
-                      date: formData.selectedDate ? format(formData.selectedDate, "EEEE, d. MMMM yyyy", { locale: de }) : "",
-                      time: formData.selectedTime,
-                      name: formData.name,
-                      email: formData.email,
-                      phone: formData.phone,
-                      preferences: {
-                        music: formData.music,
-                        conversation: formData.conversation,
-                        intensity: formData.intensity,
-                        avoidAreas: formData.avoidAreas,
-                        intuitive: formData.intuitive,
-                      },
-                      additionalNotes: formData.additionalNotes,
-                      pendingVerification: true, // Flag for confirmation page
-                    };
-                    localStorage.setItem("gentlehands_booking", JSON.stringify(bookingData));
-                    
-                    // Track booking (note: not complete until verified)
-                    trackBookingComplete(bookingNumber);
-                    
-                    // Clear draft on successful submission
-                    clearDraft();
-                    
-                    navigate(`/buchung/bestaetigung?nr=${bookingNumber}`);
-                  } catch (err) {
-                    console.error("Unexpected error:", err);
-                    toast({
-                      title: "Fehler",
-                      description: "Ein unerwarteter Fehler ist aufgetreten.",
-                      variant: "destructive",
-                    });
-                    setIsSubmitting(false);
-                  }
-                }}
+                onClick={handleBookingSubmit}
                 disabled={!canProceed() || isSubmitting || !canSubmit}
-                className="ml-auto"
+                className="ml-auto min-h-[48px] px-8"
               >
                 {isSubmitting ? (
                   <>
@@ -1724,6 +1741,9 @@ const Buchung = () => {
               </Button>
             )}
           </div>
+          
+          {/* Mobile bottom spacer for fixed navigation */}
+          <div className="h-32 sm:hidden" />
         </div>
       </section>
       
