@@ -1415,6 +1415,119 @@ export type Database = {
         }
         Relationships: []
       }
+      room_phases: {
+        Row: {
+          actual_cost: number | null
+          completion_percentage: number | null
+          created_at: string
+          description: string | null
+          equipment_list: Json | null
+          estimated_cost: number | null
+          id: string
+          image_url: string | null
+          is_current: boolean | null
+          notes: string | null
+          phase: number
+          phase_name: string
+          room_id: string
+          room_name: string
+          updated_at: string
+        }
+        Insert: {
+          actual_cost?: number | null
+          completion_percentage?: number | null
+          created_at?: string
+          description?: string | null
+          equipment_list?: Json | null
+          estimated_cost?: number | null
+          id?: string
+          image_url?: string | null
+          is_current?: boolean | null
+          notes?: string | null
+          phase: number
+          phase_name: string
+          room_id: string
+          room_name: string
+          updated_at?: string
+        }
+        Update: {
+          actual_cost?: number | null
+          completion_percentage?: number | null
+          created_at?: string
+          description?: string | null
+          equipment_list?: Json | null
+          estimated_cost?: number | null
+          id?: string
+          image_url?: string | null
+          is_current?: boolean | null
+          notes?: string | null
+          phase?: number
+          phase_name?: string
+          room_id?: string
+          room_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      room_setup_checklist: {
+        Row: {
+          actual_cost: number | null
+          category: string | null
+          completed_at: string | null
+          created_at: string
+          estimated_cost: number | null
+          id: string
+          is_completed: boolean | null
+          item_description: string | null
+          item_name: string
+          notes: string | null
+          priority: number | null
+          purchase_link: string | null
+          room_phase_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          actual_cost?: number | null
+          category?: string | null
+          completed_at?: string | null
+          created_at?: string
+          estimated_cost?: number | null
+          id?: string
+          is_completed?: boolean | null
+          item_description?: string | null
+          item_name: string
+          notes?: string | null
+          priority?: number | null
+          purchase_link?: string | null
+          room_phase_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          actual_cost?: number | null
+          category?: string | null
+          completed_at?: string | null
+          created_at?: string
+          estimated_cost?: number | null
+          id?: string
+          is_completed?: boolean | null
+          item_description?: string | null
+          item_name?: string
+          notes?: string | null
+          priority?: number | null
+          purchase_link?: string | null
+          room_phase_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_setup_checklist_room_phase_id_fkey"
+            columns: ["room_phase_id"]
+            isOneToOne: false
+            referencedRelation: "room_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_providers: {
         Row: {
           account_status: Database["public"]["Enums"]["account_status"] | null
