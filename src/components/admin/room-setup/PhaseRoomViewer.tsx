@@ -263,7 +263,6 @@ export const PhaseRoomViewer = ({
               const config = categoryConfig[product.category] || categoryConfig.extra;
               const isHighlighted = highlightedProduct === product.id;
               const isBeingDragged = draggingProduct === product.id;
-              const isPurchased = product.isCompleted;
 
               return (
                 <motion.div
@@ -283,7 +282,7 @@ export const PhaseRoomViewer = ({
                   }}
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ 
-                    scale: isBeingDragged ? 1.2 : isHighlighted ? 1.15 : 1, 
+                    scale: isBeingDragged ? 1.4 : isHighlighted ? 1.3 : 1, 
                     opacity: 1 
                   }}
                   transition={{ 
@@ -301,7 +300,7 @@ export const PhaseRoomViewer = ({
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: [1, 1.5, 1.2], opacity: [0.8, 0.3, 0.5] }}
                       transition={{ duration: 0.6, repeat: Infinity }}
-                      className="absolute inset-0 -m-4 w-20 h-20 rounded-xl bg-copper/40"
+                      className="absolute inset-0 -m-3 w-14 h-14 rounded-full bg-copper/40"
                     />
                   )}
 
@@ -310,81 +309,50 @@ export const PhaseRoomViewer = ({
                     {isHighlighted && !isBeingDragged && (
                       <motion.div
                         initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: [1, 1.3, 1.1], opacity: [1, 0.5, 0.7] }}
+                        animate={{ scale: [1, 1.5, 1.2], opacity: [1, 0.5, 0.7] }}
                         exit={{ scale: 0, opacity: 0 }}
-                        className="absolute inset-0 -m-2 rounded-xl bg-copper/40"
+                        className={cn(
+                          "absolute inset-0 rounded-full -m-4",
+                          config.color,
+                          "opacity-30"
+                        )}
+                        style={{ width: "3rem", height: "3rem" }}
                       />
                     )}
                   </AnimatePresence>
 
-                  {/* Product Image Card */}
+                  {/* Main Marker */}
                   <motion.div
                     className={cn(
-                      "relative w-14 h-14 rounded-xl overflow-hidden shadow-lg border-2 transition-all",
-                      isPurchased 
-                        ? "border-emerald-500 shadow-emerald-500/30" 
-                        : "border-white/50 shadow-black/30",
-                      isBeingDragged && "ring-4 ring-copper shadow-2xl scale-110",
-                      isHighlighted && "ring-4 ring-copper shadow-2xl",
-                      !isPurchased && "grayscale-[70%] opacity-70"
+                      "relative w-8 h-8 rounded-full flex items-center justify-center shadow-lg",
+                      product.isFixed ? "bg-amber-500 ring-2 ring-amber-300" : config.color,
+                      isBeingDragged && "ring-4 ring-white shadow-2xl",
+                      isHighlighted && "ring-4 ring-white shadow-2xl",
+                      product.isCompleted && !product.isFixed && "opacity-60"
                     )}
-                    animate={!isBeingDragged && !isHighlighted && !isPurchased ? {
-                      scale: [1, 1.05, 1],
+                    animate={!isBeingDragged && !isHighlighted && !product.isFixed ? {
+                      scale: [1, 1.08, 1],
                     } : {}}
-                    transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                    transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
                   >
-                    {/* Product Image or Placeholder */}
-                    {product.imageUrl ? (
-                      <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                        draggable={false}
-                      />
+                    {product.isFixed ? (
+                      <span className="text-xs font-bold text-white">🛏</span>
+                    ) : editMode ? (
+                      <GripVertical className="w-4 h-4 text-white" />
                     ) : (
-                      <div className={cn(
-                        "w-full h-full flex items-center justify-center",
-                        config.color
-                      )}>
-                        <span className="text-lg text-white">📦</span>
-                      </div>
+                      <span className="text-xs font-bold text-white">{index}</span>
                     )}
-
-                    {/* Shadow/Ghost overlay for unpurchased */}
-                    {!isPurchased && (
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <div className="w-6 h-6 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                          <span className="text-white text-xs">?</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Purchased checkmark */}
-                    {isPurchased && (
-                      <div className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shadow-md">
-                        <Check className="w-3 h-3 text-white" />
-                      </div>
-                    )}
-
-                    {/* Category indicator */}
-                    <div className={cn(
-                      "absolute bottom-0.5 left-0.5 w-4 h-4 rounded-full flex items-center justify-center text-[8px]",
-                      config.color
-                    )}>
-                      <span className="text-white font-bold">{index + 1}</span>
-                    </div>
-
-                    {/* Price tag */}
-                    <div className="absolute bottom-0 right-0 bg-black/70 text-white text-[8px] px-1 py-0.5 rounded-tl">
-                      CHF {product.estimatedCost}
-                    </div>
                   </motion.div>
 
-                  {/* Edit mode grip */}
-                  {editMode && !product.isFixed && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-copper flex items-center justify-center shadow-md">
-                      <GripVertical className="w-3 h-3 text-white" />
-                    </div>
+                  {/* Arrow pointing to product */}
+                  {isHighlighted && !editMode && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-1"
+                    >
+                      <Target className="w-6 h-6 text-white drop-shadow-lg animate-bounce" />
+                    </motion.div>
                   )}
 
                   {/* Label */}
@@ -393,57 +361,45 @@ export const PhaseRoomViewer = ({
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       className={cn(
-                        "absolute left-1/2 -translate-x-1/2 mt-1 top-full",
+                        "absolute left-1/2 -translate-x-1/2 mt-2 top-full",
                         "bg-background/95 backdrop-blur-sm rounded-lg px-2 py-1",
                         "border border-border shadow-md",
-                        "whitespace-nowrap text-[10px] font-medium max-w-[100px] truncate",
+                        "whitespace-nowrap text-xs font-medium",
                         "pointer-events-none",
-                        isHighlighted && "bg-copper text-white border-copper",
-                        !isPurchased && "opacity-70"
+                        isHighlighted && "bg-copper text-white border-copper"
                       )}
                     >
                       {product.name}
                     </motion.div>
                   )}
 
-                  {/* Drag mode position label */}
+                  {/* Drag mode label */}
                   {editMode && isBeingDragged && (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="absolute left-1/2 -translate-x-1/2 mt-12 top-full bg-copper text-white px-3 py-1.5 rounded-full text-xs font-medium shadow-lg whitespace-nowrap"
+                      className="absolute left-1/2 -translate-x-1/2 mt-10 top-full bg-copper text-white px-3 py-1.5 rounded-full text-xs font-medium shadow-lg whitespace-nowrap"
                     >
                       {Math.round(product.position.x)}%, {Math.round(product.position.y)}%
                     </motion.div>
                   )}
 
-                  {/* Hover Tooltip with Full Details */}
+                  {/* Hover Tooltip */}
                   <AnimatePresence>
                     {!editMode && !isHighlighted && !isBeingDragged && (
-                      <div className="absolute z-30 left-1/2 -translate-x-1/2 bottom-full mb-3 min-w-[200px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        <div className="bg-card rounded-xl shadow-xl border border-border p-3">
-                          <div className="flex items-start gap-3">
+                      <div className="absolute z-30 left-1/2 -translate-x-1/2 bottom-full mb-3 min-w-[180px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        <div className="bg-card rounded-lg shadow-xl border border-border p-2">
+                          <div className="flex items-start gap-2">
                             {product.imageUrl && (
                               <img
                                 src={product.imageUrl}
                                 alt={product.name}
-                                className={cn(
-                                  "w-16 h-16 rounded-lg object-cover border",
-                                  isPurchased ? "border-emerald-500" : "border-border grayscale opacity-70"
-                                )}
+                                className="w-10 h-10 rounded object-cover"
                               />
                             )}
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold text-foreground text-sm">{product.name}</h4>
-                              <p className="text-xs text-muted-foreground mt-0.5">{config.label}</p>
-                              <div className="flex items-center gap-2 mt-2">
-                                <span className="text-sm font-bold text-copper">CHF {product.estimatedCost}</span>
-                                {isPurchased ? (
-                                  <span className="text-[10px] bg-emerald-500/20 text-emerald-600 px-1.5 py-0.5 rounded-full">Gekauft ✓</span>
-                                ) : (
-                                  <span className="text-[10px] bg-amber-500/20 text-amber-600 px-1.5 py-0.5 rounded-full">Ausstehend</span>
-                                )}
-                              </div>
+                              <h4 className="font-medium text-foreground text-xs truncate">{product.name}</h4>
+                              <p className="text-xs text-muted-foreground">CHF {product.estimatedCost}</p>
                             </div>
                           </div>
                         </div>
@@ -576,76 +532,27 @@ export const PhaseRoomViewer = ({
         )}
       </AnimatePresence>
 
-      {/* Product Quick List with Images */}
+      {/* Product Quick List */}
       <div className="mt-4 bg-muted/30 rounded-lg p-4">
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-xs font-medium text-foreground">Produkte in dieser Phase</p>
-          <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-emerald-500" /> Gekauft
-            </span>
-            <span className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-amber-500" /> Ausstehend
-            </span>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        <p className="text-xs font-medium text-foreground mb-3">Produkte in dieser Phase (klicken zum Markieren)</p>
+        <div className="flex flex-wrap gap-2">
           {products.filter(p => !p.isFixed).map((product) => {
             const config = categoryConfig[product.category] || categoryConfig.extra;
             const isHighlighted = highlightedProduct === product.id;
-            const isPurchased = product.isCompleted;
             
             return (
               <button
                 key={product.id}
                 onClick={() => highlightProductInImage(product.id)}
                 className={cn(
-                  "relative flex flex-col items-center p-2 rounded-xl transition-all",
+                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs transition-all",
                   isHighlighted 
-                    ? "bg-copper/20 ring-2 ring-copper shadow-lg" 
-                    : "bg-background hover:bg-muted border border-border hover:border-copper/50",
-                  !isPurchased && "opacity-70"
+                    ? "bg-copper text-white shadow-md" 
+                    : "bg-background hover:bg-muted border border-border"
                 )}
               >
-                {/* Product Thumbnail */}
-                <div className={cn(
-                  "w-12 h-12 rounded-lg overflow-hidden mb-2 border-2 transition-all",
-                  isPurchased ? "border-emerald-500" : "border-border grayscale"
-                )}>
-                  {product.imageUrl ? (
-                    <img 
-                      src={product.imageUrl} 
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className={cn("w-full h-full flex items-center justify-center", config.color)}>
-                      <span className="text-white text-sm">📦</span>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Product Name */}
-                <span className="text-[10px] text-center font-medium line-clamp-2 leading-tight">
-                  {product.name}
-                </span>
-                
-                {/* Price */}
-                <span className="text-[9px] text-muted-foreground mt-0.5">
-                  CHF {product.estimatedCost}
-                </span>
-                
-                {/* Status Badge */}
-                <div className={cn(
-                  "absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center",
-                  isPurchased ? "bg-emerald-500" : "bg-amber-500"
-                )}>
-                  {isPurchased ? (
-                    <Check className="w-2.5 h-2.5 text-white" />
-                  ) : (
-                    <span className="text-[8px] text-white font-bold">!</span>
-                  )}
-                </div>
+                <div className={cn("w-2 h-2 rounded-full", config.color)} />
+                <span>{product.name}</span>
               </button>
             );
           })}
