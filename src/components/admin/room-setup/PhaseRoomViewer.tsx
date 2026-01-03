@@ -26,6 +26,7 @@ export interface ProductMarker {
   imageUrl?: string;
   category: string;
   isCompleted?: boolean;
+  isFixed?: boolean; // For fixed elements like massage table
 }
 
 interface PhaseRoomViewerProps {
@@ -77,10 +78,10 @@ export const PhaseRoomViewer = ({
   const [selectedProduct, setSelectedProduct] = useState<ProductMarker | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
 
-  const handleMouseDown = (e: React.MouseEvent, productId: string) => {
-    if (!editMode) return;
+  const handleMouseDown = (e: React.MouseEvent, product: ProductMarker) => {
+    if (!editMode || product.isFixed) return;
     e.preventDefault();
-    setDraggingProduct(productId);
+    setDraggingProduct(product.id);
   };
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -233,13 +234,14 @@ export const PhaseRoomViewer = ({
                   id={`marker-${product.id}`}
                   className={cn(
                     "absolute cursor-pointer group",
-                    editMode && "cursor-move"
+                    editMode && !product.isFixed && "cursor-move",
+                    product.isFixed && "cursor-default"
                   )}
                   style={{
                     left: `${product.position.x}%`,
                     top: `${product.position.y}%`,
                     transform: "translate(-50%, -50%)",
-                    zIndex: isDragging ? 50 : isHighlighted ? 40 : 10
+                    zIndex: isDragging ? 50 : isHighlighted ? 40 : product.isFixed ? 5 : 10
                   }}
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ 
@@ -247,7 +249,7 @@ export const PhaseRoomViewer = ({
                     opacity: 1 
                   }}
                   transition={{ delay: index * 0.05, duration: 0.2 }}
-                  onMouseDown={(e) => handleMouseDown(e, product.id)}
+                  onMouseDown={(e) => handleMouseDown(e, product)}
                   onClick={() => !editMode && handleProductClick(product)}
                 >
                   {/* Highlight Ring */}
@@ -271,20 +273,22 @@ export const PhaseRoomViewer = ({
                   <motion.div
                     className={cn(
                       "relative w-8 h-8 rounded-full flex items-center justify-center shadow-lg",
-                      config.color,
+                      product.isFixed ? "bg-amber-500 ring-2 ring-amber-300" : config.color,
                       isDragging && "ring-4 ring-white ring-opacity-50",
                       isHighlighted && "ring-4 ring-white shadow-2xl",
-                      product.isCompleted && "opacity-60"
+                      product.isCompleted && !product.isFixed && "opacity-60"
                     )}
-                    animate={!isDragging && !isHighlighted ? {
+                    animate={!isDragging && !isHighlighted && !product.isFixed ? {
                       scale: [1, 1.1, 1],
                     } : {}}
                     transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                   >
-                    {editMode ? (
+                    {product.isFixed ? (
+                      <span className="text-xs font-bold text-white">🛏</span>
+                    ) : editMode ? (
                       <GripVertical className="w-4 h-4 text-white" />
                     ) : (
-                      <span className="text-xs font-bold text-white">{index + 1}</span>
+                      <span className="text-xs font-bold text-white">{index}</span>
                     )}
                   </motion.div>
 

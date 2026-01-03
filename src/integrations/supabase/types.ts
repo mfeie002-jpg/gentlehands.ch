@@ -1428,6 +1428,7 @@ export type Database = {
           is_current: boolean | null
           notes: string | null
           phase: number
+          phase_image_url: string | null
           phase_name: string
           room_id: string
           room_name: string
@@ -1445,6 +1446,7 @@ export type Database = {
           is_current?: boolean | null
           notes?: string | null
           phase: number
+          phase_image_url?: string | null
           phase_name: string
           room_id: string
           room_name: string
@@ -1462,6 +1464,7 @@ export type Database = {
           is_current?: boolean | null
           notes?: string | null
           phase?: number
+          phase_image_url?: string | null
           phase_name?: string
           room_id?: string
           room_name?: string
@@ -1481,6 +1484,8 @@ export type Database = {
           item_description: string | null
           item_name: string
           notes: string | null
+          position_x: number | null
+          position_y: number | null
           priority: number | null
           purchase_link: string | null
           room_phase_id: string | null
@@ -1497,6 +1502,8 @@ export type Database = {
           item_description?: string | null
           item_name: string
           notes?: string | null
+          position_x?: number | null
+          position_y?: number | null
           priority?: number | null
           purchase_link?: string | null
           room_phase_id?: string | null
@@ -1513,6 +1520,8 @@ export type Database = {
           item_description?: string | null
           item_name?: string
           notes?: string | null
+          position_x?: number | null
+          position_y?: number | null
           priority?: number | null
           purchase_link?: string | null
           room_phase_id?: string | null
