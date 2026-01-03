@@ -2,13 +2,13 @@ import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ZoomIn, ZoomOut, Move, Eye, EyeOff, 
-  RotateCcw, Maximize2, ExternalLink, X,
-  GripVertical, Target
+  Maximize2, ExternalLink, X, Check,
+  GripVertical, Target, Cloud, CloudOff, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import { useDraggableProducts } from "@/hooks/useDraggableProducts";
 
 interface ShopLink {
   shop: "ikea" | "galaxus" | "microspot";
@@ -26,7 +26,7 @@ export interface ProductMarker {
   imageUrl?: string;
   category: string;
   isCompleted?: boolean;
-  isFixed?: boolean; // For fixed elements like massage table
+  isFixed?: boolean;
 }
 
 interface PhaseRoomViewerProps {
@@ -69,38 +69,29 @@ export const PhaseRoomViewer = ({
   onProductClick,
   className
 }: PhaseRoomViewerProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
   const [showLabels, setShowLabels] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [draggingProduct, setDraggingProduct] = useState<string | null>(null);
   const [highlightedProduct, setHighlightedProduct] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<ProductMarker | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
 
-  const handleMouseDown = (e: React.MouseEvent, product: ProductMarker) => {
-    if (!editMode || product.isFixed) return;
-    e.preventDefault();
-    setDraggingProduct(product.id);
-  };
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!draggingProduct || !containerRef.current || !editMode) return;
-
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-    // Clamp values
-    const clampedX = Math.max(5, Math.min(95, x));
-    const clampedY = Math.max(5, Math.min(95, y));
-
-    onProductPositionChange?.(draggingProduct, { x: clampedX, y: clampedY });
-  }, [draggingProduct, editMode, onProductPositionChange]);
-
-  const handleMouseUp = () => {
-    setDraggingProduct(null);
-  };
+  const {
+    containerRef,
+    draggingProduct,
+    isDragging,
+    hasUnsavedChanges,
+    isSaving,
+    savedStatus,
+    handleDragStart,
+    handleDragMove,
+    handleDragEnd,
+    forceSave
+  } = useDraggableProducts({
+    products,
+    onPositionChange: (id, pos) => onProductPositionChange?.(id, pos),
+    autoSaveDelay: 1200
+  });
 
   const handleProductClick = (product: ProductMarker) => {
     if (editMode) return;
@@ -111,15 +102,10 @@ export const PhaseRoomViewer = ({
 
   const highlightProductInImage = (productId: string) => {
     setHighlightedProduct(productId);
-    // Auto-scroll to product if zoomed
     const productEl = document.getElementById(`marker-${productId}`);
     if (productEl) {
       productEl.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
     }
-  };
-
-  const resetPositions = () => {
-    // This would reset to default positions - implement if needed
   };
 
   return (
@@ -133,6 +119,32 @@ export const PhaseRoomViewer = ({
           <Badge variant="secondary" className="text-xs">
             {products.length} Produkte
           </Badge>
+          
+          {/* Auto-save indicator */}
+          <AnimatePresence mode="wait">
+            {savedStatus === "saving" && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground"
+              >
+                <Loader2 className="w-3 h-3 animate-spin" />
+                Speichern...
+              </motion.div>
+            )}
+            {savedStatus === "saved" && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="flex items-center gap-1.5 text-xs text-emerald-600"
+              >
+                <Check className="w-3 h-3" />
+                Gespeichert
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
         
         <div className="flex items-center gap-1">
@@ -145,6 +157,24 @@ export const PhaseRoomViewer = ({
             <Move className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">{editMode ? "Bearbeiten" : "Verschieben"}</span>
           </Button>
+          
+          {editMode && hasUnsavedChanges && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={forceSave}
+              disabled={isSaving}
+              className="gap-1.5"
+            >
+              {isSaving ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Cloud className="w-3.5 h-3.5" />
+              )}
+              <span className="hidden sm:inline">Jetzt speichern</span>
+            </Button>
+          )}
+          
           <Button
             variant="ghost"
             size="sm"
@@ -185,7 +215,8 @@ export const PhaseRoomViewer = ({
       <div 
         className={cn(
           "relative rounded-xl overflow-hidden border border-border shadow-lg transition-all",
-          fullscreen && "fixed inset-4 z-50 rounded-2xl"
+          fullscreen && "fixed inset-4 z-50 rounded-2xl",
+          editMode && "ring-2 ring-copper ring-opacity-50"
         )}
       >
         {fullscreen && (
@@ -201,11 +232,16 @@ export const PhaseRoomViewer = ({
         
         <div 
           ref={containerRef}
-          className="relative overflow-auto"
+          className={cn(
+            "relative overflow-auto",
+            editMode && "cursor-crosshair"
+          )}
           style={{ maxHeight: fullscreen ? "calc(100vh - 4rem)" : "500px" }}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
+          onMouseMove={editMode ? handleDragMove : undefined}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchMove={editMode ? handleDragMove : undefined}
+          onTouchEnd={handleDragEnd}
         >
           <div 
             className="relative transition-transform duration-200 origin-top-left"
@@ -215,7 +251,7 @@ export const PhaseRoomViewer = ({
             <img
               src={phaseImage}
               alt={`${roomName} - Phase ${phase}`}
-              className="w-full h-auto"
+              className="w-full h-auto select-none"
               draggable={false}
             />
 
@@ -226,35 +262,51 @@ export const PhaseRoomViewer = ({
             {products.map((product, index) => {
               const config = categoryConfig[product.category] || categoryConfig.extra;
               const isHighlighted = highlightedProduct === product.id;
-              const isDragging = draggingProduct === product.id;
+              const isBeingDragged = draggingProduct === product.id;
 
               return (
                 <motion.div
                   key={product.id}
                   id={`marker-${product.id}`}
                   className={cn(
-                    "absolute cursor-pointer group",
-                    editMode && !product.isFixed && "cursor-move",
-                    product.isFixed && "cursor-default"
+                    "absolute group touch-none select-none",
+                    editMode && !product.isFixed ? "cursor-grab active:cursor-grabbing" : "cursor-pointer",
+                    product.isFixed && "cursor-default",
+                    isBeingDragged && "z-50"
                   )}
                   style={{
                     left: `${product.position.x}%`,
                     top: `${product.position.y}%`,
                     transform: "translate(-50%, -50%)",
-                    zIndex: isDragging ? 50 : isHighlighted ? 40 : product.isFixed ? 5 : 10
+                    zIndex: isBeingDragged ? 50 : isHighlighted ? 40 : product.isFixed ? 5 : 10
                   }}
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ 
-                    scale: isDragging ? 1.3 : isHighlighted ? 1.4 : 1, 
+                    scale: isBeingDragged ? 1.4 : isHighlighted ? 1.3 : 1, 
                     opacity: 1 
                   }}
-                  transition={{ delay: index * 0.05, duration: 0.2 }}
-                  onMouseDown={(e) => handleMouseDown(e, product)}
-                  onClick={() => !editMode && handleProductClick(product)}
+                  transition={{ 
+                    delay: index * 0.03, 
+                    duration: 0.15,
+                    scale: { type: "spring", stiffness: 300, damping: 20 }
+                  }}
+                  onMouseDown={(e) => editMode && handleDragStart(e, product)}
+                  onTouchStart={(e) => editMode && handleDragStart(e, product)}
+                  onClick={() => !editMode && !isDragging && handleProductClick(product)}
                 >
+                  {/* Drag visual feedback ring */}
+                  {isBeingDragged && (
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: [1, 1.5, 1.2], opacity: [0.8, 0.3, 0.5] }}
+                      transition={{ duration: 0.6, repeat: Infinity }}
+                      className="absolute inset-0 -m-3 w-14 h-14 rounded-full bg-copper/40"
+                    />
+                  )}
+
                   {/* Highlight Ring */}
                   <AnimatePresence>
-                    {isHighlighted && (
+                    {isHighlighted && !isBeingDragged && (
                       <motion.div
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: [1, 1.5, 1.2], opacity: [1, 0.5, 0.7] }}
@@ -274,14 +326,14 @@ export const PhaseRoomViewer = ({
                     className={cn(
                       "relative w-8 h-8 rounded-full flex items-center justify-center shadow-lg",
                       product.isFixed ? "bg-amber-500 ring-2 ring-amber-300" : config.color,
-                      isDragging && "ring-4 ring-white ring-opacity-50",
+                      isBeingDragged && "ring-4 ring-white shadow-2xl",
                       isHighlighted && "ring-4 ring-white shadow-2xl",
                       product.isCompleted && !product.isFixed && "opacity-60"
                     )}
-                    animate={!isDragging && !isHighlighted && !product.isFixed ? {
-                      scale: [1, 1.1, 1],
+                    animate={!isBeingDragged && !isHighlighted && !product.isFixed ? {
+                      scale: [1, 1.08, 1],
                     } : {}}
-                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                    transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
                   >
                     {product.isFixed ? (
                       <span className="text-xs font-bold text-white">🛏</span>
@@ -304,7 +356,7 @@ export const PhaseRoomViewer = ({
                   )}
 
                   {/* Label */}
-                  {showLabels && !editMode && (
+                  {showLabels && !editMode && !isBeingDragged && (
                     <motion.div
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -321,9 +373,20 @@ export const PhaseRoomViewer = ({
                     </motion.div>
                   )}
 
+                  {/* Drag mode label */}
+                  {editMode && isBeingDragged && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="absolute left-1/2 -translate-x-1/2 mt-10 top-full bg-copper text-white px-3 py-1.5 rounded-full text-xs font-medium shadow-lg whitespace-nowrap"
+                    >
+                      {Math.round(product.position.x)}%, {Math.round(product.position.y)}%
+                    </motion.div>
+                  )}
+
                   {/* Hover Tooltip */}
                   <AnimatePresence>
-                    {!editMode && !isHighlighted && (
+                    {!editMode && !isHighlighted && !isBeingDragged && (
                       <div className="absolute z-30 left-1/2 -translate-x-1/2 bottom-full mb-3 min-w-[180px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                         <div className="bg-card rounded-lg shadow-xl border border-border p-2">
                           <div className="flex items-start gap-2">
@@ -352,10 +415,14 @@ export const PhaseRoomViewer = ({
 
             {/* Edit Mode Indicator */}
             {editMode && (
-              <div className="absolute top-4 left-4 bg-copper text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-2 shadow-lg">
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute top-4 left-4 bg-copper text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-2 shadow-lg"
+              >
                 <Move className="w-3 h-3" />
-                Produkte verschieben - Drag & Drop
-              </div>
+                Drag & Drop aktiv • Auto-Save
+              </motion.div>
             )}
           </div>
         </div>
@@ -439,28 +506,26 @@ export const PhaseRoomViewer = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         className={cn(
-                          "flex items-center justify-between px-4 py-3 rounded-lg",
-                          "text-sm font-medium text-white transition-all hover:scale-[1.02]",
-                          shopLogos[shop.shop].color
+                          "flex items-center justify-between p-3 rounded-lg text-white",
+                          shopLogos[shop.shop]?.color || "bg-gray-600"
                         )}
                       >
+                        <span className="font-medium">{shopLogos[shop.shop]?.name}</span>
                         <div className="flex items-center gap-2">
+                          {shop.price && (
+                            <span className="text-sm opacity-90">CHF {shop.price}</span>
+                          )}
                           <ExternalLink className="w-4 h-4" />
-                          {shopLogos[shop.shop].name}
                         </div>
-                        {shop.price && (
-                          <span className="font-bold">CHF {shop.price}</span>
-                        )}
                       </a>
                     ))}
                   </div>
                 </div>
               )}
 
-              <div className="pt-2">
-                <p className="text-xs text-muted-foreground">
-                  Position: {Math.round(selectedProduct.position.x)}%, {Math.round(selectedProduct.position.y)}%
-                </p>
+              {/* Position Info */}
+              <div className="text-xs text-muted-foreground pt-2 border-t border-border">
+                Position: {Math.round(selectedProduct.position.x)}% × {Math.round(selectedProduct.position.y)}%
               </div>
             </div>
           </motion.div>
@@ -468,24 +533,30 @@ export const PhaseRoomViewer = ({
       </AnimatePresence>
 
       {/* Product Quick List */}
-      <div className="mt-4 flex flex-wrap gap-2">
-        {products.map((product, index) => {
-          const config = categoryConfig[product.category] || categoryConfig.extra;
-          return (
-            <button
-              key={product.id}
-              onClick={() => highlightProductInImage(product.id)}
-              className={cn(
-                "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs",
-                "bg-muted hover:bg-muted/80 transition-colors",
-                highlightedProduct === product.id && "ring-2 ring-copper bg-copper/10"
-              )}
-            >
-              <div className={cn("w-3 h-3 rounded-full", config.color)} />
-              <span className="font-medium">{index + 1}. {product.name}</span>
-            </button>
-          );
-        })}
+      <div className="mt-4 bg-muted/30 rounded-lg p-4">
+        <p className="text-xs font-medium text-foreground mb-3">Produkte in dieser Phase (klicken zum Markieren)</p>
+        <div className="flex flex-wrap gap-2">
+          {products.filter(p => !p.isFixed).map((product) => {
+            const config = categoryConfig[product.category] || categoryConfig.extra;
+            const isHighlighted = highlightedProduct === product.id;
+            
+            return (
+              <button
+                key={product.id}
+                onClick={() => highlightProductInImage(product.id)}
+                className={cn(
+                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs transition-all",
+                  isHighlighted 
+                    ? "bg-copper text-white shadow-md" 
+                    : "bg-background hover:bg-muted border border-border"
+                )}
+              >
+                <div className={cn("w-2 h-2 rounded-full", config.color)} />
+                <span>{product.name}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
