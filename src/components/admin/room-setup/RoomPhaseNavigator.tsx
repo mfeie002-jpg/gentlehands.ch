@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Layers, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, Layers, Check, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { PhaseRoomViewer, ProductMarker } from "./PhaseRoomViewer";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+// Import AI-generated room images
+import ozeanRoom from "@/assets/rooms/ozean-room.jpg";
+import alpineRoom from "@/assets/rooms/alpine-room.jpg";
+import darkRoom from "@/assets/rooms/dark-room.jpg";
+import zenRoom from "@/assets/rooms/zen-room.jpg";
+import urbanRoom from "@/assets/rooms/urban-room.jpg";
+import surpriseRoom from "@/assets/rooms/surprise-room.jpg";
 
 interface PhaseData {
   phase: number;
@@ -23,41 +33,31 @@ interface RoomPhaseNavigatorProps {
   roomName: string;
   phases: PhaseData[];
   onProductPositionChange?: (productId: string, newPosition: { x: number; y: number }) => void;
+  onSavePositions?: () => void;
   className?: string;
 }
 
-// Phase images per room showing progression
-const phaseImages: Record<string, Record<number, string>> = {
-  ozean: {
-    1: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=1200&h=800&fit=crop&q=80",
-    2: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1200&h=800&fit=crop&q=80",
-    3: "https://images.unsplash.com/photo-1540555700478-4be289fbec50?w=1200&h=800&fit=crop&q=80"
-  },
-  alpine: {
-    1: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=1200&h=800&fit=crop&q=80",
-    2: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=1200&h=800&fit=crop&q=80",
-    3: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=1200&h=800&fit=crop&q=80"
-  },
-  dark: {
-    1: "https://images.unsplash.com/photo-1540555700478-4be289fbec50?w=1200&h=800&fit=crop&q=80",
-    2: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=1200&h=800&fit=crop&q=80",
-    3: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&h=800&fit=crop&q=80"
-  },
-  urban: {
-    1: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=1200&h=800&fit=crop&q=80",
-    2: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=1200&h=800&fit=crop&q=80",
-    3: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1200&h=800&fit=crop&q=80"
-  },
-  zen: {
-    1: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=1200&h=800&fit=crop&q=80",
-    2: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=1200&h=800&fit=crop&q=80",
-    3: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=1200&h=800&fit=crop&q=80"
-  },
-  surprise: {
-    1: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=1200&h=800&fit=crop&q=80",
-    2: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1200&h=800&fit=crop&q=80",
-    3: "https://images.unsplash.com/photo-1540555700478-4be289fbec50?w=1200&h=800&fit=crop&q=80"
-  }
+// AI-generated room images per room theme
+const roomImages: Record<string, string> = {
+  ozean: ozeanRoom,
+  alpine: alpineRoom,
+  dark: darkRoom,
+  urban: urbanRoom,
+  zen: zenRoom,
+  surprise: surpriseRoom
+};
+
+// Fixed massage table position - always in center of room
+const MASSAGE_TABLE_MARKER: ProductMarker = {
+  id: "massage-table-base",
+  name: "Massage-Liege",
+  description: "Professionelle schwarze Leder-Massageliege - bereits vorhanden",
+  position: { x: 50, y: 55 },
+  estimatedCost: 0,
+  category: "basis",
+  isCompleted: true,
+  isFixed: true,
+  imageUrl: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=200&h=200&fit=crop"
 };
 
 export const RoomPhaseNavigator = ({
@@ -65,10 +65,13 @@ export const RoomPhaseNavigator = ({
   roomName,
   phases,
   onProductPositionChange,
+  onSavePositions,
   className
 }: RoomPhaseNavigatorProps) => {
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const activePhase = phases[activePhaseIndex];
   const totalCost = phases.reduce((sum, p) => sum + p.estimatedCost, 0);
@@ -90,9 +93,51 @@ export const RoomPhaseNavigator = ({
     }
   };
 
-  const getPhaseImage = (phase: number) => {
-    return phaseImages[roomId]?.[phase] || 
-      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1200&h=800&fit=crop";
+  const getRoomImage = () => {
+    return roomImages[roomId] || ozeanRoom;
+  };
+
+  // Combine products with fixed massage table
+  const getProductsWithBase = (products: ProductMarker[]): ProductMarker[] => {
+    return [MASSAGE_TABLE_MARKER, ...products];
+  };
+
+  const handlePositionChange = (productId: string, newPosition: { x: number; y: number }) => {
+    // Don't allow moving the fixed massage table
+    if (productId === MASSAGE_TABLE_MARKER.id) return;
+    
+    setHasUnsavedChanges(true);
+    onProductPositionChange?.(productId, newPosition);
+  };
+
+  const handleSavePositions = async () => {
+    setIsSaving(true);
+    try {
+      // Get all products with their positions
+      const allProducts = phases.flatMap(phase => phase.products);
+      
+      // Save to database
+      for (const product of allProducts) {
+        if (product.position) {
+          await supabase
+            .from("room_setup_checklist")
+            .update({
+              position_x: product.position.x,
+              position_y: product.position.y
+            })
+            .eq("id", product.id);
+        }
+      }
+      
+      setHasUnsavedChanges(false);
+      toast.success("Positionen gespeichert!");
+      onSavePositions?.();
+    } catch (error) {
+      console.error("Error saving positions:", error);
+      toast.error("Fehler beim Speichern");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!activePhase) return null;
@@ -134,6 +179,22 @@ export const RoomPhaseNavigator = ({
         </div>
 
         <div className="flex items-center gap-2">
+          {hasUnsavedChanges && (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={handleSavePositions}
+              disabled={isSaving}
+              className="bg-copper hover:bg-copper/90 gap-1.5"
+            >
+              {isSaving ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4" />
+              )}
+              Speichern
+            </Button>
+          )}
           <Button
             variant="outline"
             size="icon"
@@ -179,7 +240,7 @@ export const RoomPhaseNavigator = ({
         </div>
       </div>
 
-      {/* Phase Image Viewer */}
+      {/* Phase Image Viewer with AI-generated room */}
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={activePhase.phase}
@@ -193,9 +254,9 @@ export const RoomPhaseNavigator = ({
             roomName={roomName}
             phase={activePhase.phase}
             phaseName={activePhase.phaseName}
-            phaseImage={getPhaseImage(activePhase.phase)}
-            products={activePhase.products}
-            onProductPositionChange={onProductPositionChange}
+            phaseImage={getRoomImage()}
+            products={getProductsWithBase(activePhase.products)}
+            onProductPositionChange={handlePositionChange}
           />
         </motion.div>
       </AnimatePresence>
@@ -229,6 +290,14 @@ export const RoomPhaseNavigator = ({
             )}
           </button>
         ))}
+      </div>
+
+      {/* Fixed Element Legend */}
+      <div className="flex items-center gap-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+        <div className="w-4 h-4 rounded-full bg-amber-500 ring-2 ring-amber-500/50" />
+        <p className="text-sm text-amber-700 dark:text-amber-300">
+          <strong>Massage-Liege</strong> ist als Basis-Element fixiert und kann nicht verschoben werden
+        </p>
       </div>
 
       {/* Total Summary */}
