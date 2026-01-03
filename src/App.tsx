@@ -65,6 +65,8 @@ const ABTestDashboard = lazy(() => import("./pages/ABTestDashboard"));
 const HeatmapDashboard = lazy(() => import("./pages/HeatmapDashboard"));
 const AnalyticsHub = lazy(() => import("./pages/AnalyticsHub"));
 const GoalTrackingDashboard = lazy(() => import("./pages/GoalTrackingDashboard"));
+const Raumwelten = lazy(() => import("./pages/Raumwelten"));
+const AdminRoomSetup = lazy(() => import("./pages/AdminRoomSetup"));
 
 // English pages
 const IndexEN = lazy(() => import("./pages/en/Index"));
@@ -151,6 +153,8 @@ const App = () => (
                 <Route path="/ab-tests" element={<ABTestDashboard />} />
                 <Route path="/heatmap" element={<HeatmapDashboard />} />
                 <Route path="/goal-tracking" element={<GoalTrackingDashboard />} />
+                <Route path="/raumwelten" element={<Raumwelten />} />
+                <Route path="/admin/room-setup" element={<AdminRoomSetup />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/empfehlen" element={<Empfehlen />} />
