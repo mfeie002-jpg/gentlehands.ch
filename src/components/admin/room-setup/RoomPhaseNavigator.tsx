@@ -1,21 +1,24 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Layers, Check, Save, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Layers, Check, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { PhaseRoomViewer, ProductMarker } from "./PhaseRoomViewer";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
-// Import AI-generated room images
+// Import AI-generated room images (base images per room)
 import ozeanRoom from "@/assets/rooms/ozean-room.jpg";
 import alpineRoom from "@/assets/rooms/alpine-room.jpg";
 import darkRoom from "@/assets/rooms/dark-room.jpg";
 import zenRoom from "@/assets/rooms/zen-room.jpg";
 import urbanRoom from "@/assets/rooms/urban-room.jpg";
 import surpriseRoom from "@/assets/rooms/surprise-room.jpg";
+
+// Import phase-specific progression images
+import phase1Minimal from "@/assets/rooms/phase1-minimal.jpg";
+import phase2Developing from "@/assets/rooms/phase2-developing.jpg";
+import phase3Complete from "@/assets/rooms/phase3-complete.jpg";
 
 interface PhaseData {
   phase: number;
@@ -38,7 +41,7 @@ interface RoomPhaseNavigatorProps {
 }
 
 // AI-generated room images per room theme
-const roomImages: Record<string, string> = {
+const roomBaseImages: Record<string, string> = {
   ozean: ozeanRoom,
   alpine: alpineRoom,
   dark: darkRoom,
@@ -47,12 +50,19 @@ const roomImages: Record<string, string> = {
   surprise: surpriseRoom
 };
 
+// Phase progression images (showing build progress)
+const phaseProgressionImages: Record<number, string> = {
+  1: phase1Minimal,
+  2: phase2Developing,
+  3: phase3Complete
+};
+
 // Fixed massage table position - always in center of room
 const MASSAGE_TABLE_MARKER: ProductMarker = {
   id: "massage-table-base",
   name: "Massage-Liege",
   description: "Professionelle schwarze Leder-Massageliege - bereits vorhanden",
-  position: { x: 50, y: 55 },
+  position: { x: 50, y: 52 },
   estimatedCost: 0,
   category: "basis",
   isCompleted: true,
@@ -70,8 +80,7 @@ export const RoomPhaseNavigator = ({
 }: RoomPhaseNavigatorProps) => {
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const [isSaving, setIsSaving] = useState(false);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [viewMode, setViewMode] = useState<"phase" | "room">("phase");
 
   const activePhase = phases[activePhaseIndex];
   const totalCost = phases.reduce((sum, p) => sum + p.estimatedCost, 0);
@@ -93,8 +102,14 @@ export const RoomPhaseNavigator = ({
     }
   };
 
-  const getRoomImage = () => {
-    return roomImages[roomId] || ozeanRoom;
+  // Get the appropriate image based on view mode and phase
+  const getPhaseImage = () => {
+    if (viewMode === "room") {
+      // Show the room-specific themed image
+      return roomBaseImages[roomId] || ozeanRoom;
+    }
+    // Show phase progression image
+    return phaseProgressionImages[activePhase?.phase] || phase1Minimal;
   };
 
   // Combine products with fixed massage table
@@ -105,39 +120,7 @@ export const RoomPhaseNavigator = ({
   const handlePositionChange = (productId: string, newPosition: { x: number; y: number }) => {
     // Don't allow moving the fixed massage table
     if (productId === MASSAGE_TABLE_MARKER.id) return;
-    
-    setHasUnsavedChanges(true);
     onProductPositionChange?.(productId, newPosition);
-  };
-
-  const handleSavePositions = async () => {
-    setIsSaving(true);
-    try {
-      // Get all products with their positions
-      const allProducts = phases.flatMap(phase => phase.products);
-      
-      // Save to database
-      for (const product of allProducts) {
-        if (product.position) {
-          await supabase
-            .from("room_setup_checklist")
-            .update({
-              position_x: product.position.x,
-              position_y: product.position.y
-            })
-            .eq("id", product.id);
-        }
-      }
-      
-      setHasUnsavedChanges(false);
-      toast.success("Positionen gespeichert!");
-      onSavePositions?.();
-    } catch (error) {
-      console.error("Error saving positions:", error);
-      toast.error("Fehler beim Speichern");
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   if (!activePhase) return null;
@@ -179,22 +162,32 @@ export const RoomPhaseNavigator = ({
         </div>
 
         <div className="flex items-center gap-2">
-          {hasUnsavedChanges && (
-            <Button
-              variant="default"
-              size="sm"
-              onClick={handleSavePositions}
-              disabled={isSaving}
-              className="bg-copper hover:bg-copper/90 gap-1.5"
-            >
-              {isSaving ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Save className="w-4 h-4" />
+          {/* View Mode Toggle */}
+          <div className="hidden md:flex items-center bg-background rounded-lg p-1 gap-1">
+            <button
+              onClick={() => setViewMode("phase")}
+              className={cn(
+                "px-3 py-1.5 rounded-md text-xs font-medium transition-all",
+                viewMode === "phase" 
+                  ? "bg-copper text-white" 
+                  : "text-muted-foreground hover:text-foreground"
               )}
-              Speichern
-            </Button>
-          )}
+            >
+              Fortschritt
+            </button>
+            <button
+              onClick={() => setViewMode("room")}
+              className={cn(
+                "px-3 py-1.5 rounded-md text-xs font-medium transition-all",
+                viewMode === "room" 
+                  ? "bg-copper text-white" 
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Thema
+            </button>
+          </div>
+          
           <Button
             variant="outline"
             size="icon"
@@ -240,10 +233,19 @@ export const RoomPhaseNavigator = ({
         </div>
       </div>
 
+      {/* Image View Mode Info */}
+      <div className="flex items-center gap-2 px-3 py-2 bg-muted/20 rounded-lg text-xs text-muted-foreground">
+        <Info className="w-3.5 h-3.5" />
+        {viewMode === "phase" 
+          ? "Ansicht zeigt den Ausbaufortschritt (minimal → komplett)" 
+          : `Ansicht zeigt das ${roomName}-Thema`
+        }
+      </div>
+
       {/* Phase Image Viewer with AI-generated room */}
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
-          key={activePhase.phase}
+          key={`${activePhase.phase}-${viewMode}`}
           initial={{ opacity: 0, x: direction * 50 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -direction * 50 }}
@@ -254,7 +256,7 @@ export const RoomPhaseNavigator = ({
             roomName={roomName}
             phase={activePhase.phase}
             phaseName={activePhase.phaseName}
-            phaseImage={getRoomImage()}
+            phaseImage={getPhaseImage()}
             products={getProductsWithBase(activePhase.products)}
             onProductPositionChange={handlePositionChange}
           />
