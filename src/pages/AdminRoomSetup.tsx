@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { 
   Waves, Mountain, Moon, Building2, Leaf, Sparkles, 
   Check, ExternalLink, ChevronDown, ChevronUp, 
-  ShoppingCart, DollarSign, FileText, ArrowLeft, ZoomIn, Eye, Layers
+  ShoppingCart, DollarSign, FileText, ArrowLeft, ZoomIn, Eye, Layers, Columns3
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -19,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { RoomPhaseNavigator, ProductMarker } from "@/components/admin/room-setup";
+import { RoomPhaseNavigator, ProductMarker, PhaseComparisonView } from "@/components/admin/room-setup";
 
 interface ShopLink {
   shop: "ikea" | "galaxus" | "microspot";
@@ -499,6 +499,7 @@ const AdminRoomSetup = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("ozean");
   const [productPositions, setProductPositions] = useState<Record<string, { x: number; y: number }>>({});
+  const [showComparison, setShowComparison] = useState(false);
 
   useEffect(() => {
     fetchRoomPhases();
@@ -688,41 +689,102 @@ const AdminRoomSetup = () => {
             </Card>
           </div>
 
-          {/* Room Tabs with Phase Navigator */}
-          <Card className="border-0 shadow-xl">
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <CardHeader className="border-b border-border pb-0">
-                <TabsList className="w-full justify-start h-auto p-0 bg-transparent gap-1 flex-wrap">
+          {/* View Toggle */}
+          <div className="flex items-center justify-end mb-4 gap-2">
+            <Button
+              variant={showComparison ? "outline" : "default"}
+              size="sm"
+              onClick={() => setShowComparison(false)}
+              className={!showComparison ? "bg-copper hover:bg-copper/90" : ""}
+            >
+              <Layers className="w-4 h-4 mr-2" />
+              Detail-Ansicht
+            </Button>
+            <Button
+              variant={showComparison ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowComparison(true)}
+              className={showComparison ? "bg-copper hover:bg-copper/90" : ""}
+            >
+              <Columns3 className="w-4 h-4 mr-2" />
+              Vergleichs-Ansicht
+            </Button>
+          </div>
+
+          {/* Comparison View */}
+          {showComparison ? (
+            <Card className="border-0 shadow-xl p-6">
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="w-full justify-start h-auto p-1 bg-muted gap-1 flex-wrap mb-6">
                   {uniqueRooms.map((room) => (
                     <TabsTrigger
                       key={room.id}
                       value={room.id}
-                      className="data-[state=active]:bg-copper data-[state=active]:text-white px-4 py-3 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-copper gap-2"
+                      className="data-[state=active]:bg-copper data-[state=active]:text-white px-4 py-2 rounded-lg gap-2"
                     >
                       {roomIcons[room.id]}
-                      <span className="hidden sm:inline">{room.name}</span>
+                      <span>{room.name}</span>
                     </TabsTrigger>
                   ))}
                 </TabsList>
-              </CardHeader>
 
-              <CardContent className="p-6">
                 {uniqueRooms.map((room) => {
                   const phasesData = preparePhasesForNavigator(room.id);
                   return (
                     <TabsContent key={room.id} value={room.id} className="mt-0">
-                      <RoomPhaseNavigator
-                        roomId={room.id}
+                      <PhaseComparisonView
                         roomName={room.name}
-                        phases={phasesData}
-                        onProductPositionChange={handleProductPositionChange}
+                        phases={phasesData.map(p => ({
+                          phase: p.phase,
+                          phaseName: p.phaseName,
+                          description: p.description,
+                          estimatedCost: p.estimatedCost,
+                          completionPercentage: p.completionPercentage,
+                          productCount: p.products.length
+                        }))}
                       />
                     </TabsContent>
                   );
                 })}
-              </CardContent>
-            </Tabs>
-          </Card>
+              </Tabs>
+            </Card>
+          ) : (
+            /* Room Tabs with Phase Navigator */
+            <Card className="border-0 shadow-xl">
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <CardHeader className="border-b border-border pb-0">
+                  <TabsList className="w-full justify-start h-auto p-0 bg-transparent gap-1 flex-wrap">
+                    {uniqueRooms.map((room) => (
+                      <TabsTrigger
+                        key={room.id}
+                        value={room.id}
+                        className="data-[state=active]:bg-copper data-[state=active]:text-white px-4 py-3 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-copper gap-2"
+                      >
+                        {roomIcons[room.id]}
+                        <span className="hidden sm:inline">{room.name}</span>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </CardHeader>
+
+                <CardContent className="p-6">
+                  {uniqueRooms.map((room) => {
+                    const phasesData = preparePhasesForNavigator(room.id);
+                    return (
+                      <TabsContent key={room.id} value={room.id} className="mt-0">
+                        <RoomPhaseNavigator
+                          roomId={room.id}
+                          roomName={room.name}
+                          phases={phasesData}
+                          onProductPositionChange={handleProductPositionChange}
+                        />
+                      </TabsContent>
+                    );
+                  })}
+                </CardContent>
+              </Tabs>
+            </Card>
+          )}
 
           {/* Quick Links */}
           <div className="mt-12 text-center">
