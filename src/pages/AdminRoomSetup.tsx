@@ -19,15 +19,29 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 
+interface ShopLink {
+  shop: "ikea" | "galaxus" | "microspot";
+  url: string;
+  price?: number;
+}
+
 interface ChecklistItem {
   id: string;
   name: string;
   description?: string;
   estimatedCost: number;
   purchaseLink?: string;
+  shopLinks?: ShopLink[];
+  imageUrl?: string;
   isCompleted: boolean;
   category: string;
 }
+
+const shopLogos: Record<string, { name: string; color: string }> = {
+  ikea: { name: "IKEA", color: "bg-[#0058A3] hover:bg-[#004F95]" },
+  galaxus: { name: "Galaxus", color: "bg-[#5C2D91] hover:bg-[#4A2475]" },
+  microspot: { name: "Microspot", color: "bg-[#E30613] hover:bg-[#C9050F]" }
+};
 
 interface RoomPhase {
   id: string;
@@ -62,46 +76,313 @@ const roomColors: Record<string, string> = {
   surprise: "from-pink-500/10 to-rose-600/10"
 };
 
-// Default checklist items per room and phase
+// Default checklist items per room and phase with images and shop links
 const defaultChecklists: Record<string, Record<number, ChecklistItem[]>> = {
   ozean: {
     1: [
-      { id: "o1-1", name: "Blaue LED-Strips", description: "5m RGB LED-Strip mit Fernbedienung", estimatedCost: 50, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "lighting" },
-      { id: "o1-2", name: "Tropische Kunstpflanzen", description: "2-3 Palmen-Pflanzen", estimatedCost: 80, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor" },
-      { id: "o1-3", name: "Strand-Poster/Wandbild", description: "Grosses Ozean-Motiv", estimatedCost: 40, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor" },
-      { id: "o1-4", name: "Kokos-Duftkerzen", description: "Set mit 3 Kerzen", estimatedCost: 30, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "scent" }
+      { 
+        id: "o1-1", 
+        name: "Blaue LED-Strips", 
+        description: "5m RGB LED-Strip mit Fernbedienung", 
+        estimatedCost: 50, 
+        imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/led-strips-574", price: 49 },
+          { shop: "microspot", url: "https://www.microspot.ch/de/wohnen-licht/innenbeleuchtung/led-strips--c521300", price: 55 }
+        ],
+        isCompleted: false, 
+        category: "lighting" 
+      },
+      { 
+        id: "o1-2", 
+        name: "Tropische Kunstpflanzen", 
+        description: "2-3 Palmen-Pflanzen", 
+        estimatedCost: 80, 
+        imageUrl: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "ikea", url: "https://www.ikea.com/ch/de/cat/kunstpflanzen-20492/", price: 79 }
+        ],
+        isCompleted: false, 
+        category: "decor" 
+      },
+      { 
+        id: "o1-3", 
+        name: "Strand-Poster/Wandbild", 
+        description: "Grosses Ozean-Motiv 120x80cm", 
+        estimatedCost: 40, 
+        imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "ikea", url: "https://www.ikea.com/ch/de/cat/bilder-poster-10779/", price: 39 }
+        ],
+        isCompleted: false, 
+        category: "decor" 
+      },
+      { 
+        id: "o1-4", 
+        name: "Kokos-Duftkerzen", 
+        description: "Set mit 3 Kerzen", 
+        estimatedCost: 30, 
+        imageUrl: "https://images.unsplash.com/photo-1602607450896-47c0e524d8af?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/duftkerzen-1890", price: 29 }
+        ],
+        isCompleted: false, 
+        category: "scent" 
+      }
     ],
     2: [
-      { id: "o2-1", name: "Mini-Projektor", description: "1080p LED Projektor für Wellenanimation", estimatedCost: 200, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech" },
-      { id: "o2-2", name: "Premium BT-Speaker", description: "JBL oder Sonos", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound" },
-      { id: "o2-3", name: "Aroma-Diffuser", description: "Ultraschall-Diffuser mit Timer", estimatedCost: 60, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "scent" },
-      { id: "o2-4", name: "Echte Muscheln & Sand-Deko", description: "Deko-Set", estimatedCost: 90, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor" }
+      { 
+        id: "o2-1", 
+        name: "Mini-Projektor", 
+        description: "1080p LED Projektor für Wellenanimation", 
+        estimatedCost: 200, 
+        imageUrl: "https://images.unsplash.com/photo-1626379953822-baec19c3accd?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/beamer-36", price: 189 },
+          { shop: "microspot", url: "https://www.microspot.ch/de/tv-audio-foto-video/beamer--c480100", price: 199 }
+        ],
+        isCompleted: false, 
+        category: "tech" 
+      },
+      { 
+        id: "o2-2", 
+        name: "Premium BT-Speaker", 
+        description: "JBL oder Sonos", 
+        estimatedCost: 150, 
+        imageUrl: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/bluetooth-lautsprecher-84", price: 149 },
+          { shop: "microspot", url: "https://www.microspot.ch/de/tv-audio-foto-video/lautsprecher/bluetooth-lautsprecher--c484020", price: 159 }
+        ],
+        isCompleted: false, 
+        category: "sound" 
+      },
+      { 
+        id: "o2-3", 
+        name: "Aroma-Diffuser", 
+        description: "Ultraschall-Diffuser mit Timer", 
+        estimatedCost: 60, 
+        imageUrl: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/diffuser-5584", price: 59 }
+        ],
+        isCompleted: false, 
+        category: "scent" 
+      },
+      { 
+        id: "o2-4", 
+        name: "Echte Muscheln & Sand-Deko", 
+        description: "Deko-Set mit echten Meeresmuscheln", 
+        estimatedCost: 90, 
+        imageUrl: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/deko-objekte-3052", price: 85 }
+        ],
+        isCompleted: false, 
+        category: "decor" 
+      }
     ],
     3: [
-      { id: "o3-1", name: "4K 360° Projektor-System", description: "Professionelles Immersions-System", estimatedCost: 500, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech" },
-      { id: "o3-2", name: "Surround-Sound-System", description: "5.1 Kanal System", estimatedCost: 300, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound" },
-      { id: "o3-3", name: "Infrarot-Wärmelampe", description: "Therapeutische IR-Lampe", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "wellness" },
-      { id: "o3-4", name: "Profi-Aromatherapie-Station", description: "Mit mehreren Düften", estimatedCost: 50, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "scent" }
+      { 
+        id: "o3-1", 
+        name: "4K 360° Projektor-System", 
+        description: "Professionelles Immersions-System", 
+        estimatedCost: 500, 
+        imageUrl: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/beamer-36?filter=t_pt%3D1807", price: 499 }
+        ],
+        isCompleted: false, 
+        category: "tech" 
+      },
+      { 
+        id: "o3-2", 
+        name: "Surround-Sound-System", 
+        description: "5.1 Kanal System", 
+        estimatedCost: 300, 
+        imageUrl: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/soundbar-3069", price: 299 },
+          { shop: "microspot", url: "https://www.microspot.ch/de/tv-audio-foto-video/soundbars--c484200", price: 319 }
+        ],
+        isCompleted: false, 
+        category: "sound" 
+      },
+      { 
+        id: "o3-3", 
+        name: "Infrarot-Wärmelampe", 
+        description: "Therapeutische IR-Lampe", 
+        estimatedCost: 150, 
+        imageUrl: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/infrarotlampen-2118", price: 149 }
+        ],
+        isCompleted: false, 
+        category: "wellness" 
+      },
+      { 
+        id: "o3-4", 
+        name: "Profi-Aromatherapie-Station", 
+        description: "Mit mehreren Düften", 
+        estimatedCost: 50, 
+        imageUrl: "https://images.unsplash.com/photo-1600443299762-a0cdae38bcc3?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/aetherische-oele-1889", price: 49 }
+        ],
+        isCompleted: false, 
+        category: "scent" 
+      }
     ]
   },
   alpine: {
     1: [
-      { id: "a1-1", name: "Holzdeko-Set", description: "Rustikale Holzelemente", estimatedCost: 60, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor" },
-      { id: "a1-2", name: "LED-Kerzen", description: "Set mit 6 Kerzen", estimatedCost: 40, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "lighting" },
-      { id: "a1-3", name: "Tannen-Duftöl", description: "Natürliches Waldduft-Öl", estimatedCost: 25, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "scent" },
-      { id: "a1-4", name: "Warme Lichterketten", description: "Warmweisse LEDs", estimatedCost: 25, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "lighting" }
+      { 
+        id: "a1-1", 
+        name: "Holzdeko-Set", 
+        description: "Rustikale Holzelemente", 
+        estimatedCost: 60, 
+        imageUrl: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "ikea", url: "https://www.ikea.com/ch/de/cat/deko-objekte-10757/", price: 59 }
+        ],
+        isCompleted: false, 
+        category: "decor" 
+      },
+      { 
+        id: "a1-2", 
+        name: "LED-Kerzen", 
+        description: "Set mit 6 Kerzen", 
+        estimatedCost: 40, 
+        imageUrl: "https://images.unsplash.com/photo-1603905179604-8f495e77d4e3?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "ikea", url: "https://www.ikea.com/ch/de/cat/led-kerzen-18844/", price: 39 }
+        ],
+        isCompleted: false, 
+        category: "lighting" 
+      },
+      { 
+        id: "a1-3", 
+        name: "Tannen-Duftöl", 
+        description: "Natürliches Waldduft-Öl", 
+        estimatedCost: 25, 
+        imageUrl: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/aetherische-oele-1889", price: 24 }
+        ],
+        isCompleted: false, 
+        category: "scent" 
+      },
+      { 
+        id: "a1-4", 
+        name: "Warme Lichterketten", 
+        description: "Warmweisse LEDs 10m", 
+        estimatedCost: 25, 
+        imageUrl: "https://images.unsplash.com/photo-1513366884935-1d7e5427d7dc?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "ikea", url: "https://www.ikea.com/ch/de/cat/lichterketten-18759/", price: 24 }
+        ],
+        isCompleted: false, 
+        category: "lighting" 
+      }
     ],
     2: [
-      { id: "a2-1", name: "Holzwand-Panels", description: "Selbstklebende Holzpaneele 3m²", estimatedCost: 250, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor" },
-      { id: "a2-2", name: "Kuhfell-Teppich", description: "Echter oder Kunstfell-Teppich", estimatedCost: 150, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor" },
-      { id: "a2-3", name: "Philips Hue Starter-Set", description: "Mit 3 Lampen und Bridge", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "lighting" },
-      { id: "a2-4", name: "Kaminknistern-Speaker", description: "Premium BT-Speaker", estimatedCost: 50, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound" }
+      { 
+        id: "a2-1", 
+        name: "Holzwand-Panels", 
+        description: "Selbstklebende Holzpaneele 3m²", 
+        estimatedCost: 250, 
+        imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/wandpaneele-6108", price: 249 }
+        ],
+        isCompleted: false, 
+        category: "decor" 
+      },
+      { 
+        id: "a2-2", 
+        name: "Kuhfell-Teppich", 
+        description: "Echter oder Kunstfell-Teppich", 
+        estimatedCost: 150, 
+        imageUrl: "https://images.unsplash.com/photo-1600166898405-da9535204843?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "ikea", url: "https://www.ikea.com/ch/de/cat/teppiche-10653/", price: 149 }
+        ],
+        isCompleted: false, 
+        category: "decor" 
+      },
+      { 
+        id: "a2-3", 
+        name: "Philips Hue Starter-Set", 
+        description: "Mit 3 Lampen und Bridge", 
+        estimatedCost: 150, 
+        imageUrl: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/brand/philips-hue-6356", price: 149 },
+          { shop: "microspot", url: "https://www.microspot.ch/de/wohnen-licht/innenbeleuchtung/smart-beleuchtung--c521200", price: 159 }
+        ],
+        isCompleted: false, 
+        category: "lighting" 
+      },
+      { 
+        id: "a2-4", 
+        name: "Kaminknistern-Speaker", 
+        description: "Premium BT-Speaker", 
+        estimatedCost: 50, 
+        imageUrl: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/bluetooth-lautsprecher-84", price: 49 }
+        ],
+        isCompleted: false, 
+        category: "sound" 
+      }
     ],
     3: [
-      { id: "a3-1", name: "Echtholz-Wandverkleidung", description: "Professionelle Installation", estimatedCost: 600, purchaseLink: "", isCompleted: false, category: "decor" },
-      { id: "a3-2", name: "Smart Home Integration", description: "Alle Geräte verbinden", estimatedCost: 200, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech" },
-      { id: "a3-3", name: "Hi-Fi Surround-System", description: "Premium Soundsystem", estimatedCost: 300, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound" },
-      { id: "a3-4", name: "Infrarot-Heizpanel", description: "Optional für extra Wärme", estimatedCost: 100, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "wellness" }
+      { 
+        id: "a3-1", 
+        name: "Echtholz-Wandverkleidung", 
+        description: "Professionelle Installation", 
+        estimatedCost: 600, 
+        imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop",
+        shopLinks: [],
+        isCompleted: false, 
+        category: "decor" 
+      },
+      { 
+        id: "a3-2", 
+        name: "Smart Home Integration", 
+        description: "Alle Geräte verbinden", 
+        estimatedCost: 200, 
+        imageUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/smart-home-hub-1757", price: 199 }
+        ],
+        isCompleted: false, 
+        category: "tech" 
+      },
+      { 
+        id: "a3-3", 
+        name: "Hi-Fi Surround-System", 
+        description: "Premium Soundsystem", 
+        estimatedCost: 300, 
+        imageUrl: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/soundbar-3069", price: 299 }
+        ],
+        isCompleted: false, 
+        category: "sound" 
+      },
+      { 
+        id: "a3-4", 
+        name: "Infrarot-Heizpanel", 
+        description: "Optional für extra Wärme", 
+        estimatedCost: 100, 
+        imageUrl: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=200&h=200&fit=crop",
+        shopLinks: [
+          { shop: "galaxus", url: "https://www.galaxus.ch/de/s1/producttype/infrarotheizungen-2987", price: 99 }
+        ],
+        isCompleted: false, 
+        category: "wellness" 
+      }
     ]
   },
   dark: {
@@ -414,7 +695,7 @@ const AdminRoomSetup = () => {
                             </p>
 
                             {/* Checklist */}
-                            <div className="space-y-3 mb-4">
+                            <div className="space-y-4 mb-4">
                               <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
                                 <ShoppingCart className="w-4 h-4" />
                                 Einkaufsliste
@@ -422,37 +703,67 @@ const AdminRoomSetup = () => {
                               {phase.checklist.map((item) => (
                                 <div
                                   key={item.id}
-                                  className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+                                  className="flex gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
                                 >
-                                  <Checkbox
-                                    id={item.id}
-                                    checked={item.isCompleted}
-                                    className="mt-0.5"
-                                  />
+                                  {/* Product Image */}
+                                  {item.imageUrl && (
+                                    <div className="shrink-0">
+                                      <img 
+                                        src={item.imageUrl} 
+                                        alt={item.name}
+                                        className="w-20 h-20 rounded-lg object-cover border border-border/50"
+                                      />
+                                    </div>
+                                  )}
+                                  
                                   <div className="flex-1 min-w-0">
-                                    <label
-                                      htmlFor={item.id}
-                                      className={`text-sm font-medium cursor-pointer ${
-                                        item.isCompleted ? "line-through text-muted-foreground" : "text-foreground"
-                                      }`}
-                                    >
-                                      {item.name}
-                                    </label>
-                                    {item.description && (
-                                      <p className="text-xs text-muted-foreground">{item.description}</p>
-                                    )}
+                                    <div className="flex items-start gap-3">
+                                      <Checkbox
+                                        id={item.id}
+                                        checked={item.isCompleted}
+                                        className="mt-1"
+                                      />
+                                      <div className="flex-1">
+                                        <label
+                                          htmlFor={item.id}
+                                          className={`text-sm font-medium cursor-pointer block ${
+                                            item.isCompleted ? "line-through text-muted-foreground" : "text-foreground"
+                                          }`}
+                                        >
+                                          {item.name}
+                                        </label>
+                                        {item.description && (
+                                          <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
+                                        )}
+                                        
+                                        {/* Shop Links */}
+                                        {item.shopLinks && item.shopLinks.length > 0 && (
+                                          <div className="flex flex-wrap gap-2 mt-3">
+                                            {item.shopLinks.map((shop, idx) => (
+                                              <a
+                                                key={idx}
+                                                href={shop.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white transition-all hover:scale-105 ${shopLogos[shop.shop].color}`}
+                                              >
+                                                <ExternalLink className="w-3 h-3" />
+                                                {shopLogos[shop.shop].name}
+                                                {shop.price && (
+                                                  <span className="ml-1 opacity-90">CHF {shop.price}</span>
+                                                )}
+                                              </a>
+                                            ))}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="flex items-center gap-2 shrink-0">
-                                    <span className="text-sm text-muted-foreground">
+                                  
+                                  <div className="shrink-0 text-right">
+                                    <span className="text-sm font-medium text-foreground">
                                       CHF {item.estimatedCost}
                                     </span>
-                                    {item.purchaseLink && (
-                                      <Button size="icon" variant="ghost" className="h-6 w-6" asChild>
-                                        <a href={item.purchaseLink} target="_blank" rel="noopener noreferrer">
-                                          <ExternalLink className="w-3 h-3" />
-                                        </a>
-                                      </Button>
-                                    )}
                                   </div>
                                 </div>
                               ))}
