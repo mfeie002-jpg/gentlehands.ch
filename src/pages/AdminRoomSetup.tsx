@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { 
   Waves, Mountain, Moon, Building2, Leaf, Sparkles, 
   Check, ExternalLink, ChevronDown, ChevronUp, 
-  ShoppingCart, DollarSign, FileText, ArrowLeft, ZoomIn, Eye
+  ShoppingCart, DollarSign, FileText, ArrowLeft, ZoomIn, Eye, Layers
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -15,11 +15,12 @@ import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { ImageLightbox } from "@/components/admin/ImageLightbox";
-import { InteractiveRoomView } from "@/components/admin/InteractiveRoomView";
+import { RoomPhaseNavigator, ProductMarker } from "@/components/admin/room-setup";
+
 interface ShopLink {
   shop: "ikea" | "galaxus" | "microspot";
   url: string;
@@ -413,82 +414,82 @@ const defaultChecklists: Record<string, Record<number, ChecklistItem[]>> = {
   },
   dark: {
     1: [
-      { id: "d1-1", name: "Blackout-Vorhänge", description: "Komplette Verdunkelung", estimatedCost: 40, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor", position: { x: 10, y: 25 } },
-      { id: "d1-2", name: "Himalaya-Salzlampen", description: "Set mit 3 Lampen", estimatedCost: 45, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "lighting", position: { x: 80, y: 40 } },
-      { id: "d1-3", name: "Lavendel-Duftöl", description: "Beruhigendes Öl", estimatedCost: 15, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "scent", position: { x: 25, y: 70 } }
+      { id: "d1-1", name: "Blackout-Vorhänge", description: "Komplette Verdunkelung", estimatedCost: 40, imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 40 }], isCompleted: false, category: "decor", position: { x: 10, y: 25 } },
+      { id: "d1-2", name: "Himalaya-Salzlampen", description: "Set mit 3 Lampen", estimatedCost: 45, imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 45 }], isCompleted: false, category: "lighting", position: { x: 80, y: 40 } },
+      { id: "d1-3", name: "Lavendel-Duftöl", description: "Beruhigendes Öl", estimatedCost: 15, imageUrl: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 15 }], isCompleted: false, category: "scent", position: { x: 25, y: 70 } }
     ],
     2: [
-      { id: "d2-1", name: "Galaxie-Projektor", description: "Sternenhimmel-Projektor", estimatedCost: 80, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech", position: { x: 15, y: 15 } },
-      { id: "d2-2", name: "Akustik-Panels", description: "Schallabsorbierende Panels", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor", position: { x: 85, y: 30 } },
-      { id: "d2-3", name: "Dimmer-Steuerung", description: "Smart Dimmer", estimatedCost: 50, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "lighting", position: { x: 70, y: 65 } },
-      { id: "d2-4", name: "Binaurale Beats System", description: "Spezielle Audio-Frequenzen", estimatedCost: 120, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound", position: { x: 30, y: 80 } }
+      { id: "d2-1", name: "Galaxie-Projektor", description: "Sternenhimmel-Projektor", estimatedCost: 80, imageUrl: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 80 }], isCompleted: false, category: "tech", position: { x: 15, y: 15 } },
+      { id: "d2-2", name: "Akustik-Panels", description: "Schallabsorbierende Panels", estimatedCost: 150, imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 150 }], isCompleted: false, category: "decor", position: { x: 85, y: 30 } },
+      { id: "d2-3", name: "Dimmer-Steuerung", description: "Smart Dimmer", estimatedCost: 50, imageUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 50 }], isCompleted: false, category: "lighting", position: { x: 70, y: 65 } },
+      { id: "d2-4", name: "Binaurale Beats System", description: "Spezielle Audio-Frequenzen", estimatedCost: 120, imageUrl: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 120 }], isCompleted: false, category: "sound", position: { x: 30, y: 80 } }
     ],
     3: [
-      { id: "d3-1", name: "Floatation-Elemente", description: "Schwerelosigkeits-Feeling", estimatedCost: 300, purchaseLink: "", isCompleted: false, category: "wellness", position: { x: 50, y: 50 } },
-      { id: "d3-2", name: "Körperschall-System", description: "Integriert in Liege", estimatedCost: 350, purchaseLink: "", isCompleted: false, category: "sound", position: { x: 50, y: 60 } },
-      { id: "d3-3", name: "App-Lichtsteuerung", description: "Vollautomatisierung", estimatedCost: 100, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech", position: { x: 10, y: 40 } },
-      { id: "d3-4", name: "Aurora-Projektion", description: "Nordlicht-Effekte", estimatedCost: 50, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech", position: { x: 90, y: 20 } }
+      { id: "d3-1", name: "Floatation-Elemente", description: "Schwerelosigkeits-Feeling", estimatedCost: 300, imageUrl: "https://images.unsplash.com/photo-1540555700478-4be289fbec50?w=200&h=200&fit=crop", shopLinks: [], isCompleted: false, category: "wellness", position: { x: 50, y: 50 } },
+      { id: "d3-2", name: "Körperschall-System", description: "Integriert in Liege", estimatedCost: 350, imageUrl: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=200&h=200&fit=crop", shopLinks: [], isCompleted: false, category: "sound", position: { x: 50, y: 60 } },
+      { id: "d3-3", name: "App-Lichtsteuerung", description: "Vollautomatisierung", estimatedCost: 100, imageUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 100 }], isCompleted: false, category: "tech", position: { x: 10, y: 40 } },
+      { id: "d3-4", name: "Aurora-Projektion", description: "Nordlicht-Effekte", estimatedCost: 50, imageUrl: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 50 }], isCompleted: false, category: "tech", position: { x: 90, y: 20 } }
     ]
   },
   urban: {
     1: [
-      { id: "u1-1", name: "Industrial-Deko", description: "Metallische Deko-Elemente", estimatedCost: 80, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor", position: { x: 75, y: 35 } },
-      { id: "u1-2", name: "LED-Spotlights", description: "Gerichtete Beleuchtung", estimatedCost: 60, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "lighting", position: { x: 20, y: 20 } },
-      { id: "u1-3", name: "Sandelholz-Duft", description: "Premium Duftöl", estimatedCost: 30, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "scent", position: { x: 85, y: 70 } },
-      { id: "u1-4", name: "Moderne Akzente", description: "Zeitgenössische Deko", estimatedCost: 30, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor", position: { x: 30, y: 75 } }
+      { id: "u1-1", name: "Industrial-Deko", description: "Metallische Deko-Elemente", estimatedCost: 80, imageUrl: "https://images.unsplash.com/photo-1565814636199-ae8133055c1c?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 80 }], isCompleted: false, category: "decor", position: { x: 75, y: 35 } },
+      { id: "u1-2", name: "LED-Spotlights", description: "Gerichtete Beleuchtung", estimatedCost: 60, imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 60 }], isCompleted: false, category: "lighting", position: { x: 20, y: 20 } },
+      { id: "u1-3", name: "Sandelholz-Duft", description: "Premium Duftöl", estimatedCost: 30, imageUrl: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 30 }], isCompleted: false, category: "scent", position: { x: 85, y: 70 } },
+      { id: "u1-4", name: "Moderne Akzente", description: "Zeitgenössische Deko", estimatedCost: 30, imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 30 }], isCompleted: false, category: "decor", position: { x: 30, y: 75 } }
     ],
     2: [
-      { id: "u2-1", name: "Beton-Wandpanels", description: "Betonoptik-Panels", estimatedCost: 200, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor", position: { x: 50, y: 15 } },
-      { id: "u2-2", name: "Smart RGB-LED System", description: "Philips Hue oder ähnlich", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "lighting", position: { x: 10, y: 30 } },
-      { id: "u2-3", name: "Premium BT-Speaker", description: "Marshall oder JBL", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound", position: { x: 90, y: 45 } },
-      { id: "u2-4", name: "Indoor-Pflanzen", description: "Moderne Pflanzentöpfe", estimatedCost: 100, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor", position: { x: 25, y: 65 } }
+      { id: "u2-1", name: "Beton-Wandpanels", description: "Betonoptik-Panels", estimatedCost: 200, imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 200 }], isCompleted: false, category: "decor", position: { x: 50, y: 15 } },
+      { id: "u2-2", name: "Smart RGB-LED System", description: "Philips Hue oder ähnlich", estimatedCost: 150, imageUrl: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 150 }], isCompleted: false, category: "lighting", position: { x: 10, y: 30 } },
+      { id: "u2-3", name: "Premium BT-Speaker", description: "Marshall oder JBL", estimatedCost: 150, imageUrl: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 150 }], isCompleted: false, category: "sound", position: { x: 90, y: 45 } },
+      { id: "u2-4", name: "Indoor-Pflanzen", description: "Moderne Pflanzentöpfe", estimatedCost: 100, imageUrl: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 100 }], isCompleted: false, category: "decor", position: { x: 25, y: 65 } }
     ],
     3: [
-      { id: "u3-1", name: "Designer-Möbel", description: "Hochwertige Sitzmöbel", estimatedCost: 400, purchaseLink: "", isCompleted: false, category: "decor", position: { x: 70, y: 70 } },
-      { id: "u3-2", name: "B&O Sound-System", description: "Bang & Olufsen Premium", estimatedCost: 400, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound", position: { x: 15, y: 50 } },
-      { id: "u3-3", name: "Kinetic Light Installation", description: "Bewegliche Lichtkunst", estimatedCost: 150, purchaseLink: "", isCompleted: false, category: "lighting", position: { x: 50, y: 10 } },
-      { id: "u3-4", name: "Espresso-Ecke", description: "Hochwertige Kaffeemaschine", estimatedCost: 50, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "extra", position: { x: 85, y: 80 } }
+      { id: "u3-1", name: "Designer-Möbel", description: "Hochwertige Sitzmöbel", estimatedCost: 400, imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&h=200&fit=crop", shopLinks: [], isCompleted: false, category: "decor", position: { x: 70, y: 70 } },
+      { id: "u3-2", name: "B&O Sound-System", description: "Bang & Olufsen Premium", estimatedCost: 400, imageUrl: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 400 }], isCompleted: false, category: "sound", position: { x: 15, y: 50 } },
+      { id: "u3-3", name: "Kinetic Light Installation", description: "Bewegliche Lichtkunst", estimatedCost: 150, imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop", shopLinks: [], isCompleted: false, category: "lighting", position: { x: 50, y: 10 } },
+      { id: "u3-4", name: "Espresso-Ecke", description: "Hochwertige Kaffeemaschine", estimatedCost: 50, imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 50 }], isCompleted: false, category: "extra", position: { x: 85, y: 80 } }
     ]
   },
   zen: {
     1: [
-      { id: "z1-1", name: "Bambus-Deko", description: "Bambus-Elemente", estimatedCost: 50, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor", position: { x: 80, y: 40 } },
-      { id: "z1-2", name: "Papierlampen", description: "Japanische Reispapierlampen", estimatedCost: 40, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "lighting", position: { x: 20, y: 25 } },
-      { id: "z1-3", name: "Räucherstäbchen-Set", description: "Premium Räucherwerk", estimatedCost: 30, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "scent", position: { x: 25, y: 70 } },
-      { id: "z1-4", name: "Zen-Steine", description: "Dekorative Steine", estimatedCost: 30, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor", position: { x: 75, y: 75 } }
+      { id: "z1-1", name: "Bambus-Deko", description: "Bambus-Elemente", estimatedCost: 50, imageUrl: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 50 }], isCompleted: false, category: "decor", position: { x: 80, y: 40 } },
+      { id: "z1-2", name: "Papierlampen", description: "Japanische Reispapierlampen", estimatedCost: 40, imageUrl: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 40 }], isCompleted: false, category: "lighting", position: { x: 20, y: 25 } },
+      { id: "z1-3", name: "Räucherstäbchen-Set", description: "Premium Räucherwerk", estimatedCost: 30, imageUrl: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 30 }], isCompleted: false, category: "scent", position: { x: 25, y: 70 } },
+      { id: "z1-4", name: "Zen-Steine", description: "Dekorative Steine", estimatedCost: 30, imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 30 }], isCompleted: false, category: "decor", position: { x: 75, y: 75 } }
     ],
     2: [
-      { id: "z2-1", name: "Bambus-Brunnen", description: "Indoor-Wasserbrunnen", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor", position: { x: 85, y: 35 } },
-      { id: "z2-2", name: "Japanische Laternen", description: "Authentische Papierlampen", estimatedCost: 80, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "lighting", position: { x: 15, y: 20 } },
-      { id: "z2-3", name: "Echte Klangschalen", description: "Set mit 3 Schalen", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound", position: { x: 30, y: 80 } },
-      { id: "z2-4", name: "Mini Zen-Garten", description: "Mit Sand und Steinen", estimatedCost: 60, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor", position: { x: 70, y: 65 } },
-      { id: "z2-5", name: "Bonsai-Pflanzen", description: "2 kleine Bonsais", estimatedCost: 60, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor", position: { x: 90, y: 50 } }
+      { id: "z2-1", name: "Bambus-Brunnen", description: "Indoor-Wasserbrunnen", estimatedCost: 150, imageUrl: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 150 }], isCompleted: false, category: "decor", position: { x: 85, y: 35 } },
+      { id: "z2-2", name: "Japanische Laternen", description: "Authentische Papierlampen", estimatedCost: 80, imageUrl: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 80 }], isCompleted: false, category: "lighting", position: { x: 15, y: 20 } },
+      { id: "z2-3", name: "Echte Klangschalen", description: "Set mit 3 Schalen", estimatedCost: 150, imageUrl: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 150 }], isCompleted: false, category: "sound", position: { x: 30, y: 80 } },
+      { id: "z2-4", name: "Mini Zen-Garten", description: "Mit Sand und Steinen", estimatedCost: 60, imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 60 }], isCompleted: false, category: "decor", position: { x: 70, y: 65 } },
+      { id: "z2-5", name: "Bonsai-Pflanzen", description: "2 kleine Bonsais", estimatedCost: 60, imageUrl: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 60 }], isCompleted: false, category: "decor", position: { x: 90, y: 50 } }
     ],
     3: [
-      { id: "z3-1", name: "Tatami-Bodenmatten", description: "Authentische Tatami", estimatedCost: 400, purchaseLink: "", isCompleted: false, category: "decor", position: { x: 50, y: 85 } },
-      { id: "z3-2", name: "Shoji-Trennwände", description: "Japanische Raumteiler", estimatedCost: 300, purchaseLink: "", isCompleted: false, category: "decor", position: { x: 10, y: 50 } },
-      { id: "z3-3", name: "Koto-Musik-System", description: "Traditionelle japanische Musik", estimatedCost: 100, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound", position: { x: 90, y: 30 } },
-      { id: "z3-4", name: "Matcha-Ecke", description: "Tee-Zeremonie Set", estimatedCost: 150, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "extra", position: { x: 25, y: 75 } },
-      { id: "z3-5", name: "Premium Bonsai", description: "Grosser Bonsai-Baum", estimatedCost: 50, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "decor", position: { x: 75, y: 40 } }
+      { id: "z3-1", name: "Tatami-Bodenmatten", description: "Authentische Tatami", estimatedCost: 400, imageUrl: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=200&h=200&fit=crop", shopLinks: [], isCompleted: false, category: "decor", position: { x: 50, y: 85 } },
+      { id: "z3-2", name: "Shoji-Trennwände", description: "Japanische Raumteiler", estimatedCost: 300, imageUrl: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=200&h=200&fit=crop", shopLinks: [], isCompleted: false, category: "decor", position: { x: 10, y: 50 } },
+      { id: "z3-3", name: "Koto-Musik-System", description: "Traditionelle japanische Musik", estimatedCost: 100, imageUrl: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 100 }], isCompleted: false, category: "sound", position: { x: 90, y: 30 } },
+      { id: "z3-4", name: "Matcha-Ecke", description: "Tee-Zeremonie Set", estimatedCost: 150, imageUrl: "https://images.unsplash.com/photo-1547592180-85f173990554?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 150 }], isCompleted: false, category: "extra", position: { x: 25, y: 75 } },
+      { id: "z3-5", name: "Premium Bonsai", description: "Grosser Bonsai-Baum", estimatedCost: 50, imageUrl: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 50 }], isCompleted: false, category: "decor", position: { x: 75, y: 40 } }
     ]
   },
   surprise: {
     1: [
-      { id: "s1-1", name: "Multi-Themen-Deko-Set", description: "Elemente aller Themen", estimatedCost: 150, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor", position: { x: 80, y: 35 } },
-      { id: "s1-2", name: "Flexible RGB-Beleuchtung", description: "Farbwechsel-System", estimatedCost: 100, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "lighting", position: { x: 15, y: 25 } },
-      { id: "s1-3", name: "Wechsel-Duft-Set", description: "Verschiedene Düfte", estimatedCost: 50, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "scent", position: { x: 25, y: 70 } }
+      { id: "s1-1", name: "Multi-Themen-Deko-Set", description: "Elemente aller Themen", estimatedCost: 150, imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 150 }], isCompleted: false, category: "decor", position: { x: 80, y: 35 } },
+      { id: "s1-2", name: "Flexible RGB-Beleuchtung", description: "Farbwechsel-System", estimatedCost: 100, imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 100 }], isCompleted: false, category: "lighting", position: { x: 15, y: 25 } },
+      { id: "s1-3", name: "Wechsel-Duft-Set", description: "Verschiedene Düfte", estimatedCost: 50, imageUrl: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 50 }], isCompleted: false, category: "scent", position: { x: 25, y: 70 } }
     ],
     2: [
-      { id: "s2-1", name: "Grosse Projektionsfläche", description: "Motorisierte Leinwand", estimatedCost: 250, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech", position: { x: 50, y: 10 } },
-      { id: "s2-2", name: "Smart-Licht-Zonen", description: "Mehrere Zonen steuerbar", estimatedCost: 200, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "lighting", position: { x: 10, y: 40 } },
-      { id: "s2-3", name: "Multi-Zone Audio", description: "Mehrkanal-Soundsystem", estimatedCost: 200, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "sound", position: { x: 90, y: 45 } },
-      { id: "s2-4", name: "Modular-Deko-System", description: "Schnell wechselbar", estimatedCost: 50, purchaseLink: "https://www.ikea.ch", isCompleted: false, category: "decor", position: { x: 70, y: 75 } }
+      { id: "s2-1", name: "Grosse Projektionsfläche", description: "Motorisierte Leinwand", estimatedCost: 250, imageUrl: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 250 }], isCompleted: false, category: "tech", position: { x: 50, y: 10 } },
+      { id: "s2-2", name: "Smart-Licht-Zonen", description: "Mehrere Zonen steuerbar", estimatedCost: 200, imageUrl: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 200 }], isCompleted: false, category: "lighting", position: { x: 10, y: 40 } },
+      { id: "s2-3", name: "Multi-Zone Audio", description: "Mehrkanal-Soundsystem", estimatedCost: 200, imageUrl: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 200 }], isCompleted: false, category: "sound", position: { x: 90, y: 45 } },
+      { id: "s2-4", name: "Modular-Deko-System", description: "Schnell wechselbar", estimatedCost: 50, imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop", shopLinks: [{ shop: "ikea", url: "https://www.ikea.ch", price: 50 }], isCompleted: false, category: "decor", position: { x: 70, y: 75 } }
     ],
     3: [
-      { id: "s3-1", name: "360° Projektions-System", description: "Rundum-Immersion", estimatedCost: 700, purchaseLink: "", isCompleted: false, category: "tech", position: { x: 50, y: 15 } },
-      { id: "s3-2", name: "iPad-Steuerung", description: "Zentrale Raumkontrolle", estimatedCost: 400, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech", position: { x: 15, y: 65 } },
-      { id: "s3-3", name: "Full Automation System", description: "HomeKit/KNX Integration", estimatedCost: 300, purchaseLink: "", isCompleted: false, category: "tech", position: { x: 85, y: 35 } },
-      { id: "s3-4", name: "Sensorik-System", description: "Bewegungs- und Lichtsensoren", estimatedCost: 100, purchaseLink: "https://www.galaxus.ch", isCompleted: false, category: "tech", position: { x: 30, y: 80 } }
+      { id: "s3-1", name: "360° Projektions-System", description: "Rundum-Immersion", estimatedCost: 700, imageUrl: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=200&h=200&fit=crop", shopLinks: [], isCompleted: false, category: "tech", position: { x: 50, y: 15 } },
+      { id: "s3-2", name: "iPad-Steuerung", description: "Zentrale Raumkontrolle", estimatedCost: 400, imageUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 400 }], isCompleted: false, category: "tech", position: { x: 15, y: 65 } },
+      { id: "s3-3", name: "Full Automation System", description: "HomeKit/KNX Integration", estimatedCost: 300, imageUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=200&h=200&fit=crop", shopLinks: [], isCompleted: false, category: "tech", position: { x: 85, y: 35 } },
+      { id: "s3-4", name: "Sensorik-System", description: "Bewegungs- und Lichtsensoren", estimatedCost: 100, imageUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=200&h=200&fit=crop", shopLinks: [{ shop: "galaxus", url: "https://www.galaxus.ch", price: 100 }], isCompleted: false, category: "tech", position: { x: 30, y: 80 } }
     ]
   }
 };
@@ -496,8 +497,8 @@ const defaultChecklists: Record<string, Record<number, ChecklistItem[]>> = {
 const AdminRoomSetup = () => {
   const [roomPhases, setRoomPhases] = useState<RoomPhase[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expandedRooms, setExpandedRooms] = useState<string[]>(["ozean"]);
-  const [lightboxItem, setLightboxItem] = useState<ChecklistItem | null>(null);
+  const [activeTab, setActiveTab] = useState("ozean");
+  const [productPositions, setProductPositions] = useState<Record<string, { x: number; y: number }>>({});
 
   useEffect(() => {
     fetchRoomPhases();
@@ -538,12 +539,12 @@ const AdminRoomSetup = () => {
     }
   };
 
-  const toggleRoom = (roomId: string) => {
-    setExpandedRooms(prev => 
-      prev.includes(roomId) 
-        ? prev.filter(id => id !== roomId)
-        : [...prev, roomId]
-    );
+  const handleProductPositionChange = (productId: string, newPosition: { x: number; y: number }) => {
+    setProductPositions(prev => ({
+      ...prev,
+      [productId]: newPosition
+    }));
+    // Could also persist to database here
   };
 
   const getRoomPhases = (roomId: string) => {
@@ -576,6 +577,30 @@ const AdminRoomSetup = () => {
     return { completed, total };
   };
 
+  const preparePhasesForNavigator = (roomId: string) => {
+    const phases = getRoomPhases(roomId);
+    return phases.map(phase => ({
+      phase: phase.phase,
+      phaseName: phase.phaseName,
+      description: phase.description,
+      estimatedCost: phase.estimatedCost,
+      isCurrent: phase.isCurrent,
+      completionPercentage: phase.completionPercentage,
+      phaseImage: "",
+      products: phase.checklist.map(item => ({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        position: productPositions[item.id] || item.position || { x: 50, y: 50 },
+        estimatedCost: item.estimatedCost,
+        shopLinks: item.shopLinks,
+        imageUrl: item.imageUrl,
+        category: item.category,
+        isCompleted: item.isCompleted
+      }))
+    }));
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -592,6 +617,7 @@ const AdminRoomSetup = () => {
     <>
       <Helmet>
         <title>Raum-Setup Admin | Seelenstein</title>
+        <meta name="description" content="Verwalte den Aufbau aller 6 Themenräume in 3 Phasen mit interaktiver Produktplatzierung" />
       </Helmet>
 
       <Header />
@@ -606,16 +632,19 @@ const AdminRoomSetup = () => {
                 Zurück zum Admin
               </Link>
             </Button>
-            <h1 className="text-3xl font-serif text-foreground mb-2">
-              Raum-Setup Übersicht
-            </h1>
+            <div className="flex items-center gap-3 mb-2">
+              <Layers className="w-8 h-8 text-copper" />
+              <h1 className="text-3xl font-serif text-foreground">
+                Raum-Setup Übersicht
+              </h1>
+            </div>
             <p className="text-muted-foreground">
-              Verwalte den Aufbau aller 6 Themenräume in 3 Phasen
+              Verwalte den Aufbau aller 6 Themenräume in 3 Phasen - Klicke auf Produkte um sie im Bild zu sehen, verschiebe sie per Drag & Drop
             </p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
@@ -659,191 +688,41 @@ const AdminRoomSetup = () => {
             </Card>
           </div>
 
-          {/* Room Cards */}
-          <div className="space-y-6">
-            {uniqueRooms.map((room) => {
-              const phases = getRoomPhases(room.id);
-              const isExpanded = expandedRooms.includes(room.id);
-              const roomTotalCost = phases.reduce((sum, p) => sum + p.estimatedCost, 0);
-              const currentPhase = phases.find(p => p.isCurrent);
+          {/* Room Tabs with Phase Navigator */}
+          <Card className="border-0 shadow-xl">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <CardHeader className="border-b border-border pb-0">
+                <TabsList className="w-full justify-start h-auto p-0 bg-transparent gap-1 flex-wrap">
+                  {uniqueRooms.map((room) => (
+                    <TabsTrigger
+                      key={room.id}
+                      value={room.id}
+                      className="data-[state=active]:bg-copper data-[state=active]:text-white px-4 py-3 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-copper gap-2"
+                    >
+                      {roomIcons[room.id]}
+                      <span className="hidden sm:inline">{room.name}</span>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </CardHeader>
 
-              return (
-                <Card key={room.id} className={`bg-gradient-to-br ${roomColors[room.id]} border-0 overflow-hidden`}>
-                  <Collapsible open={isExpanded} onOpenChange={() => toggleRoom(room.id)}>
-                    <CollapsibleTrigger asChild>
-                      <CardHeader className="cursor-pointer hover:bg-black/5 transition-colors">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            {roomIcons[room.id]}
-                            <div>
-                              <CardTitle className="text-foreground">{room.name}</CardTitle>
-                              <p className="text-sm text-muted-foreground">
-                                {currentPhase ? `Aktuell: Phase ${currentPhase.phase} (${currentPhase.phaseName})` : "Noch nicht gestartet"}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <Badge variant="outline" className="text-copper border-copper/30">
-                              CHF {roomTotalCost}
-                            </Badge>
-                            {isExpanded ? (
-                              <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                            ) : (
-                              <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                            )}
-                          </div>
-                        </div>
-                      </CardHeader>
-                    </CollapsibleTrigger>
-
-                    <CollapsibleContent>
-                      <CardContent className="pt-0 space-y-6">
-                        {/* Interactive Room View */}
-                        <div className="mb-6">
-                          <div className="flex items-center gap-2 mb-3">
-                            <Eye className="w-4 h-4 text-copper" />
-                            <h4 className="text-sm font-medium text-foreground">Interaktive Raum-Ansicht</h4>
-                          </div>
-                          <InteractiveRoomView
-                            roomId={room.id}
-                            roomName={room.name}
-                            products={phases.flatMap(p => 
-                              p.checklist.map(item => ({
-                                id: item.id,
-                                name: item.name,
-                                description: item.description,
-                                position: item.position || { x: 50, y: 50 },
-                                estimatedCost: item.estimatedCost,
-                                shopLinks: item.shopLinks,
-                                imageUrl: item.imageUrl,
-                                category: item.category
-                              }))
-                            )}
-                          />
-                        </div>
-
-                        {phases.map((phase) => (
-                          <motion.div
-                            key={phase.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="p-6 rounded-lg bg-background/50 backdrop-blur"
-                          >
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="flex items-center gap-3">
-                                <h3 className="font-medium text-foreground">
-                                  Phase {phase.phase}: {phase.phaseName}
-                                </h3>
-                                {phase.isCurrent && (
-                                  <Badge className="bg-copper text-white">Aktuell</Badge>
-                                )}
-                              </div>
-                              <Badge variant="secondary">CHF {phase.estimatedCost}</Badge>
-                            </div>
-
-                            <p className="text-sm text-muted-foreground mb-4">
-                              {phase.description}
-                            </p>
-
-                            {/* Checklist */}
-                            <div className="space-y-4 mb-4">
-                              <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
-                                <ShoppingCart className="w-4 h-4" />
-                                Einkaufsliste
-                              </h4>
-                              {phase.checklist.map((item) => (
-                                <div
-                                  key={item.id}
-                                  className="flex gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
-                                >
-                                  {/* Product Image - Clickable for Lightbox */}
-                                  {item.imageUrl && (
-                                    <div 
-                                      className="shrink-0 cursor-pointer group relative"
-                                      onClick={() => setLightboxItem(item)}
-                                    >
-                                      <img 
-                                        src={item.imageUrl} 
-                                        alt={item.name}
-                                        className="w-20 h-20 rounded-lg object-cover border border-border/50 transition-transform group-hover:scale-105"
-                                      />
-                                      <div className="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <ZoomIn className="w-5 h-5 text-white" />
-                                      </div>
-                                    </div>
-                                  )}
-                                  
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-start gap-3">
-                                      <Checkbox
-                                        id={item.id}
-                                        checked={item.isCompleted}
-                                        className="mt-1"
-                                      />
-                                      <div className="flex-1">
-                                        <label
-                                          htmlFor={item.id}
-                                          className={`text-sm font-medium cursor-pointer block ${
-                                            item.isCompleted ? "line-through text-muted-foreground" : "text-foreground"
-                                          }`}
-                                        >
-                                          {item.name}
-                                        </label>
-                                        {item.description && (
-                                          <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
-                                        )}
-                                        
-                                        {/* Shop Links */}
-                                        {item.shopLinks && item.shopLinks.length > 0 && (
-                                          <div className="flex flex-wrap gap-2 mt-3">
-                                            {item.shopLinks.map((shop, idx) => (
-                                              <a
-                                                key={idx}
-                                                href={shop.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white transition-all hover:scale-105 ${shopLogos[shop.shop].color}`}
-                                              >
-                                                <ExternalLink className="w-3 h-3" />
-                                                {shopLogos[shop.shop].name}
-                                                {shop.price && (
-                                                  <span className="ml-1 opacity-90">CHF {shop.price}</span>
-                                                )}
-                                              </a>
-                                            ))}
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="shrink-0 text-right">
-                                    <span className="text-sm font-medium text-foreground">
-                                      CHF {item.estimatedCost}
-                                    </span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-
-                            {/* Notes */}
-                            <div>
-                              <h4 className="text-sm font-medium text-foreground mb-2">Notizen</h4>
-                              <Textarea
-                                placeholder="Notizen zu dieser Phase..."
-                                className="resize-none bg-background/50"
-                                rows={2}
-                              />
-                            </div>
-                          </motion.div>
-                        ))}
-                      </CardContent>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </Card>
-              );
-            })}
-          </div>
+              <CardContent className="p-6">
+                {uniqueRooms.map((room) => {
+                  const phasesData = preparePhasesForNavigator(room.id);
+                  return (
+                    <TabsContent key={room.id} value={room.id} className="mt-0">
+                      <RoomPhaseNavigator
+                        roomId={room.id}
+                        roomName={room.name}
+                        phases={phasesData}
+                        onProductPositionChange={handleProductPositionChange}
+                      />
+                    </TabsContent>
+                  );
+                })}
+              </CardContent>
+            </Tabs>
+          </Card>
 
           {/* Quick Links */}
           <div className="mt-12 text-center">
@@ -855,19 +734,6 @@ const AdminRoomSetup = () => {
       </main>
 
       <Footer />
-
-      {/* Image Lightbox */}
-      {lightboxItem && (
-        <ImageLightbox
-          isOpen={!!lightboxItem}
-          onClose={() => setLightboxItem(null)}
-          imageUrl={lightboxItem.imageUrl || ""}
-          productName={lightboxItem.name}
-          description={lightboxItem.description}
-          shopLinks={lightboxItem.shopLinks}
-          price={lightboxItem.estimatedCost}
-        />
-      )}
     </>
   );
 };
