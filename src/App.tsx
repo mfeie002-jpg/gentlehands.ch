@@ -154,7 +154,7 @@ const App = () => (
                 <Route path="/heatmap" element={<HeatmapDashboard />} />
                 <Route path="/goal-tracking" element={<GoalTrackingDashboard />} />
                 <Route path="/raumwelten" element={<Raumwelten />} />
-                <Route path="/admin/room-setup" element={<AdminRoomSetup />} />
+                <Route path="/admin/room-setup/*" element={<AdminRoomSetup />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/empfehlen" element={<Empfehlen />} />
