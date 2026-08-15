@@ -171,12 +171,17 @@ const App = () => (
                 <Route path="/en/experiences" element={<ExperiencesEN />} />
                 <Route path="/en/massages" element={<MassagesEN />} />
                 <Route path="/philosophie" element={<Navigate to="/ueber-uns" replace />} />
+                {/* Kampagnen-Landingpages */}
+                <Route
+                  path="/lp/mobile-wellnessmassage-zuerich"
+                  element={<LpMobileWellnessmassageZuerich />}
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
             <CriticalImagePreloader />
-            <FloatingCTA />
-            <LiveChatWidget />
+            <GlobalWidgets />
+
           </ErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
