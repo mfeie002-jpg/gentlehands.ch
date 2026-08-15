@@ -103,6 +103,20 @@ const RouteChangeHandler = () => {
   return null;
 };
 
+// Globale Widgets auf Kampagnen-Landingpages ausblenden (keine Ablenkung)
+const GlobalWidgets = () => {
+  const location = useLocation();
+  if (location.pathname.startsWith("/lp/")) return null;
+  return (
+    <>
+      <FloatingCTA />
+      <LiveChatWidget />
+    </>
+  );
+};
+
+
+
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
