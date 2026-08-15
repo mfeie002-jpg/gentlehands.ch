@@ -71,8 +71,9 @@ export const TherapistsManager = () => {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const updateData: { status: string; approved_at?: string } = { status };
+    mutationFn: async ({ id, status }: { id: string; status: "approved" | "pending" | "rejected" | "suspended" }) => {
+      const updateData: { status: "approved" | "pending" | "rejected" | "suspended"; approved_at?: string } = { status };
+
       if (status === "approved") {
         updateData.approved_at = new Date().toISOString();
       }
