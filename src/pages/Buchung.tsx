@@ -70,6 +70,7 @@ import massageAroma from "@/assets/massages/massage-aroma.jpg";
 import massageHotstone from "@/assets/massages/massage-hotstone.jpg";
 import massageSound from "@/assets/massages/massage-sound.jpg";
 import massageFullbody from "@/assets/massages/massage-fullbody.jpg";
+import massageStressReset from "@/assets/massages/massage-stress-reset.jpg";
 
 const themeImages: Record<string, string> = {
   "Ozean & Palmen": themeOcean,
@@ -80,17 +81,26 @@ const themeImages: Record<string, string> = {
   "Surprise Experience": themeSurprise,
 };
 
-const massageImages: Record<string, string> = {
-  "Deep Release Session": massageDeepTissue,
-  "Stress Reset": massageRelaxation,
-  "Emotional Grounding": massageSound,
-  "Ganzkörper Tiefenentspannung": massageFullbody,
-  "Aromatherapie": massageAroma,
-  "Hot Stone": massageHotstone,
-  "Klangtherapie": massageSound,
-  "Swedish Massage": massageRelaxation,
-  "Tiefenentspannung": massageFullbody,
+// Keyword-basiertes Matching: die Titel kommen aus der Datenbank und variieren,
+// daher wird nicht auf exakte Gleichheit geprüft.
+const massageImageRules: { keywords: string[]; image: string }[] = [
+  { keywords: ["hot stone", "hotstone", "stein"], image: massageHotstone },
+  { keywords: ["aroma", "öl", "oel"], image: massageAroma },
+  { keywords: ["klang", "sound", "emotional grounding"], image: massageSound },
+  { keywords: ["tiefengewebe", "deep tissue", "deep release"], image: massageDeepTissue },
+  { keywords: ["stress"], image: massageStressReset },
+  { keywords: ["ganzkörper", "ganzkoerper", "ritual", "tiefenentspannung"], image: massageFullbody },
+  { keywords: ["entspannung", "relax", "swedish", "klassisch"], image: massageRelaxation },
+];
+
+const getMassageImage = (title: string): string => {
+  const t = (title || "").toLowerCase();
+  const match = massageImageRules.find((rule) =>
+    rule.keywords.some((keyword) => t.includes(keyword))
+  );
+  return match?.image ?? massageRelaxation;
 };
+
 
 const steps = [
   { id: 1, title: "Masseur:in", icon: User },
