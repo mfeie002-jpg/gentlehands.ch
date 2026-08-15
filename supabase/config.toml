@@ -1,5 +1,10 @@
 project_id = "hrindypsfxbiijxgtdmi"
 
+[functions.submit-campaign-lead]
+verify_jwt = false
+
+
+
 [functions.notify-booking]
 verify_jwt = true
 

@@ -422,6 +422,60 @@ export type Database = {
           },
         ]
       }
+      campaign_leads: {
+        Row: {
+          age_confirmed: boolean
+          campaign: string
+          contact_channel: string
+          created_at: string
+          first_name: string
+          id: string
+          ip_hash: string | null
+          notes: string | null
+          phone: string
+          postal_code: string
+          preferred_date: string | null
+          preferred_timeslot: string | null
+          privacy_accepted: boolean
+          status: string
+          utm: Json
+        }
+        Insert: {
+          age_confirmed?: boolean
+          campaign?: string
+          contact_channel?: string
+          created_at?: string
+          first_name: string
+          id?: string
+          ip_hash?: string | null
+          notes?: string | null
+          phone: string
+          postal_code: string
+          preferred_date?: string | null
+          preferred_timeslot?: string | null
+          privacy_accepted?: boolean
+          status?: string
+          utm?: Json
+        }
+        Update: {
+          age_confirmed?: boolean
+          campaign?: string
+          contact_channel?: string
+          created_at?: string
+          first_name?: string
+          id?: string
+          ip_hash?: string | null
+          notes?: string | null
+          phone?: string
+          postal_code?: string
+          preferred_date?: string | null
+          preferred_timeslot?: string | null
+          privacy_accepted?: boolean
+          status?: string
+          utm?: Json
+        }
+        Relationships: []
+      }
       conversion_goals: {
         Row: {
           alert_threshold: number | null
