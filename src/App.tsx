@@ -67,6 +67,7 @@ const AnalyticsHub = lazy(() => import("./pages/AnalyticsHub"));
 const GoalTrackingDashboard = lazy(() => import("./pages/GoalTrackingDashboard"));
 const Raumwelten = lazy(() => import("./pages/Raumwelten"));
 const AdminRoomSetup = lazy(() => import("./pages/AdminRoomSetup"));
+const LpMobileWellnessmassageZuerich = lazy(() => import("./pages/lp/MobileWellnessmassageZuerich"));
 
 // English pages
 const IndexEN = lazy(() => import("./pages/en/Index"));
