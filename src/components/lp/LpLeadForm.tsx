@@ -22,8 +22,12 @@ const leadSchema = z.object({
   preferredDate: z.string().trim().min(1, { message: "Bitte wähle einen gewünschten Tag." }),
   preferredTimeslot: z.string().trim().min(1, { message: "Bitte wähle ein Zeitfenster." }),
   contactChannel: z.enum(["phone", "whatsapp"], { message: "Bitte wähle einen Kontaktweg." }),
-  ageConfirmed: z.literal(true, { message: "Bitte bestätige, dass du mindestens 18 Jahre alt bist." }),
-  privacyAccepted: z.literal(true, { message: "Bitte bestätige die Datenschutzerklärung." }),
+  ageConfirmed: z
+    .boolean()
+    .refine((v) => v === true, { message: "Bitte bestätige, dass du mindestens 18 Jahre alt bist." }),
+  privacyAccepted: z
+    .boolean()
+    .refine((v) => v === true, { message: "Bitte bestätige die Datenschutzerklärung." }),
 });
 
 type FieldErrors = Partial<Record<string, string>>;
