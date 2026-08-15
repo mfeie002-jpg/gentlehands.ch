@@ -854,7 +854,7 @@ const Buchung = () => {
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
               {massages.map((massage) => {
                 const isSelected = formData.massage === massage.id;
-                const massageImage = massageImages[massage.title] || massageFullbody;
+                const massageImage = getMassageImage(massage.title);
                 
                 return (
                   <motion.button
