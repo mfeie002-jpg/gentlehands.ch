@@ -71,11 +71,13 @@ export const TherapistsManager = () => {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const updateData: Record<string, unknown> = { status };
+    mutationFn: async ({ id, status }: { id: string; status: "approved" | "pending" | "rejected" | "suspended" }) => {
+      const updateData: { status: "approved" | "pending" | "rejected" | "suspended"; approved_at?: string } = { status };
+
       if (status === "approved") {
         updateData.approved_at = new Date().toISOString();
       }
+
       const { error } = await supabase
         .from("therapists")
         .update(updateData)
