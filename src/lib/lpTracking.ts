@@ -42,13 +42,20 @@ export const getUtmParams = (): Record<string, string> => {
   }
 };
 
-export const hasMarketingConsent = (): boolean => {
+export type MarketingConsent = "granted" | "denied" | null;
+
+/** Liefert den gespeicherten Einwilligungsstatus (null = noch keine Entscheidung). */
+export const getMarketingConsent = (): MarketingConsent => {
   try {
-    return localStorage.getItem(CONSENT_KEY) === "granted";
+    const value = localStorage.getItem(CONSENT_KEY);
+    return value === "granted" || value === "denied" ? value : null;
   } catch {
-    return false;
+    return null;
   }
 };
+
+export const hasMarketingConsent = (): boolean => getMarketingConsent() === "granted";
+
 
 export const setMarketingConsent = (granted: boolean) => {
   try {
