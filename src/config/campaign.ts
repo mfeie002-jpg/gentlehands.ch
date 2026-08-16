@@ -56,27 +56,32 @@ export interface CampaignConfig {
 
 export const campaignConfig: CampaignConfig = {
   providerFirstName: "Morris",
-  providerFullName: TODO,
+  providerFullName: "Morris Feierabend",
   verifiedQualifications: [], // Keine Qualifikation behaupten, solange nicht geprüft
-  whatsappNumber: TODO,
-  contactEmail: TODO,
-  serviceAreaText: TODO,
-  servicePostcodes: [],
-  serviceRadiusKm: TODO,
+  whatsappNumber: "+41 76 568 13 02",
+  contactEmail: "info@gentlehands.ch",
+  serviceAreaText: "Stadt Zürich, Kanton Zürich und Zug",
+  servicePostcodes: ["8001", "8002", "8003", "8004", "8005", "8006", "8008", "8032", "8037", "8038", "8041", "8044", "8045", "8046", "8047", "8048", "8049", "8050", "8051", "8052", "8053", "8055", "8057", "8064", "6300", "6330", "6340"],
+  serviceRadiusKm: 40,
 
-  offerEnabled: false,
+  offerEnabled: true,
   offerDurationMinutes: 30,
   offerPrice: 0,
   offerConditions:
-    "Einmalig für neue Kundinnen ab 18 Jahren, im definierten Zürcher Einsatzgebiet und nach Terminbestätigung. Keine Mitgliedschaft, keine automatische Verlängerung und keine versteckten Kosten.",
+    "Kennenlern-Angebot: einmalig und kostenlos für neue Kundinnen ab 18 Jahren, buchbar innerhalb einer Woche ab Anfrage, im Einsatzgebiet Stadt Zürich, Kanton Zürich und Zug sowie nach Terminbestätigung. Keine Mitgliedschaft, keine automatische Verlängerung und keine versteckten Kosten.",
 
-  availableTimeSlots: [], // Nur freigegebene Zeitfenster eintragen
+  availableTimeSlots: [
+    "Vormittag (09:00–12:00)",
+    "Nachmittag (12:00–17:00)",
+    "Abend (17:00–21:00)",
+    "Zeit nach Absprache",
+  ],
 
   metaPixelId: TODO,
-  campaignEnabled: false,
+  campaignEnabled: true,
 
   media: {
-    portraitImage: TODO,
+    portraitImage: morrisPortrait.url,
     videoSrc: TODO,
     videoPoster: TODO,
     videoCaptionsSrc: TODO,
