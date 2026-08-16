@@ -9,6 +9,8 @@
  *   wird als "nicht startbereit" behandelt (Preview only, noindex).
  */
 
+import morrisPortrait from "@/assets/morris-portrait.png.asset.json";
+
 export const TODO = "TODO_REQUIRED" as const;
 export type Todo = typeof TODO;
 
