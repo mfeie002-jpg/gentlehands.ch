@@ -11,6 +11,7 @@ import {
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { LpHeader } from "@/components/lp/LpHeader";
 import { LpFooter } from "@/components/lp/LpFooter";
+import { LpMarketingConsent } from "@/components/lp/LpMarketingConsent";
 import { LpVideoPortrait } from "@/components/lp/LpVideoPortrait";
 import { LpLeadForm } from "@/components/lp/LpLeadForm";
 import { LpLaunchChecklist } from "@/components/lp/LpLaunchChecklist";
@@ -278,6 +279,10 @@ const MobileWellnessmassageZuerich = () => {
                 </AccordionItem>
               ))}
             </Accordion>
+          </section>
+
+          <section className="mx-auto max-w-3xl px-4 pb-10">
+            <LpMarketingConsent />
           </section>
 
           <LpLaunchChecklist />
