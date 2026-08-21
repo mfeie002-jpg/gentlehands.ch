@@ -66,24 +66,24 @@ export const Footer = () => {
             </p>
             <div className="space-y-2 sm:space-y-3">
               <motion.a
-                href="mailto:kontakt@gentlehands.ch"
+                href="mailto:info@gentlehands.ch"
                 className="flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-copper transition-colors group py-1"
                 whileHover={{ x: 4 }}
               >
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-copper/10 flex items-center justify-center group-hover:bg-copper/20 transition-colors flex-shrink-0">
                   <Mail size={14} className="sm:w-4 sm:h-4 text-copper" />
                 </div>
-                <span className="text-xs sm:text-sm truncate">kontakt@gentlehands.ch</span>
+                <span className="text-xs sm:text-sm truncate">info@gentlehands.ch</span>
               </motion.a>
               <motion.a
-                href="tel:+41000000000"
+                href="tel:+41765681302"
                 className="flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-copper transition-colors group py-1"
                 whileHover={{ x: 4 }}
               >
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-copper/10 flex items-center justify-center group-hover:bg-copper/20 transition-colors flex-shrink-0">
                   <Phone size={14} className="sm:w-4 sm:h-4 text-copper" />
                 </div>
-                <span className="text-xs sm:text-sm">+41 00 000 00 00</span>
+                <span className="text-xs sm:text-sm">+41 76 568 13 02</span>
               </motion.a>
               <motion.div 
                 className="flex items-center gap-2 sm:gap-3 text-muted-foreground py-1"
