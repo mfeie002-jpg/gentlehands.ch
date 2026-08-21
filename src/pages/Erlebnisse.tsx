@@ -232,13 +232,15 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isHovered ? 1 : 0 }}
               >
-                <motion.div
+                <motion.button
+                  type="button"
+                  aria-label={`Vorschau abspielen: ${theme.title}`}
                   className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-background/90 backdrop-blur-sm flex items-center justify-center shadow-xl"
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Play size={28} className="text-copper ml-1 sm:hidden" fill="currentColor" />
-                  <Play size={32} className="text-copper ml-1 hidden sm:block" fill="currentColor" />
-                </motion.div>
+                  <Play size={28} className="text-copper ml-1 sm:hidden" fill="currentColor" aria-hidden="true" />
+                  <Play size={32} className="text-copper ml-1 hidden sm:block" fill="currentColor" aria-hidden="true" />
+                </motion.button>
               </motion.div>
               
               {/* Sound Indicator - hidden on mobile */}
@@ -295,11 +297,11 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
 
             {/* Elements */}
             <GlowCard className="mb-6 sm:mb-8 p-4 sm:p-6">
-              <h4 className="font-display text-base sm:text-lg text-foreground mb-3 sm:mb-4 flex items-center gap-2">
+              <h3 className="font-display text-base sm:text-lg text-foreground mb-3 sm:mb-4 flex items-center gap-2">
                 <Sparkles size={16} className="text-copper sm:hidden" />
                 <Sparkles size={18} className="text-copper hidden sm:block" />
                 Das erwartet Sie:
-              </h4>
+              </h3>
               <ul className="space-y-2 sm:space-y-3">
                 {theme.elements.map((element, i) => (
                   <motion.li 
@@ -321,9 +323,9 @@ const ThemeCard = ({ theme, index }: { theme: typeof themes[0]; index: number })
 
             {/* Ideal For */}
             <div className="mb-6 sm:mb-8 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-secondary/50 border border-border/50">
-              <h4 className="font-display text-base sm:text-lg text-foreground mb-3 sm:mb-4">
+              <h3 className="font-display text-base sm:text-lg text-foreground mb-3 sm:mb-4">
                 Ideal für Sie, wenn...
-              </h4>
+              </h3>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 {theme.idealFor.map((item, i) => (
                   <motion.li 

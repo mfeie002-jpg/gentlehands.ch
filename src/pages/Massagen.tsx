@@ -366,12 +366,12 @@ const Massagen = () => {
                     <div className="p-4 sm:p-8">
                       {/* Header */}
                       <div className="mb-4 sm:mb-6">
-                        <motion.h3 
+                        <motion.h2 
                           className="font-display text-lg sm:text-xl text-foreground mb-1"
                           animate={{ x: hoveredMassage === massage.id ? 4 : 0 }}
                         >
                           {massage.title}
-                        </motion.h3>
+                        </motion.h2>
                         <p className="text-xs sm:text-sm text-copper">{massage.subtitle}</p>
                       </div>
 
