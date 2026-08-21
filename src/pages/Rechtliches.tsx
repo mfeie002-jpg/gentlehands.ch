@@ -57,8 +57,8 @@ const Rechtliches = () => {
                 </div>
                 <div>
                   <p className="font-medium text-foreground">Kontakt</p>
-                  <p>E-Mail: kontakt@gentlehands.ch</p>
-                  <p>Telefon: +41 00 000 00 00</p>
+                  <p>E-Mail: info@gentlehands.ch</p>
+                  <p>Telefon: +41 76 568 13 02</p>
                 </div>
                 <div>
                   <p className="font-medium text-foreground">Vertretungsberechtigte Person</p>
@@ -266,7 +266,7 @@ const Rechtliches = () => {
                   <p>
                     Sie haben das Recht auf Auskunft, Berichtigung, Löschung und
                     Einschränkung der Verarbeitung Ihrer Daten. Kontaktieren Sie
-                    uns hierzu unter kontakt@gentlehands.ch.
+                    uns hierzu unter info@gentlehands.ch.
                   </p>
                 </div>
                 <div>

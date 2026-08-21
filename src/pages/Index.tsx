@@ -52,12 +52,11 @@ const Index = () => {
       "@type": "PostalAddress",
       "addressLocality": "Zürich",
       "addressRegion": "ZH",
-      "postalCode": "8000",
       "addressCountry": "CH"
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+41000000000",
+      "telephone": "+41765681302",
       "contactType": "customer service",
       "availableLanguage": ["German", "English"]
     },
@@ -92,13 +91,12 @@ const Index = () => {
     "name": "GentleHands",
     "description": "Exklusive Erlebnismassagen für Frauen in Zürich. Tiefenentspannung in atmosphärisch gestalteten Themenräumen.",
     "url": "https://gentlehands.ch",
-    "telephone": "+41000000000",
-    "email": "kontakt@gentlehands.ch",
+    "telephone": "+41765681302",
+    "email": "info@gentlehands.ch",
     "address": { 
       "@type": "PostalAddress", 
       "addressLocality": "Zürich", 
       "addressRegion": "ZH",
-      "postalCode": "8000",
       "addressCountry": "CH" 
     },
     "geo": {

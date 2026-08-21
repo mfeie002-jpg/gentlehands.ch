@@ -239,8 +239,8 @@ export const generateLocalBusinessSchema = () => {
     name: "GentleHands",
     description: "Premium Erlebnismassagen für Frauen in Zürich. Exklusive Wellness-Erfahrungen in atmosphärischen Themenwelten.",
     url: "https://gentlehands.ch",
-    telephone: "+41 00 000 00 00",
-    email: "kontakt@gentlehands.ch",
+    telephone: "+41 76 568 13 02",
+    email: "info@gentlehands.ch",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Musterstrasse 1",

@@ -46,7 +46,7 @@ export const SettingsPanel = () => {
     // General
     businessName: 'GentleHands',
     businessEmail: 'info@gentlehands.ch',
-    businessPhone: '+41 44 123 45 67',
+    businessPhone: '+41 76 568 13 02',
     timezone: 'Europe/Zurich',
     
     // Notifications

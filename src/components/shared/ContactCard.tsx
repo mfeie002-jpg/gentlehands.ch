@@ -16,7 +16,7 @@ export const ContactCard = () => {
 
       <div className="space-y-6">
         <a
-          href="mailto:hello@gentlehands.ch"
+          href="mailto:info@gentlehands.ch"
           className="flex items-start gap-4 group"
         >
           <div className="w-10 h-10 rounded-lg bg-copper/10 flex items-center justify-center shrink-0 group-hover:bg-copper/20 transition-colors">
@@ -25,13 +25,13 @@ export const ContactCard = () => {
           <div>
             <p className="text-sm text-muted-foreground">E-Mail</p>
             <p className="text-foreground group-hover:text-copper transition-colors">
-              hello@gentlehands.ch
+              info@gentlehands.ch
             </p>
           </div>
         </a>
 
         <a
-          href="tel:+41441234567"
+          href="tel:+41765681302"
           className="flex items-start gap-4 group"
         >
           <div className="w-10 h-10 rounded-lg bg-copper/10 flex items-center justify-center shrink-0 group-hover:bg-copper/20 transition-colors">
@@ -40,7 +40,7 @@ export const ContactCard = () => {
           <div>
             <p className="text-sm text-muted-foreground">Telefon</p>
             <p className="text-foreground group-hover:text-copper transition-colors">
-              +41 44 123 45 67
+              +41 76 568 13 02
             </p>
           </div>
         </a>

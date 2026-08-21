@@ -1258,7 +1258,7 @@ const Buchung = () => {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => updateFormData("phone", e.target.value)}
-                  placeholder="+41 00 000 00 00"
+                  placeholder="+41 76 568 13 02"
                   className={formErrors.phone ? "border-destructive" : ""}
                   maxLength={20}
                   required

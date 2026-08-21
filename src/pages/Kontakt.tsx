@@ -46,14 +46,14 @@ const Kontakt = () => {
     {
       icon: Mail,
       title: "E-Mail",
-      value: "kontakt@gentlehands.ch",
-      href: "mailto:kontakt@gentlehands.ch",
+      value: "info@gentlehands.ch",
+      href: "mailto:info@gentlehands.ch",
     },
     {
       icon: Phone,
       title: "Telefon",
-      value: "+41 00 000 00 00",
-      href: "tel:+41000000000",
+      value: "+41 76 568 13 02",
+      href: "tel:+41765681302",
     },
     {
       icon: MapPin,

@@ -3,9 +3,9 @@ import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { Phone, Mail, MessageCircle, Clock } from "lucide-react";
 
 const contacts = [
-  { icon: Phone, label: "+41 00 000 00 00", href: "tel:+41000000000", sublabel: "Anrufen" },
-  { icon: Mail, label: "kontakt@gentlehands.ch", href: "mailto:kontakt@gentlehands.ch", sublabel: "E-Mail" },
-  { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/41000000000", sublabel: "Chat starten" },
+  { icon: Phone, label: "+41 76 568 13 02", href: "tel:+41765681302", sublabel: "Anrufen" },
+  { icon: Mail, label: "info@gentlehands.ch", href: "mailto:info@gentlehands.ch", sublabel: "E-Mail" },
+  { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/41765681302", sublabel: "Chat starten" },
 ];
 
 export const QuickContactSection = () => {

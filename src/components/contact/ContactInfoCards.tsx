@@ -8,16 +8,16 @@ const contactMethods = [
     icon: Phone,
     title: "Telefon",
     description: "Mo-Fr 9-18 Uhr",
-    value: "+41 44 123 45 67",
-    link: "tel:+41441234567",
+    value: "+41 76 568 13 02",
+    link: "tel:+41765681302",
     color: "copper"
   },
   {
     icon: Mail,
     title: "E-Mail",
     description: "Antwort innerhalb 24h",
-    value: "hello@gentlehands.ch",
-    link: "mailto:hello@gentlehands.ch",
+    value: "info@gentlehands.ch",
+    link: "mailto:info@gentlehands.ch",
     color: "petrol"
   },
   {
@@ -25,7 +25,7 @@ const contactMethods = [
     title: "WhatsApp",
     description: "Schnelle Kommunikation",
     value: "Nachricht senden",
-    link: "https://wa.me/41441234567",
+    link: "https://wa.me/41765681302",
     color: "emerald-500"
   },
   {
