@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 
 export const WhatsAppWidget = () => {
-  const phoneNumber = "+41441234567";
+  const phoneNumber = "+41765681302";
   const message = "Hallo, ich interessiere mich für eine Massage bei GentleHands.";
 
   const handleClick = () => {

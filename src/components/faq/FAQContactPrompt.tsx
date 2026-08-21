@@ -36,7 +36,7 @@ export const FAQContactPrompt = () => {
               </Link>
             </Button>
             <Button variant="petrol-outline" asChild>
-              <a href="tel:+41000000000">
+              <a href="tel:+41765681302">
                 <Phone size={18} className="mr-2" />
                 Anrufen
               </a>

@@ -33,7 +33,7 @@ const IndexEN = () => {
     "name": "GentleHands",
     "description": "Exclusive experience massages for women in Zurich. Deep relaxation in atmospheric themed rooms.",
     "url": "https://gentlehands.ch/en",
-    "telephone": "+41000000000",
+    "telephone": "+41765681302",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Zurich",

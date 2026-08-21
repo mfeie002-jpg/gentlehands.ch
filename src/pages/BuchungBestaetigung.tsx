@@ -550,13 +550,13 @@ const BuchungBestaetigung = () => {
               </p>
               <div className="flex flex-wrap justify-center gap-6">
                 <a 
-                  href="tel:+41441234567" 
+                  href="tel:+41765681302" 
                   className="inline-flex items-center gap-2 text-foreground hover:text-copper transition-colors group"
                 >
                   <div className="w-8 h-8 rounded-lg bg-muted/50 group-hover:bg-copper/10 flex items-center justify-center transition-colors">
                     <Phone className="w-4 h-4" />
                   </div>
-                  +41 44 123 45 67
+                  +41 76 568 13 02
                 </a>
                 <a 
                   href="mailto:info@gentlehands.ch" 

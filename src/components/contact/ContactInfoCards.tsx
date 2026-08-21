@@ -25,7 +25,7 @@ const contactMethods = [
     title: "WhatsApp",
     description: "Schnelle Kommunikation",
     value: "Nachricht senden",
-    link: "https://wa.me/41441234567",
+    link: "https://wa.me/41765681302",
     color: "emerald-500"
   },
   {

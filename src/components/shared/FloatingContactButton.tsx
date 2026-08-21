@@ -17,7 +17,7 @@ export const FloatingContactButton = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.a
-          href="https://wa.me/41000000000"
+          href="https://wa.me/41765681302"
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-copper to-copper-dark text-accent-foreground rounded-full shadow-copper-lg hover:shadow-xl transition-shadow group"

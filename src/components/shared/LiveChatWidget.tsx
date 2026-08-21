@@ -104,7 +104,7 @@ export const LiveChatWidget = () => {
       console.error('Chat error:', error);
       
       // Replace loading message with error fallback
-      const fallbackResponse = "Entschuldigung, ich konnte Ihre Anfrage gerade nicht verarbeiten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch: +41 44 123 45 67";
+      const fallbackResponse = "Entschuldigung, ich konnte Ihre Anfrage gerade nicht verarbeiten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch: +41 76 568 13 02";
       
       setMessages(prev => prev.map(m => 
         m.id === loadingId
@@ -296,9 +296,9 @@ export const LiveChatWidget = () => {
 
                 {/* Footer */}
                 <div className="px-4 pb-3 flex items-center justify-between text-xs text-muted-foreground">
-                  <a href="tel:+41441234567" className="flex items-center gap-1 hover:text-copper transition-colors">
+                  <a href="tel:+41765681302" className="flex items-center gap-1 hover:text-copper transition-colors">
                     <Phone className="w-3 h-3" />
-                    +41 44 123 45 67
+                    +41 76 568 13 02
                   </a>
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />

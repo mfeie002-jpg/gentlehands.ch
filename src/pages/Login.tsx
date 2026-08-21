@@ -407,7 +407,7 @@ const Login = () => {
                 onClick={() =>
                   toast({
                     title: "Passwort zruggsetze",
-                    description: "Bitte kontaktiere Sie ois under kontakt@gentlehands.ch",
+                    description: "Bitte kontaktiere Sie ois under info@gentlehands.ch",
                   })
                 }
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
